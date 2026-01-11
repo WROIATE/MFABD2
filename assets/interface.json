@@ -1459,6 +1459,6 @@
     "custom_title": "MFABD2 | 棕色尘埃2自动化助手(sunyink/MFABD2)v0.0.12 | 游戏版本：20251216 (Meltdown Bunnies)",
     "url": "https://github.com/sunyink/MFABD2",
     "mirrorchyan_rid": "MFABD2",
-    "mirrorchyan_multiplatform": false,
+    "mirrorchyan_multiplatform": true,
     "version": "v0.0.12"
 }
