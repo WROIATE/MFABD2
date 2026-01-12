@@ -191,6 +191,13 @@
             "doc": "**半自动操作：日常关闭。**使用时注意启动页面。\n\n（未来计划...）作为小工具在其他页面打开，∞拖延。 "
         },
         {
+            "name": "[测试]自动钓鱼",
+            "entry": "Fishing_Entry",
+            "option": [
+                "钓鱼地点"
+            ]
+        },
+        {
             "name": "[测试殊]PC钓鱼",
             "entry": "Fishing_NiceBoat",
             "doc": "PC客户端，注意切换脚本控制器。要求：不能最小化、窗口化1080x720。暂时得手动切到钓鱼船上再开始运行。纸糊的钓鱼，只能对付普通鱼开，荒练不痛苦地练级差不多。精确切窗口大小可能需要小工具"
@@ -1314,6 +1321,40 @@
                 }
             ]
         },
+        "钓鱼地点": {
+            "cases": [
+                {
+                    "name": "烟波湖",
+                    "pipeline_override": {
+                        "Fishing_MapNavigate": {
+                            "next": [
+                                "Fishing_EnterFishingSpot_Lake"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "浅岸",
+                    "pipeline_override": {
+                        "Fishing_MapNavigate": {
+                            "next": [
+                                "Fishing_EnterFishingSpot_Shallow"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "寒霜海峡",
+                    "pipeline_override": {
+                        "Fishing_MapNavigate": {
+                            "next": [
+                                "Fishing_EnterFishingSpot_Frost"
+                            ]
+                        }
+                    }
+                }
+            ]
+        },
         "前置助手": {
             "doc": "自动设好本工具所需的前置设置。",
             "cases": [
@@ -1464,7 +1505,7 @@
     "agent": {
         "child_exec": "python",
         "child_args": [
-            "{PROJECT_DIR}/agent/main.py"
+            "../agent/main.py"
         ]
     },
     "name": "MFABD2",
