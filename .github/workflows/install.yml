@@ -31,6 +31,11 @@ on:
         type: boolean
         description: 'CI版本作为正式发布（非预发布）'
         default: false
+      notice_text:
+        type: string
+        description: '⚠️ 说明 / Note'
+        required: false
+        default: '不勾选任何选项，手动触发即为CI发版'
 
 jobs:
   meta:
