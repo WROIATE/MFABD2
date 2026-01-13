@@ -13,7 +13,7 @@ from git_operations import get_commit_list
 from version_rules import filter_valid_versions, sort_versions
 from history_manager import HistoryManager
 from version_analyzer import analyze_version_highlights
-from config import HISTORY_CONFIG, OUTPUT_CONFIG
+from History_config import HISTORY_CONFIG, OUTPUT_CONFIG
 from git_operations import get_commit_list, get_merge_commits, get_released_branches_from_main, safe_get_commit_list, ensure_reference_exists, get_commit_timestamp
 
 def group_commits_by_type(commits: List[Dict]) -> Dict[str, List[Dict]]:
