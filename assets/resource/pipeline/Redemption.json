@@ -269,7 +269,7 @@
     "action": "Click",
     "next": [
       "Redemption_Evil_Redemption_ExistingOpening",
-      "Redemption_Evil_Redemption_SelLv9"
+      "Redemption_Evil_Redemption_ListLast"
     ],
     "post_delay": 3000,
     "roi": [
@@ -293,7 +293,7 @@
     ],
     "focus": "REB.[ERROR]发现已存在的开局，退出流程"
   },
-  "Redemption_Evil_Redemption_SelLv9": {
+  "Redemption_Evil_Redemption_ListLast": {
     "recognition": "OCR",
     "action": "Click",
     "next": [
@@ -309,7 +309,7 @@
       73
     ],
     "expected": [
-      "[Ll][vV]\\D?\\d+"
+      "[Ll][vV]\\D?\\d?"
     ]
   },
   "Redemption_Evil_Redemption_DetPassLv": {
@@ -372,8 +372,8 @@
     "recognition": "OCR",
     "action": "Click",
     "next": [
-      "Redemption_Evil_Redemption_MAX",
-      "Redemption_Evil_Redemption_QuickBattNoAP"
+      "Redemption_Evil_Redemption_JustFree_Ok",
+      "Redemption_Evil_Redemption_JustFree_No"
     ],
     "post_delay": 1000,
     "roi": [
@@ -384,6 +384,84 @@
     ],
     "expected": [
       "快速战斗"
+    ]
+  },
+  "Redemption_Evil_Redemption_JustFree_No": {
+    "doc": "检测free关,做开动作",
+    "recognition": "ColorMatch",
+    "method": 40,
+    "upper": [
+      108,
+      70,
+      40
+    ],
+    "lower": [
+      105,
+      64,
+      39
+    ],
+    "roi": [
+      846,
+      263,
+      52,
+      29
+    ],
+    "count": 150,
+    "action": "Click",
+    "post_delay": 1000,
+    "max_hit": 3,
+    "focus": "REM.免费AP未勾选",
+    "next": [
+      "Redemption_Evil_Redemption_JustFree_Ok",
+      "Redemption_Evil_Redemption_JustFree_No"
+    ],
+    "timeout": 5000,
+    "on_error": [
+      "Redemption_Evil_Redemption_JustFree_Err"
+    ]
+  },
+  "Redemption_Evil_Redemption_JustFree_Ok": {
+    "doc": "检测free开,通过",
+    "recognition": "ColorMatch",
+    "method": 40,
+    "upper": [
+      21,
+      194,
+      172
+    ],
+    "lower": [
+      21,
+      192,
+      166
+    ],
+    "roi": [
+      846,
+      263,
+      52,
+      29
+    ],
+    "count": 150,
+    "focus": "REM.免费AP已勾选",
+    "next": [
+      "Redemption_Evil_Redemption_MAX",
+      "Redemption_Evil_Redemption_QuickBattNoAP"
+    ]
+  },
+  "Redemption_Evil_Redemption_JustFree_Err": {
+    "recognition": "OCR",
+    "roi": [
+      474,
+      540,
+      81,
+      63
+    ],
+    "expected": [
+      "取消"
+    ],
+    "action": "Click",
+    "focus": "REM.免费Ap切换识别,退出",
+    "next": [
+      "Redemption_Evil_Redemption_PageBackHub"
     ]
   },
   "Redemption_Evil_Redemption_QuickBattUnable": {
