@@ -213,25 +213,26 @@ jobs:
         run: |
           echo "::group::🚀 开始注入公告"
           
-          # 1. 运行 Python 脚本 (脚本里已有详细 print)
+          # 1. 运行 Python 脚本
           python scripts/inject_announcement.py "${{ needs.meta.outputs.tag }}"
           
           echo "::endgroup::"
           
-          echo "::group::👀 验证注入结果 (查看文件头部)"
+          echo "::group::👀 验证注入结果"
           
-          # 2. [关键] 定义目标文件路径
-          TARGET="install/assets/resource/Announcement/1.公告.md"
+          # 2. [修正] 路径改为 install/resource/Announcement/1.公告.md
+          TARGET="install/resource/Announcement/1.公告.md"
           
-          # 3. 使用 grep 查找锚点及其后 15 行内容打印出来，让你确认写进去了啥
           if [ -f "$TARGET" ]; then
-            echo "正在读取文件片段: $TARGET"
+            echo "✅ 成功定位文件: $TARGET"
             echo "----------------------------------------"
-            # 查找锚点，并显示后面 15 行 (-A 15)
-            grep -A 15 "" "$TARGET" || echo "⚠️ 未找到锚点，直接打印前 20 行:" && head -n 20 "$TARGET"
+            # 查找锚点，并显示后面 15 行
+            grep -A 15 "" "$TARGET" || (echo "⚠️ 未找到锚点，打印头部:" && head -n 20 "$TARGET")
             echo "----------------------------------------"
           else
-            echo "❌ 文件不存在，验证失败！"
+            echo "❌ 验证失败：文件不存在 ($TARGET)"
+            # 调试：列出 install 目录看看结构
+            ls -R install/
             exit 1
           fi
           
