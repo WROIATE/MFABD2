@@ -76,10 +76,9 @@ jobs:
           echo "开始获取活动数据..."
           
           # ---------------------------------------------------
-          # 1. 获取 PR 数据 (新增部分)
+          # 1. 获取 PR 数据
           # ---------------------------------------------------
           echo "Fetching PRs..."
-          # 获取近期更新的 PR (state=all 包含关闭和合并的)
           PRS_JSON=$(curl -s -H "Authorization: token $GH_TOKEN" \
             -H "Accept: application/vnd.github.v3+json" \
             "https://api.github.com/repos/$REPO/pulls?state=all&sort=updated&direction=desc&per_page=30")
@@ -87,47 +86,46 @@ jobs:
           PR_COUNT=0
           PRS_ARRAY="["
           
-          if [ -n "$PRS_JSON" ] && [ "$(echo "$PRS_JSON" | jq 'length')" -gt 0 ]; then
-             # 遍历 PR 进行时间比对
-             # 注意：这里使用 while read line 配合 jq 来处理数组
-             # 我们需要把 JSON 数组转成 base64 逐行读取以防特殊字符换行问题，或者简单地用 length 循环
-             
+          # 检查 JSON 是否有效且非空
+          if [ -n "$PRS_JSON" ] && echo "$PRS_JSON" | jq -e 'length > 0' >/dev/null; then
              LEN=$(echo "$PRS_JSON" | jq 'length')
-             for i in $(seq 0 $(($LEN - 1))); do
-                ITEM=$(echo "$PRS_JSON" | jq ".[$i]")
-                
-                # 提取关键时间点
-                CREATED_AT=$(echo "$ITEM" | jq -r '.created_at')
-                CLOSED_AT=$(echo "$ITEM" | jq -r '.closed_at')
-                MERGED_AT=$(echo "$ITEM" | jq -r '.merged_at')
-                UPDATED_AT=$(echo "$ITEM" | jq -r '.updated_at')
-                
+             # 使用 seq 生成序列时，确保 LEN > 0
+             if [ "$LEN" -gt 0 ]; then
+               for i in $(seq 0 $(($LEN - 1))); do
+                  ITEM=$(echo "$PRS_JSON" | jq ".[$i]")
+                  
+                  CREATED_AT=$(echo "$ITEM" | jq -r '.created_at')
+                  CLOSED_AT=$(echo "$ITEM" | jq -r '.closed_at')
+                  MERGED_AT=$(echo "$ITEM" | jq -r '.merged_at')
+                  
                 # 状态判定
-                STATUS=""
-                if [ "$MERGED_AT" != "null" ] && [ "$MERGED_AT" \> "$START_TIME" ]; then
-                   STATUS="🟣 合并"
-                elif [ "$CLOSED_AT" != "null" ] && [ "$CLOSED_AT" \> "$START_TIME" ]; then
-                   STATUS="🚫 关闭" # 关闭且未合并
-                elif [ "$CREATED_AT" \> "$START_TIME" ]; then
-                   STATUS="🆕 新建"
-                fi
-                
+                  STATUS=""
+                  # 使用 [[ ]] 进行字符串/时间比较更安全
+                  if [[ "$MERGED_AT" != "null" && "$MERGED_AT" > "$START_TIME" ]]; then
+                     STATUS="🟣 合并"
+                  elif [[ "$CLOSED_AT" != "null" && "$CLOSED_AT" > "$START_TIME" ]]; then
+                     STATUS="🚫 关闭"
+                  elif [[ "$CREATED_AT" > "$START_TIME" ]]; then
+                     STATUS="🆕 新建"
+                  fi
+                  
                 # 如果有状态变化，加入列表
-                if [ -n "$STATUS" ]; then
-                   NUMBER=$(echo "$ITEM" | jq -r '.number')
-                   TITLE=$(echo "$ITEM" | jq -r '.title' | sed 's/"/\\"/g')
-                   USER=$(echo "$ITEM" | jq -r '.user.login')
-                   
-                   if [ $PR_COUNT -gt 0 ]; then PRS_ARRAY="$PRS_ARRAY,"; fi
-                   PRS_ARRAY="$PRS_ARRAY{\"number\": $NUMBER, \"title\": \"$TITLE\", \"user\": \"$USER\", \"status\": \"$STATUS\"}"
-                   PR_COUNT=$((PR_COUNT + 1))
-                fi
-             done
+                  if [ -n "$STATUS" ]; then
+                     NUMBER=$(echo "$ITEM" | jq -r '.number')
+                     TITLE=$(echo "$ITEM" | jq -r '.title' | sed 's/"/\\"/g')
+                     USER=$(echo "$ITEM" | jq -r '.user.login')
+                     
+                     if [ $PR_COUNT -gt 0 ]; then PRS_ARRAY="$PRS_ARRAY,"; fi
+                     PRS_ARRAY="$PRS_ARRAY{\"number\": $NUMBER, \"title\": \"$TITLE\", \"user\": \"$USER\", \"status\": \"$STATUS\"}"
+                     PR_COUNT=$((PR_COUNT + 1))
+                  fi
+               done
+             fi
           fi
           PRS_ARRAY="$PRS_ARRAY]"
 
           # ---------------------------------------------------
-          # 2. 获取 Issue 评论 (原有逻辑)
+          # 2. 获取 Issue 评论 (修正了 split 错误)
           # ---------------------------------------------------
           echo "Fetching Comments..."
           COMMENTS_JSON=$(curl -s -H "Authorization: token $GH_TOKEN" \
@@ -142,14 +140,11 @@ jobs:
             while IFS= read -r comment; do
               if [ -n "$comment" ]; then
                 ISSUE_URL=$(echo "$comment" | jq -r '.issue_url')
-                # 检查是否是 PR 的评论 (PR 的 issue_url 通常包含 /pulls/ 但 api 返回的是 /issues/，区分方法是看 html_url 或者 type)
-                # 这里简单处理，统一视为 Issue 评论
                 
-                ISSUE_NUMBER=$(echo "$ISSUE_URL" | split("/") | last)
-                # 这里为了性能，不再单独 curl 获取标题，而是稍后如果需要展示再优化，
-                # 或者直接接受没有标题，但在你的原逻辑里是获取了标题的。为了保持一致性我们保留：
+                # --- 修复点：使用 basename 提取编号 ---
+                ISSUE_NUMBER=$(basename "$ISSUE_URL")
+                
                 ISSUE_TITLE=$(curl -s -H "Authorization: token $GH_TOKEN" "$ISSUE_URL" | jq -r '.title' | sed 's/"/\\"/g')
-                
                 AUTHOR=$(echo "$comment" | jq -r '.user.login')
                 BODY=$(echo "$comment" | jq -r '.body' | sed 's/"/\\"/g' | tr '\n' ' ')
                 PREVIEW=$(echo "$BODY" | cut -c 1-15)
@@ -163,7 +158,7 @@ jobs:
           COMMENTS_ARRAY="$COMMENTS_ARRAY]"
           
           # ---------------------------------------------------
-          # 3. 获取 Issue 事件 (标签/分配) (原有逻辑)
+          # 3. 获取 Issue 事件 (标签/分配)
           # ---------------------------------------------------
           echo "Fetching Events..."
           EVENTS_JSON=$(curl -s -H "Authorization: token $GH_TOKEN" \
@@ -231,7 +226,6 @@ jobs:
           echo "total_count=$TOTAL_COUNT" >> $GITHUB_OUTPUT
           
           echo "数据统计: PR=$PR_COUNT, Comment=$COMMENT_COUNT, Label=$LABEL_COUNT"
-
       - name: Generate Summary Message
         id: generate_message
         env:
