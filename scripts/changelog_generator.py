@@ -4,6 +4,7 @@
 """
 
 import os
+import pathlib
 import sys
 import re
 from typing import List, Dict
@@ -269,6 +270,19 @@ def generate_changelog_content(commits: List[Dict], current_tag: str, compare_ba
     # 构建变更日志
     changelog = f"# 更新日志\n\n"
     changelog += f"## {current_tag}\n\n"
+
+    # 读取 Release 头部草稿 (draft_release_header.md)
+    draft_header_path = os.path.join(os.path.dirname(__file__), 'draft_release_header.md')
+    if os.path.exists(draft_header_path):
+        try:
+            with open(draft_header_path, 'r', encoding='utf-8') as f:
+                header_content = f.read().strip()
+                if header_content:
+                    print(f"📖 发现发布草稿，已插入 Release 头部: {draft_header_path}")
+                    changelog += header_content + "\n\n---\n\n" # 加上分隔符和换行
+        except Exception as e:
+            print(f"⚠️ 读取发布草稿失败: {e}")
+
     try:
         changelog += get_beta_preview_content(compare_base, current_tag)
     except Exception as e:
