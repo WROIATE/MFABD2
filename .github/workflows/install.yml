@@ -137,6 +137,7 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
+
       - name: Download MaaFramework
         uses: robinraju/release-downloader@v1
         with:
@@ -207,6 +208,34 @@ jobs:
               rsync -av --ignore-existing MFA/ install/
             fi
           fi
+      - name: Inject Announcement & Verify
+        shell: bash
+        run: |
+          echo "::group::🚀 开始注入公告"
+          
+          # 1. 运行 Python 脚本 (脚本里已有详细 print)
+          python scripts/inject_announcement.py "${{ needs.meta.outputs.tag }}"
+          
+          echo "::endgroup::"
+          
+          echo "::group::👀 验证注入结果 (查看文件头部)"
+          
+          # 2. [关键] 定义目标文件路径
+          TARGET="install/assets/resource/Announcement/1.公告.md"
+          
+          # 3. 使用 grep 查找锚点及其后 15 行内容打印出来，让你确认写进去了啥
+          if [ -f "$TARGET" ]; then
+            echo "正在读取文件片段: $TARGET"
+            echo "----------------------------------------"
+            # 查找锚点，并显示后面 15 行 (-A 15)
+            grep -A 15 "" "$TARGET" || echo "⚠️ 未找到锚点，直接打印前 20 行:" && head -n 20 "$TARGET"
+            echo "----------------------------------------"
+          else
+            echo "❌ 文件不存在，验证失败！"
+            exit 1
+          fi
+          
+          echo "::endgroup::"
 
       - uses: actions/upload-artifact@v4
         with:
