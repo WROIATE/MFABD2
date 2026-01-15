@@ -550,7 +550,7 @@
             363
         ],
         "expected": [
-            "通知"
+            "声音"
         ],
         "action": "Click",
         "post_wait_freezes": 800,
@@ -562,6 +562,82 @@
     "Setup_Main_Tab_3_CK": {
         "recognition": "ColorMatch",
         "roi": "Setup_Main_Tab_3",
+        "lower": [
+            218,
+            218,
+            218
+        ],
+        "upper": [
+            255,
+            255,
+            255
+        ],
+        "count": 80,
+        "next": [
+            "Setup_Main_ShoundOff"
+        ]
+    },
+    "Setup_Main_ShoundOff": {
+        "recognition": "OCR",
+        "expected": [
+            "不使用"
+        ],
+        "roi": [
+            931,
+            130,
+            122,
+            37
+        ],
+        "next": [
+            "Setup_Main_ShoundOff_Ck",
+            "[JumpBack]Setup_Main_ShoundOff_Chg"
+        ]
+    },
+    "Setup_Main_ShoundOff_Ck": {
+        "recognition": "ColorMatch",
+        "roi": "Setup_Main_ShoundOff",
+        "lower": [
+            53,
+            64,
+            83
+        ],
+        "upper": [
+            53,
+            64,
+            83
+        ],
+        "count": 10,
+        "next": [
+            "Setup_Main_Tab_4"
+        ]
+    },
+    "Setup_Main_ShoundOff_Chg": {
+        "action": "Click",
+        "target": "Setup_Main_ShoundOff",
+        "post_delay": 3000,
+        "focus": "SM.设定变更关闭声音"
+    },
+    "Setup_Main_Tab_4": {
+        "recognition": "OCR",
+        "roi": [
+            172,
+            94,
+            94,
+            363
+        ],
+        "expected": [
+            "通知"
+        ],
+        "action": "Click",
+        "post_wait_freezes": 800,
+        "next": [
+            "Setup_Main_Tab_4_CK",
+            "Setup_Main_Tab_4"
+        ]
+    },
+    "Setup_Main_Tab_4_CK": {
+        "recognition": "ColorMatch",
+        "roi": "Setup_Main_Tab_4",
         "lower": [
             218,
             218,
