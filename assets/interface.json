@@ -1335,6 +1335,9 @@
                         },
                         "Setup_Entry4": {
                             "enabled": false
+                        },
+                        "StartGame_Setup_SoundTurnOff_Start": {
+                            "enabled": true
                         }
                     }
                 }

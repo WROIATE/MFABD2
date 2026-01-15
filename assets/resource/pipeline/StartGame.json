@@ -722,7 +722,7 @@
       55,
       52
     ],
-    "enabled": true,
+    "enabled": false,
     "max_hit": 1,
     "action": "Click",
     "next": [
