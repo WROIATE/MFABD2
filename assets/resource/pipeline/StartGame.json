@@ -42,6 +42,7 @@
       "[JumpBack]StartGame_PayFailed",
       "StartGame_Error_API",
       "StartGame_Error_AM",
+      "[JumpBack]StartGame_Setup_SoundTurnOff_Start",
       "StartGame_TouchStart",
       "StartGame_Loading",
       "StartGame_LoadingPage"
@@ -708,5 +709,97 @@
     "next": [
       "Global_BackToPve2#"
     ]
+  },
+  "StartGame_Setup_SoundTurnOff_Start": {
+    "doc": "在下载前关闭游戏声音,节省资源和流量",
+    "recognition": "TemplateMatch",
+    "template": [
+      "Str_Setup_Ico.png"
+    ],
+    "roi": [
+      82,
+      153,
+      55,
+      52
+    ],
+    "enabled": true,
+    "max_hit": 1,
+    "action": "Click",
+    "next": [
+      "[JumpBack]StartGame_Setup_SoundTurnOff_Intterp",
+      "StartGame_Setup_SoundTurnOff"
+    ]
+  },
+  "StartGame_Setup_SoundTurnOff_Intterp": {
+    "recognition": "OCR",
+    "expected": [
+      "取消",
+      "确认"
+    ],
+    "roi": [
+      348,
+      210,
+      564,
+      341
+    ],
+    "action": "Click",
+    "post_delay": 1500,
+    "max_hit": 3
+  },
+  "StartGame_Setup_SoundTurnOff": {
+    "recognition": "OCR",
+    "expected": [
+      "不使用"
+    ],
+    "roi": [
+      698,
+      402,
+      102,
+      31
+    ],
+    "next": [
+      "StartGame_Setup_SoundTurnOff_Ck",
+      "StartGame_Setup_SoundTurnOff_Chg"
+    ]
+  },
+  "StartGame_Setup_SoundTurnOff_Ck": {
+    "recognition": "ColorMatch",
+    "roi": "StartGame_Setup_SoundTurnOff",
+    "lower": [
+      53,
+      64,
+      83
+    ],
+    "upper": [
+      53,
+      64,
+      83
+    ],
+    "count": 10,
+    "next": [
+      "StartGame_Setup_SoundTurnOff_End"
+    ]
+  },
+  "StartGame_Setup_SoundTurnOff_Chg": {
+    "action": "Click",
+    "target": "StartGame_Setup_SoundTurnOff",
+    "post_delay": 3000,
+    "focus": "SM.设定变更关闭声音",
+    "next": [
+      "StartGame_Setup_SoundTurnOff_End"
+    ]
+  },
+  "StartGame_Setup_SoundTurnOff_End": {
+    "recognition": "OCR",
+    "expected": [
+      "确认"
+    ],
+    "roi": [
+      588,
+      557,
+      111,
+      82
+    ],
+    "action": "Click"
   }
 }
