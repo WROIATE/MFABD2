@@ -213,7 +213,14 @@ jobs:
               rsync -av --ignore-existing MFA/ install/
             fi
           fi
-
+      # 删除 Python 包内的冗余 bin 目录
+      # 针对 MFABD2 的目录结构 (install/python/Lib/site-packages/maa/bin)
+      # 这一步会扫描 install 目录下所有的 maa/bin 并删除
+      # =======================================================
+      - name: Remove redundant MAA binaries (Deduplication)
+        if: matrix.os != 'android'
+        run: |
+          python3 -c "import shutil; from pathlib import Path; [shutil.rmtree(p) for p in Path('install').rglob('**/site-packages/maa/bin') if p.is_dir()]"
       - uses: actions/upload-artifact@v4
         with:
           name: MFABD2-${{ needs.meta.outputs.tag }}-${{ matrix.os }}-${{ matrix.arch }}
