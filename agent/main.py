@@ -2,22 +2,46 @@
 
 import os
 import sys
+import platform
 from pathlib import Path
 
 # --- 核心修复：添加依赖库路径 ---
-# 假设目录结构:
-# install/
-#   ├── agent/
-#   │    └── main.py (本文件)
-#   └── deps/ (依赖库)
 current_file_path = Path(__file__).resolve()
 project_root = current_file_path.parent.parent  # 指向 install/ 目录
 deps_path = project_root / "agent"
 
-# 将 agent 目录加入 python 搜索路径
+# 将 agent 目录加入 python 搜索路径 (解决 fishing_agent 找不到的问题)
 if deps_path.exists():
     sys.path.insert(0, str(deps_path))
+
 # -----------------------------
+# 1. 动态计算 RID (Runtime Identifier)
+system_name = platform.system().lower()  # 'windows', 'linux', 'darwin'
+proc_arch = platform.machine().lower()   # 'amd64', 'x86_64', 'aarch64', 'arm64'
+
+# [修复2] 必须给 rid 一个默认值，或者补全 Windows 分支
+rid = "win-x64" # 默认值，防崩溃
+
+if system_name == 'windows':
+    if 'arm64' in proc_arch:
+        rid = "win-arm64"
+    else:
+        rid = "win-x64"
+elif system_name == 'linux':
+    rid = "linux-arm64" if 'aarch64' in proc_arch else "linux-x64"
+elif system_name == 'darwin':
+    rid = "osx-arm64" if 'arm64' in proc_arch else "osx-x64"
+
+# 2. 拼接 Native 库路径
+dll_path = project_root / "runtimes" / rid / "native"
+
+# 3. 【关键】在导入 maa 之前，注入环境变量
+# 这一步告诉 maa 库去 runtimes 目录找 DLL，而不是去 bin 找
+os.environ["MAAFW_BINARY_PATH"] = str(dll_path)
+
+if system_name == 'windows':
+    # Windows 额外需要加到 PATH 里
+    os.environ["PATH"] = str(dll_path) + os.pathsep + os.environ["PATH"]
 
 from maa.agent.agent_server import AgentServer
 from maa.toolkit import Toolkit
