@@ -21,28 +21,28 @@ install_path = working_dir / Path("install")
 version = len(sys.argv) > 1 and sys.argv[1] or "v0.0.1"
 target_os = len(sys.argv) > 2 and sys.argv[2] or "win"
 
-def install_deps():
-    if not (working_dir / "deps" / "bin").exists():
-        print("Please download the MaaFramework to \"deps\" first.")
-        print("请先下载 MaaFramework 到 \"deps\"。")
-        sys.exit(1)
+# def install_deps():
+#     if not (working_dir / "deps" / "bin").exists():
+#         print("Please download the MaaFramework to \"deps\" first.")
+#         print("请先下载 MaaFramework 到 \"deps\"。")
+#         sys.exit(1)
 
-    shutil.copytree(
-        working_dir / "deps" / "bin",
-        install_path,
-        ignore=shutil.ignore_patterns(
-            "*MaaDbgControlUnit*",
-            "*MaaThriftControlUnit*",
-            "*MaaRpc*",
-            "*MaaHttp*",
-        ),
-        dirs_exist_ok=True,
-    )
-    shutil.copytree(
-        working_dir / "deps" / "share" / "MaaAgentBinary",
-        install_path / "MaaAgentBinary",
-        dirs_exist_ok=True,
-    )
+#     shutil.copytree(
+#         working_dir / "deps" / "bin",
+#         install_path,
+#         ignore=shutil.ignore_patterns(
+#             "*MaaDbgControlUnit*",
+#             "*MaaThriftControlUnit*",
+#             "*MaaRpc*",
+#             "*MaaHttp*",
+#         ),
+#         dirs_exist_ok=True,
+#     )
+#     shutil.copytree(
+#         working_dir / "deps" / "share" / "MaaAgentBinary",
+#         install_path / "MaaAgentBinary",
+#         dirs_exist_ok=True,
+#     )
 
 def convert_line_endings(file_path):
     """将文件的换行符统一转换为 Windows 格式 (CRLF)"""
@@ -211,7 +211,7 @@ def install_agent(target_os):
         print(f"❌ 更新 interface.json 失败: {e}")
 
 if __name__ == "__main__":
-    install_deps()
+    # install_deps()
     install_resource()
     install_chores()
     install_agent(target_os)
