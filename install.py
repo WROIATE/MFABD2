@@ -211,7 +211,7 @@ def install_agent(target_os):
         print(f"❌ 更新 interface.json 失败: {e}")
 
 if __name__ == "__main__":
-    install_deps()
+    # install_deps()
     install_resource()
     install_chores()
     install_agent(target_os)
