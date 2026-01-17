@@ -106,15 +106,57 @@ jobs:
           echo "is_tag_push=$is_tag_push" | tee -a $GITHUB_OUTPUT
           echo "is_dev_version=$([ "$version_type" = "ci" ] && echo "true" || echo "false")" | tee -a $GITHUB_OUTPUT
           echo "version_type=$version_type" | tee -a $GITHUB_OUTPUT
+      - name: Download MFAA for Detection
+        uses: robinraju/release-downloader@v1
+        with:
+          repository: SweetSmellFox/MFAAvalonia
+          latest: true
+          fileName: "MFAAvalonia-*-linux-x64*" # 只下这个用于探测
+          out-file-path: "temp_detect"
+          extract: true
+
+      # 运行脚本提取版本
+      - name: Detect Version
+        id: detect_maa
+        run: |
+          cat << 'EOF' > detect.py
+          import sys, ctypes, os
+          from pathlib import Path
+          
+          # 递归找到 .so 文件
+          root = Path("temp_detect")
+          lib_path = next(root.rglob("libMaaFramework.so"), None)
+          
+          if not lib_path:
+              print("::error::找不到 .so 文件，MFAA 结构可能变了！")
+              sys.exit(1)
+              
+          try:
+              lib = ctypes.CDLL(str(lib_path))
+              lib.MaaVersion.restype = ctypes.c_char_p
+              ver = lib.MaaVersion().decode('utf-8')
+              print(f"Detected: {ver}")
+              # 输出到 GitHub Output
+              with open(os.environ['GITHUB_OUTPUT'], 'a') as f:
+                  f.write(f"version={ver}\n")
+          except Exception as e:
+              print(f"::error::加载失败: {e}")
+              sys.exit(1)
+          EOF
+          python3 detect.py
     outputs:
       tag: ${{ steps.set_tag.outputs.tag }}
       is_tag_push: ${{ steps.set_tag.outputs.is_tag_push }}
       is_dev_version: ${{ steps.set_tag.outputs.is_dev_version }}
       version_type: ${{ steps.set_tag.outputs.version_type }}
+      maa_version: ${{ steps.detect_maa.outputs.version }}
 
   install:
     needs: meta
     runs-on: macos-latest
+    
+    env:
+      MAA_VERSION: ${{ needs.meta.outputs.maa_version }}
     strategy:
       matrix:
         os: [win, macos, linux, android]
@@ -132,11 +174,14 @@ jobs:
         with:
           python-version: '3.x'
 
-      # 新增：安装 Python 依赖
-      - name: Install Python dependencies
+      # 安装./requirements.txt内容注意维护(不要包含Maafw !)
+      # 使用 meta 探测到的版本号安装 MaaFramework Python 绑定
+      - name: Install Requirements 
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
+          echo "Installing maafw==$MAA_VERSION"
+          pip install maafw==$MAA_VERSION
 
       - name: Download MaaFramework
         uses: robinraju/release-downloader@v1
@@ -157,9 +202,9 @@ jobs:
         with:
           repository: SweetSmellFox/MFAAvalonia
           fileName: "MFAAvalonia-*-${{ (matrix.os == 'win' && 'win') || (matrix.os == 'macos' && 'osx') || (matrix.os == 'linux' && 'linux') }}-${{ (matrix.arch == 'x86_64' && 'x64') || (matrix.arch == 'aarch64' && 'arm64') }}*"
-          # 指定MFAA最新版
+          #安装最新版
           # latest: true
-          # 指定MFAA旧稳定版
+          #安装固定旧版
           tag: "v2.2.7"
           out-file-path: "MFA"
           extract: true
@@ -215,7 +260,7 @@ jobs:
           echo "=========================================="
 
           # 4. 重点：下载【Windows 平台】的依赖包 (加上 --platform 选项)
-          # 如果不加下面这些参数，你在 Mac 跑 CI 就会下载到 Mac 版的库，导致用户在 Win 用不了
+          # 如果不加下面这些参数， Mac 跑 CI 就会下载到 Mac 版的库，导致用户在 Win 用不了
           python3 -m pip install \
             --platform win_amd64 \
             --python-version 3.10 \
@@ -223,6 +268,7 @@ jobs:
             --no-cache-dir \
             numpy==1.26.4 \
             -r requirements.txt \
+            maafw==$MAA_VERSION \
             --target install/python/Lib/site-packages
       - name: Install
         shell: bash
@@ -272,7 +318,35 @@ jobs:
       - name: Remove redundant MAA binaries (Deduplication)
         if: matrix.os != 'android'
         run: |
-          python3 -c "import shutil; from pathlib import Path; [shutil.rmtree(p) for p in Path('install').rglob('**/site-packages/maa/bin') if p.is_dir()]"
+          python3 -c "
+          import shutil
+          from pathlib import Path
+
+          root = Path('install')
+          
+          # 1. 寻找源 plugins 目录 (在 python 包里)
+          src_plugins = next(root.rglob('**/site-packages/maa/bin/plugins'), None)
+          
+          # 2. 寻找目标 native 目录 (在 runtimes 里)
+          # 假设 install/runtimes 下只有一个平台文件夹，或者我们只关心 native 层级
+          target_native = next(root.rglob('runtimes/*/native'), None)
+          
+          # 3. 如果两者都存在，执行移动
+          if src_plugins and target_native and src_plugins.exists():
+              dest_plugins = target_native / 'plugins'
+              if not dest_plugins.exists():
+                  print(f'Moving plugins from {src_plugins} to {dest_plugins}')
+                  shutil.move(str(src_plugins), str(dest_plugins))
+              else:
+                  print(f'Target plugins dir already exists: {dest_plugins}')
+
+          # 4. 安全删除所有冗余的 bin 目录
+          for p in root.rglob('**/site-packages/maa/bin'):
+              if p.is_dir():
+                  print(f'Removing redundant bin: {p}')
+                  shutil.rmtree(p)
+          "
+          
       - uses: actions/upload-artifact@v4
         with:
           name: MFABD2-${{ needs.meta.outputs.tag }}-${{ matrix.os }}-${{ matrix.arch }}

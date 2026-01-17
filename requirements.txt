@@ -1,6 +1,5 @@
 json-with-comments
 requests>=2.25.0
-maafw==v5.3.0
 pytz
 loguru
 numpy<2
