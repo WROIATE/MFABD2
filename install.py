@@ -140,8 +140,8 @@ def install_resource():
     # 1. 更新根版本字段（保持 CI 原始格式）
     interface["version"] = version
     
-    # 2. 动态更新 custom_title 中的版本号
-    if "custom_title" in interface:
+    # 2. 动态更新 title 中的版本号
+    if "title" in interface:
         # 匹配 "MFABD2)" 后到 " | 游戏版本" 前的所有内容
         pattern = r"(?<=MFABD2\))(.*?)(?=\s*\|\s*游戏版本：)"
         
