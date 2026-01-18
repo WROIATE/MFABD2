@@ -617,6 +617,12 @@
             "type": "switch",
             "cases": [
                 {
+                    "name": "Yes",
+                    "option": [
+                        "章节图策略"
+                    ]
+                },
+                {
                     "name": "No",
                     "description": "选“不打”会,会使得启用“优先双倍”被“强制双倍”替代,这是为了避免bug",
                     "pipeline_override": {
@@ -628,12 +634,6 @@
                         },
                         "Battle_CollectMapHangXianDoubleCk1No": {}
                     }
-                },
-                {
-                    "name": "Yes",
-                    "option": [
-                        "章节图策略"
-                    ]
                 }
             ]
         },
@@ -730,6 +730,14 @@
             "type": "switch",
             "cases": [
                 {
+                    "name": "Yes",
+                    "option": [
+                        "双倍策略",
+                        "资源策略",
+                        "米饭分配次数"
+                    ]
+                },
+                {
                     "name": "No",
                     "description": "不打:不打航线图，全刷狩猎场。",
                     "pipeline_override": {
@@ -746,14 +754,6 @@
                             ]
                         }
                     }
-                },
-                {
-                    "name": "Yes",
-                    "option": [
-                        "双倍策略",
-                        "资源策略",
-                        "米饭分配次数"
-                    ]
                 }
             ]
         },
