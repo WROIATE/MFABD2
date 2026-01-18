@@ -152,9 +152,9 @@ def install_resource():
         new_title = re.sub(
             pattern, 
             display_version,
-            interface["custom_title"]
+            interface["title"]
         )
-        interface["custom_title"] = new_title
+        interface["title"] = new_title
 
     with open(install_path / "interface.json", "w", encoding="utf-8") as f:
         jsonc.dump(interface, f, ensure_ascii=False, indent=4)
