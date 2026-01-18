@@ -141,8 +141,8 @@ def install_resource():
     # 1. 更新根版本字段（保持 CI 原始格式）
     interface["version"] = version
     
-    # 2. 动态更新 custom_title 中的版本号
-    if "custom_title" in interface:
+    # 2. 动态更新 title 中的版本号
+    if "title" in interface:
         # 匹配 "MFABD2)" 后到 " | 游戏版本" 前的所有内容
         pattern = r"(?<=MFABD2\))(.*?)(?=\s*\|\s*游戏版本：)"
         
@@ -153,9 +153,9 @@ def install_resource():
         new_title = re.sub(
             pattern, 
             display_version,
-            interface["custom_title"]
+            interface["title"]
         )
-        interface["custom_title"] = new_title
+        interface["title"] = new_title
 
     with open(install_path / "interface.json", "w", encoding="utf-8") as f:
         jsonc.dump(interface, f, ensure_ascii=False, indent=4)
