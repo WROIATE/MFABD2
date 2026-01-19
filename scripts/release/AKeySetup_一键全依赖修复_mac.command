@@ -12,6 +12,7 @@ DOTNET_SCRIPT="DependencySetup_依赖库安装_mac.sh"
 GREEN='\033[0;32m'
 BLUE='\033[0;34m'
 YELLOW='\033[1;33m'
+RED='\033[0;31m'  # 补充了红色定义
 NC='\033[0m'
 
 echo -e "${BLUE}=======================================${NC}"
@@ -20,9 +21,9 @@ echo -e "${BLUE}    目标 MAA 版本: $TARGET_MAA_VERSION       ${NC}"
 echo -e "${BLUE}=======================================${NC}"
 
 # =======================================================
-# 第一步：调用上游脚本安装 .NET (你要补的部分)
+# 第一步：调用上游脚本安装 .NET
 # =======================================================
-echo -e "\n${GREEN}>>> [1/2] 检查并安装 .NET 运行时...${NC}"
+echo -e "\n${GREEN}>>> [1/3] 检查并安装 .NET 运行时...${NC}"
 
 if [ -f "./$DOTNET_SCRIPT" ]; then
     echo -e "正在调用外部脚本: $DOTNET_SCRIPT"
@@ -41,7 +42,7 @@ fi
 # =======================================================
 # 第二步：安装 Python 依赖
 # =======================================================
-echo -e "\n${GREEN}>>> [2/2] 配置 Python 环境 (MFABD2 组件)...${NC}"
+echo -e "\n${GREEN}>>> [2/3] 配置 Python 环境 (MFABD2 组件)...${NC}"
 
 # 1. 检查 Python3
 if ! command -v python3 &> /dev/null; then
@@ -83,7 +84,49 @@ for source_entry in "${SOURCES[@]}"; do
 done
 
 # =======================================================
-# 结束
+# 第三步：配置启动路径 (仅在安装成功时执行)
+# =======================================================
+
+if [ "$INSTALL_SUCCESS" = true ]; then
+    # 🟢 Step 3 - 自动将 Python 绝对路径写入配置文件
+    echo -e "\n${GREEN}>>> [3/3] 正在配置启动路径...${NC}"
+    
+    # 1. 获取当前 python3 的绝对路径
+    CURRENT_PYTHON_PATH=$(command -v python3)
+    echo "检测到 Python 路径: $CURRENT_PYTHON_PATH"
+    
+    # 2. 使用 Python 自身来修改 interface.json
+    # 注意：这里的 $CURRENT_PYTHON_PATH 会被 bash 替换后再传给 python
+    python3 -c "
+import json
+import os
+
+config_file = 'interface.json'
+
+try:
+    if os.path.exists(config_file):
+        with open(config_file, 'r', encoding='utf-8') as f:
+            data = json.load(f)
+        
+        # 修改路径
+        old_path = data.get('agent', {}).get('child_exec', '未知')
+        data['agent']['child_exec'] = '$CURRENT_PYTHON_PATH'
+        
+        with open(config_file, 'w', encoding='utf-8') as f:
+            json.dump(data, f, indent=4, ensure_ascii=False)
+            
+        print(f'✅ 已成功更新 interface.json')
+        print(f'   - 旧路径: {old_path}')
+        print(f'   - 新路径: $CURRENT_PYTHON_PATH')
+    else:
+        print('⚠️  未找到 interface.json，跳过路径配置。')
+except Exception as e:
+    print(f'❌ 配置文件修改失败: {e}')
+"
+fi
+
+# =======================================================
+# 结束总结
 # =======================================================
 echo -e "\n${BLUE}=======================================${NC}"
 if [ "$INSTALL_SUCCESS" = true ]; then
