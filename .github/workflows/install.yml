@@ -255,7 +255,7 @@ jobs:
       - name: Install
         shell: bash
         run: |
-          python ./install.py ${{ needs.meta.outputs.tag }} ${{ matrix.os }}
+          python ./install.py ${{ needs.meta.outputs.tag }} ${{ matrix.os }} ${{ env.MAA_VERSION }}
 
           if [[ "${{ matrix.os }}" != "android" ]]; then
             if [ -d "MFA" ]; then

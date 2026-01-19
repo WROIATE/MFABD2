@@ -20,6 +20,7 @@ working_dir = Path(__file__).parent
 install_path = working_dir / Path("install")
 version = len(sys.argv) > 1 and sys.argv[1] or "v0.0.1"
 target_os = len(sys.argv) > 2 and sys.argv[2] or "win"
+maa_ver = len(sys.argv) > 3 and sys.argv[3] or "0.0.0"
 
 def install_deps():
     if not (working_dir / "deps" / "bin").exists():
@@ -166,6 +167,32 @@ def install_chores():
     shutil.copy2(working_dir / "LICENSE", install_path)
     shutil.copy2(working_dir / "LICENSE-APACHE", install_path)
     shutil.copy2(working_dir / "LICENSE-MIT", install_path)
+    # 处理 Mac 引导脚本(复制py3安装脚本、并将实际MFAA的MFA版本写入脚本文件，防止错配报错)
+    if "mac" in target_os or "osx" in target_os:
+        src_script = working_dir / "scripts" / "release" / "AKeySetup_一键全依赖安装_mac.command"
+        dst_script = install_path / "AKeySetup_一键全依赖安装_mac.command"
+
+        if src_script.exists():
+            print(f"处理并打包 Mac 脚本，注入版本号: {maa_ver}")
+
+            # 读取原始内容
+            with open(src_script, 'r', encoding='utf-8') as f:
+                content = f.read()
+
+            # 🟢 核心手术：替换占位符
+            new_content = content.replace("{{MAA_VERSION}}", maa_ver)
+
+            # 写入到安装目录
+            with open(dst_script, 'w', encoding='utf-8') as f:
+                f.write(new_content)
+
+            # 赋予可执行权限 (在 Linux/Mac 构建机上有效，Windows 上可能无效但不影响文件内容)
+            try:
+                os.chmod(dst_script, 0o755)
+            except:
+                pass
+        else:
+            print(f"⚠️ 警告: 未找到脚本源文件 {src_script}")
 
 def install_agent(target_os):
     print("正在安装 Agent...")
@@ -194,11 +221,14 @@ def install_agent(target_os):
         if any(target_os.startswith(p) for p in ["win", "windows"]):
             # Windows 下通常使用嵌入式 Python
             interface["agent"]["child_exec"] = r"{PROJECT_DIR}/python/python.exe"
+            interface["agent"]["child_args"] = ["-u", "-X", "utf8=1", r"{PROJECT_DIR}/agent/main.py"]
         elif any(target_os.startswith(p) for p in ["macos", "darwin", "osx"]):
-            interface["agent"]["child_exec"] = r"{PROJECT_DIR}/python/bin/python3"
+            interface["agent"]["child_exec"] = "python3"
+            interface["agent"]["child_args"] = ["-u", "-X", "utf8=1", r"{PROJECT_DIR}/agent/main.py"]
         else:
             # Linux/Android 通常直接调用系统 python3
             interface["agent"]["child_exec"] = "python3"
+            interface["agent"]["child_args"] = ["-u", r"{PROJECT_DIR}/agent/main.py"]
 
         # 配置启动参数
         # -u 禁用缓冲，让日志实时输出

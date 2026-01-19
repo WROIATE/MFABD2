@@ -465,3 +465,6 @@ debug
 
 .nicegui
 assets/resource/pipeline/*.mpe.json
+
+# 允许追踪 scripts 下的 release 文件夹
+!scripts/release/
