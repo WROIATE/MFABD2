@@ -77,6 +77,7 @@
         "focus": "CSB.技能页3-正确",
         "doc": "色核识别完成.开始施放技能组",
         "next": [
+            "Collect_Skill_AllUsed",
             "Collect_Skill3_1_Nothing",
             "Collect_Skill1_Used",
             "Collect_Skill1"
@@ -455,5 +456,36 @@
             129
         ],
         "doc": "技能页1，结束复位色核识别"
+    },
+    "Collect_Skill_AllUsed": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "recognition": "OCR",
+                "roi": [
+                    942,
+                    564,
+                    54,
+                    34
+                ],
+                "expected": [
+                    "(\\d+)\\s*[/:：|\\-~]?\\s*\\1(?!\\d)"
+                ]
+            },
+            {
+                "recognition": "OCR",
+                "roi": [
+                    976,
+                    484,
+                    56,
+                    32
+                ],
+                "expected": [
+                    "(\\d+)\\s*[/:：|\\-~]?\\s*\\1(?!\\d)"
+                ]
+            }
+        ],
+        "focus": "两种技能均已用完",
+        "action": "StopTask"
     }
 }
