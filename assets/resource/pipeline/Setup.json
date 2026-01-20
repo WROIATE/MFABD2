@@ -1223,197 +1223,7 @@
         "action": "Click",
         "post_delay": 1000,
         "next": [
-            "Setup_SetSkill_Tab1"
-        ]
-    },
-    "Setup_SetSkill_Tab1": {
-        "recognition": "OCR",
-        "expected": [
-            "天赋技能"
-        ],
-        "roi": [
-            87,
-            423,
-            97,
-            47
-        ],
-        "action": "Click",
-        "target": [
-            234,
-            443,
-            9,
-            6
-        ],
-        "post_delay": 1500,
-        "next": [
-            "Setup_SetSkill_Tab1_Ck",
-            "Setup_SetSkill_Tab1"
-        ]
-    },
-    "Setup_SetSkill_Tab1_Ck": {
-        "recognition": "ColorMatch",
-        "upper": [
-            217,
-            177,
-            55
-        ],
-        "lower": [
-            197,
-            157,
-            35
-        ],
-        "roi": [
-            224,
-            434,
-            33,
-            25
-        ],
-        "next": [
-            "Setup_SetSkill_Tab1_Reset5"
-        ]
-    },
-    "Setup_SetSkill_Tab1_Reset5": {
-        "action": "Click",
-        "target": [
-            1135,
-            440,
-            12,
-            11
-        ],
-        "post_delay": 500,
-        "next": [
-            "Setup_SetSkill_Tab1_Reset4"
-        ]
-    },
-    "Setup_SetSkill_Tab1_Reset4": {
-        "action": "Click",
-        "target": [
-            1048,
-            443,
-            9,
-            7
-        ],
-        "post_delay": 500,
-        "next": [
-            "Setup_SetSkill_Tab1_Reset3"
-        ]
-    },
-    "Setup_SetSkill_Tab1_Reset3": {
-        "action": "Click",
-        "target": [
-            968,
-            441,
-            8,
-            4
-        ],
-        "post_delay": 500,
-        "next": [
-            "Setup_SetSkill_Tab1_Reset2"
-        ]
-    },
-    "Setup_SetSkill_Tab1_Reset2": {
-        "action": "Click",
-        "target": [
-            884,
-            442,
-            10,
-            5
-        ],
-        "post_delay": 500,
-        "next": [
-            "Setup_SetSkill_Tab1_Reset1"
-        ]
-    },
-    "Setup_SetSkill_Tab1_Reset1": {
-        "action": "Click",
-        "target": [
-            799,
-            444,
-            10,
-            5
-        ],
-        "post_delay": 500,
-        "next": [
-            "Setup_SetSkill_1-1",
-            "[JumpBack]Setup_SetSkill_1-1_Swip"
-        ]
-    },
-    "Setup_SetSkill_1-1": {
-        "recognition": "OCR",
-        "expected": [
-            "探查"
-        ],
-        "roi": [
-            110,
-            580,
-            1053,
-            33
-        ],
-        "action": "Click",
-        "target_offset": [
-            0,
-            -80,
-            0,
-            0
-        ],
-        "next": [
-            "Setup_SetSkill_1-1_Shake1"
-        ]
-    },
-    "Setup_SetSkill_1-1_Swip": {
-        "recognition": "OCR",
-        "expected": [
-            "天赋技能"
-        ],
-        "roi": [
-            87,
-            423,
-            97,
-            47
-        ],
-        "action": "Swipe",
-        "begin": [
-            1134,
-            592,
-            1,
-            1
-        ],
-        "end": [
-            103,
-            590,
-            1,
-            1
-        ],
-        "duration": 500,
-        "end_hold": 800,
-        "max_hit": 2
-    },
-    "Setup_SetSkill_1-1_Shake1": {
-        "action": "Click",
-        "target": [
-            309,
-            443,
-            7,
-            7
-        ],
-        "post_delay": 500,
-        "next": [
-            "Setup_SetSkill_1-1_Shake2"
-        ]
-    },
-    "Setup_SetSkill_1-1_Shake2": {
-        "action": "Click",
-        "target": [
-            234,
-            443,
-            9,
-            6
-        ],
-        "post_delay": 500,
-        "next": [
-            "[JumpBack]Setup_SetSkill_SwipMini",
-            "Setup_SetSkill_1-2",
-            "[JumpBack]Setup_SetSkill_1-2_Swip"
+            "Setup_SetSkill_tab3"
         ]
     },
     "Setup_SetSkill_SwipMini": {
@@ -1424,563 +1234,34 @@
             23,
             9
         ],
-        "upper": [
-            226,
-            196,
-            130
-        ],
+        "method": 40,
         "lower": [
-            201,
-            155,
+            18,
+            50,
             80
+        ],
+        "upper": [
+            26,
+            255,
+            255
         ],
         "count": 50,
         "action": "Swipe",
         "begin": [
-            220,
+            222,
             505,
-            1,
-            1
+            0,
+            0
         ],
         "end": [
             118,
             510,
-            1,
-            1
+            0,
+            0
         ],
         "duration": 500,
         "end_hold": 800,
         "doc": "小幅度滑动,使黄色消失"
-    },
-    "Setup_SetSkill_1-2": {
-        "recognition": "OCR",
-        "expected": [
-            "召集"
-        ],
-        "roi": [
-            110,
-            580,
-            1053,
-            33
-        ],
-        "action": "Click",
-        "target_offset": [
-            0,
-            -80,
-            0,
-            0
-        ],
-        "next": [
-            "Setup_SetSkill_1-2_Shake1"
-        ]
-    },
-    "Setup_SetSkill_1-2_Swip": {
-        "recognition": "OCR",
-        "expected": [
-            "天赋技能"
-        ],
-        "roi": [
-            87,
-            423,
-            97,
-            47
-        ],
-        "action": "Swipe",
-        "begin": [
-            1134,
-            592,
-            1,
-            1
-        ],
-        "end": [
-            103,
-            590,
-            1,
-            1
-        ],
-        "duration": 500,
-        "end_hold": 800,
-        "max_hit": 2
-    },
-    "Setup_SetSkill_1-2_Shake1": {
-        "action": "Click",
-        "target": [
-            309,
-            443,
-            7,
-            7
-        ],
-        "post_delay": 500,
-        "next": [
-            "Setup_SetSkill_1-2_Shake2"
-        ]
-    },
-    "Setup_SetSkill_1-2_Shake2": {
-        "action": "Click",
-        "target": [
-            234,
-            443,
-            9,
-            6
-        ],
-        "post_delay": 500,
-        "next": [
-            "[JumpBack]Setup_SetSkill_SwipMini",
-            "Setup_SetSkill_1-3",
-            "[JumpBack]Setup_SetSkill_1-3_Swip"
-        ],
-        "timeout": 5000,
-        "on_error": [
-            "Setup_SetSkill_Tab2"
-        ]
-    },
-    "Setup_SetSkill_1-3": {
-        "recognition": "OCR",
-        "expected": [
-            "召集"
-        ],
-        "roi": [
-            302,
-            580,
-            861,
-            33
-        ],
-        "action": "Click",
-        "target_offset": [
-            0,
-            -80,
-            0,
-            0
-        ],
-        "next": [
-            "Setup_SetSkill_1-3_Shake1"
-        ]
-    },
-    "Setup_SetSkill_1-3_Swip": {
-        "recognition": "OCR",
-        "expected": [
-            "天赋技能"
-        ],
-        "roi": [
-            87,
-            423,
-            97,
-            47
-        ],
-        "action": "Swipe",
-        "begin": [
-            1134,
-            592,
-            1,
-            1
-        ],
-        "end": [
-            103,
-            590,
-            1,
-            1
-        ],
-        "duration": 500,
-        "end_hold": 800,
-        "max_hit": 2
-    },
-    "Setup_SetSkill_1-3_Shake1": {
-        "action": "Click",
-        "target": [
-            309,
-            443,
-            7,
-            7
-        ],
-        "post_delay": 500,
-        "next": [
-            "Setup_SetSkill_1-3_Shake2"
-        ]
-    },
-    "Setup_SetSkill_1-3_Shake2": {
-        "action": "Click",
-        "target": [
-            234,
-            443,
-            9,
-            6
-        ],
-        "post_delay": 500,
-        "next": [
-            "[JumpBack]Setup_SetSkill_SwipMini",
-            "Setup_SetSkill_1-4",
-            "[JumpBack]Setup_SetSkill_1-4_Swip"
-        ],
-        "timeout": 5000,
-        "on_error": [
-            "Setup_SetSkill_Tab2"
-        ]
-    },
-    "Setup_SetSkill_1-4": {
-        "recognition": "OCR",
-        "expected": [
-            "召集"
-        ],
-        "roi": [
-            110,
-            580,
-            1053,
-            33
-        ],
-        "action": "Click",
-        "target_offset": [
-            0,
-            -80,
-            0,
-            0
-        ],
-        "next": [
-            "Setup_SetSkill_1-4_Shake1"
-        ]
-    },
-    "Setup_SetSkill_1-4_Swip": {
-        "recognition": "OCR",
-        "expected": [
-            "天赋技能"
-        ],
-        "roi": [
-            87,
-            423,
-            97,
-            47
-        ],
-        "action": "Swipe",
-        "begin": [
-            1134,
-            592,
-            1,
-            1
-        ],
-        "end": [
-            103,
-            590,
-            1,
-            1
-        ],
-        "duration": 500,
-        "end_hold": 800,
-        "max_hit": 2
-    },
-    "Setup_SetSkill_1-4_Shake1": {
-        "action": "Click",
-        "target": [
-            309,
-            443,
-            7,
-            7
-        ],
-        "post_delay": 500,
-        "next": [
-            "Setup_SetSkill_1-4_Shake2"
-        ]
-    },
-    "Setup_SetSkill_1-4_Shake2": {
-        "action": "Click",
-        "target": [
-            234,
-            443,
-            9,
-            6
-        ],
-        "post_delay": 500,
-        "next": [
-            "[JumpBack]Setup_SetSkill_SwipMini",
-            "Setup_SetSkill_1-5",
-            "[JumpBack]Setup_SetSkill_1-5_Swip"
-        ],
-        "timeout": 5000,
-        "on_error": [
-            "Setup_SetSkill_Tab2"
-        ]
-    },
-    "Setup_SetSkill_1-5": {
-        "recognition": "OCR",
-        "expected": [
-            "召集"
-        ],
-        "roi": [
-            110,
-            580,
-            1053,
-            33
-        ],
-        "action": "Click",
-        "target_offset": [
-            0,
-            -80,
-            0,
-            0
-        ],
-        "next": [
-            "Setup_SetSkill_Tab2"
-        ],
-        "timeout": 5000,
-        "on_error": [
-            "Setup_SetSkill_Tab2_Hub"
-        ]
-    },
-    "Setup_SetSkill_1-5_Swip": {
-        "recognition": "OCR",
-        "expected": [
-            "天赋技能"
-        ],
-        "roi": [
-            87,
-            423,
-            97,
-            47
-        ],
-        "action": "Swipe",
-        "begin": [
-            1134,
-            592,
-            1,
-            1
-        ],
-        "end": [
-            103,
-            590,
-            1,
-            1
-        ],
-        "duration": 500,
-        "end_hold": 800,
-        "max_hit": 2
-    },
-    "Setup_SetSkill_Tab2_Hub": {
-        "next": [
-            "Setup_SetSkill_Tab2"
-        ]
-    },
-    "Setup_SetSkill_Tab2": {
-        "recognition": "OCR",
-        "expected": [
-            "天赋技能"
-        ],
-        "roi": [
-            87,
-            423,
-            97,
-            47
-        ],
-        "action": "Click",
-        "target": [
-            309,
-            443,
-            8,
-            8
-        ],
-        "post_delay": 1500,
-        "next": [
-            "Setup_SetSkill_Tab2_Ck",
-            "Setup_SetSkill_Tab2"
-        ]
-    },
-    "Setup_SetSkill_Tab2_Ck": {
-        "recognition": "ColorMatch",
-        "upper": [
-            217,
-            177,
-            55
-        ],
-        "lower": [
-            197,
-            157,
-            35
-        ],
-        "roi": [
-            297,
-            435,
-            30,
-            24
-        ],
-        "next": [
-            "[JumpBack]Setup_SetSkill_tab2_ReLift",
-            "Setup_SetSkill_Tab2_Reset5"
-        ]
-    },
-    "Setup_SetSkill_tab2_ReLift": {
-        "recognition": "OCR",
-        "expected": [
-            "天赋技能"
-        ],
-        "roi": [
-            87,
-            423,
-            97,
-            47
-        ],
-        "action": "Swipe",
-        "end": [
-            1134,
-            592,
-            1,
-            1
-        ],
-        "begin": [
-            115,
-            590,
-            1,
-            1
-        ],
-        "duration": 500,
-        "end_hold": 800,
-        "max_hit": 3
-    },
-    "Setup_SetSkill_Tab2_Reset5": {
-        "action": "Click",
-        "target": [
-            1135,
-            440,
-            12,
-            11
-        ],
-        "post_delay": 500,
-        "next": [
-            "Setup_SetSkill_Tab2_Reset4"
-        ]
-    },
-    "Setup_SetSkill_Tab2_Reset4": {
-        "action": "Click",
-        "target": [
-            1048,
-            443,
-            9,
-            7
-        ],
-        "post_delay": 500,
-        "next": [
-            "Setup_SetSkill_Tab2_Reset3"
-        ]
-    },
-    "Setup_SetSkill_Tab2_Reset3": {
-        "action": "Click",
-        "target": [
-            968,
-            441,
-            8,
-            4
-        ],
-        "post_delay": 500,
-        "next": [
-            "Setup_SetSkill_Tab2_Reset2"
-        ]
-    },
-    "Setup_SetSkill_Tab2_Reset2": {
-        "action": "Click",
-        "target": [
-            884,
-            442,
-            10,
-            5
-        ],
-        "post_delay": 500,
-        "next": [
-            "Setup_SetSkill_Tab2_Reset1"
-        ]
-    },
-    "Setup_SetSkill_Tab2_Reset1": {
-        "action": "Click",
-        "target": [
-            799,
-            444,
-            10,
-            5
-        ],
-        "post_delay": 500,
-        "next": [
-            "Setup_SetSkill_2_Hub"
-        ]
-    },
-    "Setup_SetSkill_2_Hub": {
-        "next": [
-            "[JumpBack]Setup_SetSkill_SwipMini",
-            "[JumpBack]Setup_SetSkill_2-1",
-            "[JumpBack]Setup_SetSkill_2-1_Swip"
-        ],
-        "timeout": 5000,
-        "on_error": [
-            "Setup_SetSkill_tab3"
-        ]
-    },
-    "Setup_SetSkill_2-1": {
-        "recognition": "OCR",
-        "expected": [
-            "吸收"
-        ],
-        "roi": [
-            110,
-            580,
-            1053,
-            33
-        ],
-        "action": "Click",
-        "target_offset": [
-            0,
-            -80,
-            0,
-            0
-        ],
-        "post_delay": 500,
-        "next": [
-            "Setup_SetSkill_2-1_Shake1"
-        ]
-    },
-    "Setup_SetSkill_2-1_Swip": {
-        "recognition": "OCR",
-        "expected": [
-            "天赋技能"
-        ],
-        "roi": [
-            87,
-            423,
-            97,
-            47
-        ],
-        "action": "Swipe",
-        "begin": [
-            1134,
-            592,
-            1,
-            1
-        ],
-        "end": [
-            103,
-            590,
-            1,
-            1
-        ],
-        "duration": 500,
-        "end_hold": 800,
-        "max_hit": 2
-    },
-    "Setup_SetSkill_2-1_Shake1": {
-        "action": "Click",
-        "target": [
-            379,
-            442,
-            11,
-            9
-        ],
-        "post_delay": 500,
-        "next": [
-            "Setup_SetSkill_2-1_Shake2"
-        ]
-    },
-    "Setup_SetSkill_2-1_Shake2": {
-        "action": "Click",
-        "target": [
-            309,
-            443,
-            7,
-            7
-        ],
-        "post_delay": 500
     },
     "Setup_SetSkill_tab3": {
         "recognition": "OCR",
@@ -1989,16 +1270,16 @@
         ],
         "roi": [
             87,
-            423,
+            371,
             97,
-            47
+            99
         ],
         "action": "Click",
         "target": [
-            382,
-            443,
-            9,
-            7
+            380,
+            411,
+            10,
+            8
         ],
         "post_delay": 1500,
         "next": [
@@ -2019,10 +1300,10 @@
             35
         ],
         "roi": [
-            368,
-            436,
-            35,
-            21
+            366,
+            405,
+            36,
+            22
         ],
         "next": [
             "[JumpBack]Setup_SetSkill_tab3_ReLift",
@@ -2036,9 +1317,9 @@
         ],
         "roi": [
             87,
-            423,
+            371,
             97,
-            47
+            99
         ],
         "action": "Swipe",
         "end": [
@@ -2060,10 +1341,10 @@
     "Setup_SetSkill_tab3_Reset5": {
         "action": "Click",
         "target": [
-            1135,
-            440,
-            12,
-            11
+            1133,
+            391,
+            13,
+            42
         ],
         "post_delay": 500,
         "next": [
@@ -2073,10 +1354,10 @@
     "Setup_SetSkill_tab3_Reset4": {
         "action": "Click",
         "target": [
-            1048,
-            443,
-            9,
-            7
+            1051,
+            409,
+            10,
+            8
         ],
         "post_delay": 500,
         "next": [
@@ -2086,10 +1367,10 @@
     "Setup_SetSkill_tab3_Reset3": {
         "action": "Click",
         "target": [
-            968,
-            441,
-            8,
-            4
+            967,
+            412,
+            9,
+            5
         ],
         "post_delay": 500,
         "next": [
@@ -2100,9 +1381,9 @@
         "action": "Click",
         "target": [
             884,
-            442,
-            10,
-            5
+            409,
+            11,
+            6
         ],
         "post_delay": 500,
         "next": [
@@ -2112,10 +1393,10 @@
     "Setup_SetSkill_tab3_Reset1": {
         "action": "Click",
         "target": [
-            799,
-            444,
-            10,
-            5
+            801,
+            410,
+            11,
+            6
         ],
         "post_delay": 500,
         "next": [
@@ -2126,7 +1407,7 @@
     "Setup_SetSkill_3-1": {
         "recognition": "OCR",
         "expected": [
-            "生成魔法阵"
+            "探查"
         ],
         "roi": [
             110,
@@ -2152,9 +1433,9 @@
         ],
         "roi": [
             87,
-            423,
+            371,
             97,
-            47
+            99
         ],
         "action": "Swipe",
         "begin": [
@@ -2177,40 +1458,368 @@
         "action": "Click",
         "target": [
             309,
-            443,
-            7,
-            7
+            412,
+            8,
+            8
         ],
         "post_delay": 500,
         "next": [
             "Setup_SetSkill_3-1_Shake2"
-        ]
+        ],
+        "doc": "Shake,图钉技能组切出去再切回来，技能就会自动排列——选中的黄色在前，方便滑动隐藏"
     },
     "Setup_SetSkill_3-1_Shake2": {
         "action": "Click",
         "target": [
             379,
-            442,
+            410,
             11,
-            9
+            8
         ],
         "post_delay": 500,
         "next": [
-            "Setup_SetSkill_Select3-5"
+            "Setup_SetSkill_3-2_Pre",
+            "[JumpBack]Setup_SetSkill_ReLift"
         ]
     },
-    "Setup_SetSkill_Select3-5": {
+    "Setup_SetSkill_3-2_Pre": {
+        "recognition": "ColorMatch",
+        "roi": [
+            110,
+            503,
+            23,
+            9
+        ],
+        "method": 40,
+        "lower": [
+            18,
+            50,
+            80
+        ],
+        "upper": [
+            26,
+            255,
+            255
+        ],
+        "count": 50,
+        "next": [
+            "Setup_SetSkill_3-2",
+            "[JumpBack]Setup_SetSkill_SwipMini",
+            "[JumpBack]Setup_SetSkill_1to2_Swip"
+        ]
+    },
+    "Setup_SetSkill_3-2": {
+        "recognition": "OCR",
+        "expected": [
+            "吸收"
+        ],
+        "roi": [
+            110,
+            580,
+            1053,
+            33
+        ],
         "action": "Click",
-        "target": [
-            1135,
-            440,
-            12,
-            11
+        "target_offset": [
+            0,
+            -80,
+            0,
+            0
         ],
         "post_delay": 500,
         "next": [
+            "Setup_SetSkill_3-2_Shake1"
+        ]
+    },
+    "Setup_SetSkill_2to3_Swip": {
+        "recognition": "OCR",
+        "expected": [
+            "天赋技能"
+        ],
+        "roi": [
+            87,
+            371,
+            97,
+            99
+        ],
+        "action": "Swipe",
+        "begin": [
+            1134,
+            592,
+            1,
+            1
+        ],
+        "end": [
+            103,
+            590,
+            1,
+            1
+        ],
+        "duration": 500,
+        "end_hold": 800,
+        "max_hit": 2
+    },
+    "Setup_SetSkill_3-2_Shake1": {
+        "action": "Click",
+        "target": [
+            309,
+            412,
+            8,
+            8
+        ],
+        "post_delay": 500,
+        "next": [
+            "Setup_SetSkill_3-2_Shake2"
+        ]
+    },
+    "Setup_SetSkill_3-2_Shake2": {
+        "action": "Click",
+        "target": [
+            379,
+            410,
+            11,
+            8
+        ],
+        "post_delay": 500,
+        "next": [
+            "Setup_SetSkill_3-3_Pre",
+            "[JumpBack]Setup_SetSkill_ReLift"
+        ]
+    },
+    "Setup_SetSkill_3-3_Pre": {
+        "recognition": "ColorMatch",
+        "roi": [
+            110,
+            503,
+            23,
+            9
+        ],
+        "method": 40,
+        "lower": [
+            18,
+            50,
+            80
+        ],
+        "upper": [
+            26,
+            255,
+            255
+        ],
+        "count": 50,
+        "next": [
+            "Setup_SetSkill_3-3",
+            "[JumpBack]Setup_SetSkill_SwipMini",
+            "[JumpBack]Setup_SetSkill_2to3_Swip"
+        ]
+    },
+    "Setup_SetSkill_3-3": {
+        "recognition": "OCR",
+        "expected": [
+            "召集"
+        ],
+        "roi": [
+            110,
+            580,
+            1053,
+            33
+        ],
+        "action": "Click",
+        "target_offset": [
+            0,
+            -80,
+            0,
+            0
+        ],
+        "next": [
+            "Setup_SetSkill_3-3_Shake1"
+        ]
+    },
+    "Setup_SetSkill_3to4_Swip": {
+        "recognition": "OCR",
+        "expected": [
+            "天赋技能"
+        ],
+        "roi": [
+            87,
+            371,
+            97,
+            99
+        ],
+        "action": "Swipe",
+        "begin": [
+            1134,
+            592,
+            1,
+            1
+        ],
+        "end": [
+            103,
+            590,
+            1,
+            1
+        ],
+        "duration": 500,
+        "end_hold": 800,
+        "max_hit": 2
+    },
+    "Setup_SetSkill_3-3_Shake1": {
+        "action": "Click",
+        "target": [
+            309,
+            412,
+            8,
+            8
+        ],
+        "post_delay": 500,
+        "next": [
+            "Setup_SetSkill_3-3_Shake2"
+        ]
+    },
+    "Setup_SetSkill_3-3_Shake2": {
+        "action": "Click",
+        "target": [
+            379,
+            410,
+            11,
+            8
+        ],
+        "post_delay": 500,
+        "next": [
+            "Setup_SetSkill_3-4_Pre",
+            "[JumpBack]Setup_SetSkill_ReLift"
+        ],
+        "timeout": 5000,
+        "on_error": []
+    },
+    "Setup_SetSkill_3-4_Pre": {
+        "recognition": "ColorMatch",
+        "roi": [
+            110,
+            503,
+            23,
+            9
+        ],
+        "method": 40,
+        "lower": [
+            18,
+            50,
+            80
+        ],
+        "upper": [
+            26,
+            255,
+            255
+        ],
+        "count": 50,
+        "next": [
+            "Setup_SetSkill_3-4",
+            "[JumpBack]Setup_SetSkill_SwipMini",
+            "[JumpBack]Setup_SetSkill_3to4_Swip"
+        ]
+    },
+    "Setup_SetSkill_3-4": {
+        "recognition": "OCR",
+        "expected": [
+            "生成魔法阵"
+        ],
+        "roi": [
+            110,
+            580,
+            1053,
+            33
+        ],
+        "action": "Click",
+        "target_offset": [
+            0,
+            -80,
+            0,
+            0
+        ],
+        "next": [
+            "Setup_SetSkill_3-4_Shake1"
+        ]
+    },
+    "Setup_SetSkill_4to5_Swip": {
+        "recognition": "OCR",
+        "expected": [
+            "天赋技能"
+        ],
+        "roi": [
+            87,
+            371,
+            97,
+            99
+        ],
+        "action": "Swipe",
+        "begin": [
+            1134,
+            592,
+            1,
+            1
+        ],
+        "end": [
+            103,
+            590,
+            1,
+            1
+        ],
+        "duration": 500,
+        "end_hold": 800,
+        "max_hit": 2
+    },
+    "Setup_SetSkill_3-4_Shake1": {
+        "action": "Click",
+        "target": [
+            309,
+            412,
+            8,
+            8
+        ],
+        "post_delay": 500,
+        "next": [
+            "Setup_SetSkill_3-4_Shake2"
+        ]
+    },
+    "Setup_SetSkill_3-4_Shake2": {
+        "action": "Click",
+        "target": [
+            379,
+            410,
+            11,
+            8
+        ],
+        "post_delay": 500,
+        "next": [
+            "Setup_SetSkill_3-5_Pre",
+            "[JumpBack]Setup_SetSkill_ReLift"
+        ],
+        "timeout": 5000,
+        "on_error": []
+    },
+    "Setup_SetSkill_3-5_Pre": {
+        "recognition": "ColorMatch",
+        "roi": [
+            110,
+            503,
+            23,
+            9
+        ],
+        "method": 40,
+        "lower": [
+            18,
+            50,
+            80
+        ],
+        "upper": [
+            26,
+            255,
+            255
+        ],
+        "count": 50,
+        "next": [
             "Setup_SetSkill_3-5",
-            "[JumpBack]Setup_SetSkill_3-5_Swip"
+            "[JumpBack]Setup_SetSkill_SwipMini",
+            "[JumpBack]Setup_SetSkill_4to5_Swip"
         ]
     },
     "Setup_SetSkill_3-5": {
@@ -2235,16 +1844,56 @@
             "Setup_SetSkill_3-5_Shake1"
         ]
     },
-    "Setup_SetSkill_3-5_Swip": {
+    "Setup_SetSkill_3-5_Shake1": {
+        "action": "Click",
+        "target": [
+            309,
+            412,
+            8,
+            8
+        ],
+        "post_delay": 500,
+        "next": [
+            "Setup_SetSkill_3-5_Shake2"
+        ]
+    },
+    "Setup_SetSkill_3-5_Shake2": {
+        "action": "Click",
+        "target": [
+            379,
+            410,
+            11,
+            8
+        ],
+        "post_delay": 500,
+        "next": [
+            "Setup_End",
+            "[JumpBack]Global_ToSandBox"
+        ]
+    },
+    "Setup_End": {
+        "recognition": "TemplateMatch",
+        "focus": "Set.结束",
+        "roi": [
+            1108,
+            637,
+            65,
+            57
+        ],
+        "template": [
+            "pin.png"
+        ]
+    },
+    "Setup_SetSkill_1to2_Swip": {
         "recognition": "OCR",
         "expected": [
             "天赋技能"
         ],
         "roi": [
             87,
-            423,
+            371,
             97,
-            47
+            99
         ],
         "action": "Swipe",
         "begin": [
@@ -2261,47 +1910,58 @@
         ],
         "duration": 500,
         "end_hold": 800,
-        "max_hit": 2
+        "max_hit": 2,
+        "doc": "当页找不到,向后滑动,限定次数"
     },
-    "Setup_SetSkill_3-5_Shake1": {
-        "action": "Click",
-        "target": [
-            379,
-            442,
-            11,
+    "Setup_SetSkill_LiftYew_ReLiftEnd": {
+        "recognition": "ColorMatch",
+        "roi": [
+            110,
+            503,
+            23,
             9
         ],
-        "post_delay": 500,
-        "next": [
-            "Setup_SetSkill_3-5_Shake2"
-        ]
-    },
-    "Setup_SetSkill_3-5_Shake2": {
-        "action": "Click",
-        "target": [
-            309,
-            443,
-            7,
-            7
+        "method": 40,
+        "lower": [
+            18,
+            50,
+            80
         ],
-        "post_delay": 500,
-        "next": [
-            "Setup_End",
-            "[JumpBack]Global_ToSandBox"
-        ]
+        "upper": [
+            26,
+            255,
+            255
+        ],
+        "count": 50,
+        "doc": "判断当前页是否包含未选择技能的第一个.方法,左侧识别到黄色图标"
     },
-    "Setup_End": {
-        "recognition": "TemplateMatch",
-        "action": "Click",
-        "focus": "Set.结束",
+    "Setup_SetSkill_ReLift": {
+        "recognition": "OCR",
+        "expected": [
+            "天赋技能"
+        ],
         "roi": [
-            1108,
-            637,
-            65,
-            57
+            87,
+            371,
+            97,
+            99
         ],
-        "template": [
-            "pin.png"
-        ]
+        "action": "Swipe",
+        "end": [
+            1134,
+            592,
+            1,
+            1
+        ],
+        "begin": [
+            115,
+            590,
+            1,
+            1
+        ],
+        "duration": 500,
+        "end_hold": 600,
+        "post_delay": 1000,
+        "focus": "将技能列表复位"
     }
 }
