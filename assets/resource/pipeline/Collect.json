@@ -1494,7 +1494,7 @@
       91,
       90
     ],
-    "post_delay": 500,
+    "post_delay": 1000,
     "template": [
       "IcoHand.png"
     ],
