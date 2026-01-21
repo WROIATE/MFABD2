@@ -70,13 +70,14 @@
 > 
 - 人物技能请按图中设置
 
- > <img alt="LOGO" src="https://github.com/sunyink/MFABD2/blob/main/ReadMe/IT-2511.jpg"  width="600px"/>
+ > <img alt="LOGO" src="https://github.com/sunyink/MFABD2/blob/main/ReadMe/IT-2601.jpg"  width="600px"/>
  > <img alt="LOGO" src="https://github.com/sunyink/MFABD2/blob/main/ReadMe/3.png"  width="400px"/>
 
 ---
 <details>
   <summary>Mac系统使用指引</summary>
-  经反馈Mac可以使用，配置过程复杂些。可以参考[M9A文档站](https://1999.fan/zh_cn/manual/newbie.html)，因为是同样的框架，软件部署部分是相通的。
+  - 经反馈Mac可以使用，配置过程复杂些。可以参考[M9A文档站](https://1999.fan/zh_cn/manual/newbie.html)，因为是同样的框架，软件部署部分是相通的。<Br>
+  - Mac的Agent功能，在根目录提供一键修复环境脚本，可能需要经常使用。
 </details>
 
 ## 功能一览
