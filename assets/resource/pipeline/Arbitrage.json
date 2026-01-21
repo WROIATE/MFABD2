@@ -212,7 +212,9 @@
         "focus": "点击商店",
         "next": [
             "Arbitrage_NviGuide_CKMsgBox_Ocr",
-            "Arbitrage_NviGuide_Merchant_Ocr"
+            "Arbitrage_NviGuide_Merchant_Ocr",
+            "[JumpBack]Arbitrage_NviGuide_Onfoot_Loop",
+            "Arbitrage_Merchant_Ico"
         ]
     },
     "Arbitrage_NviGuide_CKMsgBox_Ocr": {
