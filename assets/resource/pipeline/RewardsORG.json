@@ -514,6 +514,7 @@
     "recognition": "TemplateMatch",
     "action": "Click",
     "next": [
+      "[JumpBack]Global_WaitingForLoading",
       "RewardsORG_FantasiaSquare",
       "RewardsORG_Square_ToSquare"
     ],
