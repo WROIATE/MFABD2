@@ -1403,8 +1403,7 @@
       "罗戴夫镇",
       "安全"
     ],
-    "post_delay": 800,
-    "post_wait_freezes": 200,
+    "post_wait_freezes": 1500,
     "target": [
       120,
       35,

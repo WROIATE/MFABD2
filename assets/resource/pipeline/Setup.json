@@ -116,7 +116,8 @@
                 ],
                 "template": [
                     "Skill1-1.png"
-                ]
+                ],
+                "threshold": 0.6
             },
             {
                 "recognition": "TemplateMatch",
@@ -128,7 +129,8 @@
                 ],
                 "template": [
                     "Skill1-2~5.png"
-                ]
+                ],
+                "threshold": 0.6
             },
             {
                 "recognition": "TemplateMatch",
@@ -140,7 +142,8 @@
                 ],
                 "template": [
                     "Skill2-1-2.png"
-                ]
+                ],
+                "threshold": 0.6
             },
             {
                 "recognition": "TemplateMatch",
@@ -152,7 +155,8 @@
                 ],
                 "template": [
                     "skill3-5.png"
-                ]
+                ],
+                "threshold": 0.6
             },
             {
                 "recognition": "TemplateMatch",
@@ -164,7 +168,8 @@
                 ],
                 "template": [
                     "Skill3-1.png"
-                ]
+                ],
+                "threshold": 0.6
             }
         ],
         "inverse": true,
