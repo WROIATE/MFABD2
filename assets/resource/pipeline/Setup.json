@@ -103,6 +103,83 @@
         "focus": "SMSP.触发设置按需调整,原因:启动不应默认在箱庭",
         "max_hit": 1
     },
+    "Setup_Entry5": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "recognition": "TemplateMatch",
+                "roi": [
+                    970,
+                    620,
+                    66,
+                    67
+                ],
+                "template": [
+                    "Skill1-1.png"
+                ],
+                "threshold": 0.6
+            },
+            {
+                "recognition": "TemplateMatch",
+                "roi": [
+                    933,
+                    526,
+                    75,
+                    73
+                ],
+                "template": [
+                    "Skill1-2~5.png"
+                ],
+                "threshold": 0.6
+            },
+            {
+                "recognition": "TemplateMatch",
+                "roi": [
+                    966,
+                    437,
+                    80,
+                    86
+                ],
+                "template": [
+                    "Skill2-1-2.png"
+                ],
+                "threshold": 0.6
+            },
+            {
+                "recognition": "TemplateMatch",
+                "roi": [
+                    1140,
+                    447,
+                    83,
+                    83
+                ],
+                "template": [
+                    "skill3-5.png"
+                ],
+                "threshold": 0.6
+            },
+            {
+                "recognition": "TemplateMatch",
+                "roi": [
+                    1051,
+                    400,
+                    81,
+                    86
+                ],
+                "template": [
+                    "Skill3-1.png"
+                ],
+                "threshold": 0.6
+            }
+        ],
+        "inverse": true,
+        "focus": "SMSP.技能页3有未放置好的技能",
+        "next": [
+            "[JumpBack]Setup_ToPve2#_Switch",
+            "[JumpBack]Setup_SetSkill_Switch"
+        ],
+        "max_hit": 1
+    },
     "Setup_ToPve2#_Switch": {
         "next": [
             "Global_BackToPve2#"
