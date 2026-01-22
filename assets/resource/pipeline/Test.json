@@ -1,13 +1,30 @@
 {
   "Test_HomePage": {
+    "action": "Custom",
+    "custom_action": "CheckCoolDown",
+    "custom_action_param": {
+      "card_name": "Map_01"
+    },
     "next": [
-      "Check_Weekly_Task"
+      "Test_HomePage_0"
     ],
+    "timeout": 5000,
     "on_error": [
-      "errer"
+      "Test_HomePage_1"
     ],
     "focus": "G=0.流程启动",
     "doc": "开始周任务检测流程"
+  },
+  "Test_HomePage_0": {
+    "focus": "测试=0,通过",
+    "action": "Custom",
+    "custom_action": "MarkComplete",
+    "custom_action_param": {
+      "card_name": "Map_01"
+    }
+  },
+  "Test_HomePage_1": {
+    "focus": "测试=1,失败"
   },
   "Check_Weekly_Task": {
     "next": [

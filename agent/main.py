@@ -5,7 +5,7 @@ import sys
 import platform
 from pathlib import Path
 
-# --- 核心修复：添加依赖库路径 ---
+# --- 添加依赖库路径 ---
 current_file_path = Path(__file__).resolve()
 project_root = current_file_path.parent.parent  # 指向 install/ 目录
 deps_path = project_root / "agent"
@@ -49,13 +49,14 @@ from maa.toolkit import Toolkit
 # 如果你有自定义动作/识别，在这里导入 (参照 B 项目)
 # import my_action 
 # import my_reco
-import fishing_agent
+import fishing_agent # 钓鱼~
+import action # 动作子文件夹:agent\action\__init__.py里声明的全部
 
 
 def main():
     # 设置 stdout 为 utf-8 (防止中文乱码)
     if sys.version_info >= (3, 7):
-        sys.stdout.reconfigure(encoding='utf-8')
+        sys.stdout.reconfigure(encoding='utf-8') # type: ignore
 
     print(f"Agent 正在启动... 根目录: {project_root}")
 
