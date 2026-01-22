@@ -241,14 +241,7 @@
     "recognition": "TemplateMatch",
     "action": "Click",
     "next": [
-      "Gacha_FindFreeGacha_GotoADV",
-      "Gacha_PvAnimeIsOver",
-      "[JumpBack]Gacha_SkipPV",
-      "Gacha_FindFreeGacha"
-    ],
-    "on_error": [
-      "Gacha_Slip",
-      "GachaADV_Start"
+      "Gacha_SkipPV"
     ],
     "roi": [
       317,
@@ -260,7 +253,7 @@
       "FreeGacha.png"
     ],
     "order_by": "Vertical",
-    "post_wait_freezes": 1000,
+    "post_wait_freezes": 500,
     "post_delay": 200,
     "threshold": 0.85,
     "timeout": 5000,
@@ -298,19 +291,17 @@
       19,
       28
     ],
-    "recognition": "OCR",
-    "inverse": true,
-    "expected": [
-      "兑换"
+    "doc": "GA.卡池动画跳过.把FindFreeGacha的next起点接到这里:强制点一下来跳过可能的动画.",
+    "post_delay": 800,
+    "next": [
+      "Gacha_FindFreeGacha_GotoADV",
+      "Gacha_PvAnimeIsOver",
+      "Gacha_FindFreeGacha"
     ],
-    "focus": "GA.卡池动画跳过",
-    "roi": [
-      1038,
-      381,
-      155,
-      147
-    ],
-    "post_delay": 800
+    "on_error": [
+      "Gacha_Slip",
+      "GachaADV_Start"
+    ]
   },
   "Gacha_PvAnimeIsOver": {
     "recognition": "OCR",
