@@ -83,13 +83,13 @@ else:
     # 【开发模式】：绝对不要乱指路！
     # 开发环境下，Python 会自动去 venv/site-packages 里找 pip 安装好的最新 DLL
     # 如果这里强行指向 runtimes，就会导致“代码是新的，DLL 是旧的”版本冲突
-    mfaalog.info("开发模式: 跳过 DLL 路径注入 (使用 Python 库自带 DLL)  | agent\utils\venv_ops.py的maafw版本需要手动指定与agent一致")
+    mfaalog.info("开发模式: 跳过 DLL 路径注入 (使用 Python 库自带 DLL)  | agent//utils//venv_ops.py的maafw版本需要手动指定与agent一致")
 
 from maa.agent.agent_server import AgentServer
 from maa.toolkit import Toolkit
 
 # 如果你有自定义动作/识别，在这里导入
-import action # action子文件夹:agent\action\__init__.py里声明的全部
+import action # action子文件夹:agent/action/__init__.py里声明的全部
 import fishing_agent # 钓鱼~
 
 

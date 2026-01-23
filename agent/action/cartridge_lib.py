@@ -2,6 +2,7 @@ import json
 import os
 import time
 from datetime import datetime, timedelta
+import utils
 
 # --- 引入 MFA 核心库 ---
 from maa.custom_action import CustomAction
@@ -13,8 +14,8 @@ CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
 PROJECT_ROOT = os.path.dirname(os.path.dirname(CURRENT_DIR))
 DB_PATH = os.path.join(PROJECT_ROOT, "cartridge_history.json")
 
-print(f"[Python] 冷却管理器已加载。")
-print(f"[Python] 数据库路径: {DB_PATH}")
+utils.mfaalog.info(f"[Py] 周常管理器已加载。")
+utils.mfaalog.info(f"[Py] 数据库路径: {DB_PATH}")
 
 class CooldownManager:
     def __init__(self):
@@ -27,7 +28,8 @@ class CooldownManager:
                 with open(DB_PATH, 'r', encoding='utf-8') as f:
                     self.data = json.load(f)
             except Exception as e:
-                print(f"[Python] 读取记录失败: {e}，将创建新记录。")
+                utils.mfaalog.info(f"[Py] 读取记录失败: {e}，将创建新记录。")
+                utils.mfaalog.info(f"[Py] 读取记录失败: {e}，将创建新记录。")
                 self.data = {}
         else:
             self.data = {}
@@ -37,7 +39,7 @@ class CooldownManager:
             with open(DB_PATH, 'w', encoding='utf-8') as f:
                 json.dump(self.data, f, indent=4, ensure_ascii=False)
         except Exception as e:
-            print(f"[Python] 保存记录失败: {e}")
+            utils.mfaalog.info(f"[Py] 保存记录失败: {e}")
 
     def _get_last_reset_time(self):
         now = datetime.now()
@@ -66,14 +68,14 @@ class CooldownManager:
             else:
                 card_name = str(argv)
         except Exception as e:
-            print(f"[Python] 参数解析警告: {e}, argv type: {type(argv)}")
+            utils.mfaalog.info(f"[Py] 参数解析警告: {e}, argv type: {type(argv)}")
             card_name = "Unknown_Card"
 
-        print(f"----------------------------------------")
-        print(f"[Python] 正在检查卡带: {card_name}")
+        utils.mfaalog.info(f"----------------------------------------")
+        utils.mfaalog.info(f"[Py] 正在检查卡带: {card_name}")
 
         if card_name not in self.data:
-            print(f"[Python] 🟢 无历史记录，允许进入。")
+            utils.mfaalog.info(f"[Py] 🟢 无历史记录，允许进入。")
             return True
 
         last_play_str = self.data[card_name]
@@ -81,17 +83,17 @@ class CooldownManager:
             last_play_time = datetime.strptime(last_play_str, "%Y-%m-%d %H:%M:%S")
             reset_time = self._get_last_reset_time()
             
-            print(f"[Python] 上次吸取: {last_play_str}")
-            print(f"[Python] 刷新基准: {reset_time}")
+            utils.mfaalog.info(f"[Py] 上次吸取: {last_play_str}")
+            utils.mfaalog.info(f"[Py] 刷新基准: {reset_time}")
 
             if last_play_time < reset_time:
-                print(f"[Python] 🟢 已过刷新点，允许进入。")
+                utils.mfaalog.info(f"[Py] 🟢 已过刷新点，允许进入。")
                 return True
             else:
-                print(f"[Python] 🔴 本周已完成，跳过。")
+                utils.mfaalog.info(f"[Py] 🔴 本周已完成，跳过。")
                 return False
         except Exception as e:
-            print(f"[Python] ⚠️ 时间解析错误 ({e})，默认允许进入。")
+            utils.mfaalog.info(f"[Py] ⚠️ 时间解析错误 ({e})，默认允许进入。")
             return True
 
     def mark_complete(self, argv):
@@ -114,7 +116,7 @@ class CooldownManager:
         now_str = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         self.data[card_name] = now_str
         self.save()
-        print(f"[Python] ✅ {card_name} 记录已更新: {now_str}")
+        utils.mfaalog.info(f"[Py] ✅ {card_name} 记录已更新: {now_str}")
         return True
 
 manager = CooldownManager()
@@ -130,7 +132,7 @@ class CheckCoolDownAction(CustomAction):
         try:
             return manager.check_availability(argv)
         except Exception as e:
-            print(f"[Python] CheckCoolDownAction 异常: {e}")
+            utils.mfaalog.info(f"[Py] CheckCoolDownAction 异常: {e}")
             return False
 
 @AgentServer.custom_action("MarkComplete")
@@ -139,5 +141,5 @@ class MarkCompleteAction(CustomAction):
         try:
             return manager.mark_complete(argv)
         except Exception as e:
-            print(f"[Python] MarkCompleteAction 异常: {e}")
+            utils.mfaalog.info(f"[Py] MarkCompleteAction 异常: {e}")
             return True
