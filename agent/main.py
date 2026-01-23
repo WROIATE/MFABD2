@@ -90,9 +90,8 @@ from maa.toolkit import Toolkit
 
 # 如果你有自定义动作/识别，在这里导入
 import action # action子文件夹:agent/action/__init__.py里声明的全部
+import recognition
 import fishing_agent # 钓鱼~
-
-
 
 def main():
     # 设置 stdout 为 utf-8 (防止中文乱码)

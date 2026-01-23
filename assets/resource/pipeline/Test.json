@@ -1,5 +1,6 @@
 {
   "Test_HomePage": {
+    "doc": "周触发器测试起点",
     "action": "Custom",
     "custom_action": "CheckCoolDown",
     "custom_action_param": {
@@ -12,8 +13,7 @@
     "on_error": [
       "Test_HomePage_1"
     ],
-    "focus": "G=0.流程启动",
-    "doc": "开始周任务检测流程"
+    "focus": "G=0.流程启动"
   },
   "Test_HomePage_0": {
     "focus": "测试=0,通过",
@@ -25,6 +25,43 @@
   },
   "Test_HomePage_1": {
     "focus": "测试=1,失败"
+  },
+  "Test_HomePage_B": {
+    "doc": "计数器测试起点",
+    "next": [
+      "Test_HomePage_B_main"
+    ]
+  },
+  "Test_HomePage_B_main": {
+    "doc": "检测次数!",
+    "recognition": "Custom",
+    "custom_recognition": "CheckTag",
+    "custom_recognition_param": {
+      "tag": "Item_Count",
+      "max": 3
+    },
+    "next": [
+      "Test_HomePage_B_Action"
+    ],
+    "on_error": [
+      "Test_HomePage_B_Err"
+    ]
+  },
+  "Test_HomePage_B_Action": {
+    "focus": "计数+1了",
+    "action": "Custom",
+    "custom_action": "UpdateTag",
+    "custom_action_param": {
+      "tag": "Item_Count",
+      "value": 1
+    },
+    "next": [
+      "Test_HomePage_B_main"
+    ],
+    "timeout": 2000
+  },
+  "Test_HomePage_B_Err": {
+    "focus": "失败了"
   },
   "Check_Weekly_Task": {
     "next": [
