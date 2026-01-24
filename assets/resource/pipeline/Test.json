@@ -355,7 +355,7 @@
       163
     ],
     "action": "Custom",
-    "custom_action": "OCR_Rank_And_Patch",
+    "custom_action": "OCR_RankAndPatch",
     "custom_action_param": {
       "filter_regex": "(\\d+)",
       "number_mode": "int",

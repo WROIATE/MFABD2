@@ -6,7 +6,7 @@ from maa.context import Context
 import utils
 
 # ==============================================================================
-# 📜 OCR 决策排序器 (OCR_Rank_And_Patch v3.0) - 全参数说明书
+# 📜 OCR 决策排序器 (OCR_RankAndPatch v3.0) - 全参数说明书
 # ==============================================================================
 # [功能简介]
 # 1. 自动获取当前节点的 OCR 结果。
@@ -56,7 +56,7 @@ import utils
 
 #         // 2. 调用 Python 决策工具
 #         "action": "Custom",
-#         "custom_action": "OCR_Rank_And_Patch",
+#         "custom_action": "OCR_RankAndPatch",
         
 #         // 3. 全参数配置字典
 #         "custom_action_param": {
@@ -107,8 +107,8 @@ import utils
 # }
 # ==============================================================================
 
-@AgentServer.custom_action("OCR_Rank_And_Patch")
-class OCR_Rank_And_Patch(CustomAction):
+@AgentServer.custom_action("OCR_RankAndPatch")
+class OCR_RankAndPatch(CustomAction):
     def run(self, context: Context, argv: CustomAction.RunArg) -> bool:
         try:
             utils.mfaalog.info("[Py] 🚀 OCR_Rank v3.0 启动...")
