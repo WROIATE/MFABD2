@@ -309,5 +309,40 @@
       "Gacha-homepage.png"
     ],
     "green_mask": false
+  },
+  "test_smart_scroller": {
+    "action": "Custom",
+    "custom_action": "SmartSwipe",
+    "custom_action_param": {
+      "proxy_node": "Custom_Proxy_Swipe",
+      "action": "Swipe",
+      "begin": [
+        1025,
+        640,
+        0,
+        0
+      ],
+      "end": [
+        117,
+        640,
+        0,
+        0
+      ],
+      "detect_roi": [
+        1062,
+        594,
+        198,
+        80
+      ],
+      "duration": 500,
+      "end_hold": 1000,
+      "settle_delay": 500,
+      "retry_times": 2,
+      "threshold": 3.0
+    },
+    "next": [
+      "test_smart_scroller"
+    ],
+    "timeout": 2000
   }
 }
