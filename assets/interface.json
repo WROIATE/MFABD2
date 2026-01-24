@@ -761,11 +761,6 @@
             "type": "select",
             "cases": [
                 {
-                    "name": "强制双倍",
-                    "description": "强制:先满足打双倍，尝试满足资源倾向，满足不了会打另一种资源。",
-                    "pipeline_override": {}
-                },
-                {
                     "name": "优先双倍",
                     "description": "优先:先考虑资源倾向，再考虑双倍则打航线，否则全打狩猎场。",
                     "pipeline_override": {
@@ -776,6 +771,11 @@
                             ]
                         }
                     }
+                },
+                {
+                    "name": "强制双倍",
+                    "description": "强制:先满足打双倍，尝试满足资源倾向，满足不了会打另一种资源。",
+                    "pipeline_override": {}
                 },
                 {
                     "name": "忽视双倍",
@@ -878,6 +878,25 @@
             "description": "全打某属性or均匀属性每种打2次，一定用完免费火把",
             "cases": [
                 {
+                    "name": "补短",
+                    "pipeline_override": {
+                        "Battle_FastBattleTouch_StoneSelect_Smart": {
+                            "enabled": true
+                        }
+                    }
+                },
+                {
+                    "name": "均衡",
+                    "pipeline_override": {
+                        "Battle_FastBattleTouch_StoneSelect": {
+                            "next": [
+                                "Battle_TurnCharact_Start",
+                                "[JumpBack]Battle_QuickBattleButton"
+                            ]
+                        }
+                    }
+                },
+                {
                     "name": "火",
                     "pipeline_override": {
                         "Battle_FastBattleTouch_StoneSelect": {
@@ -938,17 +957,6 @@
                                 350,
                                 0,
                                 0
-                            ]
-                        }
-                    }
-                },
-                {
-                    "name": "均衡",
-                    "pipeline_override": {
-                        "Battle_FastBattleTouch_StoneSelect": {
-                            "next": [
-                                "Battle_TurnCharact_Start",
-                                "[JumpBack]Battle_QuickBattleButton"
                             ]
                         }
                     }
