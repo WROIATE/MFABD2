@@ -9,7 +9,7 @@
     "recognition": "TemplateMatch",
     "action": "Click",
     "next": [
-      "Battle_Unmask",
+      "Battle_ListCollapse",
       "Battle_CollectMap",
       "Battle_TouchCollect"
     ],
@@ -33,11 +33,11 @@
     "post_wait_freezes": 500,
     "doc": "找到run-点击左上扫荡"
   },
-  "Battle_Unmask": {
+  "Battle_ListCollapse": {
     "recognition": "TemplateMatch",
     "action": "Click",
     "next": [
-      "Battle_Unmask",
+      "Battle_ListCollapse",
       "Battle_CollectMap",
       "Battle_TouchCollect"
     ],
@@ -48,7 +48,7 @@
       256
     ],
     "template": [
-      "UnmaskGE.png"
+      "Battle_ListCollapseGE.png"
     ],
     "green_mask": true
   },
@@ -444,6 +444,7 @@
   "Battle_CollectMapDongXueCK": {
     "recognition": "TemplateMatch",
     "next": [
+      "Battle_FastBattleTouch_StoneSelect_Smart",
       "Battle_FastBattleTouch_StoneSelect"
     ],
     "roi": [
@@ -454,6 +455,98 @@
     ],
     "template": [
       "CharactFirepng.png"
+    ]
+  },
+  "Battle_FastBattleTouch_StoneSelect_Smart": {
+    "enabled": false,
+    "next": [
+      "[JumpBack]Battle_ListExpand",
+      "Battle_FastBattleTouch_StoneSelect_SmartSelect"
+    ]
+  },
+  "Battle_ListExpand": {
+    "recognition": "TemplateMatch",
+    "action": "Click",
+    "roi": [
+      1104,
+      80,
+      36,
+      27
+    ],
+    "post_delay": 500,
+    "template": [
+      "Battle_ListExpand.png"
+    ],
+    "green_mask": true,
+    "max_hit": 5
+  },
+  "Battle_FastBattleTouch_StoneSelect_SmartSelect": {
+    "recognition": "OCR",
+    "expected": "(\\d+)",
+    "roi": [
+      1090,
+      66,
+      91,
+      163
+    ],
+    "action": "Custom",
+    "custom_action": "OCR_RankAndPatch",
+    "custom_action_param": {
+      "filter_regex": "(\\d+)",
+      "number_mode": "int",
+      "sort_mode": "asc",
+      "pick_index": 1,
+      "replacement_list": [
+        [
+          230,
+          120,
+          0,
+          0
+        ],
+        [
+          230,
+          175,
+          0,
+          0
+        ],
+        [
+          230,
+          230,
+          0,
+          0
+        ],
+        [
+          230,
+          290,
+          0,
+          0
+        ],
+        [
+          230,
+          350,
+          0,
+          0
+        ]
+      ],
+      "target_node": "Battle_FastBattleTouch_StoneSelect_SmartClick",
+      "target_param": "target"
+    },
+    "next": [
+      "Battle_FastBattleTouch_StoneSelect_SmartClick"
+    ]
+  },
+  "Battle_FastBattleTouch_StoneSelect_SmartClick": {
+    "action": "Click",
+    "target": [
+      0,
+      0,
+      0,
+      0
+    ],
+    "next": [
+      "Battle_NoAP_Torch",
+      "Battle_FastBattleMAXTouchDongXue",
+      "[JumpBack]Battle_QuickBattleButton"
     ]
   },
   "Battle_FastBattleTouch_StoneSelect": {
