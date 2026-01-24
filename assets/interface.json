@@ -875,7 +875,7 @@
             ]
         },
         "圣石洞穴属性": {
-            "description": "全打某属性or均匀属性每种打2次，一定用完免费火把",
+            "description": "补短，全打打当前存量最少的<br>均衡,均匀属性每种打2次，一定用完免费火把<br>或者全打某属性",
             "cases": [
                 {
                     "name": "补短",
@@ -1433,6 +1433,9 @@
                             "enabled": false
                         },
                         "Setup_Entry4": {
+                            "enabled": false
+                        },
+                        "Setup_Entry5": {
                             "enabled": false
                         }
                     }
