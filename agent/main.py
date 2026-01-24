@@ -91,6 +91,7 @@ from maa.toolkit import Toolkit
 # 如果你有自定义动作/识别，在这里导入
 import action # action子文件夹:agent/action/__init__.py里声明的全部
 import recognition
+from utils.persistent_store import PersistentStore # Agent配置文件热备份
 import fishing_agent # 钓鱼~
 
 def main():
@@ -99,6 +100,8 @@ def main():
         sys.stdout.reconfigure(encoding='utf-8') # type: ignore
 
     print(f"Agent 正在启动... 根目录: {project_root}")
+    PersistentStore.load() 
+    print("✅ [Agent] 存档/备份系统已就绪")
 
     # 1. 初始化 Toolkit (借鉴 B 项目)
     # 这会读取 interface.json 并自动配置一些环境
@@ -115,13 +118,13 @@ def main():
     # 3. 启动服务
     try:
         AgentServer.start_up(socket_id)
-        print("AgentServer 已启动，等待指令...")
+        mfaalog.info("AgentServer 已启动，等待指令...")
         AgentServer.join()
     except Exception as e:
-        print(f"Agent 运行发生异常: {e}")
+        mfaalog.warning(f"Agent 运行发生异常: {e}")
     finally:
         AgentServer.shut_down()
-        print("AgentServer 已关闭")
+        mfaalog.info("AgentServer 已关闭")
 
 if __name__ == "__main__":
     main()

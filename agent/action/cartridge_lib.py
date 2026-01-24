@@ -1,45 +1,18 @@
 import json
-import os
 import time
 from datetime import datetime, timedelta
 import utils
-
-# --- 引入 MFA 核心库 ---
 from maa.custom_action import CustomAction
 from maa.context import Context
-from maa.agent.agent_server import AgentServer # <--- 新增导入
+from maa.agent.agent_server import AgentServer
+from utils.persistent_store import PersistentStore # 热更新写入工具
 
-# --- 1. 路径自动定位 ---
-CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
-PROJECT_ROOT = os.path.dirname(os.path.dirname(CURRENT_DIR))
-DB_PATH = os.path.join(PROJECT_ROOT, "cartridge_history.json")
-
-utils.mfaalog.info(f"[Py] 周常管理器已加载。")
-utils.mfaalog.info(f"[Py] 数据库路径: {DB_PATH}")
+print(f"[Py] 周常管理器已加载 (v2.0 自动存档版)。")
 
 class CooldownManager:
-    def __init__(self):
-        self.data = {}
-        self.load()
-
-    def load(self):
-        if os.path.exists(DB_PATH):
-            try:
-                with open(DB_PATH, 'r', encoding='utf-8') as f:
-                    self.data = json.load(f)
-            except Exception as e:
-                utils.mfaalog.info(f"[Py] 读取记录失败: {e}，将创建新记录。")
-                utils.mfaalog.info(f"[Py] 读取记录失败: {e}，将创建新记录。")
-                self.data = {}
-        else:
-            self.data = {}
-
-    def save(self):
-        try:
-            with open(DB_PATH, 'w', encoding='utf-8') as f:
-                json.dump(self.data, f, indent=4, ensure_ascii=False)
-        except Exception as e:
-            utils.mfaalog.info(f"[Py] 保存记录失败: {e}")
+    # ✅ 既然 PersistentStore 是静态类，这里甚至不需要 __init__
+    # 但为了保持兼容性，留个空的或者直接删掉都行
+    pass
 
     def _get_last_reset_time(self):
         now = datetime.now()
@@ -74,11 +47,13 @@ class CooldownManager:
         utils.mfaalog.info(f"----------------------------------------")
         utils.mfaalog.info(f"[Py] 正在检查卡带: {card_name}")
 
-        if card_name not in self.data:
+        # ✅ 从防坏档系统里取数据
+        # 第二个参数 None 是默认值，如果没记录就返回 None
+        last_play_str = PersistentStore.get(card_name, None)
+
+        if last_play_str is None:
             utils.mfaalog.info(f"[Py] 🟢 无历史记录，允许进入。")
             return True
-
-        last_play_str = self.data[card_name]
         try:
             last_play_time = datetime.strptime(last_play_str, "%Y-%m-%d %H:%M:%S")
             reset_time = self._get_last_reset_time()
@@ -114,8 +89,10 @@ class CooldownManager:
             card_name = "Unknown_Card"
 
         now_str = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        self.data[card_name] = now_str
-        self.save()
+
+        # ✅ 一键保存 (自动完成：写入临时文件 -> 重命名 -> 复制备份)
+        PersistentStore.set(card_name, now_str)
+        
         utils.mfaalog.info(f"[Py] ✅ {card_name} 记录已更新: {now_str}")
         return True
 
