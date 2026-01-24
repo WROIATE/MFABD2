@@ -20,7 +20,8 @@
     "action": "Custom",
     "custom_action": "MarkComplete",
     "custom_action_param": {
-      "card_name": "Map_01"
+      "card_name": "Map_01",
+      "cycle_type": "g_weekly"
     }
   },
   "Test_HomePage_1": {
