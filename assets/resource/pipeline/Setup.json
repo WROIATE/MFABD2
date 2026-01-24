@@ -115,8 +115,9 @@
                     67
                 ],
                 "template": [
-                    "Skill1-1.png"
+                    "Skill3-1GE.png"
                 ],
+                "green_mask": true,
                 "threshold": 0.6
             },
             {

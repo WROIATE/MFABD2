@@ -101,7 +101,7 @@ def main():
 
     print(f"Agent 正在启动... 根目录: {project_root}")
     PersistentStore.load() 
-    print("✅ [Agent] 存档/备份系统已就绪")
+    mfaalog.info("✅ [Agent] 存档/备份系统已就绪")
 
     # 1. 初始化 Toolkit (借鉴 B 项目)
     # 这会读取 interface.json 并自动配置一些环境
