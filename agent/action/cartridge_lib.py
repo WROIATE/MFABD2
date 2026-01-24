@@ -31,18 +31,20 @@ utils.mfaalog.info(f"[Py] 周期策略管理器已加载。")
 #
 # "custom_action_param": {
 #     "card_name": "Weekly_Boss_Lv5",   // [必填] 任务唯一标识 (ID)
-#     "cycle_type": "cn_weekly"         // [选填] 策略类型 (对应下方配置的 Key)
+#     "cycle_type": "g_weekly"          // [选填] 策略类型 (对应下方配置的 Key)
 #                                       // 若不填，默认使用 第一个有效数组
 # }
 #
 # ------------------------------------------------------------------------------
 # ⚙️ 策略配置说明 (CYCLE_STRATEGIES)
 # ------------------------------------------------------------------------------
-# type             : 周期模式 ("daily" | "weekly" | "semi_monthly")
+# type             : 周期模式 ("daily" | "weekly" | "semi_monthly" | "interval")
 # reset_time       : 刷新时间点 (24小时制字符串，如 "04:00")
 # timezone         : 服务器时区 (8=北京时间, 0=UTC, 9=东京时间)
-# reset_weekday    : [周常专用] 刷新日 (0=周一, ... 6=周日)
-# reset_days       : [月常专用] 刷新日期列表 (如 [1, 16])
+# reset_weekday    : [weekly专用] 刷新日 (0=周一, ... 6=周日)
+# reset_days       : [semi_monthly专用] 刷新日期列表 (如 [1, 16])
+# anchor_date      : [interval专用] 历史上任意一次刷新日期 ("2024-01-01")
+# interval_days    : [interval专用] 间隔天数 (14=双周, 3=每三天)
 # blackout_minutes : 结算保护期 (分钟)。在此期间脚本将强制跳过任务。
 #
 # ==============================================================================
@@ -81,15 +83,58 @@ CYCLE_STRATEGIES = {
     #     "reset_days": [1, 16],  # 1号和16号
     #     "blackout_minutes": 60  # 结算1小时 (04:00-05:00不可进入)
     # }
+
+    # # 【实例5】双周/间隔模式 (每14天刷新)
+    # "biweekly_event": {
+    #     "type": "interval",
+    #     "interval_days": 14,          # 14天一循环
+    #     "anchor_date": "2024-01-01",  # 锚点：历史上的一天刷新日
+    #     "reset_time": "04:00",
+    #     "timezone": 8,
+    #     "blackout_minutes": 0
+    # },
+    #
     # #####第一个有效字典数组会被视为默认值!#####
-    # 【BD2】国际服卡带刷新时间周常 (每周一 08:00) 
+    # 【BD2】国际服-卡带刷新时间周常 (每周一 08:00) 
     "g_weekly": {
         "type": "weekly",
         "reset_time": "08:00",
         "timezone": 8,
         "reset_weekday": 0,     # 周一
-        "blackout_minutes": 0  # 无结算期
+        "blackout_minutes": 0   # 无结算期
+    },
+    # 【BD2】国际服-日常刷新时间 (每天 08:00)
+    "g_daily": {
+        "type": "daily",
+        "reset_time": "08:00",  # UTC 0点
+        "timezone": 8,          # UTC+8
+        "blackout_minutes": 0
+    },
+    # 【BD2】国际服-镜中之战刷新时间 (每14天刷新)
+    "mirror_pvp": {
+        "type": "interval",
+        "interval_days": 14,          # 14天一循环
+        "anchor_date": "2026-01-25",  # 锚点：历史上的一天刷新日
+        "reset_time": "08:00",
+        "timezone": 8,
+        "blackout_minutes": 180       # 暂时设定,有待确认
+    },
+    # 【BD2】国际服-黄金竞技场刷新时间 (每14天刷新)
+    "golden_pvp": {
+        "type": "weekly",
+        "reset_time": "24:00",
+        "timezone": 8,
+        "reset_weekday": 2,     # 周三
+        "blackout_minutes": 540  # 结算540分钟，防止刚好卡点进不去
     }
+    # # 【BD2】国际服-救赎之塔 (半月常, 1号/16号刷新)时间不确定，暂时不写
+    # "g_abyss": {
+    #     "type": "semi_monthly",
+    #     "reset_time": "04:00",
+    #     "timezone": 8,
+    #     "reset_days": [1, 16],  # 1号和16号
+    #     "blackout_minutes": 60  # 结算1小时 (04:00-05:00不可进入)
+    # }
 }
 # ==============================================================================
 
@@ -137,23 +182,46 @@ class CooldownManager:
             config = CYCLE_STRATEGIES[fallback_key]
             utils.mfaalog.warning(f"[Py] ⚠️ 策略 '{strategy_name}' 未定义，已降级使用 '{fallback_key}'")
         
-
-        # 1. 构造游戏服务器的“现在时间”
+        # 3. 构造游戏服务器的“现在时间”
         server_tz_offset = config.get("timezone", 8)
         server_tz = timezone(timedelta(hours=server_tz_offset))
         now_server = datetime.now(server_tz)
 
-        # 2. 解析基准刷新点 (例如 04:00)
+        # 4. 解析基准刷新点 (例如 04:00)
         h, m = map(int, config.get("reset_time", "04:00").split(':'))
+        
+        cycle_type = config.get("type", "daily")
+
+        # --- 间隔模式 (Interval) 逻辑 v6.0 新增 ---
+        if cycle_type == "interval":
+            anchor_str = config.get("anchor_date", "2024-01-01")
+            interval = config.get("interval_days", 14)
+            
+            # 构造锚点时间 (带时区)
+            anchor_naive = datetime.strptime(anchor_str, "%Y-%m-%d")
+            anchor_dt = anchor_naive.replace(hour=h, minute=m, tzinfo=server_tz)
+            
+            # 算出 锚点 到 现在 过去了多少天
+            delta = now_server - anchor_dt
+            
+            # 向下取整算出经过了多少个周期
+            cycles_passed = int(delta.total_seconds() // (interval * 86400))
+            
+            # 算出最近的一次刷新时间
+            final_reset = anchor_dt + timedelta(days=cycles_passed * interval)
+            
+            return final_reset.timestamp(), config
+
+        # --- 以下是常规逻辑 ---
+        
+        # 构造今天的刷新点
         base_reset = now_server.replace(hour=h, minute=m, second=0, microsecond=0)
         
         # 如果还没到今天的刷新点，说明上一次刷新是在昨天
         if now_server < base_reset:
             base_reset -= timedelta(days=1)
 
-        # 3. 根据周期类型回溯 (找最近的一个刷新日)
-        cycle_type = config.get("type", "daily")
-
+        # 根据周期类型回溯 (找最近的一个刷新日)
         if cycle_type == "weekly":
             target_wd = config.get("reset_weekday", 0)
             current_wd = base_reset.weekday()
