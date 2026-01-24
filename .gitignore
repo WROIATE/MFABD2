@@ -469,3 +469,8 @@ assets/resource/pipeline/*.mpe.json
 
 # 允许追踪 scripts 下的 release 文件夹
 !scripts/release/
+
+# 忽略用户运行Agent数据库
+agent_save_data.json
+agent_save_data.json.bak
+cartridge_history.json
