@@ -344,5 +344,69 @@
       "test_smart_scroller"
     ],
     "timeout": 2000
+  },
+  "test_ocr_decision": {
+    "recognition": "OCR",
+    "expected": "(\\d+)",
+    "roi": [
+      1090,
+      66,
+      91,
+      163
+    ],
+    "action": "Custom",
+    "custom_action": "OCR_Rank_And_Patch",
+    "custom_action_param": {
+      "filter_regex": "(\\d+)",
+      "number_mode": "int",
+      "sort_mode": "asc",
+      "pick_index": 1,
+      "replacement_list": [
+        [
+          230,
+          120,
+          0,
+          0
+        ],
+        [
+          230,
+          175,
+          0,
+          0
+        ],
+        [
+          230,
+          230,
+          0,
+          0
+        ],
+        [
+          230,
+          290,
+          0,
+          0
+        ],
+        [
+          230,
+          350,
+          0,
+          0
+        ]
+      ],
+      "target_node": "Buy_Best_Item",
+      "target_param": "target"
+    },
+    "next": [
+      "Buy_Best_Item"
+    ]
+  },
+  "Buy_Best_Item": {
+    "action": "Click",
+    "target": [
+      0,
+      0,
+      0,
+      0
+    ]
   }
 }
