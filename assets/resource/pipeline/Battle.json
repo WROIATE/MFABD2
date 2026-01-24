@@ -10,6 +10,7 @@
     "action": "Click",
     "next": [
       "Battle_ListCollapse",
+      "Battle_NoRiceAP_Skip",
       "Battle_CollectMap",
       "Battle_TouchCollect"
     ],
@@ -81,7 +82,6 @@
     "recognition": "OCR",
     "action": "Click",
     "next": [
-      "Battle_NoAP_Rice",
       "Battle_FastBattleMAXTouchShouLie",
       "[JumpBack]Battle_QuickBattleButton"
     ],
@@ -97,6 +97,20 @@
       "野猪洞穴"
     ],
     "doc": "A-1.选择狩猎场。注意后面还有另一处~R2"
+  },
+  "Battle_NoRiceAP_Skip": {
+    "focus": "BM.免费米饭耗尽，跳过打米饭",
+    "recognition": "OCR",
+    "roi": [
+      1046,
+      32,
+      57,
+      25
+    ],
+    "expected": "0/",
+    "next": [
+      "Battle_CollectMapDongXue"
+    ]
   },
   "Battle_FastBattleMAXTouchShouLie": {
     "recognition": "OCR",
@@ -444,6 +458,7 @@
   "Battle_CollectMapDongXueCK": {
     "recognition": "TemplateMatch",
     "next": [
+      "Battle_NoTorchesAP_Skip",
       "Battle_FastBattleTouch_StoneSelect_Smart",
       "Battle_FastBattleTouch_StoneSelect"
     ],
@@ -455,6 +470,20 @@
     ],
     "template": [
       "CharactFirepng.png"
+    ]
+  },
+  "Battle_NoTorchesAP_Skip": {
+    "focus": "BM.免费火把耗尽，跳过打圣石洞穴",
+    "recognition": "OCR",
+    "roi": [
+      1046,
+      32,
+      57,
+      25
+    ],
+    "expected": "0/",
+    "next": [
+      "Global_ToSandBox"
     ]
   },
   "Battle_FastBattleTouch_StoneSelect_Smart": {
