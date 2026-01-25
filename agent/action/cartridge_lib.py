@@ -114,10 +114,10 @@ CYCLE_STRATEGIES = {
     "mirror_pvp": {
         "type": "interval",
         "interval_days": 14,          # 14天一循环
-        "anchor_date": "2026-01-26",  # 锚点：历史上的一天刷新日
-        "reset_time": "08:00",
+        "anchor_date": "2026-01-25",  # 锚点：历史上的一天刷新日
+        "reset_time": "23:00",
         "timezone": 8,
-        "blackout_minutes": 180       # 暂时设定,有待确认
+        "blackout_minutes": 540      # 暂时设定。假定周日晚23点结束，有待确认:假定周一8点开始
     },
     # 【BD2】国际服-黄金竞技场刷新时间 (每14天刷新)
     "golden_pvp": {
