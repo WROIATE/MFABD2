@@ -107,7 +107,7 @@
       57,
       25
     ],
-    "expected": "0/",
+    "expected": "^0/\\d+",
     "next": [
       "Battle_CollectMapDongXue"
     ]
@@ -481,7 +481,7 @@
       57,
       25
     ],
-    "expected": "0/",
+    "expected": "^0/\\d+",
     "next": [
       "Global_ToSandBox"
     ]

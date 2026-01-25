@@ -10,7 +10,7 @@ current_file_path = Path(__file__).resolve()
 project_root = current_file_path.parent.parent  # 指向 install/ 目录
 deps_path = project_root / "agent"
 
-# 将 agent 目录加入 python 搜索路径 (解决 fishing_agent 找不到的问题)
+# 将 agent 目录加入 python 搜索路径
 if deps_path.exists():
     sys.path.insert(0, str(deps_path))
 
