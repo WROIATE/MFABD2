@@ -642,7 +642,7 @@
     "recognition": "OCR",
     "action": "Click",
     "next": [
-      "Gacha_BackMapPage",
+      "Global_ToHomePage",
       "Gacha_FinGacha"
     ],
     "post_delay": 3000,
@@ -663,46 +663,6 @@
       0
     ],
     "doc": "返回首页"
-  },
-  "Gacha_BackMapPage": {
-    "recognition": "OCR",
-    "action": "Click",
-    "next": [
-      "Gacha_FinBackMapPage",
-      "Gacha_BackMapPage"
-    ],
-    "post_delay": 1000,
-    "roi": [
-      98,
-      656,
-      66,
-      32
-    ],
-    "expected": [
-      "抽抽乐"
-    ],
-    "target": [
-      135,
-      40,
-      0,
-      0
-    ],
-    "doc": "识别左下抽抽乐-返回地图页"
-  },
-  "Gacha_FinBackMapPage": {
-    "recognition": "TemplateMatch",
-    "next": [],
-    "focus": "GA.退出抽卡成功",
-    "roi": [
-      1122,
-      646,
-      40,
-      38
-    ],
-    "template": [
-      "pin.png"
-    ],
-    "doc": "识别右下图钉-章节主页"
   },
   "Gacha_FindEquRedDot": {
     "recognition": "TemplateMatch",

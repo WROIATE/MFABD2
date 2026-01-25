@@ -114,7 +114,7 @@ CYCLE_STRATEGIES = {
     "mirror_pvp": {
         "type": "interval",
         "interval_days": 14,          # 14天一循环
-        "anchor_date": "2026-01-25",  # 锚点：历史上的一天刷新日
+        "anchor_date": "2026-01-26",  # 锚点：历史上的一天刷新日
         "reset_time": "08:00",
         "timezone": 8,
         "blackout_minutes": 180       # 暂时设定,有待确认
