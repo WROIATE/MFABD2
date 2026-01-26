@@ -1,11 +1,4 @@
 {
-  "Collect_StartGame_HomePage": {
-    "next": [
-      "Collect_HomePageHub2",
-      "Collect_PerPetTask",
-      "Collect_HomePageHub"
-    ]
-  },
   "Collect_HomePageHub": {
     "recognition": "TemplateMatch",
     "next": [
@@ -78,34 +71,6 @@
     ],
     "green_mask": true,
     "doc": "其他页面，返回按钮"
-  },
-  "Collect_PerPetTask": {
-    "recognition": "TemplateMatch",
-    "action": "Click",
-    "next": [
-      "Collect_PerPetTask",
-      "Collect_StartGameType2"
-    ],
-    "post_delay": 5000,
-    "focus": "CM.宠物派遣(调试中...错误请回报)",
-    "roi": [
-      234,
-      217,
-      714,
-      412
-    ],
-    "template": [
-      "tanhaoGE.png"
-    ],
-    "threshold": 0.85,
-    "green_mask": true,
-    "target_offset": [
-      -3,
-      -4,
-      6,
-      6
-    ],
-    "doc": "宠物派遣"
   },
   "Collect_StartGameType2": {
     "recognition": "TemplateMatch",
@@ -2001,6 +1966,19 @@
     "expected": [
       "最近"
     ]
+  },
+  "Collect_PackEnd_Ck": {
+    "recognition": "OCR",
+    "roi": [
+      53,
+      532,
+      105,
+      46
+    ],
+    "expected": [
+      "最近"
+    ],
+    "doc": "预留节点,禁止删除,修改action无效。"
   },
   "Collect_QuickCart_NOHavePointer_Swip": {
     "roi": [
