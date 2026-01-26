@@ -21,6 +21,22 @@
       }
     }
   },
+  "Test_HomePage_R": {
+    "doc": "周触发器测试起点",
+    "recognition": "Custom",
+    "custom_recognition": "CheckCoolDown",
+    "custom_recognition_param": {
+      "card_name": "Map_01"
+    },
+    "next": [
+      "Test_HomePage_0"
+    ],
+    "timeout": 100,
+    "on_error": [
+      "Test_HomePage_1"
+    ],
+    "focus": "G=0.流程启动"
+  },
   "Test_HomePage": {
     "doc": "周触发器测试起点",
     "action": "Custom",
@@ -408,5 +424,31 @@
       0,
       0
     ]
+  },
+  "test_runtask0": {
+    "roi": [
+      122,
+      627,
+      13,
+      10
+    ],
+    "next": [
+      "test_runtask"
+    ]
+  },
+  "test_runtask": {
+    "action": "Custom",
+    "custom_action": "RunTask",
+    "custom_action_param": {
+      "entry": "test_runtask2",
+      "param": {
+        "test_runtask2": {
+          "target": "test_runtask0"
+        }
+      }
+    }
+  },
+  "test_runtask2": {
+    "action": "Click"
   }
 }
