@@ -10,6 +10,7 @@ from utils.persistent_store import PersistentStore
 
 # --- MFA 核心库 ---
 from maa.custom_action import CustomAction
+from maa.custom_recognition import CustomRecognition
 from maa.context import Context
 from maa.agent.agent_server import AgentServer
 
@@ -25,14 +26,50 @@ utils.mfaalog.info(f"[Py] 周期策略管理器已加载。")
 # 策略漏洞：忽略了时区变化,时间戳没有时区标记，带电脑旅游历史时间戳的处理未编写应对。
 #
 # ------------------------------------------------------------------------------
-# 📝 JSON Pipeline 配置指南
+# 📝 JSON Pipeline 配置指南 (标准规范版)
 # ------------------------------------------------------------------------------
-# 在 MFA 的 JSON 任务节点中，通过 custom_action_param 传递参数：
 #
-# "custom_action_param": {
-#     "card_name": "Weekly_Boss_Lv5",   // [必填] 任务唯一标识 (ID)
-#     "cycle_type": "g_weekly"          // [选填] 策略类型 (对应下方配置的 Key)
-#                                       // 若不填，默认使用 第一个有效数组
+# 【模式 A】作为“自定义识别器”使用 (推荐 ⭐)
+# ---------------------------------------------------
+# 逻辑：检查通过 -> 视为“识别成功”，执行当前节点的 action。
+#       检查不通过(冷却中) -> 视为“识别失败”，寻找 on_error 或跳过当前任务。
+#
+# "Task_Daily_Dungeon": {
+#     "recognition": "Custom",               // ⚡️ 必须固定为 Custom
+#     "custom_recognition": "CheckCoolDown", // ⚡️ 指向 Python 注册的 ID
+#     "custom_recognition_param": {
+#         "card_name": "Map_01",             // 任务唯一标识 ID
+#         "cycle_type": "g_daily"            // 策略类型
+#     },
+#     "timeout": 100,                        // 建议设短（如 100ms），纯逻辑无需重试
+#     "action": "Click",
+#     "action_param": { "target": "Button" },
+#     "next": [ "Sub_Task" ],
+#     "on_error": [ "Next_Major_Task" ]      // 冷却中会触发失败，跳转至此
+# }
+#
+# 【模式 B】作为“自定义动作”使用
+# ---------------------------------------------------
+# 逻辑：检查通过 -> Action 返回 True，继续 next。
+#       检查不通过 -> Action 返回 False，通常导致节点失败。
+#
+# "Task_Check_Action": {
+#     "action": "Custom",                    // ⚡️ 注意：Action 模式也建议写全
+#     "custom_action": "CheckCoolDown",
+#     "custom_action_param": {
+#         "card_name": "Map_01"
+#     },
+#     "next": [ "Enter_Stage" ]
+# }
+#
+# 【通用】任务完成标记 (MarkComplete)
+# ---------------------------------------------------
+# "Task_Combat_Done": {
+#     "action": "Custom",
+#     "custom_action": "MarkComplete",
+#     "custom_action_param": {
+#         "card_name": "Map_01"
+#     }
 # }
 #
 # ------------------------------------------------------------------------------
@@ -355,3 +392,30 @@ class CheckCoolDownAction(CustomAction):
 class MarkCompleteAction(CustomAction):
     def run(self, context: Context, argv: CustomAction.RunArg):
         return manager.mark_complete(argv)
+    
+@AgentServer.custom_recognition("CheckCoolDown")
+class CheckCoolDownRecognition(CustomRecognition):
+    def analyze(self, context: Context, argv: CustomRecognition.AnalyzeArg):
+        try:
+            # 1. 获取参数 (Recognition 的参数名为 custom_recognition_param)
+            params = json.loads(argv.custom_recognition_param)
+            
+            # 2. 调用核心逻辑 (传入解析后的字典)
+            is_available = manager.check_availability(params)
+            
+            # 3. 根据结果返回
+            if is_available:
+                # 🟢 任务可用 -> 返回 AnalyzeResult (逻辑上的“识别成功”)
+                # 这里的 detail 可以传递给后续的 Action (如果有)
+                msg = f"任务 {params.get('card_name')} 可执行"
+                return CustomRecognition.AnalyzeResult(
+                    box=[0, 0, 0, 0],  # 虚拟坐标，逻辑检查不需要真实坐标
+                    detail={"msg": msg, "card_name": params.get('card_name')}
+                )
+            else:
+                # 🔴 任务冷却中 -> 返回 None (逻辑上的“识别失败/跳过”)
+                return None
+                
+        except Exception as e:
+            utils.mfaalog.error(f"[Py] CheckCoolDownRecognition 异常: {e}")
+            return None
