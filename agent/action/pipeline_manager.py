@@ -170,13 +170,21 @@ class RunTask(CustomAction):
     def run(self, context: Context, argv: CustomAction.RunArg) -> bool:
         params = parse_json_arg(argv)
         entry_node = params.get("entry")
+        # 新增：读取 override 参数
+        override_data = params.get("param", {}) 
         
         if not entry_node:
             return False
 
         try:
-            utils.mfaalog.info(f"[Py] 🚀 Call Sub: 进入子任务 [{entry_node}]")
-            context.run_task(entry_node)
+            if override_data:
+                utils.mfaalog.info(f"[Py] 🚀 Call Sub: [{entry_node}] (带参数注入)")
+                # 第二个参数就是 运行时覆盖，它只在这次运行中生效，不污染全局
+                context.run_task(entry_node, override_data)
+            else:
+                utils.mfaalog.info(f"[Py] 🚀 Call Sub: [{entry_node}]")
+                context.run_task(entry_node)
+                
             utils.mfaalog.info(f"[Py] ✅ Return: 子任务结束")
             return True
         except Exception as e:
