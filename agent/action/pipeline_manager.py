@@ -3,6 +3,7 @@ from maa.agent.agent_server import AgentServer
 from maa.custom_action import CustomAction
 from maa.context import Context
 import utils
+import random
 
 # ==============================================================================
 # 🔧 Pipeline 动态管理器 
@@ -15,7 +16,8 @@ import utils
 # "action": {
 #     "type": "Custom",
 #     "param": {
-#         "custom_action": "PatchNode",
+#         "custom_action": "PatchNode",   
+#                       \\另有,PatchAndClick动作,逻辑一样,可额外点击当前节点box坐标
 #         "custom_action_param": {
 #             "node": "Battle_Node",
 #             "patch": { "next": ["Boss_Win"], "timeout": 30000 },
@@ -193,4 +195,71 @@ class RunTask(CustomAction):
             return True
         except Exception as e:
             utils.mfaalog.error(f"[Py] RunTask 异常: {e}")
+            return False
+        
+@AgentServer.custom_action("PatchAndClick")
+class PatchAndClick(CustomAction):
+    def run(self, context: Context, argv: CustomAction.RunArg) -> bool:
+        global NODE_BACKUPS
+        
+        try:
+            # --- 步骤 1: 解析参数 & 执行 Patch 逻辑 ---
+            params = parse_json_arg(argv)
+            target_node = params.get("node")
+            patch_data = params.get("patch")
+            origin_data = params.get("origin")
+            
+            # [新增] 读取用户偏移量，格式应为 [x, y]，例如 [100, 0]
+            user_offset = params.get("target_offset") 
+
+            if target_node and patch_data:
+                # 1.1 登记备份
+                if origin_data and target_node not in NODE_BACKUPS:
+                    NODE_BACKUPS[target_node] = origin_data
+                    utils.mfaalog.info(f"[Py] 📖 (P&C) 已登记节点备份: {target_node}")
+
+                # 1.2 执行魔改
+                context.override_pipeline({target_node: patch_data})
+                utils.mfaalog.info(f"[Py] 🔧 (P&C) 节点 [{target_node}] 参数已动态替换")
+            else:
+                utils.mfaalog.warning("[Py] PatchAndClick 缺少 patch 参数，仅执行点击逻辑")
+
+            # --- 步骤 2: 执行点击逻辑 (Click) ---
+            box = argv.box
+            
+            # 使用 getattr 兼容不同版本的 Rect 属性 (w/width, h/height)
+            if box:
+                w = getattr(box, 'w', getattr(box, 'width', 0))
+                h = getattr(box, 'h', getattr(box, 'height', 0))
+                
+                if w > 0 and h > 0:
+                    # 2.1 计算基础中心点
+                    cx = box.x + w / 2
+                    cy = box.y + h / 2
+                    
+                    # 2.2 [核心修改] 应用用户自定义偏移 (target_offset)
+                    # 坐标系: X向右为正，Y向下为正
+                    if user_offset and isinstance(user_offset, list) and len(user_offset) >= 2:
+                        off_x = int(user_offset[0])
+                        off_y = int(user_offset[1])
+                        cx += off_x
+                        cy += off_y
+                        utils.mfaalog.info(f"[Py] 🎯 应用偏移: [{off_x}, {off_y}]")
+
+                    # 2.3 增加随机微调 (防检测)
+                    # 如果你不希望偏移后的点击也被随机化，可以注释掉这两行
+                    offset_random = 3
+                    cx += random.uniform(-offset_random, offset_random)
+                    cy += random.uniform(-offset_random, offset_random)
+                    
+                    # 2.4 调用底层点击
+                    context.tasker.controller.post_click(int(cx), int(cy))
+                    utils.mfaalog.info(f"[Py] 🖱️ (P&C) 点击坐标: ({int(cx)}, {int(cy)})")
+                    return True
+            
+            utils.mfaalog.warning("[Py] ⚠️ Patch 成功，但没有有效的识别区域(Box)，无法点击。")
+            return True
+
+        except Exception as e:
+            utils.mfaalog.error(f"[Py] PatchAndClick 异常: {e}")
             return False
