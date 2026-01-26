@@ -52,12 +52,16 @@ import utils
 # ------------------------------------------------------------------------------
 # 4. RunTask (调用子任务)
 # ------------------------------------------------------------------------------
-# "action": {
-#     "type": "Custom",
-#     "param": {
-#         "custom_action": "RunTask",
-#         "custom_action_param": {
-#             "entry": "SubTask_Start"
+# 作用: 运行另一个任务/节点，支持传入临时参数。注意，流程级别调用，参数修改节点跑完就清除了。
+# JSON 示例:
+# "action": "Custom",
+# "custom_action": "RunTask",
+# "custom_action_param": {
+#     "entry": "Swipe_Common_Node",           // [必填] 入口节点名
+#     "param": {                              // [选填] 临时覆盖参数 (只在这次调用生效)
+#         "Swipe_Common_Node": {              // 必须包一层节点名
+#             "begin": [100, 200, 0, 0],
+#             "duration": 500
 #         }
 #     }
 # }
