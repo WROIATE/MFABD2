@@ -150,7 +150,7 @@ CYCLE_STRATEGIES = {
     # 【BD2】国际服-镜中之战刷新时间 (每14天刷新)
     "mirror_pvp": {
         "type": "interval",
-        "interval_days": 14,          # 14天一循环
+        "interval_days": 7,          # 7天一循环
         "anchor_date": "2026-01-25",  # 锚点：历史上的一天刷新日
         "reset_time": "23:00",
         "timezone": 8,
