@@ -29,7 +29,26 @@ import random
 # * 以后调用 RestoreNode 或 ResetAll 时，不需要再填数据，系统会自动查找。
 #
 # ------------------------------------------------------------------------------
-# 2. RestoreNode (单点还原)
+# 2. PatchAndClick (魔改 + 偏移点击)
+# ------------------------------------------------------------------------------
+# 场景：识别到入口 -> 1.修改后续节点参数 -> 2.点击当前识别位置(支持偏移)
+#
+# JSON 示例:
+# "action": "Custom",
+# "custom_action": "PatchAndClick",
+# "custom_action_param": {
+#     "node": "Battle_Logic",
+#     "patch": { "next": ["Boss_Win"] },
+#     "origin": { "next": ["Common_Win"] },
+#
+#     // [选填] 点击偏移量 [x, y, 0, 0]
+#     // 说明：X为正向右，Y为正向下。
+#     // 建议写满 4 位以符合 MFA 数据规范，程序只取前两位。
+#     "target_offset": [100, 50, 0, 0]
+# }
+# ==============================================================================
+# ------------------------------------------------------------------------------
+# 3. RestoreNode (单点还原)
 # ------------------------------------------------------------------------------
 # "action": {
 #     "type": "Custom",
@@ -42,7 +61,7 @@ import random
 # }
 #
 # ------------------------------------------------------------------------------
-# 3. ResetAll (一键重置/批量还原)
+# 4. ResetAll (一键重置/批量还原)
 # ------------------------------------------------------------------------------
 # "action": {
 #     "type": "Custom",
@@ -52,7 +71,7 @@ import random
 # }
 #
 # ------------------------------------------------------------------------------
-# 4. RunTask (调用子任务)
+# 5. RunTask (调用子任务)
 # ------------------------------------------------------------------------------
 # 作用: 运行另一个任务/节点，支持传入临时参数。注意，流程级别调用，参数修改节点跑完就清除了。
 # JSON 示例:
@@ -209,7 +228,7 @@ class PatchAndClick(CustomAction):
             patch_data = params.get("patch")
             origin_data = params.get("origin")
             
-            # [新增] 读取用户偏移量，格式应为 [x, y]，例如 [100, 0]
+            # [读取] 偏移量
             user_offset = params.get("target_offset") 
 
             if target_node and patch_data:
@@ -220,44 +239,56 @@ class PatchAndClick(CustomAction):
 
                 # 1.2 执行魔改
                 context.override_pipeline({target_node: patch_data})
-                utils.mfaalog.info(f"[Py] 🔧 (P&C) 节点 [{target_node}] 参数已动态替换")
+                print.info(f"[Py] 🔧 (P&C) 节点 [{target_node}] 参数已动态替换")
             else:
-                utils.mfaalog.warning("[Py] PatchAndClick 缺少 patch 参数，仅执行点击逻辑")
+                print.warning("[Py] PatchAndClick 缺少 patch 参数，仅执行点击逻辑")
 
             # --- 步骤 2: 执行点击逻辑 (Click) ---
             box = argv.box
             
-            # 使用 getattr 兼容不同版本的 Rect 属性 (w/width, h/height)
             if box:
+                # 兼容属性获取
                 w = getattr(box, 'w', getattr(box, 'width', 0))
                 h = getattr(box, 'h', getattr(box, 'height', 0))
                 
+                # 只有当识别到了东西，或者用户想盲点（虽然通常必须有box）
                 if w > 0 and h > 0:
-                    # 2.1 计算基础中心点
-                    cx = box.x + w / 2
-                    cy = box.y + h / 2
+                    # 默认点击识别区域的中心
+                    final_x = box.x + w / 2
+                    final_y = box.y + h / 2
                     
-                    # 2.2 [核心修改] 应用用户自定义偏移 (target_offset)
-                    # 坐标系: X向右为正，Y向下为正
-                    if user_offset and isinstance(user_offset, list) and len(user_offset) >= 2:
-                        off_x = int(user_offset[0])
-                        off_y = int(user_offset[1])
-                        cx += off_x
-                        cy += off_y
-                        utils.mfaalog.info(f"[Py] 🎯 应用偏移: [{off_x}, {off_y}]")
+                    # [核心逻辑] 处理自定义偏移
+                    if user_offset:
+                        # 🔒 严格模式：必须是 4 位数组 [dx, dy, w, h]
+                        if not isinstance(user_offset, list) or len(user_offset) != 4:
+                            print.error(f"[Py] ❌ 参数错误: target_offset 必须包含 4 个值 [dx, dy, w, h]。当前: {user_offset}")
+                            return False
+                        
+                        off_dx = int(user_offset[0])
+                        off_dy = int(user_offset[1])
+                        off_w  = int(user_offset[2])
+                        off_h  = int(user_offset[3])
+                        
+                        # 计算新区域的左上角
+                        target_x = box.x + off_dx
+                        target_y = box.y + off_dy
+                        
+                        # 计算新区域的中心点 (如果是 0,0 则就是左上角本身)
+                        final_x = target_x + off_w / 2
+                        final_y = target_y + off_h / 2
+                        
+                        utils.mfaalog.info(f"[Py] 🎯 应用精确偏移: 基准({box.x},{box.y}) -> 偏移[{off_dx},{off_dy},{off_w},{off_h}]")
 
-                    # 2.3 增加随机微调 (防检测)
-                    # 如果你不希望偏移后的点击也被随机化，可以注释掉这两行
-                    offset_random = 3
-                    cx += random.uniform(-offset_random, offset_random)
-                    cy += random.uniform(-offset_random, offset_random)
+                    # 移除随机微调，相信作者的设定
+                    click_x = int(final_x)
+                    click_y = int(final_y)
                     
-                    # 2.4 调用底层点击
-                    context.tasker.controller.post_click(int(cx), int(cy))
-                    utils.mfaalog.info(f"[Py] 🖱️ (P&C) 点击坐标: ({int(cx)}, {int(cy)})")
+                    # 2.4 执行点击
+                    context.tasker.controller.post_click(click_x, click_y)
+                    utils.mfaalog.info(f"[Py] 🖱️ (P&C) 点击坐标: ({click_x}, {click_y})")
                     return True
             
-            utils.mfaalog.warning("[Py] ⚠️ Patch 成功，但没有有效的识别区域(Box)，无法点击。")
+            print.warning("[Py] ⚠️ Patch 成功，但没有有效的识别区域(Box)，无法点击。")
             return True
 
         except Exception as e:
