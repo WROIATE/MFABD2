@@ -56,10 +56,10 @@
             {
                 "recognition": "ColorMatch",
                 "roi": [
-                    1174,
-                    633,
-                    58,
-                    59
+                    1187,
+                    651,
+                    32,
+                    29
                 ],
                 "count": 200,
                 "lower": [

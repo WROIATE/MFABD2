@@ -1,9 +1,9 @@
 {
     "Collect_StartGame_HomePage": {
         "next": [
-            "[JumpBack]Global_ToSandBox",
+            "Collect_Sandplay",
             "[JumpBack]Collect_PerPetTask",
-            "Collect_Sandplay"
+            "[JumpBack]Global_ToSandBox"
         ]
     },
     "Collect_PerPetTask": {
@@ -63,8 +63,8 @@
         "doc": "快速卡带已调出,等待后续",
         "next": [
             "[JumpBack]Collect_FeatureSwitch_StoryPack",
-            "[JUmpBack]Collect_FeatureSwitch_CharacterPack",
-            "[JUmpBack]Collect_FeatureSwitch_Eventack"
+            "[JumpBack]Collect_FeatureSwitch_CharacterPack",
+            "[JumpBack]Collect_FeatureSwitch_Eventack"
         ]
     },
     "Collect_FeatureSwitch_StoryPack": {
@@ -143,7 +143,10 @@
     },
     "Collect_QuickCart_StoryPack_OcrCheck": {
         "recognition": "ColorMatch",
-        "next": [],
+        "next": [
+            "Collect_LocatePackFrame_Loc1",
+            "[JumpBack]Collect_LocatePackFrame_Loc1_ResetLoc"
+        ],
         "focus": "",
         "roi": "Collect_QuickCart_SelectType_StoryPack",
         "count": 200,
@@ -160,7 +163,10 @@
     },
     "Collect_QuickCart_CharacterPack_OcrCheck": {
         "recognition": "ColorMatch",
-        "next": [],
+        "next": [
+            "Collect_LocatePackFrame_Loc1",
+            "[JumpBack]Collect_LocatePackFrame_Loc1_ResetLoc"
+        ],
         "roi": "Collect_QuickCart_SelectType_CharacterPack",
         "upper": [
             255,
@@ -177,7 +183,10 @@
     },
     "Collect_QuickCart_EventPack_OcrCheck": {
         "recognition": "ColorMatch",
-        "next": [],
+        "next": [
+            "Collect_LocatePackFrame_Loc1",
+            "[JumpBack]Collect_LocatePackFrame_Loc1_ResetLoc"
+        ],
         "roi": "Collect_QuickCart_SelectType_EventPack",
         "upper": [
             255,
@@ -237,6 +246,16 @@
             230,
             114
         ],
+        "action": "Custom",
+        "custom_action": "RunTask",
+        "custom_action_param": {
+            "entry": "Collect_PackLocation_PassFieldsAndHub",
+            "param": {
+                "Collect_PackLocation_PassFieldsAndHub": {
+                    "roi": "Collect_LocatePackFrame_Loc2"
+                }
+            }
+        },
         "next": [
             "Collect_LocatePackFrame_Loc3"
         ],
@@ -257,6 +276,16 @@
             232,
             114
         ],
+        "action": "Custom",
+        "custom_action": "RunTask",
+        "custom_action_param": {
+            "entry": "Collect_PackLocation_PassFieldsAndHub",
+            "param": {
+                "Collect_PackLocation_PassFieldsAndHub": {
+                    "roi": "Collect_LocatePackFrame_Loc3"
+                }
+            }
+        },
         "next": [
             "Collect_LocatePackFrame_Loc4"
         ],
@@ -277,6 +306,16 @@
             233,
             114
         ],
+        "action": "Custom",
+        "custom_action": "RunTask",
+        "custom_action_param": {
+            "entry": "Collect_PackLocation_PassFieldsAndHub",
+            "param": {
+                "Collect_PackLocation_PassFieldsAndHub": {
+                    "roi": "Collect_LocatePackFrame_Loc4"
+                }
+            }
+        },
         "next": [
             "Collect_LocatePackFrame_Loc5"
         ],
@@ -297,6 +336,16 @@
             228,
             114
         ],
+        "action": "Custom",
+        "custom_action": "RunTask",
+        "custom_action_param": {
+            "entry": "Collect_PackLocation_PassFieldsAndHub",
+            "param": {
+                "Collect_PackLocation_PassFieldsAndHub": {
+                    "roi": "Collect_LocatePackFrame_Loc5"
+                }
+            }
+        },
         "next": [
             "Collect_LocatePackFrame_Loc6"
         ],
@@ -317,6 +366,16 @@
             230,
             114
         ],
+        "action": "Custom",
+        "custom_action": "RunTask",
+        "custom_action_param": {
+            "entry": "Collect_PackLocation_PassFieldsAndHub",
+            "param": {
+                "Collect_PackLocation_PassFieldsAndHub": {
+                    "roi": "Collect_LocatePackFrame_Loc6"
+                }
+            }
+        },
         "next": [
             "Collect_LocatePackFrame_Loc7"
         ],
@@ -337,6 +396,16 @@
             229,
             114
         ],
+        "action": "Custom",
+        "custom_action": "RunTask",
+        "custom_action_param": {
+            "entry": "Collect_PackLocation_PassFieldsAndHub",
+            "param": {
+                "Collect_PackLocation_PassFieldsAndHub": {
+                    "roi": "Collect_LocatePackFrame_Loc7"
+                }
+            }
+        },
         "next": [
             "Collect_LocatePackFrame_Loc8"
         ],
@@ -357,6 +426,16 @@
             228,
             114
         ],
+        "action": "Custom",
+        "custom_action": "RunTask",
+        "custom_action_param": {
+            "entry": "Collect_PackLocation_PassFieldsAndHub",
+            "param": {
+                "Collect_PackLocation_PassFieldsAndHub": {
+                    "roi": "Collect_LocatePackFrame_Loc8"
+                }
+            }
+        },
         "next": [
             "Collect_LocatePackFrame_Loc9"
         ],
@@ -377,6 +456,16 @@
             143,
             114
         ],
+        "action": "Custom",
+        "custom_action": "RunTask",
+        "custom_action_param": {
+            "entry": "Collect_PackLocation_PassFieldsAndHub",
+            "param": {
+                "Collect_PackLocation_PassFieldsAndHub": {
+                    "roi": "Collect_LocatePackFrame_Loc9"
+                }
+            }
+        },
         "focus": "CM.L.快速卡带盒定位-位置9"
     },
     "Collect_LocatePackFrame_Loc1_ResetLoc": {
@@ -395,10 +484,8 @@
         ],
         "end_hold": 400,
         "post_wait_freezes": 800,
-        "next": [
-            "Collect_LocatePackFrame_Loc1_ResetLoc"
-        ],
-        "doc": "稍微回移复位第一张卡带,向右。注意留够延迟等待动画消除。"
+        "doc": "稍微回移复位第一张卡带,向右。注意留够延迟等待动画消除。",
+        "max_hit": 20
     },
     "Collect_LocatePackFrame_Smart_Swip": {
         "action": "Custom",

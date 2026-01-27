@@ -239,9 +239,9 @@ class PatchAndClick(CustomAction):
 
                 # 1.2 执行魔改
                 context.override_pipeline({target_node: patch_data})
-                print.info(f"[Py] 🔧 (P&C) 节点 [{target_node}] 参数已动态替换")
+                print(f"[Py] 🔧 (P&C) 节点 [{target_node}] 参数已动态替换")
             else:
-                print.warning("[Py] PatchAndClick 缺少 patch 参数，仅执行点击逻辑")
+                print("[Py] PatchAndClick 缺少 patch 参数，仅执行点击逻辑")
 
             # --- 步骤 2: 执行点击逻辑 (Click) ---
             box = argv.box
@@ -261,7 +261,7 @@ class PatchAndClick(CustomAction):
                     if user_offset:
                         # 🔒 严格模式：必须是 4 位数组 [dx, dy, w, h]
                         if not isinstance(user_offset, list) or len(user_offset) != 4:
-                            print.error(f"[Py] ❌ 参数错误: target_offset 必须包含 4 个值 [dx, dy, w, h]。当前: {user_offset}")
+                            print(f"[Py] ❌ 参数错误: target_offset 必须包含 4 个值 [dx, dy, w, h]。当前: {user_offset}")
                             return False
                         
                         off_dx = int(user_offset[0])
@@ -288,7 +288,7 @@ class PatchAndClick(CustomAction):
                     utils.mfaalog.info(f"[Py] 🖱️ (P&C) 点击坐标: ({click_x}, {click_y})")
                     return True
             
-            print.warning("[Py] ⚠️ Patch 成功，但没有有效的识别区域(Box)，无法点击。")
+            print("[Py] ⚠️ Patch 成功，但没有有效的识别区域(Box)，无法点击。")
             return True
 
         except Exception as e:

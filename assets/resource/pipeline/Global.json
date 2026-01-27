@@ -190,7 +190,7 @@
             "Global_ToSandBox_Enter_B",
             "Global_ToSandBox_Reset"
         ],
-        "post_wait_freezes": 2500,
+        "post_delay": 4000,
         "focus": "G=1.页面非预期，点击返回按钮",
         "roi": [
             1,

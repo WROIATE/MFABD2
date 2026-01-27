@@ -288,7 +288,7 @@ class CooldownManager:
         return final_reset.timestamp(), config
 
     def check_availability(self, argv):
-        # --- 1. 参数解析 (增强健壮性) ---
+        # --- 1. 参数解析 ---
         try:
             if hasattr(argv, 'custom_action_param'):
                 param_str = getattr(argv, 'custom_action_param', '{}')
@@ -299,20 +299,16 @@ class CooldownManager:
                 params = {}
             
             card_name = params.get("card_name", "Unknown_Card")
-            strategy_name = params.get("cycle_type", "g_weekly") # 默认策略
+            strategy_name = params.get("cycle_type", "g_weekly") 
         except Exception as e:
             utils.mfaalog.error(f"[Py] 参数解析失败: {e}")
-            return True # 出错放行，避免卡死
-
-        utils.mfaalog.info(f"----------------------------------------")
-        utils.mfaalog.info(f"[Py] 检查: {card_name} (策略: {strategy_name})")
+            return True 
 
         # --- 2. 读取数据库 ---
-        # 读出来的是给人看的字符串: "2026-01-24 12:00:00"
         storage_key = self._get_storage_key(card_name, strategy_name)
         last_run_str = PersistentStore.get(storage_key, None)
 
-        # --- 3. 计算服务器刷新时间 (UTC戳) ---
+        # --- 3. 计算服务器刷新时间 ---
         try:
             reset_ts, config = self._calculate_server_reset_timestamp(strategy_name)
         except Exception as e:
@@ -321,34 +317,52 @@ class CooldownManager:
 
         # --- 4. 结算期逻辑 ---
         blackout_min = config.get("blackout_minutes", 0)
-        current_ts = time.time() # 绝对的 UTC 时间戳
+        current_ts = time.time()
         settlement_end_ts = reset_ts + (blackout_min * 60)
         
-        # 打印给人看 (转为本地时间显示)
+        # 格式化: 只显示 "月-日 时:分" 以节省空间
         local_reset_str = datetime.fromtimestamp(reset_ts).strftime("%Y-%m-%d %H:%M:%S")
-        utils.mfaalog.info(f"[Py] 刷新基准(本地): {local_reset_str}")
         
-        # 结算期拦截
         if reset_ts <= current_ts < settlement_end_ts:
-            end_str = datetime.fromtimestamp(settlement_end_ts).strftime("%H:%M:%S")
-            utils.mfaalog.warning(f"[Py] ⛔ 处于结算期 (结束于 {end_str})")
+            end_str = datetime.fromtimestamp(settlement_end_ts).strftime("%H:%M")
+            utils.mfaalog.warning(f"\n[Py] ⛔ {card_name} 处于结算期 (至 {end_str})")
             return False
 
-        # --- 5. 核心比对 ---
+        # --- 5. 核心比对与日志构建 ---
+        status_icon = "❓"
+        is_pass = False
+        last_run_display = "新任务" # 默认显示
+
         if last_run_str is None:
-            utils.mfaalog.info(f"[Py] 🟢 无历史记录，允许进入。")
-            return True
+            # 无记录 -> 通过
+            status_icon = "🟢"
+            is_pass = True
+        else:
+            # 有记录 -> 比对
+            last_run_ts = self._str_to_utc_timestamp(last_run_str)
+            
+            # 直接使用完整时间字符串，不再截断
+            last_run_display = last_run_str
 
-        # 【翻译】: 字符串 -> UTC戳
-        last_run_ts = self._str_to_utc_timestamp(last_run_str)
+            if last_run_ts < reset_ts:
+                status_icon = "🟢"
+                is_pass = True
+            else:
+                status_icon = "🔴"
+                is_pass = False
+
+        # --- 6. 最终整合打印 (单行 + 前置换行) ---
+        # 格式: [空行] [图标] 名称(对齐) | 策略 | 基准时间 | 上次时间 -> 结果
+        # :<14 表示左对齐占14个字符位，让竖线尽量对齐
+        log_msg = f"检查: {card_name:<14}（策略：{strategy_name}） \n 刷新基准: {local_reset_str} \n 上次运行: {last_run_display}"
         
-        utils.mfaalog.info(f"[Py] 上次运行(本地): {last_run_str}")
-
-        if last_run_ts < reset_ts:
-            utils.mfaalog.info(f"[Py] 🟢 记录早于刷新点，允许进入。")
+        if is_pass:
+            utils.mfaalog.info(f"{log_msg}\n   -> {status_icon} 启动")
             return True
         else:
-            utils.mfaalog.info(f"[Py] 🔴 本周期已完成，跳过。")
+            # 如果你想在UI上也看到跳过信息，用 info；如果只想在文件里看，用 print 或 debug
+            # 这里为了满足你的需求（看到保留的信息），使用 info
+            print(f"{log_msg}\n   -> {status_icon} 跳过")
             return False
 
     def mark_complete(self, argv):
