@@ -108,6 +108,9 @@
         "max_hit": 1
     },
     "Setup_Entry5": {
+        "enabled": false
+    },
+    "Setup_Entry5——disable": {
         "recognition": "And",
         "all_of": [
             {
