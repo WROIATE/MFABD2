@@ -9,10 +9,6 @@
     "Collect_PerPetTask": {
         "recognition": "TemplateMatch",
         "action": "Click",
-        "next": [
-            "Collect_PerPetTask",
-            "Collect_StartGameType2"
-        ],
         "post_delay": 5000,
         "focus": "CM.宠物派遣(调试中...错误请回报)",
         "roi": [

@@ -65,9 +65,6 @@
             "default_check": true,
             "description": "**地图采集**：进入卡带，对有传送阵地图进行`探查`、`吸取`、`召集`。请根据技能数量与等级合理决定每日吸取卡带数量。<br>**采集方案:**<br>**快速(快速卡带列表)：**从箱庭点击卡带图标后从左选取x张卡带采集（通过卡带右上图钉实现自定义排序，进而自定义选刷）,剧情游戏卡和角色游戏卡分开选择（二者可改变先后顺序）,合计不宜大于每日技能吸取数量。<br>**固定：**旧逻辑，不能自定义卡带，作为备案保留。<br>**举例：**目标先刷主线7+8+9+13，再刷火片。设置为，剧情卡带只标记这4张图给置顶，只标记角色卡的火片给置顶；采集方案=快速：1#剧情卡→2#角色卡；剧情卡带-刷取张数=4、角色卡带-刷取张数=1。看不全下拉菜单可选项上悬停1秒或调大MFA窗口。<br>**注意:**应当先将传送阵激活，并探明周围箱庭迷雾，使得区域地图上能完整显示明亮的传送阵图标。",
             "option": [
-                "采集方案",
-                "快速卡带-剧情卡带-刷取张数",
-                "快速卡带-角色卡带-刷取张数",
                 "第三图采集额外等待"
             ]
         },
@@ -202,106 +199,7 @@
     "option": {
         "采集方案": {
             "description": "决定2件事:<br>1、切卡入口是箱庭快速卡带按钮，还是主页面卡带老菜单。<br>2、快速卡带的类型顺序 or 固定卡带的刷取内容",
-            "cases": [
-                {
-                    "name": "快速：1#剧情卡→2#角色卡",
-                    "pipeline_override": {}
-                },
-                {
-                    "name": "快速：1#角色卡→2#剧情卡",
-                    "pipeline_override": {}
-                },
-                {
-                    "name": "固定：木&金-章节9+7+8",
-                    "pipeline_override": {
-                        "Collect_HomePageHub": {
-                            "next": [
-                                "Collect_PerPetTask",
-                                "Collect_PVEChapterIden2#",
-                                "[JumpBack]Collect_HomePageSwipeInitialize_BackHomePage"
-                            ]
-                        },
-                        "Collect_HomePageHub1": {
-                            "next": [
-                                "Collect_PerPetTask",
-                                "Collect_PVEChapterIden2#",
-                                "[JumpBack]Collect_HomePageSwipeInitialize_BackHomePage"
-                            ]
-                        },
-                        "Collect_StartGameType2": {
-                            "next": [
-                                "Collect_PVEChapterIden2#",
-                                "[JumpBack]Collect_HomePageSwipeInitialize_BackHomePage"
-                            ]
-                        },
-                        "Collect_TargetMap3": {
-                            "next": [
-                                "Collect_TargetMapEnd",
-                                "[JumpBack]Collect_ClickTeleporCircleIco",
-                                "[JumpBack]Collect_Protection_ReturnToAreaMap",
-                                "[JumpBack]Collect_TeleporNotFind"
-                            ]
-                        },
-                        "Collect_TeleporNotFind": {
-                            "next": [
-                                "Collect_TargetMapEnd_End",
-                                "Collect_ClickTeleporCircleIco",
-                                "Collect_TeleporNotFind"
-                            ]
-                        }
-                    }
-                },
-                {
-                    "name": "固定：低练度-章节2",
-                    "pipeline_override": {
-                        "Collect_HomePageHub": {
-                            "next": [
-                                "Collect_PerPetTask",
-                                "Collect_PVEChapterIden2#",
-                                "[JumpBack]Collect_HomePageSwipeInitialize_BackHomePage"
-                            ]
-                        },
-                        "Collect_HomePageHub1": {
-                            "next": [
-                                "Collect_PerPetTask",
-                                "Collect_PVEChapterIden2#",
-                                "[JumpBack]Collect_HomePageSwipeInitialize_BackHomePage"
-                            ]
-                        },
-                        "Collect_StartGameType2": {
-                            "next": [
-                                "Collect_PVEChapterIden2#",
-                                "[JumpBack]Collect_HomePageSwipeInitialize_BackHomePage"
-                            ]
-                        },
-                        "Collect_TargetMap3": {
-                            "next": [
-                                "Collect_TargetMapEnd",
-                                "[JumpBack]Collect_ClickTeleporCircleIco",
-                                "[JumpBack]Collect_Protection_ReturnToAreaMap",
-                                "[JumpBack]Collect_TeleporNotFind"
-                            ]
-                        },
-                        "Collect_TeleporNotFind": {
-                            "next": [
-                                "Collect_TargetMapEnd_End",
-                                "Collect_ClickTeleporCircleIco",
-                                "Collect_TeleporNotFind"
-                            ]
-                        },
-                        "Collect_ChapterSelection1": {
-                            "next": [
-                                "Collect_ChapterSelectionEnd",
-                                "[JumpBack]Collect_PetTask",
-                                "[JumpBack]Collect_OperationsMain_Sandplay"
-                            ],
-                            "template": [
-                                "pve2b.png"
-                            ]
-                        }
-                    }
-                }
-            ]
+            "cases": []
         },
         "快速卡带-剧情卡带-刷取张数": {
             "description": "【仅适用于‘快速’方案】左起第1张开始，刷几个剧情游戏卡带？<br>最大值 = $‘吸取’技能总次数 ÷3 - $角色卡带计划刷取张数 。超选都是浪费时间！",
