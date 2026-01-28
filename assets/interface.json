@@ -169,6 +169,15 @@
             "description": "**商店套利：**流传‘跑商’中的‘商’，我定义为商店套利。<br>未来完整流程包括：购买高利润料理食材、购买高利润其他食材、料理制作、料理择价出售、高利润材料择价出售"
         },
         {
+            "name": "[半自动]自动钓鱼",
+            "entry": "Fishing_Entry",
+            "option": [
+                "钓鱼地点",
+                "目标次数"
+            ],
+            "description": "从大多数界面开始自动钓鱼，钓起目标条数的鱼结束流程。<br>目前对普通鱼类有可观的成成功率,非常适合练级 <br> Powered by XiaoXKKK"
+        }
+        {
             "name": "[全局]结束游戏",
             "entry": "Close_HomePage"
         },
@@ -188,14 +197,6 @@
             ],
             "description": "**半自动操作：日常关闭。**使用时注意启动页面。<br>（未来计划...）作为小工具在其他页面打开，∞拖延。 "
         },
-        {
-            "name": "[半自动]自动钓鱼",
-            "entry": "Fishing_Entry",
-            "option": [
-                "钓鱼地点"
-            ],
-            "description": "在main页or移动到船上再运行 Powered by XiaoXKKK"
-        }
     ],
     "option": {
         "采集方案": {
@@ -1083,6 +1084,30 @@
                     }
                 }
             ]
+        },
+        "目标次数": {
+            "description": "钓到指定条数鱼后停止",
+            "type": "input",
+            "inputs": [
+                {
+                    "name": "目标钓鱼条数",
+                    "pipeline_type": "int",
+                    "default": "100",
+                    "verify": "^(\\d+)$",
+                    "pattern_msg": "应为非负整数"
+                }
+            ],
+            "pipeline_override": {
+                "Custom_Fishing_Task": {
+                    "action": {
+                        "param": {
+                            "custom_action_param": {
+                                "max_count": "{目标钓鱼条数}"
+                            }
+                        }
+                    }
+                }
+            }
         },
         "第三图采集额外等待": {
             "description": "如果探查技能非180s的传说级，可能第三次采集刚好超过技能时间。<br>故可以在此设定一个强制等待时间，以便脚本识别后重新施放。",
