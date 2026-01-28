@@ -28,7 +28,8 @@
         },
         "next": [
             "Fishing_BusinReward",
-            "Fishing_Already_Setsail"
+            "Fishing_Already_Setsail",
+            "[JumpBack]Global_ToHomePage"
         ]
     },
     "Fishing_Already_Setsail": {
@@ -471,8 +472,41 @@
             }
         },
         "next": [
-            "Fishing_InMap"
+            "Fishing_InMap",
+            "[JumoBack]Fishing_InMap_TalkSkip"
         ]
+    },
+    "Fishing_InMap_TalkSkip": {
+        "focus": "消除广场教程对话",
+        "recognition": "TemplateMatch",
+        "roi": [
+            1005,
+            15,
+            99,
+            66
+        ],
+        "template": [
+            "UI_talk.png"
+        ],
+        "action": "Click",
+        "post_delay": 1000,
+        "next": [
+            "Fishing_InMap_TalkSkip_Ck"
+        ]
+    },
+    "Fishing_InMap_TalkSkip_Ck": {
+        "recognition": "OCR",
+        "roi": [
+            553,
+            350,
+            333,
+            327
+        ],
+        "expected": [
+            "确认"
+        ],
+        "action": "Click",
+        "post_delay": 1000
     },
     "Fishing_InMap": {
         "recognition": {
