@@ -131,7 +131,8 @@
             "default_check": true,
             "entry": "RewardsORG_HomePage",
             "option": [
-                "公会奖励"
+                "公会奖励",
+                "广场每日祈求"
             ],
             "description": "**日常奖励：**依次领取`公会每日签到`、`餐馆-格鲁费之星`、`广场-神像许愿抽奖`。进入`餐馆`领取每日`常客圣石`，切出卡带到`主线2`。<br>**无公会建议关闭公会奖励开关。**"
         },
@@ -1060,6 +1061,24 @@
                         },
                         "StartGame_Setup_SoundTurnOff_Start": {
                             "enabled": true
+                        }
+                    }
+                }
+            ]
+        },
+        "广场每日祈求": {
+            "description": "可以选择梦幻广场神像祈求开关",
+            "type": "switch",
+            "cases": [
+                {
+                    "name": "Yes",
+                    "pipeline_override": {}
+                },
+                {
+                    "name": "No",
+                    "pipeline_override": {
+                        "RewardsORG_Square_Hub": {
+                            "enabled": false
                         }
                     }
                 }
