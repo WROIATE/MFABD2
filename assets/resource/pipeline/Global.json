@@ -1,4 +1,15 @@
 {
+    "Global_Index": {
+        "focus": "公共复用节点目录。开发整理用，别真引用此节点",
+        "on_error": [
+            "Global_ToHomePage",
+            "Global_ToSandBox",
+            "Global_QuickCart_MenuReset",
+            "Global_BackToQC1",
+            "Global_BackToPve2#"
+        ],
+        "doc": "依次为:回到主页面|回到箱庭|调出快速卡带菜单|回到快速卡带1|回到传统卡带2"
+    },
     "Global_OnceHomeButton": {
         "recognition": "TemplateMatch",
         "roi": [
@@ -396,7 +407,9 @@
         "template": [
             "BusinQuickIcoGE.png"
         ],
-        "green_mask": true
+        "green_mask": true,
+        "max_hit": 50,
+        "doc": "50次多半是卡死了,死死透别截图了"
     },
     "Global_BackToQC1_Menu": {
         "recognition": "OCR",
