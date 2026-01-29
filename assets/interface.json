@@ -120,7 +120,7 @@
         },
         {
             "name": "[执行]周常任务",
-            "entry": "Weekly_HomePage",
+            "entry": "Weekly_Start",
             "option": [
                 "末日之书"
             ],
@@ -820,21 +820,16 @@
             "type": "switch",
             "cases": [
                 {
-                    "name": "No",
-                    "pipeline_override": {
-                        "Weekly_LastNight_Start": {
-                            "next": [
-                                "Weekly_LastNight_End",
-                                "[JumpBack]Weekly_HomePageHub",
-                                "[JumpBack]Weekly_HomePageHub2",
-                                "[JumpBack]Weekly_HomePageHub1"
-                            ]
-                        }
-                    }
-                },
-                {
                     "name": "Yes",
                     "pipeline_override": {}
+                },
+                {
+                    "name": "No",
+                    "pipeline_override": {
+                        "Weekly_LastNight_Hub": {
+                            "enabled": false
+                        }
+                    }
                 }
             ]
         },
