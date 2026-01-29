@@ -45,7 +45,8 @@
       "[JumpBack]StartGame_Setup_SoundTurnOff_Start",
       "StartGame_TouchStart",
       "StartGame_Loading",
-      "StartGame_LoadingPage"
+      "StartGame_LoadingPage",
+      "[JumpBack]StartGame_ModMsg"
     ],
     "post_delay": 5000,
     "pre_wait_freezes": 3000,
@@ -801,5 +802,14 @@
       82
     ],
     "action": "Click"
+  },
+  "StartGame_ModMsg": {
+    "recognition": "OCR",
+    "expected": [
+      "CONFIRM"
+    ],
+    "action": "Click",
+    "post_delay": 1500,
+    "doc": "mod弹窗消除,缺乏信息瞎蒙的."
   }
 }
