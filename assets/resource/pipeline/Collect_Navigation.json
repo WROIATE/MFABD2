@@ -1,4 +1,7 @@
 {
+  "Collect_Navigation_ReadMe": {
+    "doc": "《卡带内导航模块》>>●开始>>【主流程】从进入箱庭开始，Collect_TargetMap系列主流程，每一个地图节点都包含大量子流程。通过下方地图名称通用前缀控制系列进度与退出（另一种思路是录入全部小地图名称）（另：起始包含一个图标点击托举异物Collect_FindPickupCat 不完善）。注意主流程子节点顺序。●>>找传送门>>【子流程1】初始节点_OperationsMain_Sandplay特殊卡带恢复。 | 【子流程2 FTC】找不到传送门。初始节点的error为进入强制传送门恢复模块。●>>进入传送地图后>>【子流程3】区域图强制进入白名单。Collect_TargetMap_Special_ClickTpCircleIco可复用的、无视地图前缀强制进入传送门（【重要】必须置于后面黑名单出口前。TargetMap系列主流程也要加上地图名）。 | 【子流程4】区域图越过黑名单，Collect_ClickTelepor_ButNotActive温和正则地图提示无传送阵、Collect_TeleporNotFind激进越过inverse判定故日常不应该触发（考虑删掉）。●>>命中出口>>● Collect_ClickTeleporCircleIco进入【技能模组】，技能模组结束会复位到下一站区域地图 ●>>非命中出口>>●【子流程5】拥有一套退出正则：Collect_QuickCart_TargetMapEnd温和识别关键词、Collect_Architecture_Underlying_Logic_Protection激进全局退出、Collect_OperationsEnd_NORight区域图到底、Collect_MapRight_NoFind区域图到底。"
+  },
   "Collect_OperationsMain_Sandplay": {
     "recognition": "TemplateMatch",
     "next": [
@@ -131,21 +134,6 @@
       "移动魔法阵"
     ],
     "doc": "找到图钉，进入区域地图"
-  },
-  "Collect_PetTask": {
-    "recognition": "TemplateMatch",
-    "action": "Click",
-    "post_delay": 5000,
-    "roi": [
-      866,
-      550,
-      28,
-      28
-    ],
-    "template": [
-      "PetTask.png"
-    ],
-    "doc": "宠物派遣"
   },
   "Collect_TargetMap1-1": {
     "recognition": "TemplateMatch",
@@ -539,7 +527,7 @@
   },
   "Collect_Architecture_Underlying_Logic_Protection": {
     "recognition": "OCR",
-    "focus": "CM-P.[WRN]状态机底层逻辑防护被触发",
+    "focus": "CM-P.[WRN]状态机底层逻辑防护被触发\n直接结束卡带",
     "next": [
       "Collect_QuickCart_HomePageHub2"
     ],
@@ -622,7 +610,7 @@
     ],
     "inverse": true,
     "post_delay": 1000,
-    "focus": "CBB.[WRN]未识别到传送阵，执行特殊换页",
+    "focus": "CBB.[WRN]未识别到传送阵，执行特殊换页（正常不应该触发）",
     "roi": [
       209,
       82,
@@ -1025,25 +1013,6 @@
     "green_mask": true,
     "doc": "详细地图内左图标，目的移动到最左"
   },
-  "Collect_QuickCart_Start": {
-    "next": [
-      "Collect_QuickCart_FastIcons"
-    ]
-  },
-  "Collect_QuickCart_FastIcons": {
-    "recognition": "TemplateMatch",
-    "action": "Click",
-    "next": [
-      "Collect_QuickCart_FastUI",
-      "Collect_QuickCart_FastIcons"
-    ],
-    "post_delay": 1000,
-    "focus": "QCB.进入快速卡带",
-    "template": [
-      "QuickCartGeadai.png"
-    ],
-    "green_mask": true
-  },
   "Collect_QuickCart_FastUI": {
     "recognition": "OCR",
     "focus": "QCB.确认快速卡带",
@@ -1063,226 +1032,6 @@
   "Collect_PackEnd_Ck": {
     "focus": "CM.卡带内流程结束-执行完成打标记",
     "doc": "预留节点,禁止删除,远端传入action打完成卡带标记。"
-  },
-  "Collect_QuickCart_NOHavePointer_Swip": {
-    "roi": [
-      1040,
-      659,
-      240,
-      19
-    ],
-    "lower": [
-      226,
-      191,
-      13
-    ],
-    "upper": [
-      254,
-      254,
-      184
-    ],
-    "count": 10,
-    "action": "Swipe",
-    "begin": [
-      1025,
-      640,
-      0,
-      0
-    ],
-    "end": [
-      117,
-      640,
-      0,
-      0
-    ],
-    "next": [
-      "[Anchor]Collect_Isenable"
-    ],
-    "duration": 500,
-    "end_hold": 1000,
-    "post_delay": 500,
-    "doc": "将卡带表滑到更右侧,中继",
-    "focus": "CB.[WRN]预埋管路触发-检查运行是否出错"
-  },
-  "Collect_QuickCart_Menu_Ocr": {
-    "recognition": "OCR",
-    "action": "Click",
-    "next": [
-      "Collect_QuickCart_QC_Sort"
-    ],
-    "on_error": [
-      "Collect_ChapterSelectionError"
-    ],
-    "focus": "CM.接入快速卡带",
-    "roi": [
-      32,
-      506,
-      306,
-      125
-    ],
-    "expected": [
-      "最近"
-    ],
-    "doc": "此处为分歧点,后接主线卡带or角色卡带,interrupt"
-  },
-  "Collect_ChapterSelectionError": {
-    "action": "Click",
-    "next": [],
-    "post_delay": 5000,
-    "focus": "CM.非正常退出卡带标记",
-    "target": [
-      120,
-      35,
-      0,
-      0
-    ],
-    "doc": "防止影响后续流程，将卡带页面结束"
-  },
-  "Collect_QuickCart_QC_Sort": {
-    "recognition": "OCR",
-    "action": "Click",
-    "next": [
-      "Collect_QuickCart_QC_Sort_Clr",
-      "Collect_QuickCart_QC_Sort"
-    ],
-    "on_error": [
-      "Collect_ChapterSelectionError"
-    ],
-    "post_delay": 2000,
-    "focus": "QCM.快速卡带类选择-剧情",
-    "roi": [
-      36,
-      527,
-      1104,
-      63
-    ],
-    "expected": [
-      "剧情游戏卡"
-    ]
-  },
-  "Collect_QuickCart_QC_Sort_Clr": {
-    "recognition": "ColorMatch",
-    "next": [],
-    "roi": [
-      214,
-      536,
-      113,
-      39
-    ],
-    "upper": [
-      255,
-      255,
-      255
-    ],
-    "lower": [
-      167,
-      167,
-      165
-    ],
-    "count": 500,
-    "focus": "CM.快速卡带类确认-剧情"
-  },
-  "Collect_QuickCart_QC_Out": {
-    "recognition": "ColorMatch",
-    "next": [
-      "Collect_QuickCart_Switch"
-    ],
-    "focus": "CM.[WRN]QC.识别到中断给出中止指示",
-    "roi": [
-      57,
-      538,
-      87,
-      36
-    ],
-    "lower": [
-      226,
-      191,
-      13
-    ],
-    "upper": [
-      254,
-      254,
-      184
-    ],
-    "count": 10,
-    "doc": "主动识别中断给出的更改,'最近'亮起,通往QC/QR转换节点|注意interface"
-  },
-  "Collect_QuickCart_Switch": {
-    "focus": "CM.剧情/角色卡带切换节点",
-    "next": [
-      "Collect_QuickCart_QR_Sort",
-      "[JumpBack]Global_QuickCart_MenuReset",
-      "[JumpBack]Global_BackPageHub_Once"
-    ]
-  },
-  "Collect_QuickCart_QR_Sort": {
-    "recognition": "OCR",
-    "action": "Click",
-    "next": [
-      "Collect_QuickCart_QR_Sort_Clr",
-      "Collect_QuickCart_QR_Sort"
-    ],
-    "on_error": [
-      "Collect_ChapterSelectionError"
-    ],
-    "post_delay": 2000,
-    "focus": "QRM.快速卡带类选择-角色",
-    "roi": [
-      36,
-      527,
-      1104,
-      63
-    ],
-    "expected": [
-      "角色游戏卡"
-    ]
-  },
-  "Collect_QuickCart_QR_Sort_Clr": {
-    "recognition": "ColorMatch",
-    "next": [],
-    "roi": [
-      382,
-      537,
-      124,
-      42
-    ],
-    "upper": [
-      255,
-      255,
-      255
-    ],
-    "lower": [
-      167,
-      167,
-      165
-    ],
-    "count": 500,
-    "focus": "CM.快速卡带类确认-角色"
-  },
-  "Collect_QuickCart_QR_Out": {
-    "recognition": "ColorMatch",
-    "next": [
-      "Collect_ChapterSelectionError"
-    ],
-    "focus": "CM.[WRN]QR.识别到中断给出中止指示",
-    "roi": [
-      57,
-      538,
-      87,
-      36
-    ],
-    "lower": [
-      226,
-      191,
-      13
-    ],
-    "upper": [
-      254,
-      254,
-      184
-    ],
-    "count": 10,
-    "doc": "主动识别中断给出的更改,'最近'亮起,通往QR/QR转换节点|注意interface"
   },
   "Collect_QuickCart_TargetMapEnd": {
     "recognition": "OCR",
@@ -1329,8 +1078,9 @@
     "recognition": "TemplateMatch",
     "action": "Click",
     "next": [
-      "Collect_QuickCart_FastIcons",
-      "Collect_QuickCart_HomePageHub2"
+      "Collect_QuickCart_FastUI",
+      "Collect_QuickCart_HomePageHub2",
+      "[JumpBack]Global_QuickCart_MenuReset"
     ],
     "post_delay": 2000,
     "focus": "G=1.页面非预期，点击返回按钮",
