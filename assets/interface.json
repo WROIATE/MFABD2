@@ -133,6 +133,7 @@
             "entry": "Daily_HomePage",
             "option": [
                 "公会奖励",
+                "餐馆自动升级",
                 "广场每日祈求"
             ],
             "description": "**日常奖励：**依次领取`公会每日签到`、`餐馆-格鲁费之星`、`广场-神像许愿抽奖`。进入`餐馆`领取每日`常客圣石`，切出卡带到`主线2`。<br>**无公会建议关闭公会奖励开关。**"
@@ -1078,6 +1079,27 @@
                             "enabled": true
                         }
                     }
+                }
+            ]
+        },
+        "餐馆自动升级": {
+            "description": "升级有一次性小动画，按期望游戏体验选择。",
+            "type": "switch",
+            "cases": [
+                {
+                    "name": "No",
+                    "pipeline_override": {
+                        "Daily_Busin_StageUp": {
+                            "enabled": false
+                        },
+                        "Daily_Busin_LevelUp": {
+                            "enabled": false
+                        }
+                    }
+                },
+                {
+                    "name": "Yes",
+                    "pipeline_override": {}
                 }
             ]
         },

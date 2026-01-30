@@ -339,7 +339,9 @@
     "recognition": "OCR",
     "action": "Click",
     "next": [
-      "Daily_Busin_GiftGet",
+      "[JumpBack]Daily_Busin_GiftGet",
+      "[JumpBack]Daily_Busin_StageUp",
+      "[JumpBack]Daily_Busin_LevelUp",
       "Daily_Busin_NoGift",
       "Daily_Busin_InBusin"
     ],
@@ -358,11 +360,6 @@
   "Daily_Busin_GiftGet": {
     "recognition": "TemplateMatch",
     "action": "Click",
-    "next": [
-      "Daily_Busin_GiftGet",
-      "Daily_Busin_Quick_BackPVEPage_Str",
-      "Global_BackToPve2#"
-    ],
     "post_delay": 3000,
     "focus": "GBM.圣石发现",
     "roi": [
@@ -399,6 +396,82 @@
     "expected": [
       "常客"
     ]
+  },
+  "Daily_Busin_StageUp": {
+    "recognition": "And",
+    "all_of": [
+      {
+        "recognition": "OCR",
+        "expected": "^(?=.*[下])(?=.*[一])(?=.*[阶段]).{2,5}$",
+        "roi": [
+          1155,
+          937,
+          158,
+          81
+        ]
+      },
+      {
+        "recognition": "ColorMatch",
+        "roi": [
+          1155,
+          937,
+          158,
+          81
+        ],
+        "method": 40,
+        "lower": [
+          21,
+          14,
+          127
+        ],
+        "upper": [
+          24,
+          11,
+          241
+        ],
+        "count": 50
+      }
+    ],
+    "action": "Click",
+    "post_delay": 5000
+  },
+  "Daily_Busin_LevelUp": {
+    "recognition": "And",
+    "all_of": [
+      {
+        "recognition": "OCR",
+        "expected": "升级",
+        "roi": [
+          1155,
+          937,
+          158,
+          81
+        ]
+      },
+      {
+        "recognition": "ColorMatch",
+        "roi": [
+          1155,
+          937,
+          158,
+          81
+        ],
+        "method": 40,
+        "lower": [
+          21,
+          14,
+          127
+        ],
+        "upper": [
+          24,
+          11,
+          241
+        ],
+        "count": 50
+      }
+    ],
+    "action": "Click",
+    "post_delay": 5000
   },
   "Daily_Busin_Quick_BackPVEPage_Str": {
     "recognition": "TemplateMatch",
