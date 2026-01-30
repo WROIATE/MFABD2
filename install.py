@@ -20,6 +20,7 @@ working_dir = Path(__file__).parent
 install_path = working_dir / Path("install")
 version = len(sys.argv) > 1 and sys.argv[1] or "v0.0.1"
 target_os = len(sys.argv) > 2 and sys.argv[2] or "win"
+# 确保这里能接收到 CI 传进来的版本号，默认为 0.0.0
 maa_ver = len(sys.argv) > 3 and sys.argv[3] or "0.0.0"
 
 # def install_deps():
@@ -166,10 +167,35 @@ def install_chores():
     shutil.copy2(working_dir / "LICENSE", install_path)
     shutil.copy2(working_dir / "LICENSE-APACHE", install_path)
     shutil.copy2(working_dir / "LICENSE-MIT", install_path)
-    # 处理 Mac 引导脚本(复制py3安装脚本、并将实际MFAA的MFA版本写入脚本文件，防止错配报错)
+    
+    # 处理 Mac 引导脚本：注入真实版本号
     if "mac" in target_os or "osx" in target_os:
         src_script = working_dir / "scripts" / "release" / "AKeySetup_一键全依赖安装_mac.command"
         dst_script = install_path / "AKeySetup_一键全依赖安装_mac.command"
+
+        if src_script.exists():
+            print(f"📦 [Mac] 处理安装脚本，注入 MaaVersion: {maa_ver}")
+            try:
+                with open(src_script, 'r', encoding='utf-8') as f:
+                    content = f.read()
+
+                # 替换占位符 {{MAA_VERSION}}
+                if "{{MAA_VERSION}}" in content:
+                    new_content = content.replace("{{MAA_VERSION}}", maa_ver)
+                    with open(dst_script, 'w', encoding='utf-8') as f:
+                        f.write(new_content)
+                    
+                    # 尝试赋予执行权限
+                    os.chmod(dst_script, 0o755)
+                else:
+                    print("⚠️ 警告: Mac 脚本中未找到 {{MAA_VERSION}} 占位符！")
+                    # 如果没找到占位符，至少把原文件拷过去
+                    shutil.copy2(src_script, dst_script)
+
+            except Exception as e:
+                print(f"❌ 处理 Mac 脚本失败: {e}")
+        else:
+            print(f"⚠️ 未找到 Mac 脚本源文件: {src_script}")
 
         if src_script.exists():
             print(f"处理并打包 Mac 脚本，注入版本号: {maa_ver}")

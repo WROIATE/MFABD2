@@ -106,43 +106,93 @@ jobs:
           echo "is_tag_push=$is_tag_push" | tee -a $GITHUB_OUTPUT
           echo "is_dev_version=$([ "$version_type" = "ci" ] && echo "true" || echo "false")" | tee -a $GITHUB_OUTPUT
           echo "version_type=$version_type" | tee -a $GITHUB_OUTPUT
+
+        # 2. 下载资源 (用于探测)
+      - name: Parse Configuration
+        id: parse_config
+        run: |
+          python3 -c "
+          import re, os, sys
+          req_file = 'requirements.txt'
+          mfaa_tag = ''
+          if os.path.exists(req_file):
+              with open(req_file, 'r', encoding='utf-8') as f:
+                  for line in f:
+                      m = re.match(r'^#\s*MFAA_TAG=(v[\w\.\-]+)', line.strip())
+                      if m: mfaa_tag = m.group(1); break
+          if not mfaa_tag:
+              print('::error::未找到 # MFAA_TAG 配置'); sys.exit(1)
+          print(f'✅ 目标资源版本: {mfaa_tag}')
+          with open(os.environ['GITHUB_OUTPUT'], 'a') as f:
+              f.write(f'mfaa_tag={mfaa_tag}\n')
+          "
+
+      # [修改] 下载资源 (改用 steps.parse_config.outputs.mfaa_tag)
       - name: Download MFAA for Detection
         uses: robinraju/release-downloader@v1
         with:
           repository: SweetSmellFox/MFAAvalonia
-          latest: true
-          fileName: "MFAAvalonia-*-linux-x64*" # 只下这个用于探测
+          latest: false
+          tag: ${{ steps.parse_config.outputs.mfaa_tag }}
+          fileName: "MFAAvalonia-*-linux-x64*"
           out-file-path: "temp_detect"
           extract: true
 
-      # 运行脚本提取版本
-      - name: Detect Version
+      # 3. 探测内核版本
+      # 3. 探测内核版本 (修复版)
+      # 3. 探测内核版本 (修复版)
+      - name: Detect Core Version
         id: detect_maa
         run: |
+          # 1. 使用 find 查找文件的【绝对路径】(加上 $(pwd))
+          SO_FILE=$(find "$(pwd)/temp_detect" -name "libMaaFramework.so" | head -n 1)
+          
+          if [ -z "$SO_FILE" ]; then
+            echo "::error::根本找不到 libMaaFramework.so 文件！"
+            exit 1
+          fi
+          
+          SO_DIR=$(dirname "$SO_FILE")
+          echo "📍 定位到库文件: $SO_FILE"
+          echo "🔧 库目录: $SO_DIR"
+          
+          # 2. 【关键】设置 LD_LIBRARY_PATH 为绝对路径
+          # 这告诉 Linux："加载库的时候，去这个目录里找依赖！"
+          export LD_LIBRARY_PATH="$SO_DIR:$LD_LIBRARY_PATH"
+          
+          # 3. 【调试神器】运行 ldd
+          # 如果后面 Python 报错，看这部分日志就知道缺哪个库了
+          echo "=== 🕵️‍♂️ 依赖检查 (ldd) ==="
+          ldd "$SO_FILE" || true
+          echo "========================="
+          
+          # 4. 生成探测脚本
           cat << 'EOF' > detect.py
           import sys, ctypes, os
-          from pathlib import Path
           
-          # 递归找到 .so 文件
-          root = Path("temp_detect")
-          lib_path = next(root.rglob("libMaaFramework.so"), None)
+          # 从环境变量获取刚才找到的绝对路径
+          so_path = os.environ.get("TARGET_SO_PATH")
+          print(f"🐍 Python loading: {so_path}")
           
-          if not lib_path:
-              print("::error::找不到 .so 文件，MFAA 结构可能变了！")
-              sys.exit(1)
-              
           try:
-              lib = ctypes.CDLL(str(lib_path))
+              # mode=ctypes.RTLD_GLOBAL 有时能解决跨库符号依赖问题
+              lib = ctypes.CDLL(so_path, mode=ctypes.RTLD_GLOBAL)
+              
               lib.MaaVersion.restype = ctypes.c_char_p
               ver = lib.MaaVersion().decode('utf-8')
-              print(f"Detected: {ver}")
-              # 输出到 GitHub Output
+              
+              print(f"✅ Detected Core: {ver}")
+              
               with open(os.environ['GITHUB_OUTPUT'], 'a') as f:
                   f.write(f"version={ver}\n")
+                  
           except Exception as e:
               print(f"::error::加载失败: {e}")
               sys.exit(1)
           EOF
+          
+          # 5. 运行脚本 (传入路径变量)
+          export TARGET_SO_PATH="$SO_FILE"
           python3 detect.py
     outputs:
       tag: ${{ steps.set_tag.outputs.tag }}
@@ -150,6 +200,7 @@ jobs:
       is_dev_version: ${{ steps.set_tag.outputs.is_dev_version }}
       version_type: ${{ steps.set_tag.outputs.version_type }}
       maa_version: ${{ steps.detect_maa.outputs.version }}
+      mfaa_tag: ${{ steps.parse_config.outputs.mfaa_tag }}
 
   install:
     needs: meta
@@ -157,6 +208,7 @@ jobs:
     
     env:
       MAA_VERSION: ${{ needs.meta.outputs.maa_version }}
+      MFAA_TAG: ${{ needs.meta.outputs.mfaa_tag }}
     strategy:
       matrix:
         os: [win, macos, linux, android]
@@ -174,39 +226,39 @@ jobs:
         with:
           python-version: '3.x'
 
-      # 安装./requirements.txt内容注意维护(不要包含Maafw !)
+      
       # 使用 meta 探测到的版本号安装 MaaFramework Python 绑定
       - name: Install Requirements 
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
-          echo "Installing maafw==$MAA_VERSION"
+          # 显式安装探测到的匹配版本
+          echo "Installing matched core: maafw==$MAA_VERSION"
           pip install maafw==$MAA_VERSION
 
-      - name: Download MaaFramework
-        uses: robinraju/release-downloader@v1
-        with:
-          repository: MaaXYZ/MaaFramework
-          fileName: "MAA-${{ matrix.os }}-${{ matrix.arch }}*"
-          # 指定MFA最新版
-          latest: true
-          # 指定MFA旧稳定版
-          # tag: "v4.5.6"
-          out-file-path: "deps"
-          extract: true
-
       - name: Download MFAAvalonia
-        if: matrix.os != 'android'
         id: download_mfa
+        if: matrix.os != 'android'
         uses: robinraju/release-downloader@v1
         with:
           repository: SweetSmellFox/MFAAvalonia
-          fileName: "MFAAvalonia-*-${{ (matrix.os == 'win' && 'win') || (matrix.os == 'macos' && 'osx') || (matrix.os == 'linux' && 'linux') }}-${{ (matrix.arch == 'x86_64' && 'x64') || (matrix.arch == 'aarch64' && 'arm64') }}*"
-          #安装最新版
-          # latest: true
-          # 指定MFAA旧稳定版
-          tag: "v2.5.6"
+          latest: false
+          tag: ${{ env.MFAA_TAG }}
+          fileName: "MFAAvalonia-*-${{ matrix.os == 'macos' && 'osx' || matrix.os }}*"
           out-file-path: "MFA"
+          extract: true
+
+          # [新增] 专门为 Android 下载 MaaFramework 内核
+      - name: Download MaaFramework (Android)
+        if: matrix.os == 'android'
+        uses: robinraju/release-downloader@v1
+        with:
+          repository: MaaXYZ/MaaFramework
+          latest: false
+          tag: "${{ env.MAA_VERSION }}"
+          # Android 将通配符逻辑调整为匹配 "MAA-android-{架构}-xxxx"
+          fileName: "MAA-android-${{ matrix.arch }}*"
+          out-file-path: "AndroidCore"
           extract: true
 
       - name: Restore Assets (Clone from Resource Repo)
@@ -270,17 +322,110 @@ jobs:
             -r requirements.txt \
             maafw==$MAA_VERSION \
             --target install/python/Lib/site-packages
-      - name: Install
+      - name: Install & Merge
         shell: bash
         run: |
+          # 1. 运行 install.py (处理配置、注入版本号、生成资源目录等)
+          # install.py 会创建 'install' 目录并放入 resource 和 agent
           python ./install.py ${{ needs.meta.outputs.tag }} ${{ matrix.os }} ${{ env.MAA_VERSION }}
 
+          # 2. [桌面端逻辑] 合并 MFAAvalonia 到 install 目录
           if [[ "${{ matrix.os }}" != "android" ]]; then
             if [ -d "MFA" ]; then
               mkdir -p install
-              rsync -av --ignore-existing MFA/ install/
+              # 使用 rsync 覆盖，确保 UI 和 Core 都在正确位置
+              rsync -av MFA/ install/
+            fi
+          
+          # 3. [新增][安卓逻辑] 合并 MaaFramework Core 到 install 目录
+          else
+            echo "🤖 处理 Android 内核合并..."
+            if [ -d "AndroidCore" ]; then
+              # AndroidCore 解压后通常包含 bin, lib, share, include 等
+              # 我们将它们直接复制到 install 根目录下
+              cp -r AndroidCore/* install/
+              echo "✅ Android 内核已合并"
+            else
+              echo "❌ 未找到 AndroidCore 目录，下载可能失败"
+              exit 1
             fi
           fi
+
+      # [核心修复 1] 强力清理残留的压缩包 (解决根目录 85MB 问题)
+      - name: Cleanup Archives
+        shell: bash
+        run: |
+          echo "🧹 Cleaning up zip/tar.gz files..."
+          # 1. 删除根目录的
+          rm -f *.zip *.tar.gz 
+          # 2. 删除 MFA 源目录的
+          rm -f MFA/*.zip MFA/*.tar.gz
+          # 3. [关键补刀] 删除 install 目录里被 rsync 拷进去的
+          rm -f install/*.zip install/*.tar.gz
+          # 4.删安卓构建包
+          rm -rf AndroidCore
+          
+          echo "✅ Cleanup done."
+
+      # [核心修复 2] 还原原版逻辑：利用矩阵 (Matrix) 清理 runtimes
+      # 既然我们下载的是"全家桶"，那我们就根据 matrix.os 和 matrix.arch 把不需要的肢解掉
+      - name: Prune Runtimes (Architecture Slimming)
+        if: matrix.os != 'android'
+        shell: bash
+        run: |
+          python3 -c "
+          import shutil
+          import os
+          from pathlib import Path
+
+          # 获取矩阵定义的'正确'架构
+          # win / macos / linux
+          matrix_os = '${{ matrix.os }}'
+          # x86_64 / aarch64
+          matrix_arch = '${{ matrix.arch }}'
+
+          print(f'🎯 Target: {matrix_os}-{matrix_arch}')
+          
+          # 定义需要保留的关键词
+          # 例如: 如果是 win-x86_64，我们保留 'win' 和 'x64'/'amd64'
+          keep_keywords = []
+          
+          if matrix_os == 'win': keep_keywords.append('win')
+          elif matrix_os == 'macos': keep_keywords.append('osx') # runtimes里通常叫osx
+          elif matrix_os == 'linux': keep_keywords.append('linux')
+          
+          if matrix_arch == 'x86_64': 
+              keep_keywords.extend(['x64', 'amd64'])
+          elif matrix_arch == 'aarch64': 
+              keep_keywords.extend(['arm64', 'aarch64'])
+
+          runtimes_dir = Path('install/runtimes')
+          if runtimes_dir.exists():
+              initial_size = sum(f.stat().st_size for f in runtimes_dir.rglob('*') if f.is_file())
+              print(f'📦 Runtimes size before: {initial_size/1024/1024:.2f} MB')
+
+              for p in runtimes_dir.iterdir():
+                  if p.is_dir():
+                      # 逻辑：如果文件夹名字里【不包含】任何一个保留关键词，就删掉
+                      # 比如: 文件夹叫 'osx-arm64'，但我想要 'win' -> 删！
+                      # 比如: 文件夹叫 'win-arm64'，我想要 'win' 和 'x64' -> 缺x64 -> 删！
+                      
+                      # 检查是否包含OS关键词
+                      match_os = any(k in p.name for k in keep_keywords if k in ['win', 'osx', 'linux'])
+                      # 检查是否包含架构关键词
+                      match_arch = any(k in p.name for k in keep_keywords if k in ['x64', 'amd64', 'arm64', 'aarch64'])
+
+                      if not (match_os and match_arch):
+                          print(f'🗑️ Pruning mismatched runtime: {p.name}')
+                          shutil.rmtree(p)
+                      else:
+                          print(f'✅ Keeping runtime: {p.name}')
+                          
+              final_size = sum(f.stat().st_size for f in runtimes_dir.rglob('*') if f.is_file())
+              print(f'🎉 Runtimes size after: {final_size/1024/1024:.2f} MB')
+          else:
+              print('⚠️ No runtimes directory found.')
+          "
       - name: Inject Announcement & Verify
         shell: bash
         run: |
@@ -315,6 +460,7 @@ jobs:
       # 针对 MFABD2 的目录结构 (install/python/Lib/site-packages/maa/bin)
       # 这一步会扫描 install 目录下所有的 maa/bin 并删除
       # =======================================================
+ 
       - name: Remove redundant MAA binaries (Deduplication)
         if: matrix.os != 'android'
         run: |

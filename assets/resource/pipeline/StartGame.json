@@ -312,7 +312,8 @@
       "[JumpBack]StartGame_SeasonSet",
       "StartGame_SandPlayPage",
       "[JumpBack]PVP_PerOperationsMain_Error",
-      "[JumpBack]StartGame_BackMapPage"
+      "[JumpBack]StartGame_BackMapPage",
+      "[JumpBack]Global_WaitingForLoading"
     ],
     "pre_delay": 5000,
     "post_delay": 10000,

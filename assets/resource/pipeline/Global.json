@@ -6,9 +6,11 @@
             "Global_ToSandBox",
             "Global_QuickCart_MenuReset",
             "Global_BackToQC1",
-            "Global_BackToPve2#"
+            "Global_BackToPve2#",
+            "Global_BackPageHub_Once",
+            "[JumpBack]Global_WaitingForLoading"
         ],
-        "doc": "依次为:回到主页面|回到箱庭|调出快速卡带菜单|回到快速卡带1|回到传统卡带2"
+        "doc": "依次为:回到主页面|回到箱庭|调出快速卡带菜单|回到快速卡带1|回到传统卡带2|点一次返回按钮 | 卡带读取界面循环等待"
     },
     "Global_OnceHomeButton": {
         "recognition": "TemplateMatch",
@@ -189,7 +191,8 @@
         "next": [
             "Global_ToSandBox_Enter_A",
             "Global_ToSandBox_Enter_B",
-            "Global_ToSandBox_Reset"
+            "Global_ToSandBox_Reset",
+            "[JumpBack]Global_WaitingForLoading"
         ],
         "doc": "[通用复位]复位到主界面模块,开始,中继调用"
     },
@@ -361,7 +364,8 @@
         ],
         "next": [
             "Global_BackToPve2#_FinBackMapPage",
-            "Global_BackToPve2#_TouchPVEBook"
+            "Global_BackToPve2#_TouchPVEBook",
+            "[JumpBack]Global_WaitingForLoading"
         ],
         "post_delay": 5000,
         "focus": "G.复位用卡带已找到",
@@ -459,7 +463,8 @@
         "action": "Click",
         "next": [
             "Global_BackToQC1_Fin",
-            "Global_BackToQC1_Pvemap"
+            "Global_BackToQC1_Pvemap",
+            "[JumpBack]Global_WaitingForLoading"
         ],
         "post_delay": 4000,
         "roi": [
@@ -542,9 +547,5 @@
             }
         ],
         "post_delay": 5000
-    },
-    "Custom_Proxy_Swipe": {
-        "doc": "不要使用,不要删除。这是验证滑动custom的预留节点。",
-        "action": "Swipe"
     }
 }
