@@ -43,7 +43,7 @@
             "name": "[全局]启动游戏",
             "entry": "StartGame_Start",
             "default_check": true,
-            "description": "<span style=\"color:Crimson;font-size:16px\">框架有PC端控制器(720P窗口化)，但资源来不及做相关适配。简单形容，站里有火车、没铁轨。</span><br><b>启动游戏</b>：<br>自动启动游戏，包含更新、支付失败等一些异常框点击，领取`主界面`奖励、`宠物派遣`。<br><b><span style=\"color:Crimson;font-size:16px\">注意：网络环境需提前解决。</span></b><br>【<b>首次运行前，务必至少查看</b>`使用帮助`<b>卡片！</b>】",
+            "description": "<span style=\"color:Crimson;font-size:14px\">框架有PC端控制器(720P窗口化)，但资源来不及适配仅供探索。</span><br><b>启动游戏</b>：<br>自动启动游戏，包含更新、支付失败等一些异常框点击，领取`主界面`奖励、`宠物派遣`。<br><b><span style=\"color:Crimson;font-size:16px\">注意：网络环境需提前解决。</span></b><br>【<b>首次运行前，务必至少查看</b>`使用帮助`<b>卡片！</b>】",
             "option": [
                 "前置助手"
             ]
@@ -122,9 +122,10 @@
             "name": "[执行]周常任务",
             "entry": "Weekly_Start",
             "option": [
-                "末日之书"
+                "末日之书",
+                "周常钓鱼"
             ],
-            "description": "**每周独立周常：**每周奖励3项：依次打1轮`末日之书`、`我的小屋`随机点赞4次、访问`街机页面`。<br>正常运作可以拿完全部`每周任务`奖励。<br>周触发器开发烂尾中...欢迎协助←(･ω･)ﾉ。 "
+            "description": "**每周独立周常：**每周奖励4项：依次访问`街机页面`、`我的小屋`随机点赞4次、打1轮`末日之书`、钓鱼1条。<br>正常运作可以拿完全部`每周任务`奖励。<br>周触发器已实装，周期内不会重复打了。 "
         },
         {
             "name": "[领取]公会签到/餐馆",
@@ -827,6 +828,24 @@
                     "name": "No",
                     "pipeline_override": {
                         "Weekly_LastNight_Hub": {
+                            "enabled": false
+                        }
+                    }
+                }
+            ]
+        },
+        "周常钓鱼": {
+            "description": "钓鱼1条",
+            "type": "switch",
+            "cases": [
+                {
+                    "name": "Yes",
+                    "pipeline_override": {}
+                },
+                {
+                    "name": "No",
+                    "pipeline_override": {
+                        "Weekly_Flishing_Hub": {
                             "enabled": false
                         }
                     }

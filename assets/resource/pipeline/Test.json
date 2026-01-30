@@ -450,5 +450,48 @@
   },
   "test_runtask2": {
     "action": "Click"
+  },
+  "test_PatchBatch": {
+    "action": {
+      "type": "Custom",
+      "param": {
+        "custom_action": "PatchBatch",
+        "custom_action_param": {
+          "patches": {
+            "test_PatchBatch1": {
+              "next": [
+                "test_PatchBatch2"
+              ]
+            },
+            "test_PatchBatch2": {
+              "next": [
+                "test_PatchBatch3"
+              ]
+            }
+          }
+        }
+      }
+    },
+    "next": [
+      "test_PatchBatch1"
+    ]
+  },
+  "test_PatchBatch1": {},
+  "test_PatchBatch2": {},
+  "test_PatchBatch3": {},
+  "test_daly": {
+    "pre_wait_freezes": {
+      "target": [
+        615,
+        257,
+        47,
+        44
+      ],
+      "method": 5,
+      "rate_limit": 500,
+      "time": 2000,
+      "timeout": 30000,
+      "threshold": 0.95
+    }
   }
 }

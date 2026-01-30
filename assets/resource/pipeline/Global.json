@@ -211,7 +211,8 @@
         ],
         "template": [
             "BackButGe.png",
-            "BackButGe2.png"
+            "BackButGe2.png",
+            "UI_qsback.png"
         ],
         "green_mask": true,
         "doc": "其他页面，返回按钮"

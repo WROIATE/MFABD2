@@ -3,7 +3,8 @@
     "next": [
       "[JumpBack]Weekly_Arcade_Hub",
       "[JumpBack]Weekly_VisitCabin_Hub",
-      "[JumpBack]Weekly_LastNight_Hub"
+      "[JumpBack]Weekly_LastNight_Hub",
+      "[JumpBack]Weekly_Flishing_Hub"
     ]
   },
   "Weekly_LastNight_Hub": {
@@ -32,6 +33,106 @@
     "timeout": 1,
     "max_hit": 1,
     "doc": "小屋"
+  },
+  "Weekly_Flishing_Hub": {
+    "enabled": true,
+    "next": [
+      "Weekly_Fishing_Start"
+    ],
+    "timeout": 1,
+    "max_hit": 1,
+    "doc": "每周1条鱼"
+  },
+  "Weekly_Fishing_Start": {
+    "recognition": "Custom",
+    "custom_recognition": "CheckCoolDown",
+    "custom_recognition_param": {
+      "card_name": "Gameplay_fishing",
+      "cycle_type": "g_weekly"
+    },
+    "action": "Custom",
+    "custom_action": "PatchBatch",
+    "custom_action_param": {
+      "node": "Custom_Fishing_Task",
+      "patches": {
+        "Custom_Fishing_Task": {
+          "action": {
+            "param": {
+              "custom_action_param": {
+                "max_count": 1
+              }
+            }
+          },
+          "next": "[Anchor]Weekly_Fishing"
+        }
+      }
+    },
+    "next": [
+      "Weekly_Fishing_Anchor"
+    ]
+  },
+  "Weekly_Fishing_Anchor": {
+    "anchor": [
+      "Weekly_Fishing"
+    ],
+    "next": [
+      "Weekly_Fishing_Anchor_Goto",
+      "Weekly_Fishing_Anchor_Done"
+    ],
+    "timeout": 1
+  },
+  "Weekly_Fishing_Anchor_Goto": {
+    "max_hit": 1,
+    "next": [
+      "Fishing_Entry"
+    ]
+  },
+  "Weekly_Fishing_Anchor_Done": {
+    "action": "Custom",
+    "custom_action": "MarkComplete",
+    "custom_action_param": {
+      "card_name": "Gameplay_fishing",
+      "cycle_type": "g_weekly"
+    },
+    "next": [
+      "Weekly_Fishing_Back"
+    ]
+  },
+  "Weekly_Fishing_Back": {
+    "recognition": "TemplateMatch",
+    "roi": [
+      1154,
+      19,
+      64,
+      56
+    ],
+    "template": [
+      "UI_Dock.png"
+    ],
+    "action": "Click",
+    "post_delay": 3000,
+    "next": [
+      "Weekly_Fishing_Back_Msg",
+      "Weekly_Fishing_Back"
+    ]
+  },
+  "Weekly_Fishing_Back_Msg": {
+    "recognition": "OCR",
+    "expected": [
+      "确认"
+    ],
+    "roi": [
+      665,
+      394,
+      124,
+      155
+    ],
+    "action": "Click",
+    "post_delay": 2000,
+    "next": [
+      "Global_ToSandBox",
+      "Weekly_Fishing_Back_Msg"
+    ]
   },
   "Weekly_LastNight_Start": {
     "action": "Custom",
