@@ -252,11 +252,7 @@
       223,
       195,
       120
-    ],
-    "template": [
-      "ActiveRollOnGe.png"
-    ],
-    "green_mask": true
+    ]
   },
   "Activities_GetBorn": {
     "recognition": "OCR",
