@@ -130,7 +130,7 @@
         {
             "name": "[领取]日常任务",
             "default_check": true,
-            "entry": "RewardsORG_HomePage",
+            "entry": "Daily_HomePage",
             "option": [
                 "公会奖励",
                 "广场每日祈求"
@@ -900,7 +900,7 @@
                 {
                     "name": "No",
                     "pipeline_override": {
-                        "RewardsORG_Union_Hub": {
+                        "Daily_Union_Hub": {
                             "enabled": false
                         }
                     }
@@ -1092,7 +1092,7 @@
                 {
                     "name": "No",
                     "pipeline_override": {
-                        "RewardsORG_Square_Hub": {
+                        "Daily_Square_Hub": {
                             "enabled": false
                         }
                     }
