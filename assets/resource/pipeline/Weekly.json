@@ -687,8 +687,16 @@
     "action": "Custom",
     "custom_action": "MarkComplete",
     "custom_action_param": {
-      "card_name": "UI_Cabin_Like",
-      "cycle_type": "g_weekly"
+      "targets": [
+        {
+          "card_name": "UI_Cabin_Like",
+          "cycle_type": "g_weekly"
+        },
+        {
+          "card_name": "UI_Cabin_Visit",
+          "cycle_type": "g_daily"
+        }
+      ]
     },
     "next": [
       "Global_ToHomePage"

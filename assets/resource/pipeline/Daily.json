@@ -2,6 +2,7 @@
   "RewardsORG_HomePage": {
     "next": [
       "[JumpBack]RewardsORG_Union_Hub",
+      "[JumpBack]RewardsORG_VisitCabin_Hub",
       "[JumpBack]RewardsORG_Busin_Hub",
       "[JumpBack]RewardsORG_Square_Hub"
     ],
@@ -641,6 +642,66 @@
     "next": [
       "RewardsORG_Pray",
       "Global_BackToQC1"
+    ]
+  },
+  "RewardsORG_VisitCabin_Hub": {
+    "next": [
+      "RewardsORG_VisitCabin_Hub_Post"
+    ],
+    "max_hit": 1,
+    "timeout": 1
+  },
+  "RewardsORG_VisitCabin_Hub_Post": {
+    "recognition": "Custom",
+    "custom_recognition": "CheckCoolDown",
+    "custom_recognition_param": {
+      "card_name": "UI_Cabin_Visit",
+      "cycle_type": "g_daily"
+    },
+    "action": {
+      "type": "Custom",
+      "param": {
+        "custom_action": "PatchNode",
+        "custom_action_param": {
+          "node": "Weekly_VisitCabin_TabChg",
+          "patch": {
+            "next": [
+              "[Acchor]Daily_Cabin"
+            ]
+          }
+        }
+      }
+    },
+    "next": [
+      "RewardsORG_VisitCabin_Anchor"
+    ]
+  },
+  "RewardsORG_VisitCabin_Anchor": {
+    "anchor": [
+      "Daily_Cabin"
+    ],
+    "next": [
+      "RewardsORG_VisitCabin_Hub_Goto",
+      "RewardsORG_VisitCabin_End"
+    ]
+  },
+  "RewardsORG_VisitCabin_Hub_Goto": {
+    "next": [
+      "Weekly_VisitCabin_HomePage",
+      "[JumpBack]Global_ToHomePage"
+    ],
+    "timeout": 1000,
+    "max_hit": 1
+  },
+  "RewardsORG_VisitCabin_End": {
+    "action": "Custom",
+    "custom_action": "MarkComplete",
+    "custom_action_param": {
+      "card_name": "UI_Cabin_Visit",
+      "cycle_type": "g_daily"
+    },
+    "next": [
+      "Global_ToHomePage"
     ]
   }
 }
