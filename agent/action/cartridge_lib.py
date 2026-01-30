@@ -64,14 +64,24 @@ utils.mfaalog.info(f"[Py] 周期策略管理器已加载。")
 #
 # 【通用】任务完成标记 (MarkComplete)
 # ---------------------------------------------------
+# 单个:
 # "Task_Combat_Done": {
 #     "action": "Custom",
 #     "custom_action": "MarkComplete",
 #     "custom_action_param": {
-#         "card_name": "Map_01"
+#         "card_name": "Map_01",
+#         "cycle_type": "g_daily" ←缺略默认
 #     }
 # }
 #
+# 多个:
+# "custom_action_param": {
+#     "targets": [          ←注意!
+#         { "card_name": "Map_01", "cycle_type": "g_daily" },
+#         { "card_name": "Map_Boss_Reward", "cycle_type": "g_weekly" },
+#         { "card_name": "Map_Hidden_Path", "cycle_type": "g_weekly" }
+#     ]
+# }
 # ------------------------------------------------------------------------------
 # ⚙️ 策略配置说明 (CYCLE_STRATEGIES)
 # ------------------------------------------------------------------------------
@@ -375,24 +385,55 @@ class CooldownManager:
                 params = argv
             else:
                 params = {}
-            card_name = params.get("card_name", "Unknown_Card")
-            strategy_name = params.get("cycle_type", "g_weekly")
-        except:
-            card_name = "Unknown_Card"
-            strategy_name = "g_weekly"
+        except Exception as e:
+            utils.mfaalog.error(f"[Py] 参数解析失败: {e}")
+            return False
 
-        # --- 保存逻辑 ---
-        storage_key = self._get_storage_key(card_name, strategy_name)
+        # --- 统一标准化为列表 ---
+        # 目标列表，存放 {'card_name':..., 'cycle_type':...} 字典
+        task_list = []
+
+        # 情况 A: 批量模式 (传入了 targets 数组)
+        if "targets" in params and isinstance(params["targets"], list):
+            task_list = params["targets"]
         
-        # ✅ 【写入】: 存当前电脑的本地时间字符串
-        # 优点: 用户打开 json 看到的是自己墙上挂钟的时间，非常直观
+        # 情况 B: 单个模式 (兼容旧写法，直接在根目录有 card_name)
+        elif "card_name" in params:
+            task_list = [params]
+            
+        # 如果列表为空，报错
+        if not task_list:
+            utils.mfaalog.warning("[Py] MarkComplete 未找到有效的 card_name 或 targets 参数")
+            return False
+
+        # --- 批量执行保存 ---
+        # 获取当前时间 (所有任务统一使用同一个完成时间)
         now_str = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        
-        # 自动调用防坏档系统写入
-        PersistentStore.set(storage_key, now_str)
-        
-        utils.mfaalog.info(f"[Py] ✅ 记录已更新: {storage_key} -> {now_str}")
-        return True
+        success_count = 0
+
+        for item in task_list:
+            # 提取名称，如果没有 card_name 则跳过该项
+            c_name = item.get("card_name")
+            if not c_name:
+                continue
+                
+            # 提取类型，默认为 g_weekly
+            s_name = item.get("cycle_type", "g_weekly")
+
+            # 生成 Key 并写入
+            storage_key = self._get_storage_key(c_name, s_name)
+            PersistentStore.set(storage_key, now_str)
+            success_count += 1
+            
+            # 打印单条详细日志 (可选)
+            utils.mfaalog.debug(f"[Py] 标记更新: {storage_key}")
+
+        # --- 最终日志 ---
+        if success_count > 0:
+            utils.mfaalog.info(f"[Py] ✅ 批量标记完成: 已更新 {success_count} 个任务的时间戳 -> {now_str}")
+            return True
+        else:
+            return False
 
 manager = CooldownManager()
 
