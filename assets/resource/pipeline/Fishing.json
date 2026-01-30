@@ -473,7 +473,7 @@
         },
         "next": [
             "Fishing_InMap",
-            "[JumoBack]Fishing_InMap_TalkSkip"
+            "[JumpBack]Fishing_InMap_TalkSkip"
         ]
     },
     "Fishing_InMap_TalkSkip": {
