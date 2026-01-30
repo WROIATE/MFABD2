@@ -27,7 +27,24 @@ import random
 # }
 # * 注意：如果你填了 'origin'，系统会自动把它存入内存。
 # * 以后调用 RestoreNode 或 ResetAll 时，不需要再填数据，系统会自动查找。
-#
+# ------------------------------------------------------------------------------
+# 1. PatchBatch (批量修改 + 自动注册备份)
+# ------------------------------------------------------------------------------
+# "action": {
+#             "type": "Custom",
+#             "param": {
+#                 "custom_action": "PatchBatch",
+#                 "custom_action_param": {
+#                     "patches": {
+#                         "Battle_Node": { "next": ["Boss_Win"], "timeout": 30000 },
+#                         "Swipe_Common": { "duration": 500 }
+#                     },
+#                     "origins": {
+#                         "Battle_Node": { "next": ["Normal_Win"], "timeout": 10000 },
+#                         "Swipe_Common": { "duration": 1000 }
+#                     }
+#                 }
+#             }
 # ------------------------------------------------------------------------------
 # 2. PatchAndClick (魔改 + 偏移点击)
 # ------------------------------------------------------------------------------
@@ -293,4 +310,49 @@ class PatchAndClick(CustomAction):
 
         except Exception as e:
             utils.mfaalog.error(f"[Py] PatchAndClick 异常: {e}")
+            return False
+        
+@AgentServer.custom_action("PatchBatch")
+class PatchBatch(CustomAction):
+    """
+    V2: 批量打补丁
+    支持格式:
+    {
+        "patches": { 
+            "NodeA": { "param": "val" },
+            "NodeB": { "param": "val" }
+        },
+        "origins": {
+            "NodeA": { "param": "old_val" },
+            "NodeB": { "param": "old_val" }
+        }
+    }
+    """
+    def run(self, context: Context, argv: CustomAction.RunArg) -> bool:
+        global NODE_BACKUPS
+        params = parse_json_arg(argv)
+        
+        # 获取整个补丁字典 { "NodeName": {data}, ... }
+        patches_dict = params.get("patches", {})
+        origins_dict = params.get("origins", {})
+
+        if not patches_dict:
+            utils.mfaalog.warning("[Py] PatchBatch: 未提供 patches 数据")
+            return False
+
+        try:
+            # 1. 批量登记备份 (仅当账本中不存在时)
+            for node_name, origin_data in origins_dict.items():
+                if node_name not in NODE_BACKUPS:
+                    NODE_BACKUPS[node_name] = origin_data
+                    utils.mfaalog.info(f"[Py] 📖 (Batch) 已登记备份: {node_name}")
+
+            # 2. 批量执行魔改
+            # override_pipeline 本身就支持 { A:{...}, B:{...} } 格式
+            context.override_pipeline(patches_dict)
+            
+            utils.mfaalog.info(f"[Py] 🔧 (Batch) 已同时修改 {len(patches_dict)} 个节点")
+            return True
+        except Exception as e:
+            utils.mfaalog.error(f"[Py] PatchBatch 失败: {e}")
             return False
