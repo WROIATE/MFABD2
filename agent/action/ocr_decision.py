@@ -183,11 +183,15 @@ class OCR_RankAndPatch(CustomAction):
                 if text is None and isinstance(item, dict): text = item.get("text", "")
                 if text is None: text = str(item)
 
-                clean_text = text.replace(",", "")
                 if number_mode == "int":
-                    clean_text = clean_text.replace(".", "")
-                    matches = re.findall(r"(\d+)", clean_text)
+                    # 暴力清洗：将所有 非数字 (0-9) 的字符全部替换为空
+                    # 作用：把 "29:717" 变成 "29717"，把 "1,234" 变成 "1234"
+                    clean_text = re.sub(r"[^\d]", "", text)
+                    # 只要清洗后还有东西，就视为匹配成功，作为一个整体数字处理
+                    matches = [clean_text] if clean_text else []
                 else:
+                    # float 模式保持原样，仅去除常见干扰
+                    clean_text = text.replace(",", "")
                     matches = re.findall(r"(\d+\.?\d*)", clean_text)
                 
                 if matches:
