@@ -493,5 +493,18 @@
       "timeout": 30000,
       "threshold": 0.95
     }
+  },
+  "test_seejson": {
+    "action": "Custom",
+    "custom_action": "PatchByRegex",
+    "custom_action_param": {
+      "pattern": [
+        "Shop*",
+        "Battle$"
+      ],
+      "patch": {
+        "timeout": 5000
+      }
+    }
   }
 }

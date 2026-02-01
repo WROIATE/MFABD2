@@ -1,9 +1,13 @@
 import json
+import re
+import os
+import copy
+import random
+from pathlib import Path
 from maa.agent.agent_server import AgentServer
 from maa.custom_action import CustomAction
 from maa.context import Context
 import utils
-import random
 
 # ==============================================================================
 # 🔧 Pipeline 动态管理器 
@@ -107,19 +111,59 @@ import random
 
 # --- 全局影子账本 ---
 # 格式: { "NodeName": { "original_key": "original_value" } }
-NODE_BACKUPS = {}
+NODE_BACKUPS = {}          # 影子账本：记录被修改节点的原值
+ALL_NODES_CACHE = {} 
+CACHE_LOADED = False
 
 def parse_json_arg(argv: CustomAction.RunArg) -> dict:
     """通用参数解析器"""
     try:
-        if not argv.custom_action_param:
-            return {}
-        if isinstance(argv.custom_action_param, dict):
-            return argv.custom_action_param
+        if not argv.custom_action_param: return {}
+        if isinstance(argv.custom_action_param, dict): return argv.custom_action_param
         return json.loads(str(argv.custom_action_param).strip())
-    except Exception as e:
-        utils.mfaalog.warning(f"[Py] 参数解析失败: {e}")
-        return {}
+    except: return {}
+
+def _ensure_cache_loaded(force_refresh=False):
+    """
+    [核心] 扫描所有文件，建立本地节点配置数据库。
+    """
+    global ALL_NODES_CACHE, CACHE_LOADED
+    
+    if CACHE_LOADED and not force_refresh:
+        return
+
+    utils.mfaalog.info("[Py] 💾 正在建立节点数据库 (Deep Cache)...")
+    ALL_NODES_CACHE = {} 
+
+    # 1. 定位目录
+    base_dir = Path(".") 
+    target_path = base_dir / "resource" / "pipeline"
+    if not target_path.exists():
+        found = list(base_dir.rglob("pipeline"))
+        if found: target_path = found[0]
+
+    if not target_path.exists():
+        utils.mfaalog.error(f"[Py] ❌ 找不到 pipeline 目录")
+        return
+
+    # 2. 扫描并存储内容
+    count = 0
+    for file_path in target_path.rglob("*.json"):
+        try:
+            with open(file_path, "r", encoding="utf-8") as f:
+                content_str = f.read()
+                content_str = re.sub(r"//.*", "", content_str) # 简单去注释
+                data = json.loads(content_str)
+            
+            if isinstance(data, dict):
+                for node_name, node_config in data.items():
+                    ALL_NODES_CACHE[node_name] = node_config
+                    count += 1
+        except Exception as e:
+            utils.mfaalog.warning(f"[Py] 读取跳过 {file_path.name}: {e}")
+
+    CACHE_LOADED = True
+    utils.mfaalog.info(f"[Py] 💾 数据库构建完成！已索引 {count} 个节点的原始配置。")
 
 @AgentServer.custom_action("PatchNode")
 class PatchNode(CustomAction):
@@ -355,4 +399,102 @@ class PatchBatch(CustomAction):
             return True
         except Exception as e:
             utils.mfaalog.error(f"[Py] PatchBatch 失败: {e}")
+            return False
+        
+# PatchByRegex (正则批量覆写 - 增强版)
+# ==============================================================================
+# 场景：把所有 "Shop_Buy_*" 的节点超时时间都改成 5秒
+@AgentServer.custom_action("PatchByRegex")
+class PatchByRegex(CustomAction):
+    def run(self, context: Context, argv: CustomAction.RunArg) -> bool:
+        params = parse_json_arg(argv)
+        patterns = params.get("pattern")
+        
+        # --- 参数解析 ---
+        # 模式 A: 深度修改 (指定路径 target_path + value)
+        target_path = params.get("target_path") 
+        deep_value = params.get("value") 
+        
+        # 模式 B: 简单覆盖 (指定 patch 字典)
+        simple_patch = params.get("patch") 
+        
+        # 校验
+        if not patterns:
+            utils.mfaalog.error("[Py] PatchByRegex: 缺少 pattern 参数")
+            return False
+        if not target_path and not simple_patch:
+            utils.mfaalog.error("[Py] PatchByRegex: 必须提供 'target_path' (深度模式) 或 'patch' (简单模式)")
+            return False
+
+        if isinstance(patterns, str): patterns = [patterns]
+
+        # 1. 确保数据库已加载
+        _ensure_cache_loaded()
+        if not ALL_NODES_CACHE:
+            utils.mfaalog.error("[Py] 节点数据库为空，无法执行正则匹配")
+            return False
+
+        # 2. 准备动态变量 (比如 $box)
+        current_roi = [0,0,0,0]
+        if argv.box and getattr(argv.box, 'w', 0) > 0:
+            current_roi = [int(argv.box.x), int(argv.box.y), int(argv.box.w), int(argv.box.h)]
+        
+        # 预处理替换值
+        final_deep_value = deep_value
+        if final_deep_value == "$box": final_deep_value = current_roi
+        
+        # 3. 开始匹配和修改
+        override_dict = {}
+        matched_count = 0
+        
+        try:
+            for pat in patterns:
+                regex = re.compile(pat)
+                
+                # 遍历内存数据库中的所有节点
+                for node_name, original_config in ALL_NODES_CACHE.items():
+                    if regex.search(node_name):
+                        
+                        # --- 分支 A: 深度修改 ---
+                        if target_path:
+                            # 深拷贝原始配置
+                            new_config = copy.deepcopy(original_config)
+                            cursor = new_config
+                            try:
+                                # 走进深层结构
+                                for key in target_path[:-1]:
+                                    cursor = cursor[key]
+                                
+                                # 修改目标字段
+                                last_key = target_path[-1]
+                                cursor[last_key] = final_deep_value
+                                
+                                override_dict[node_name] = new_config
+                                matched_count += 1
+                            except Exception:
+                                # 结构不匹配，静默跳过
+                                continue
+                                
+                        # --- 分支 B: 简单覆盖 ---
+                        elif simple_patch:
+                            # 简单模式直接用 simple_patch，不读取原始配置
+                            # 这里支持简单的变量替换逻辑(可选)
+                            patch_copy = copy.deepcopy(simple_patch)
+                            if patch_copy.get("roi") == "$box":
+                                patch_copy["roi"] = current_roi
+                                
+                            override_dict[node_name] = patch_copy
+                            matched_count += 1
+
+            # 4. 提交修改
+            if override_dict:
+                context.override_pipeline(override_dict)
+                utils.mfaalog.info(f"[Py] ⚡ [PatchRegex] 命中了 {matched_count} 个节点 -> 已注入 (Deep/Simple)。")
+                return True
+            else:
+                utils.mfaalog.warning(f"[Py] [PatchRegex] 未命中任何节点 或 路径不匹配。")
+                return True
+
+        except Exception as e:
+            utils.mfaalog.error(f"[Py] PatchByRegex 执行异常: {e}")
             return False
