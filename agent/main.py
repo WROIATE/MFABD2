@@ -5,6 +5,15 @@ import sys
 import platform
 from pathlib import Path
 
+
+# =========================================================================
+# [新增] 强制全链路 UTF-8 (解决 Windows 命令行/pip 读取中文报错问题)
+# PYTHONUTF8=1 : 让 Python 3.7+ 忽略系统区域设置，强制使用 UTF-8 (PEP 540)
+# PYTHONIOENCODING : 强制标准输入输出流的编码
+# =========================================================================
+os.environ["PYTHONUTF8"] = "1"
+os.environ["PYTHONIOENCODING"] = "utf-8"
+
 # --- 添加依赖库路径 ---
 current_file_path = Path(__file__).resolve()
 project_root = current_file_path.parent.parent  # 指向 install/ 目录
