@@ -220,16 +220,23 @@
             114
         ],
         "action": "Custom",
-        "custom_action": "RunTask",
+        "custom_action": "PatchByRegex",
         "custom_action_param": {
-            "entry": "Collect_PackLocation_PassFieldsAndHub",
-            "param": {
-                "Collect_PackLocation_PassFieldsAndHub": {
-                    "roi": "Collect_LocatePackFrame_Loc1"
-                }
-            }
+            "pattern": [
+                "^Collect_Pack_(Story|Character|Event)_\\d+$"
+            ],
+            "target_path": [
+                "all_of",
+                0,
+                "roi"
+            ],
+            "value": "$box",
+            "reset_tags": [
+                "PackLocation_ToggleSwitch"
+            ]
         },
         "next": [
+            "[JumpBack]Collect_PackLocation_PassFieldsAndHub",
             "Collect_LocatePackFrame_Loc2"
         ],
         "timeout": 3000,
@@ -251,16 +258,23 @@
             114
         ],
         "action": "Custom",
-        "custom_action": "RunTask",
+        "custom_action": "PatchByRegex",
         "custom_action_param": {
-            "entry": "Collect_PackLocation_PassFieldsAndHub",
-            "param": {
-                "Collect_PackLocation_PassFieldsAndHub": {
-                    "roi": "Collect_LocatePackFrame_Loc2"
-                }
-            }
+            "pattern": [
+                "^Collect_Pack_(Story|Character|Event)_\\d+$"
+            ],
+            "target_path": [
+                "all_of",
+                0,
+                "roi"
+            ],
+            "value": "$box",
+            "reset_tags": [
+                "PackLocation_ToggleSwitch"
+            ]
         },
         "next": [
+            "[JumpBack]Collect_PackLocation_PassFieldsAndHub",
             "Collect_LocatePackFrame_Loc3"
         ],
         "timeout": 3000,
@@ -281,16 +295,23 @@
             114
         ],
         "action": "Custom",
-        "custom_action": "RunTask",
+        "custom_action": "PatchByRegex",
         "custom_action_param": {
-            "entry": "Collect_PackLocation_PassFieldsAndHub",
-            "param": {
-                "Collect_PackLocation_PassFieldsAndHub": {
-                    "roi": "Collect_LocatePackFrame_Loc3"
-                }
-            }
+            "pattern": [
+                "^Collect_Pack_(Story|Character|Event)_\\d+$"
+            ],
+            "target_path": [
+                "all_of",
+                0,
+                "roi"
+            ],
+            "value": "$box",
+            "reset_tags": [
+                "PackLocation_ToggleSwitch"
+            ]
         },
         "next": [
+            "[JumpBack]Collect_PackLocation_PassFieldsAndHub",
             "Collect_LocatePackFrame_Loc4"
         ],
         "timeout": 3000,
@@ -311,16 +332,23 @@
             114
         ],
         "action": "Custom",
-        "custom_action": "RunTask",
+        "custom_action": "PatchByRegex",
         "custom_action_param": {
-            "entry": "Collect_PackLocation_PassFieldsAndHub",
-            "param": {
-                "Collect_PackLocation_PassFieldsAndHub": {
-                    "roi": "Collect_LocatePackFrame_Loc4"
-                }
-            }
+            "pattern": [
+                "^Collect_Pack_(Story|Character|Event)_\\d+$"
+            ],
+            "target_path": [
+                "all_of",
+                0,
+                "roi"
+            ],
+            "value": "$box",
+            "reset_tags": [
+                "PackLocation_ToggleSwitch"
+            ]
         },
         "next": [
+            "[JumpBack]Collect_PackLocation_PassFieldsAndHub",
             "Collect_LocatePackFrame_Loc5"
         ],
         "timeout": 3000,
@@ -341,16 +369,23 @@
             114
         ],
         "action": "Custom",
-        "custom_action": "RunTask",
+        "custom_action": "PatchByRegex",
         "custom_action_param": {
-            "entry": "Collect_PackLocation_PassFieldsAndHub",
-            "param": {
-                "Collect_PackLocation_PassFieldsAndHub": {
-                    "roi": "Collect_LocatePackFrame_Loc5"
-                }
-            }
+            "pattern": [
+                "^Collect_Pack_(Story|Character|Event)_\\d+$"
+            ],
+            "target_path": [
+                "all_of",
+                0,
+                "roi"
+            ],
+            "value": "$box",
+            "reset_tags": [
+                "PackLocation_ToggleSwitch"
+            ]
         },
         "next": [
+            "[JumpBack]Collect_PackLocation_PassFieldsAndHub",
             "Collect_LocatePackFrame_Loc6"
         ],
         "timeout": 3000,
@@ -371,16 +406,23 @@
             114
         ],
         "action": "Custom",
-        "custom_action": "RunTask",
+        "custom_action": "PatchByRegex",
         "custom_action_param": {
-            "entry": "Collect_PackLocation_PassFieldsAndHub",
-            "param": {
-                "Collect_PackLocation_PassFieldsAndHub": {
-                    "roi": "Collect_LocatePackFrame_Loc6"
-                }
-            }
+            "pattern": [
+                "^Collect_Pack_(Story|Character|Event)_\\d+$"
+            ],
+            "target_path": [
+                "all_of",
+                0,
+                "roi"
+            ],
+            "value": "$box",
+            "reset_tags": [
+                "PackLocation_ToggleSwitch"
+            ]
         },
         "next": [
+            "[JumpBack]Collect_PackLocation_PassFieldsAndHub",
             "Collect_LocatePackFrame_Loc7"
         ],
         "timeout": 3000,
@@ -401,16 +443,23 @@
             114
         ],
         "action": "Custom",
-        "custom_action": "RunTask",
+        "custom_action": "PatchByRegex",
         "custom_action_param": {
-            "entry": "Collect_PackLocation_PassFieldsAndHub",
-            "param": {
-                "Collect_PackLocation_PassFieldsAndHub": {
-                    "roi": "Collect_LocatePackFrame_Loc7"
-                }
-            }
+            "pattern": [
+                "^Collect_Pack_(Story|Character|Event)_\\d+$"
+            ],
+            "target_path": [
+                "all_of",
+                0,
+                "roi"
+            ],
+            "value": "$box",
+            "reset_tags": [
+                "PackLocation_ToggleSwitch"
+            ]
         },
         "next": [
+            "[JumpBack]Collect_PackLocation_PassFieldsAndHub",
             "Collect_LocatePackFrame_Loc8"
         ],
         "timeout": 3000,
@@ -431,16 +480,23 @@
             114
         ],
         "action": "Custom",
-        "custom_action": "RunTask",
+        "custom_action": "PatchByRegex",
         "custom_action_param": {
-            "entry": "Collect_PackLocation_PassFieldsAndHub",
-            "param": {
-                "Collect_PackLocation_PassFieldsAndHub": {
-                    "roi": "Collect_LocatePackFrame_Loc8"
-                }
-            }
+            "pattern": [
+                "^Collect_Pack_(Story|Character|Event)_\\d+$"
+            ],
+            "target_path": [
+                "all_of",
+                0,
+                "roi"
+            ],
+            "value": "$box",
+            "reset_tags": [
+                "PackLocation_ToggleSwitch"
+            ]
         },
         "next": [
+            "[JumpBack]Collect_PackLocation_PassFieldsAndHub",
             "Collect_LocatePackFrame_Loc9"
         ],
         "timeout": 3000,
@@ -461,16 +517,23 @@
             114
         ],
         "action": "Custom",
-        "custom_action": "RunTask",
+        "custom_action": "PatchByRegex",
         "custom_action_param": {
-            "entry": "Collect_PackLocation_PassFieldsAndHub",
-            "param": {
-                "Collect_PackLocation_PassFieldsAndHub": {
-                    "roi": "Collect_LocatePackFrame_Loc9"
-                }
-            }
+            "pattern": [
+                "^Collect_Pack_(Story|Character|Event)_\\d+$"
+            ],
+            "target_path": [
+                "all_of",
+                0,
+                "roi"
+            ],
+            "value": "$box",
+            "reset_tags": [
+                "PackLocation_ToggleSwitch"
+            ]
         },
         "next": [
+            "[JumpBack]Collect_PackLocation_PassFieldsAndHub",
             "Collect_LocatePackFrame_Smart_Swip"
         ],
         "focus": "CM.L.快速卡带盒定位-位置9"
@@ -529,13 +592,19 @@
         ]
     },
     "Collect_PackLocation_PassFieldsAndHub": {
-        "roi": [
-            66,
-            595,
-            101,
-            80
-        ],
-        "doc": "[路由节点]不可删除，roi修改无效。用于暂存卡带位roi参数。默认预留卡带位1范围。原理:A传参数到此,此连接无数C,C`roi=此=A",
+        "recognition": "Custom",
+        "custom_recognition": "CheckTag",
+        "custom_recognition_param": {
+            "tag": "PackLocation_ToggleSwitch",
+            "max": 1
+        },
+        "action": "Custom",
+        "custom_action": "UpdateTag",
+        "custom_action_param": {
+            "tag": "PackLocation_ToggleSwitch",
+            "value": 1
+        },
+        "doc": "[路由节点]不可删除。计数器开关，防止同一节点多次进入，下一个节点的action阶段重置计数。",
         "next": [
             "Collect_Pack_Story_1",
             "Collect_Pack_Story_2",
@@ -555,7 +624,19 @@
             "Collect_Pack_Story_16",
             "Collect_Pack_Story_17",
             "Collect_Pack_Story_18",
-            "Collect_Pack_Story_19"
+            "Collect_Pack_Story_19",
+            "Collect_Pack_Character_1",
+            "Collect_Pack_Character_2",
+            "Collect_Pack_Character_3",
+            "Collect_Pack_Character_4",
+            "Collect_Pack_Character_5",
+            "Collect_Pack_Character_6",
+            "Collect_Pack_Character_7",
+            "Collect_Pack_Character_8",
+            "Collect_Pack_Event_1",
+            "Collect_Pack_Event_2",
+            "Collect_Pack_Event_3",
+            "Collect_Pack_Event_4"
         ],
         "timeout": 1000
     },
