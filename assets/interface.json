@@ -596,7 +596,7 @@
                 {
                     "name": "No",
                     "pipeline_override": {
-                        "Equip_Exclude24MJEqu_OCR": {
+                        "Equip_Overdrive_RefLvMax_OCR": {
                             "expected": [
                                 "专\\S*",
                                 "\\S*用"
@@ -607,7 +607,7 @@
                 {
                     "name": "Yes",
                     "pipeline_override": {
-                        "Equip_Exclude24MJEqu_OCR": {
+                        "Equip_Overdrive_RefLvMax_OCR": {
                             "expected": [
                                 "制作"
                             ]
@@ -629,7 +629,7 @@
                     "pipeline_override": {
                         "Equip_filter<C17Ck": {
                             "next": [
-                                "Equip_Exclude24MJEqu_OCR"
+                                "Equip_Overdrive_RefLvMax_OCR"
                             ]
                         }
                     }
