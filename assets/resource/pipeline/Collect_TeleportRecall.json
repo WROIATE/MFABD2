@@ -73,19 +73,19 @@
         "doc": "检查tab3,并切换,为传送阵可用状态做准备",
         "next": [
             "Collect_ForceTeleporCircle",
-            "Collect_Skill3_1_Nothing",
+            "Collect_Skill3_4_Nothing",
             "Collect_ForceTeleporCircle_No"
         ]
     },
     "Collect_ForceTeleporCircle": {
         "recognition": "ColorMatch",
         "roi": [
-            998,
-            635,
-            13,
-            3
+            1086,
+            428,
+            10,
+            2
         ],
-        "count": 15,
+        "count": 10,
         "lower": [
             253,
             253,
@@ -100,16 +100,16 @@
         "post_delay": 3000,
         "focus": "CFB.传送技能亮-尝试",
         "next": [
-            "Collect_Skill3_1"
+            "Collect_Skill3_4"
         ]
     },
-    "Collect_Skill3_1_Nothing": {
+    "Collect_Skill3_4_Nothing": {
         "recognition": "TemplateMatch",
         "roi": [
-            963,
-            607,
-            80,
-            85
+            1051,
+            400,
+            81,
+            86
         ],
         "template": [
             "Skill-Nothing.png"
@@ -140,10 +140,10 @@
     "Collect_ForceTeleporCircle_No": {
         "recognition": "ColorMatch",
         "roi": [
-            998,
-            635,
-            13,
-            3
+            1086,
+            428,
+            10,
+            2
         ],
         "count": 15,
         "lower": [
@@ -163,13 +163,13 @@
             "Collect_TeleporCircle_OnFoot_Start"
         ]
     },
-    "Collect_Skill3_1": {
+    "Collect_Skill3_4": {
         "recognition": "TemplateMatch",
         "roi": [
-            963,
-            607,
-            80,
-            85
+            1051,
+            400,
+            81,
+            86
         ],
         "template": [
             "Skill3-1.png"
@@ -181,7 +181,7 @@
         "next": [
             "Collect_ForceTelepor_MapCk",
             "Collect_Skill3_1_ERR_TooClose",
-            "Collect_Skill3_1"
+            "Collect_Skill3_4"
         ]
     },
     "Collect_Skill3_1_ERR_TooClose": {
@@ -602,27 +602,52 @@
         ],
         "action": "Click",
         "next": [
-            "Collect_OnFoot_Skill3_1"
+            "Collect_OnFoot_Skill3_4"
         ],
         "focus": "CTOB.传送阵目标确认"
     },
-    "Collect_OnFoot_Skill3_1": {
-        "recognition": "TemplateMatch",
-        "roi": [
-            963,
-            607,
-            80,
-            85
-        ],
-        "template": [
-            "Skill3-1.png"
+    "Collect_OnFoot_Skill3_4": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "recognition": "TemplateMatch",
+                "roi": [
+                    1051,
+                    400,
+                    81,
+                    86
+                ],
+                "template": [
+                    "Skill3-1.png"
+                ]
+            },
+            {
+                "recognition": "ColorMatch",
+                "roi": [
+                    1086,
+                    428,
+                    10,
+                    2
+                ],
+                "count": 10,
+                "lower": [
+                    253,
+                    253,
+                    252
+                ],
+                "upper": [
+                    255,
+                    255,
+                    255
+                ]
+            }
         ],
         "action": "Click",
         "target": [
-            998,
-            649,
-            16,
-            8
+            1088,
+            444,
+            0,
+            0
         ],
         "next": [
             "Collect_TeleporCircle_OnFoot_Skirmish",
@@ -652,22 +677,47 @@
         "timeout": 2000
     },
     "Collect_OnFoot_Skill3_1_Again": {
-        "recognition": "TemplateMatch",
-        "roi": [
-            963,
-            607,
-            80,
-            85
-        ],
-        "template": [
-            "Skill3-1.png"
+        "recognition": "And",
+        "all_of": [
+            {
+                "recognition": "TemplateMatch",
+                "roi": [
+                    1051,
+                    400,
+                    81,
+                    86
+                ],
+                "template": [
+                    "Skill3-1.png"
+                ]
+            },
+            {
+                "recognition": "ColorMatch",
+                "roi": [
+                    1086,
+                    428,
+                    10,
+                    2
+                ],
+                "count": 10,
+                "lower": [
+                    253,
+                    253,
+                    252
+                ],
+                "upper": [
+                    255,
+                    255,
+                    255
+                ]
+            }
         ],
         "action": "Click",
         "target": [
-            998,
-            649,
-            16,
-            8
+            1088,
+            444,
+            0,
+            0
         ]
     },
     "Collect_TeleporCircle_OnFoot_Skirmish": {
@@ -769,7 +819,7 @@
         "post_delay": 5000,
         "next": [
             "Collect_ForceTelepor_IsEffect_ResetFoot",
-            "Collect_Skill3_1"
+            "Collect_Skill3_4"
         ],
         "focus": "CTOB.停止自动寻路,施放传送技能"
     },

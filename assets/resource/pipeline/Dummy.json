@@ -1,5 +1,9 @@
 {
     "Fishing_NiceBoat": {
         "focus": "占位符.需要正确的资源选择."
+    },
+    "Custom_Proxy_Swipe": {
+        "doc": "不要使用,不要删除。这是验证滑动custom的预留节点。",
+        "action": "Swipe"
     }
 }

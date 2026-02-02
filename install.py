@@ -20,6 +20,8 @@ working_dir = Path(__file__).parent
 install_path = working_dir / Path("install")
 version = len(sys.argv) > 1 and sys.argv[1] or "v0.0.1"
 target_os = len(sys.argv) > 2 and sys.argv[2] or "win"
+# 确保这里能接收到 CI 传进来的版本号，默认为 0.0.0
+maa_ver = len(sys.argv) > 3 and sys.argv[3] or "0.0.0"
 
 # def install_deps():
 #     if not (working_dir / "deps" / "bin").exists():
@@ -141,8 +143,8 @@ def install_resource():
     # 1. 更新根版本字段（保持 CI 原始格式）
     interface["version"] = version
     
-    # 2. 动态更新 custom_title 中的版本号
-    if "custom_title" in interface:
+    # 2. 动态更新 title 中的版本号
+    if "title" in interface:
         # 匹配 "MFABD2)" 后到 " | 游戏版本" 前的所有内容
         pattern = r"(?<=MFABD2\))(.*?)(?=\s*\|\s*游戏版本：)"
         
@@ -153,9 +155,9 @@ def install_resource():
         new_title = re.sub(
             pattern, 
             display_version,
-            interface["custom_title"]
+            interface["title"]
         )
-        interface["custom_title"] = new_title
+        interface["title"] = new_title
 
     with open(install_path / "interface.json", "w", encoding="utf-8") as f:
         jsonc.dump(interface, f, ensure_ascii=False, indent=4)
@@ -165,6 +167,57 @@ def install_chores():
     shutil.copy2(working_dir / "LICENSE", install_path)
     shutil.copy2(working_dir / "LICENSE-APACHE", install_path)
     shutil.copy2(working_dir / "LICENSE-MIT", install_path)
+    
+    # 处理 Mac 引导脚本：注入真实版本号
+    if "mac" in target_os or "osx" in target_os:
+        src_script = working_dir / "scripts" / "release" / "AKeySetup_一键全依赖安装_mac.command"
+        dst_script = install_path / "AKeySetup_一键全依赖安装_mac.command"
+
+        if src_script.exists():
+            print(f"📦 [Mac] 处理安装脚本，注入 MaaVersion: {maa_ver}")
+            try:
+                with open(src_script, 'r', encoding='utf-8') as f:
+                    content = f.read()
+
+                # 替换占位符 {{MAA_VERSION}}
+                if "{{MAA_VERSION}}" in content:
+                    new_content = content.replace("{{MAA_VERSION}}", maa_ver)
+                    with open(dst_script, 'w', encoding='utf-8') as f:
+                        f.write(new_content)
+                    
+                    # 尝试赋予执行权限
+                    os.chmod(dst_script, 0o755)
+                else:
+                    print("⚠️ 警告: Mac 脚本中未找到 {{MAA_VERSION}} 占位符！")
+                    # 如果没找到占位符，至少把原文件拷过去
+                    shutil.copy2(src_script, dst_script)
+
+            except Exception as e:
+                print(f"❌ 处理 Mac 脚本失败: {e}")
+        else:
+            print(f"⚠️ 未找到 Mac 脚本源文件: {src_script}")
+
+        if src_script.exists():
+            print(f"处理并打包 Mac 脚本，注入版本号: {maa_ver}")
+
+            # 读取原始内容
+            with open(src_script, 'r', encoding='utf-8') as f:
+                content = f.read()
+
+            # 🟢 核心手术：替换占位符
+            new_content = content.replace("{{MAA_VERSION}}", maa_ver)
+
+            # 写入到安装目录
+            with open(dst_script, 'w', encoding='utf-8') as f:
+                f.write(new_content)
+
+            # 赋予可执行权限 (在 Linux/Mac 构建机上有效，Windows 上可能无效但不影响文件内容)
+            try:
+                os.chmod(dst_script, 0o755)
+            except:
+                pass
+        else:
+            print(f"⚠️ 警告: 未找到脚本源文件 {src_script}")
 
 def install_agent(target_os):
     print("正在安装 Agent...")
@@ -193,11 +246,14 @@ def install_agent(target_os):
         if any(target_os.startswith(p) for p in ["win", "windows"]):
             # Windows 下通常使用嵌入式 Python
             interface["agent"]["child_exec"] = r"{PROJECT_DIR}/python/python.exe"
+            interface["agent"]["child_args"] = ["-u", "-X", "utf8=1", r"{PROJECT_DIR}/agent/main.py"]
         elif any(target_os.startswith(p) for p in ["macos", "darwin", "osx"]):
-            interface["agent"]["child_exec"] = r"{PROJECT_DIR}/python/bin/python3"
+            interface["agent"]["child_exec"] = "python3"
+            interface["agent"]["child_args"] = ["-u", "-X", "utf8=1", r"{PROJECT_DIR}/agent/main.py"]
         else:
             # Linux/Android 通常直接调用系统 python3
             interface["agent"]["child_exec"] = "python3"
+            interface["agent"]["child_args"] = ["-u", r"{PROJECT_DIR}/agent/main.py"]
 
         # 配置启动参数
         # -u 禁用缓冲，让日志实时输出

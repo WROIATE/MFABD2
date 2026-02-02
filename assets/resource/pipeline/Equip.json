@@ -91,6 +91,7 @@
   "Equip_Skill_Tap3_clr": {
     "recognition": "ColorMatch",
     "next": [
+      "[JumpBack]Setup_Entry5",
       "Equip_Skill3_5_Nothing",
       "Equip_Skill3_5"
     ],
@@ -118,10 +119,10 @@
     "recognition": "TemplateMatch",
     "focus": "ESB.无技能被设置，栏位3-5",
     "roi": [
-      1139,
-      443,
-      80,
-      86
+      1140,
+      447,
+      83,
+      83
     ],
     "template": [
       "Skill-Nothing.png"
@@ -129,19 +130,19 @@
     "doc": "PVE点击技能2（栏位4。栏位5留空，摸鱼）"
   },
   "Equip_Skill3_5": {
+    "recognition": "TemplateMatch",
+    "roi": [
+      1140,
+      447,
+      83,
+      83
+    ],
+    "template": [
+      "skill3-5.png"
+    ],
     "action": "Click",
     "next": [
       "Equip_EquipMakeGui"
-    ],
-    "post_delay": 2000,
-    "roi": [
-      1122,
-      646,
-      40,
-      38
-    ],
-    "template": [
-      "pin.png"
     ],
     "target": [
       1181,
@@ -149,6 +150,7 @@
       0,
       0
     ],
+    "post_delay": 2000,
     "doc": "PVE点击技能4"
   },
   "Equip_EquipMakeGui": {
