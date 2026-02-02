@@ -77,15 +77,41 @@
         "doc": "调出快速卡带2/2,核对"
     },
     "Global_ToHomePage": {
-        "recognition": "OCR",
-        "roi": [
-            98,
-            656,
-            66,
-            32
-        ],
-        "expected": [
-            "抽抽乐"
+        "recognition": "And",
+        "all_of": [
+            {
+                "recognition": "OCR",
+                "roi": [
+                    98,
+                    656,
+                    66,
+                    32
+                ],
+                "expected": [
+                    "抽抽乐"
+                ]
+            },
+            {
+                "recognition": "ColorMatch",
+                "roi": [
+                    104,
+                    664,
+                    51,
+                    17
+                ],
+                "method": 40,
+                "lower": [
+                    0,
+                    0,
+                    218
+                ],
+                "upper": [
+                    149,
+                    5,
+                    255
+                ],
+                "count": 150
+            }
         ],
         "inverse": true,
         "next": [
@@ -175,15 +201,41 @@
         "doc": "其他页面，返回按钮"
     },
     "Global_ToHomePage_Enter": {
-        "recognition": "OCR",
-        "roi": [
-            98,
-            656,
-            66,
-            32
-        ],
-        "expected": [
-            "抽抽乐"
+        "recognition": "And",
+        "all_of": [
+            {
+                "recognition": "OCR",
+                "roi": [
+                    98,
+                    656,
+                    66,
+                    32
+                ],
+                "expected": [
+                    "抽抽乐"
+                ]
+            },
+            {
+                "recognition": "ColorMatch",
+                "roi": [
+                    104,
+                    664,
+                    51,
+                    17
+                ],
+                "method": 40,
+                "lower": [
+                    0,
+                    0,
+                    218
+                ],
+                "upper": [
+                    149,
+                    5,
+                    255
+                ],
+                "count": 150
+            }
         ],
         "doc": "[通用复位]复位到主界面模块,结束,中继调用"
     },
