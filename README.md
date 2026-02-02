@@ -14,7 +14,7 @@
 
 [![.NET Version](https://img.shields.io/badge/.NET-≥%2010-512BD4?logo=csharp)](https://dotnet.microsoft.com/download/dotnet/10.0)
 [![License](https://img.shields.io/badge/License-MIT%2FApache--2.0-blue)](./LICENSE)
-[![构建状态](https://img.shields.io/badge/构建状态-通过-success?logo=githubactions)](https://github.com/sunyink/MFABD2/actions)
+[![构建状态](https://img.shields.io/github/actions/workflow/status/sunyink/MFABD2/install.yml?label=构建状态&logo=githubactions)](https://github.com/sunyink/MFABD2/actions/workflows/install.yml)
 [![最新版本](https://img.shields.io/github/v/release/sunyink/MFABD2?label=最新版本&logo=github&color=green)](https://github.com/sunyink/MFABD2/releases)
 
 
