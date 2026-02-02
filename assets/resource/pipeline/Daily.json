@@ -471,7 +471,23 @@
       }
     ],
     "action": "Click",
-    "post_delay": 5000
+    "post_delay": 5000,
+    "next": [
+      "Daily_Busin_LevelUp_Ck",
+      "Daily_Busin_LevelUp"
+    ]
+  },
+  "Daily_Busin_LevelUp_Ck": {
+    "recognition": "OCR",
+    "expected": "^(?=.*[点击])(?=.*[画面])(?=.*[关闭]).{3,8}$",
+    "roi": [
+      834,
+      761,
+      252,
+      221
+    ],
+    "action": "Click",
+    "post_delay": 500
   },
   "Daily_Busin_Quick_BackPVEPage_Str": {
     "recognition": "TemplateMatch",
