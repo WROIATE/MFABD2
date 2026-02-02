@@ -396,7 +396,7 @@
       "[JumpBack]StartGame_NewChar",
       "[JumpBack]StartGame_SeasonSet",
       "Setup_Entry4",
-      "Setup_Entry2",
+      "[JumpBack]Setup_Entry2",
       "StartGame_MainMsgBox_Remove",
       "[JumpBack]Global_OnceHomeButton",
       "[JumpBack]StartGame_BackMapPage"
@@ -504,8 +504,9 @@
   "StartGame_FinBackMapPage": {
     "recognition": "TemplateMatch",
     "next": [
-      "Setup_Entry1",
-      "StartGame_PerPetTask"
+      "[JumpBack]Setup_Entry1",
+      "[JumpBack]StartGame_PerPetTask",
+      "StartGame_End"
     ],
     "anchor": "StartGame_Setup_Change",
     "focus": "SM.返回箱庭成功",
@@ -542,6 +543,21 @@
     ],
     "green_mask": true,
     "doc": "宠物派遣。此时已因其他步骤充分延时，时机更合适。"
+  },
+  "StartGame_End": {
+    "recognition": "TemplateMatch",
+    "roi": [
+      1047,
+      516,
+      107,
+      110
+    ],
+    "template": [
+      "Run.png"
+    ],
+    "green_mask": true,
+    "focus": "SM.启动流程结束",
+    "doc": "启动环节结束"
   },
   "StartGame_LinkError": {
     "recognition": "OCR",
