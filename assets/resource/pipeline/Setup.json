@@ -1,8 +1,8 @@
 {
     "Setup_Str": {
         "next": [
-            "[JumpBack]Setup_ToPvP_Switch",
             "[JumpBack]Setup_Main_Switch",
+            "[JumpBack]Setup_ToPvP_Switch",
             "[JumpBack]Setup_Equip_Switch",
             "[JumpBack]Setup_SetSkill_Switch"
         ],
@@ -492,6 +492,12 @@
             "图像"
         ],
         "action": "Click",
+        "target_offset": [
+            18,
+            0,
+            0,
+            0
+        ],
         "post_wait_freezes": 800,
         "next": [
             "Setup_Main_Tab_2_CK",
@@ -692,7 +698,8 @@
             1
         ],
         "duration": 800,
-        "end_hold": 1000
+        "end_hold": 1000,
+        "post_delay": 500
     },
     "Setup_Main_SkipAv": {
         "recognition": "OCR",
@@ -786,6 +793,12 @@
             "声音"
         ],
         "action": "Click",
+        "target_offset": [
+            18,
+            0,
+            0,
+            0
+        ],
         "post_wait_freezes": 800,
         "next": [
             "Setup_Main_Tab_3_CK",
@@ -862,6 +875,12 @@
             "通知"
         ],
         "action": "Click",
+        "target_offset": [
+            18,
+            0,
+            0,
+            0
+        ],
         "post_wait_freezes": 800,
         "next": [
             "Setup_Main_Tab_4_CK",
