@@ -3,15 +3,22 @@
   <img alt="LOGO" src="https://github.com/sunyink/MFABD2/blob/main/ReadMe/logo.png" width="180" height="180" />
 
 
-# MaaBD2-棕色尘埃2自动化助手
-[![License](https://img.shields.io/badge/License-MIT%2FApache--2.0-blue)](./LICENSE)
-[![.NET Version](https://img.shields.io/badge/.NET-≥%2010-512BD4?logo=csharp)](https://dotnet.microsoft.com/download/dotnet/10.0)
-[![月提交](https://img.shields.io/github/commit-activity/m/sunyink/MFABD2?label=开发活跃度&color=blue)](https://github.com/sunyink/MFABD2/commits/main)
-[![给项目点赞](https://img.shields.io/github/stars/sunyink/MFABD2?style=social&label=给项目点赞)](https://github.com/sunyink/MFABD2)
-<br>
+# MaaBD2 - 棕色尘埃2自动化助手
+
+
+
+[![Main 月提交](https://img.shields.io/github/commit-activity/m/sunyink/MFABD2?label=稳定版活跃度&color=brightgreen)](https://github.com/sunyink/MFABD2/commits/main)
+[![Dev 月提交](https://img.shields.io/github/commit-activity/m/sunyink/MFABD2/develop?label=公测版活跃度&color=blue)](https://github.com/sunyink/MFABD2/tree/develop)
 <a href="https://mirrorchyan.com/zh/projects?rid=MFABD2" target="_blank"><img alt="mirrorc" src="https://img.shields.io/badge/Mirror%E9%85%B1-%239af3f6?logo=countingworkspro&logoColor=4f46e5"></a>
+[![给项目点赞](https://img.shields.io/github/stars/sunyink/MFABD2?label=给项目点赞&color=f39c12)](https://github.com/sunyink/MFABD2)
+
+[![.NET Version](https://img.shields.io/badge/.NET-≥%2010-512BD4?logo=csharp)](https://dotnet.microsoft.com/download/dotnet/10.0)
+[![License](https://img.shields.io/badge/License-MIT%2FApache--2.0-blue)](./LICENSE)
 [![构建状态](https://img.shields.io/badge/构建状态-通过-success?logo=githubactions)](https://github.com/sunyink/MFABD2/actions)
 [![最新版本](https://img.shields.io/github/v/release/sunyink/MFABD2?label=最新版本&logo=github&color=green)](https://github.com/sunyink/MFABD2/releases)
+
+
+
 </div>
 
 本项目基于 [MaaFramework](https://github.com/MaaXYZ/MaaFramework) 所提供的项目模板进行开发的棕色尘埃2自动化助手。
