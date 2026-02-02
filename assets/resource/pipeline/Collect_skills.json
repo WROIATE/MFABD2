@@ -78,7 +78,7 @@
         "doc": "色核识别完成.开始施放技能组",
         "next": [
             "[JumpBack]Setup_Entry5",
-            "Collect_Skill_AllUsed",
+            "Collect_Skill3_2_Depleted",
             "Collect_Skill3_1_Nothing",
             "Collect_Skill1_Used",
             "Collect_Skill1"
@@ -114,7 +114,7 @@
         "recognition": "OCR",
         "next": [
             "Collect_Skill3_2_Nothing",
-            "Collect_Skill3_2_perOcr",
+            "Collect_Skill3_2_Depleted",
             "Collect_Skill3_2",
             "Collect_Skill3_2_Used"
         ],
@@ -321,26 +321,48 @@
             "Collect_Skill3_3",
             "Collect_Skill_TapReset"
         ],
-        "focus": "CSB.'吸取'技能已无法使用"
+        "focus": "CSB.'吸取'技能已无法使用(OCR耗尽已在Collect_Skill3_2_Depleted判定)"
     },
-    "Collect_Skill3_2_perOcr": {
-        "recognition": "OCR",
-        "next": [
-            "Collect_Skill3_3"
+    "Collect_Skill3_2_Depleted": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "recognition": "OCR",
+                "roi": [
+                    942,
+                    564,
+                    54,
+                    34
+                ],
+                "expected": [
+                    "(\\d+)\\s*[/:：|\\-~]?\\s*\\1(?!\\d)"
+                ]
+            },
+            {
+                "recognition": "ColorMatch",
+                "roi": [
+                    954,
+                    555,
+                    7,
+                    12
+                ],
+                "method": 40,
+                "lower": [
+                    0,
+                    0,
+                    145
+                ],
+                "upper": [
+                    149,
+                    5,
+                    151
+                ],
+                "count": 50
+            }
         ],
-        "timeout": 5000,
-        "on_error": [],
-        "focus": "CSB.施放次数已满,栏位3-2",
-        "roi": [
-            942,
-            564,
-            54,
-            34
-        ],
-        "expected": [
-            "(\\d+)\\s*[/:：|\\-~]?\\s*\\1(?!\\d)"
-        ],
-        "doc": "当3/3左边捕获与右边相同时,必定用完次数,跳过,否则进入色核&图像复核节点核对."
+        "action": "StopTask",
+        "focus": "CSB.技能'吸取'施放次数已满,结束流程.",
+        "doc": "当3/3左边捕获与右边相同时,必定用完次数.辅助灰色色核.直接结束流程,作为整个吸取的出"
     },
     "Collect_Skill3_3_perOcr": {
         "recognition": "OCR",
@@ -363,22 +385,37 @@
     },
     "Collect_Skill3_2_Nothing": {
         "recognition": "TemplateMatch",
-        "next": [
-            "Collect_Skill3_3"
+        "template": [
+            "Skill-Nothing.png"
         ],
-        "timeout": 8000,
-        "on_error": [],
-        "focus": "CSB.无技能被设置,栏位1-2",
         "roi": [
             933,
             526,
             75,
             73
         ],
-        "template": [
-            "Skill-Nothing.png"
+        "action": {
+            "type": "Custom",
+            "param": {
+                "custom_action": "PatchNode",
+                "custom_action_param": {
+                    "node": "Collect_Skill3_3",
+                    "patch": {
+                        "max_hit": 1,
+                        "next": "Collect_Skill_KillFocus"
+                    }
+                }
+            }
+        },
+        "next": [
+            "Collect_Skill3_3"
         ],
-        "doc": "PVE点击技能2"
+        "on_error": [
+            "Collect_Skill_KillFocus"
+        ],
+        "timeout": 2000,
+        "focus": "CSB.[WRN]无技能被设置,栏位3-2 吸取技能不存在",
+        "doc": "如果吸取技能不存在，流程无意义。用一次召集就可以杀流程了。用注入custom给召集设maxhit=1，并附加error直接去结束节点。"
     },
     "Collect_Skill3_3_Nothing": {
         "recognition": "TemplateMatch",
@@ -458,35 +495,8 @@
         ],
         "doc": "技能页1，结束复位色核识别"
     },
-    "Collect_Skill_AllUsed": {
-        "recognition": "And",
-        "all_of": [
-            {
-                "recognition": "OCR",
-                "roi": [
-                    942,
-                    564,
-                    54,
-                    34
-                ],
-                "expected": [
-                    "(\\d+)\\s*[/:：|\\-~]?\\s*\\1(?!\\d)"
-                ]
-            },
-            {
-                "recognition": "OCR",
-                "roi": [
-                    976,
-                    484,
-                    56,
-                    32
-                ],
-                "expected": [
-                    "(\\d+)\\s*[/:：|\\-~]?\\s*\\1(?!\\d)"
-                ]
-            }
-        ],
-        "focus": "两种技能均已用完",
+    "Collect_Skill_KillFocus": {
+        "focus": "CM.S. 技能配置不足-结束流程",
         "action": "StopTask"
     }
 }
