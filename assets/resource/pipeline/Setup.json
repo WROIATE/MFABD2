@@ -684,30 +684,43 @@
         "post_delay": 3000
     },
     "Setup_Main_Swip": {
-        "action": "Swipe",
-        "begin": [
-            810,
-            620,
-            1,
-            1
-        ],
-        "end": [
-            810,
-            25,
-            1,
-            1
-        ],
-        "duration": 800,
-        "end_hold": 1000,
-        "post_delay": 500
+        "action": "Custom",
+        "custom_action": "SmartSwipe",
+        "custom_action_param": {
+            "proxy_node": "Custom_Proxy_Swipe",
+            "action": "Swipe",
+            "begin": [
+                810,
+                620,
+                0,
+                0
+            ],
+            "end": [
+                810,
+                25,
+                0,
+                0
+            ],
+            "duration": 700,
+            "end_hold": 1000,
+            "settle_delay": 1000,
+            "retry_times": 1,
+            "threshold": 2.0,
+            "detect_roi": [
+                544,
+                402,
+                488,
+                215
+            ]
+        }
     },
     "Setup_Main_SkipAv": {
         "recognition": "OCR",
         "roi": [
-            822,
-            232,
-            346,
-            40
+            816,
+            180,
+            355,
+            99
         ],
         "expected": [
             "关闭"
@@ -745,9 +758,9 @@
         "recognition": "OCR",
         "roi": [
             454,
-            404,
+            368,
             344,
-            43
+            79
         ],
         "expected": [
             "使用"
