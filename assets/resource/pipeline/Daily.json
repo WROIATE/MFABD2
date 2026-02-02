@@ -124,9 +124,9 @@
   },
   "Daily_UnionBack2": {
     "recognition": "OCR",
-    "action": "Click",
     "next": [
       "Daily_UnionBack2",
+      "Global_ToHomePage_Enter",
       "Global_ToHomePage"
     ],
     "post_delay": 3000,
