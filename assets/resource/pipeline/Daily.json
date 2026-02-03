@@ -125,7 +125,6 @@
   "Daily_UnionBack2": {
     "recognition": "OCR",
     "next": [
-      "Daily_UnionBack2",
       "Global_ToHomePage_Enter",
       "Global_ToHomePage"
     ],
