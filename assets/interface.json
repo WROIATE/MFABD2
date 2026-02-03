@@ -957,10 +957,6 @@
             "type": "switch",
             "cases": [
                 {
-                    "name": "No",
-                    "pipeline_override": {}
-                },
-                {
                     "name": "Yes",
                     "pipeline_override": {
                         "Activities_HomePageHub": {
@@ -971,6 +967,10 @@
                             ]
                         }
                     }
+                },
+                {
+                    "name": "No",
+                    "pipeline_override": {}
                 }
             ]
         },
