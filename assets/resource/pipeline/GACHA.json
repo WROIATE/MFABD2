@@ -640,10 +640,9 @@
   },
   "Gacha_FinGacha": {
     "recognition": "OCR",
-    "action": "Click",
     "next": [
-      "Global_ToHomePage",
-      "Gacha_FinGacha"
+      "Global_ToHomePage_Enter",
+      "Global_ToHomePage"
     ],
     "post_delay": 3000,
     "focus": "GA.退出抽卡",
