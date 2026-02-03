@@ -638,7 +638,9 @@
             "Collect_Pack_Event_3",
             "Collect_Pack_Event_4"
         ],
-        "timeout": 1000
+        "timeout": 1,
+        "pre_delay": 0,
+        "post_delay": 0
     },
     "Collect_Pack_Story_1": {
         "recognition": "And",
