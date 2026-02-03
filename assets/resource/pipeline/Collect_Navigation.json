@@ -17,7 +17,7 @@
       "[JumpBack]Collect_Tab3"
     ],
     "post_delay": 1000,
-    "focus": "CB.箱庭模块启动",
+    "focus": "CM.N.箱庭模块启动",
     "roi": [
       1122,
       646,
@@ -478,7 +478,7 @@
   "Collect_TargetMapEnd": {
     "recognition": "OCR",
     "next": [],
-    "focus": "CB.卡带内流程进入END环节",
+    "focus": "CM.N.卡带内流程进入END环节",
     "roi": [
       408,
       622,
@@ -565,7 +565,7 @@
     "doc": "维护点C06.切图状态机如果OCR识别出错,可能导致脚本停留在图1,但实际已执行到图2,最后过量切图到旅店后面,会循环卡住。定性为状态机思维框架底层bug，难修危害大。此节点作为额外守护，放入next中。直接结束卡带内流程，最多断臂卡带内剩下资源，但不会全部卡死。"
   },
   "Collect_TargetMap_Special_ClickTpCircleIco": {
-    "focus": "CB.特殊选中触发",
+    "focus": "CM.N.特殊选中触发",
     "doc": "此节点置于'TargetMapEnd'之前，对需要吸取的安全节点做单独适配，否则会提前结束吸取。起因：杰登之门卡带有3张安全图。",
     "next": [
       "Collect_ClickTeleporCircleIco"
@@ -742,7 +742,7 @@
       "Collect_ClickTelepor_TargetClass_Purple",
       "Collect_ClickTelepor_TargetClass_White"
     ],
-    "focus": "CB.区域地图.tp1.找到传送阵图标",
+    "focus": "CM.N.区域地图.tp1.找到传送阵图标",
     "roi": [
       100,
       71,
@@ -786,7 +786,7 @@
       "Collect_ClickTelepor_TargetClass_PurpleProcess"
     ],
     "post_delay": 5000,
-    "focus": "CB.选择次选传送阵",
+    "focus": "CM.N.选择次选传送阵",
     "roi": [
       100,
       71,
@@ -816,7 +816,7 @@
       "Collect_ClickTelepor_TargetClass_White"
     ],
     "post_delay": 5000,
-    "focus": "CB.区域地图.tp1.选择首选传送阵图标",
+    "focus": "CM.N.区域地图.tp1.选择首选传送阵图标",
     "action": "Click",
     "doc": "详细地图内传送阵选择"
   },
@@ -833,7 +833,7 @@
       47
     ],
     "expected": "^(?=.*[没有])(?=.*[已激活的])(?=.*[魔法阵]).{6,}$",
-    "focus": "CB.[WRN]区域地图传送阵没有激活!"
+    "focus": "CM.N.[WRN]区域地图传送阵没有激活!"
   },
   "Collect_ClickTelepor_Abnormal_Overlap": {
     "doc": "当传送阵地图中存在重叠时的处理,找三角(无法处理紫色情况) | 注意:特征太泛,少用",
@@ -843,7 +843,7 @@
       "Collect_ClickTelepor_TargetClass_White"
     ],
     "post_delay": 5000,
-    "focus": "CB.区域地图.tp1.找到传送阵图标",
+    "focus": "CM.N.区域地图.tp1.找到传送阵图标",
     "roi": [
       100,
       71,
@@ -873,7 +873,7 @@
       "Collect_Skill_Start",
       "Collect_ClickBackOnSecureMap"
     ],
-    "focus": "CB.区域地图.tp1.已正确",
+    "focus": "CM.N.区域地图.tp1.已正确",
     "roi": [
       408,
       622,
@@ -954,7 +954,7 @@
   "Collect_FindTeleporCircle0.9": {
     "recognition": "TemplateMatch",
     "action": "Click",
-    "focus": "CB.箱庭地图内找到传送阵-按钮标",
+    "focus": "CM.N.箱庭地图内找到传送阵-按钮标",
     "roi": [
       828,
       519,
@@ -979,7 +979,7 @@
       0
     ],
     "post_delay": 5000,
-    "focus": "CB.箱庭地图内找到传送阵-物件",
+    "focus": "CM.N.箱庭地图内找到传送阵-物件",
     "roi": [
       0,
       0,
@@ -1050,6 +1050,7 @@
       "雷瓦汀基地救护站",
       "拉勒凯旅馆",
       "罗戴夫旅馆",
+      "封印指定室",
       "旅馆",
       "安全"
     ],
@@ -1083,7 +1084,7 @@
       "[JumpBack]Global_QuickCart_MenuReset"
     ],
     "post_delay": 2000,
-    "focus": "G=1.页面非预期，点击返回按钮",
+    "focus": "CM.N.开始卡带退出",
     "roi": [
       1,
       1,
