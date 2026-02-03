@@ -5,7 +5,12 @@ import sys
 import platform
 from pathlib import Path
 
-
+# =========================================================================
+# [配置] 调试开关
+# =========================================================================
+# True  : 开启虚拟环境自动检查与接管 (默认)
+# False : 强制关闭虚拟化逻辑 (用于排查环境问题，或手动管理环境时)
+ENABLE_VENV_AUTO_CHECK = False
 # =========================================================================
 # [新增] 强制全链路 UTF-8 (解决 Windows 命令行/pip 读取中文报错问题)
 # PYTHONUTF8=1 : 让 Python 3.7+ 忽略系统区域设置，强制使用 UTF-8 (PEP 540)
@@ -44,18 +49,23 @@ current_mode = get_env_mode()
 # 虚拟环境接管逻辑 (仅在开发模式且非内嵌环境时触发)
 # 这里保留我们之前讨论的逻辑
 if current_mode == 'dev':
-    # 再次检查一下是不是 Windows 内嵌 Python 防止误判
-    is_embedded = False
-    if sys.platform == "win32":
-        try:
-            if project_root in Path(sys.executable).resolve().parents:
-                is_embedded = True
-        except:
-            pass
+    # 1. 优先检查手动开关
+    if not ENABLE_VENV_AUTO_CHECK:
+        mfaalog.warning("⚠️ [调试模式] 虚拟环境自动接管已通过开关禁用 (ENABLE_VENV_AUTO_CHECK=False)")
     
-    if not is_embedded:
-        mfaalog.info("开发模式: 启动虚拟环境管理...")
-        venv_ops.ensure_venv(project_root)
+    else:
+        # 2. 正常逻辑：检查是不是 Windows 内嵌 Python 防止误判
+        is_embedded = False
+        if sys.platform == "win32":
+            try:
+                if project_root in Path(sys.executable).resolve().parents:
+                    is_embedded = True
+            except:
+                pass
+        
+        if not is_embedded:
+            mfaalog.info("开发模式: 启动虚拟环境管理...")
+            venv_ops.ensure_venv(project_root)
 
 # -----------------------------
 # 1. 动态计算 RID (Runtime Identifier)
