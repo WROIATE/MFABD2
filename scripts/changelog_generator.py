@@ -328,7 +328,7 @@ def generate_changelog_content(commits: List[Dict], current_tag: str, compare_ba
                     changelog += format_commit_message(commit) + "\n"
             changelog += "\n"
     
-    changelog += "[已有 Mirror酱 CDK？前往 Mirror酱 高速下载](https://mirrorchyan.com/zh/projects?rid=MFABD2)\n\n"
+    changelog += "\n[已有 Mirror酱 CDK？前往 Mirror酱 高速下载](https://mirrorchyan.com/zh/projects?rid=MFABD2)\n\n"
 
     changelog += f"**对比范围**: {compare_base} → {current_tag}\n\n"
 
@@ -479,17 +479,6 @@ def main():
     changelog_content = add_historical_versions(changelog_content, current_tag)
 
 
-     # ========================================================
-     # [Hotfix] 修复 UI 崩溃问题
-     # 操作：移除所有空行，并统一换行符
-     # 原因：防止 Markdown.Avalonia 解析器在处理 <details> 内的空行时发生 StackOverflow
-     # ========================================================
-    print("正在清洗空行以防止 UI 崩溃...")
-     # splitlines() 会自动处理 \r\n 和 \n，strip() 移除空白，最后用 \n 重新拼接
-    lines = changelog_content.splitlines()
-    changelog_content = "\n".join([line for line in lines if line.strip()])
-    # ========================================================
-    
     # 输出到文件
     output_file = "../CHANGES.md"
     with open(output_file, 'w', encoding='utf-8') as f:

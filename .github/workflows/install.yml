@@ -532,6 +532,17 @@ jobs:
           GITHUB_REPOSITORY: ${{ github.repository }}
           GITHUB_REPOSITORY_OWNER: ${{ github.repository_owner }}
 
+
+
+
+      # 上传 CHANGES.md 到构建物
+      # =======================================================
+      - name: Upload Changelog Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: CHANGES
+          path: CHANGES.md
+      # =======================================================
       - name: Set release body
         id: set_release_body
         run: |
