@@ -376,9 +376,7 @@ def add_historical_versions(current_changelog: str, current_tag: str) -> str:
             return current_changelog
         
         # 构建历史版本折叠内容
-        # 修改：统一使用一个 details 包裹所有内容，防止 UI 渲染崩溃
         historical_section = "\n## 历史版本更新内容\n\n"
-        historical_section += "<details>\n<summary>📚 点击展开/折叠 所有历史版本列表</summary>\n\n"
         
         for release in historical_releases:
             tag = release['tag_name']
@@ -386,35 +384,44 @@ def add_historical_versions(current_changelog: str, current_tag: str) -> str:
             body = release.get('body', '') or ""
             
             print(f"处理历史版本: {tag} (发布时间: {published_at})")
+            print(f"内容长度: {len(body)} 字符")
             
             # 智能标记分析（根据配置决定是否启用）
             markers = ""
             if HISTORY_CONFIG['enable_version_highlights']:
                 markers = analyze_version_highlights(release)
                 marker_display = f" {markers}" if markers else ""
+                print(f"版本标记: '{markers}'")
             else:
                 marker_display = ""
+                print("版本标记: 已禁用")
             
             # 截断处理
             truncated_body = manager.truncate_release_body(body)
+            print(f"截断后长度: {len(truncated_body)} 字符")
             
             if not truncated_body.strip():
                 print(f"跳过版本 {tag}: 内容为空")
                 continue
             
-            # 检查内容是否与其他版本重复 (可选保留)
-            # body_hash = hash(truncated_body.strip())
+            # 检查内容是否与其他版本重复
+            body_hash = hash(truncated_body.strip())
+            print(f"内容哈希: {body_hash}")
             
-            # 修改：内部使用标题结构，不再嵌套 details
-            historical_section += f"### {tag} ({published_at}){marker_display}\n\n"
-            historical_section += f"{truncated_body}\n\n"
-            historical_section += "---\n\n"
+            historical_section += f"""<details>
+<summary>{tag} ({published_at}){marker_display}</summary>
+
+{truncated_body}
+
+</details>
+
+"""
         
         print(f"成功添加 {len(historical_releases)} 个历史版本")
         
-        # 添加历史版本结束标识并关闭标签
+        # 添加历史版本结束标识
         if historical_releases:
-            historical_section += "*以上为历史版本信息*\n</details>\n\n"
+            historical_section += "---\n*以上为历史版本信息*\n\n"
         
         return current_changelog + historical_section
         
