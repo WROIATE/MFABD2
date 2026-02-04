@@ -16,6 +16,15 @@ from version_analyzer import analyze_version_highlights
 from History_config import HISTORY_CONFIG, OUTPUT_CONFIG
 from git_operations import get_commit_list, get_merge_commits, get_released_branches_from_main, safe_get_commit_list, ensure_reference_exists, get_commit_timestamp
 
+# ==============================================================================
+# [配置开关]
+# 控制是否生成历史版本回溯信息
+# ------------------------------------------------------------------------------
+# True  : 开启。会尝试获取 GitHub 历史 Release 并生成折叠列表 (可能导致 UI 卡顿)
+# False : 关闭。仅生成当前版本的变更日志，完全忽略历史版本
+# ==============================================================================
+ENABLE_HISTORY_GENERATION = False
+
 def group_commits_by_type(commits: List[Dict]) -> Dict[str, List[Dict]]:
     """按提交类型分组（简化版本，后续可以改进）"""
     groups = {
@@ -349,6 +358,13 @@ def generate_changelog_content(commits: List[Dict], current_tag: str, compare_ba
     return changelog
 
 def add_historical_versions(current_changelog: str, current_tag: str) -> str:
+    """添加历史版本折叠内容"""
+    
+    # 阻断逻辑开关
+    if not ENABLE_HISTORY_GENERATION:
+        print("🛑 历史版本生成已由全局开关 (ENABLE_HISTORY_GENERATION) 禁用，跳过。")
+        return current_changelog
+    
     """添加历史版本折叠内容"""
     print("准备获取历史版本...")
     print(f"当前标签: {current_tag}")
