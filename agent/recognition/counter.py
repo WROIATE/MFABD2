@@ -6,6 +6,67 @@ import json
 # 引入我们封装好的日志工具
 from utils import mfaalog as logger
 
+# 🔢 计数与逻辑控制器 (Counter & Logic Controller)
+# ==============================================================================
+# 核心功能：基于 [内存变量](全局有效) 实现任务次数限制、逻辑分支控制。
+# 适用场景：限制副本刷取次数（如每日3次）、防止任务死循环、单次运行中的一次性锁。
+# 特性：
+#   1. 内存级存储：速度极快，无需读写文件。
+#   2. 灵活控制：支持 检查(Check)、更新(Update)、重置(Reset) 三种操作。
+#   3. 动态参数：完全通过 pipeline.json 传递参数，无需修改 Python 代码。
+#
+# 策略缺陷：
+#   1. 数据易失：MAA 重启后计数器会清零（保存在 RAM 中）。
+#   2. 无法跨进程：如果开启多个 MAA 实例，它们之间的计数不互通。
+#
+# ------------------------------------------------------------------------------
+# 📝 JSON Pipeline 配置指南 (标准规范版)
+# ------------------------------------------------------------------------------
+#
+# 【功能 A】CheckTag 识别计数现状 (作为 "recognition" 使用)
+# ---------------------------------------------------
+# 逻辑：当前计数 < max -> 识别成功 (执行 action)
+#       当前计数 >= max -> 识别失败 (跳过或转到 on_error)
+#
+# "Task_Farm_Map": {
+#     "recognition": "Custom",             // ⚡️ 固定为 Custom
+#     "custom_recognition": "CheckTag",    // ⚡️ 指向 Python 类名
+#     "custom_recognition_param": {
+#         "tag": "Daily_Map_1",            // 唯一标识符
+#         "max": 3                         // 最大允许次数
+#     },
+#     "action": "Click",                   // 检查通过后执行的动作
+#     "next": "Task_Settlement",           // 后续流程
+#     "on_error": "Next_Task"              // ⚡️ 次数刷满后跳转至此
+# }
+#
+# 【功能 B】UpdateTag - 计数动作 (作为 "action" 使用)
+# ---------------------------------------------------
+# 逻辑：执行后，指定 tag 的计数 +value。通常放在战斗结算或任务完成处。
+#
+# "Task_Settlement": {
+    # "action": "Custom",                  // ⚡️ 固定为 Custom
+    # "custom_action": "UpdateTag",        // ⚡️ 指向 Python 类名
+    # "custom_action_param": {
+    #     "tag": "Daily_Map_1",            // 必须与 CheckTag 的 tag 一致
+    #     "value": 1                       // 计数 +1 ,支持任意整数,可为负数
+    # },
+#     "next": "Task_Farm_Map"              // ⚡️ 循环回头部再次检查
+# }
+#
+# 【功能 C】ResetTag - 重置计数 (作为 "action" 使用)
+# ---------------------------------------------------
+# 逻辑：将指定 tag 列表归零。通常放在 StartUp 任务中。
+#
+# "Task_Init": {
+#     "action": "Custom",
+#     "custom_action": "ResetTag",
+#     "custom_action_param": {
+#         "tags": ["Daily_Map_1", "Boss_V2"]  // 支持列表或单个字符串
+#     }
+# }
+# ==============================================================================
+
 # 全局内存数据库
 TAG_STORE = {}
 
