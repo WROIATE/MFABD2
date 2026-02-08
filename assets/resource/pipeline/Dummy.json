@@ -4,6 +4,7 @@
     },
     "Custom_Proxy_Swipe": {
         "doc": "不要使用,不要删除。这是验证滑动custom的预留节点。",
-        "action": "Swipe"
+        "action": "Swipe",
+        "post_delay": 1000
     }
 }

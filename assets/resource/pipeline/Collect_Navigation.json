@@ -4,6 +4,23 @@
   },
   "Collect_OperationsMain_Sandplay": {
     "recognition": "TemplateMatch",
+    "roi": [
+      1122,
+      646,
+      40,
+      38
+    ],
+    "template": [
+      "pin.png"
+    ],
+    "action": "Custom",
+    "custom_action": "ResetTag",
+    "custom_action_param": {
+      "tags": [
+        "LocPage_SmartSwip"
+      ]
+    },
+    "post_delay": 1000,
     "next": [
       "Collect_OperationsMain_ToAreaMap",
       "[JumpBack]Collect_Special_EP6",
@@ -16,17 +33,7 @@
     "on_error": [
       "[JumpBack]Collect_Tab3"
     ],
-    "post_delay": 1000,
     "focus": "CM.N.箱庭模块启动",
-    "roi": [
-      1122,
-      646,
-      40,
-      38
-    ],
-    "template": [
-      "pin.png"
-    ],
     "doc": "中断：章节内主要操作开始。找到图钉，确认进入箱庭"
   },
   "Collect_FindPickupCat": {

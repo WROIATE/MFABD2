@@ -50,7 +50,7 @@
     },
     "Collect_QuickCart_Menu": {
         "recognition": "OCR",
-        "focus": "",
+        "focus": "CM.L.调度器",
         "roi": [
             32,
             506,
@@ -148,10 +148,9 @@
     "Collect_QuickCart_StoryPack_OcrCheck": {
         "recognition": "ColorMatch",
         "next": [
-            "Collect_LocatePackFrame_Loc1",
-            "[JumpBack]Collect_LocatePackFrame_Loc1_ResetLoc"
+            "Collect_FirstBootPack"
         ],
-        "focus": "",
+        "focus": "CM.L.剧情-卡带调取完毕",
         "roi": "Collect_QuickCart_SelectType_StoryPack",
         "count": 200,
         "lower": [
@@ -163,13 +162,13 @@
             255,
             255,
             255
-        ]
+        ],
+        "doc": "当前节点链层数标记：2。初次调取卡带菜单完毕，开始初次点击卡带.先复位再to1,to1没判定的!不可直接IsPresent,防止用户行为干扰"
     },
     "Collect_QuickCart_CharacterPack_OcrCheck": {
         "recognition": "ColorMatch",
         "next": [
-            "Collect_LocatePackFrame_Loc1",
-            "[JumpBack]Collect_LocatePackFrame_Loc1_ResetLoc"
+            "Collect_FirstBootPack"
         ],
         "roi": "Collect_QuickCart_SelectType_CharacterPack",
         "upper": [
@@ -183,13 +182,12 @@
             165
         ],
         "count": 300,
-        "focus": "CM.L.快速卡带类确认-角色"
+        "focus": "CM.L.角色-卡带调取完毕"
     },
     "Collect_QuickCart_EventPack_OcrCheck": {
         "recognition": "ColorMatch",
         "next": [
-            "Collect_LocatePackFrame_Loc1",
-            "[JumpBack]Collect_LocatePackFrame_Loc1_ResetLoc"
+            "Collect_FirstBootPack"
         ],
         "roi": "Collect_QuickCart_SelectType_EventPack",
         "upper": [
@@ -203,8 +201,339 @@
             165
         ],
         "count": 500,
-        "focus": "CM.L.快速卡带类确认-角色"
+        "focus": "CM.L.活动-卡带调取完毕"
     },
+    "Collect_FirstBootPack": {
+        "next": [
+            "Collect_FirstBootPack_ProbeIsPresent",
+            "[JumpBack]Collect_LocatePackFrame_Loc1_ResetLoc",
+            "Collect_FirstBootPack_To1"
+        ]
+    },
+    "Collect_FirstBootPack_To1": {
+        "action": "Click",
+        "target": [
+            110,
+            626,
+            15,
+            14
+        ],
+        "post_delay": 5000,
+        "focus": "CM.L.卡带类型初次启动,进入1#位置",
+        "next": [
+            "[JumpBack]Global_WaitingForLoading",
+            "[JumpBack]Global_QuickCart_MenuReset",
+            "Collect_PackProbe_IsPresent"
+        ]
+    },
+    "Collect_FirstBootPack_ProbeIsPresent": {
+        "recognition": "ColorMatch",
+        "roi": [
+            0,
+            659,
+            201,
+            19
+        ],
+        "method": 40,
+        "lower": [
+            22,
+            67,
+            177
+        ],
+        "upper": [
+            30,
+            241,
+            255
+        ],
+        "count": 2,
+        "focus": "CM.L.初次启动探针确认",
+        "next": [
+            "Collect_PackProbe_IsPresent"
+        ],
+        "timeout": 2000,
+        "on_error": [],
+        "doc": "卡带1位置存在指针"
+    },
+    "Collect_PackProbe_IsPresent": {
+        "focus": "CM.L.当前卡带位置探针存在",
+        "recognition": "OCR",
+        "roi": [
+            32,
+            506,
+            306,
+            125
+        ],
+        "expected": [
+            "最近"
+        ],
+        "next": [
+            "[JumpBack]Collect_LocatePackFrame_Loc1_ResetLoc",
+            "Collect_PackProbe_Loc1",
+            "Collect_PackProbe_Loc2",
+            "Collect_PackProbe_Loc3",
+            "Collect_PackProbe_Loc4",
+            "Collect_PackProbe_Loc5",
+            "Collect_PackProbe_Loc6",
+            "Collect_PackProbe_Loc7",
+            "Collect_PackProbe_Loc8",
+            "Collect_PackProbe_Loc9",
+            "Collect_PackProbe_NotPresent"
+        ],
+        "timeout": 2000
+    },
+    "Collect_PackProbe_Loc1": {
+        "recognition": "ColorMatch",
+        "roi": [
+            0,
+            659,
+            197,
+            19
+        ],
+        "method": 40,
+        "lower": [
+            22,
+            67,
+            177
+        ],
+        "upper": [
+            30,
+            241,
+            255
+        ],
+        "count": 2,
+        "next": [
+            "Collect_LocatePackFrame_Loc2"
+        ],
+        "timeout": 2000
+    },
+    "Collect_PackProbe_Loc2": {
+        "recognition": "ColorMatch",
+        "roi": [
+            119,
+            659,
+            230,
+            19
+        ],
+        "method": 40,
+        "lower": [
+            22,
+            67,
+            177
+        ],
+        "upper": [
+            30,
+            241,
+            255
+        ],
+        "count": 2,
+        "next": [
+            "Collect_LocatePackFrame_Loc3"
+        ],
+        "timeout": 2000
+    },
+    "Collect_PackProbe_Loc3": {
+        "recognition": "ColorMatch",
+        "roi": [
+            262,
+            659,
+            232,
+            19
+        ],
+        "method": 40,
+        "lower": [
+            22,
+            67,
+            177
+        ],
+        "upper": [
+            30,
+            241,
+            255
+        ],
+        "count": 2,
+        "next": [
+            "Collect_LocatePackFrame_Loc4"
+        ],
+        "timeout": 2000
+    },
+    "Collect_PackProbe_Loc4": {
+        "recognition": "ColorMatch",
+        "roi": [
+            406,
+            659,
+            233,
+            19
+        ],
+        "method": 40,
+        "lower": [
+            22,
+            67,
+            177
+        ],
+        "upper": [
+            30,
+            241,
+            255
+        ],
+        "count": 2,
+        "next": [
+            "Collect_LocatePackFrame_Loc5"
+        ],
+        "timeout": 2000
+    },
+    "Collect_PackProbe_Loc5": {
+        "recognition": "ColorMatch",
+        "roi": [
+            552,
+            659,
+            228,
+            19
+        ],
+        "method": 40,
+        "lower": [
+            22,
+            67,
+            177
+        ],
+        "upper": [
+            30,
+            241,
+            255
+        ],
+        "count": 2,
+        "next": [
+            "Collect_LocatePackFrame_Loc6"
+        ],
+        "timeout": 2000
+    },
+    "Collect_PackProbe_Loc6": {
+        "recognition": "ColorMatch",
+        "roi": [
+            697,
+            659,
+            230,
+            19
+        ],
+        "method": 40,
+        "lower": [
+            22,
+            67,
+            177
+        ],
+        "upper": [
+            30,
+            241,
+            255
+        ],
+        "count": 2,
+        "next": [
+            "Collect_LocatePackFrame_Loc7"
+        ],
+        "timeout": 2000
+    },
+    "Collect_PackProbe_Loc7": {
+        "recognition": "ColorMatch",
+        "roi": [
+            841,
+            659,
+            229,
+            19
+        ],
+        "method": 40,
+        "lower": [
+            22,
+            67,
+            177
+        ],
+        "upper": [
+            30,
+            241,
+            255
+        ],
+        "count": 2,
+        "next": [
+            "Collect_LocatePackFrame_Loc8"
+        ],
+        "timeout": 2000
+    },
+    "Collect_PackProbe_Loc8": {
+        "recognition": "ColorMatch",
+        "roi": [
+            985,
+            659,
+            228,
+            19
+        ],
+        "method": 40,
+        "lower": [
+            22,
+            67,
+            177
+        ],
+        "upper": [
+            30,
+            241,
+            255
+        ],
+        "count": 2,
+        "next": [
+            "Collect_LocatePackFrame_Loc9"
+        ],
+        "timeout": 2000
+    },
+    "Collect_PackProbe_Loc9": {
+        "recognition": "ColorMatch",
+        "roi": [
+            1136,
+            659,
+            143,
+            19
+        ],
+        "method": 40,
+        "lower": [
+            22,
+            67,
+            177
+        ],
+        "upper": [
+            30,
+            241,
+            255
+        ],
+        "count": 2,
+        "next": [
+            "Collect_LocatePackFrame_Smart_Swip"
+        ],
+        "timeout": 2000
+    },
+    "Collect_PackProbe_NotPresent": {
+        "recognition": "ColorMatch",
+        "roi": [
+            0,
+            659,
+            1280,
+            19
+        ],
+        "method": 40,
+        "lower": [
+            22,
+            67,
+            177
+        ],
+        "upper": [
+            30,
+            241,
+            255
+        ],
+        "count": 2,
+        "inverse": true,
+        "focus": "<span style=\"color:GoldenRod;\">CM.L.位置探针不存在</span>",
+        "next": [
+            "Collect_LocatePackFrame_Loc1",
+            "[JumpBack]Collect_LocatePackFrame_Loc1_ResetLoc"
+        ]
+    },
+    "探针结束": {},
     "Collect_LocatePackFrame_Loc1": {
         "recognition": "TemplateMatch",
         "template": [
@@ -236,15 +565,23 @@
             ]
         },
         "next": [
+            "[JumpBack]Collect_LocatePackFrame_Smart_Swip",
+            "[JumpBack]Collect_LocatePackFrame_Loc1_ResetLoc",
             "[JumpBack]Collect_PackLocation_PassFieldsAndHub",
             "Collect_LocatePackFrame_Loc2"
         ],
-        "timeout": 2100,
-        "on_error": [
-            "Collect_LocatePackFrame_Smart_Swip"
-        ],
+        "timeout": 2000,
         "focus": "CM.L.快速卡带盒定位-位置1",
-        "doc": "正常范围:[41,580,163,114]/缩小范围:[47,580,145,114],让滑动复位更精确"
+        "doc": "正常范围:[41,580,163,114]/缩小范围:[47,580,145,114],让滑动复位更精确",
+        "on_error": [
+            "Collect_LocatePackFrame_Loc3",
+            "Collect_LocatePackFrame_Loc4",
+            "Collect_LocatePackFrame_Loc5",
+            "Collect_LocatePackFrame_Loc6",
+            "Collect_LocatePackFrame_Loc7",
+            "Collect_LocatePackFrame_Loc8",
+            "Collect_LocatePackFrame_Loc9"
+        ]
     },
     "Collect_LocatePackFrame_Loc2": {
         "recognition": "TemplateMatch",
@@ -277,12 +614,19 @@
             ]
         },
         "next": [
+            "[JumpBack]Collect_LocatePackFrame_Smart_Swip",
+            "[JumpBack]Collect_LocatePackFrame_Loc1_ResetLoc",
             "[JumpBack]Collect_PackLocation_PassFieldsAndHub",
             "Collect_LocatePackFrame_Loc3"
         ],
-        "timeout": 2100,
+        "timeout": 2000,
         "on_error": [
-            "Collect_LocatePackFrame_Smart_Swip"
+            "Collect_LocatePackFrame_Loc4",
+            "Collect_LocatePackFrame_Loc5",
+            "Collect_LocatePackFrame_Loc6",
+            "Collect_LocatePackFrame_Loc7",
+            "Collect_LocatePackFrame_Loc8",
+            "Collect_LocatePackFrame_Loc9"
         ],
         "focus": "CM.L.快速卡带盒定位-位置2"
     },
@@ -317,12 +661,18 @@
             ]
         },
         "next": [
+            "[JumpBack]Collect_LocatePackFrame_Smart_Swip",
+            "[JumpBack]Collect_LocatePackFrame_Loc1_ResetLoc",
             "[JumpBack]Collect_PackLocation_PassFieldsAndHub",
             "Collect_LocatePackFrame_Loc4"
         ],
-        "timeout": 2100,
+        "timeout": 2000,
         "on_error": [
-            "Collect_LocatePackFrame_Smart_Swip"
+            "Collect_LocatePackFrame_Loc5",
+            "Collect_LocatePackFrame_Loc6",
+            "Collect_LocatePackFrame_Loc7",
+            "Collect_LocatePackFrame_Loc8",
+            "Collect_LocatePackFrame_Loc9"
         ],
         "focus": "CM.L.快速卡带盒定位-位置3"
     },
@@ -357,12 +707,17 @@
             ]
         },
         "next": [
+            "[JumpBack]Collect_LocatePackFrame_Smart_Swip",
+            "[JumpBack]Collect_LocatePackFrame_Loc1_ResetLoc",
             "[JumpBack]Collect_PackLocation_PassFieldsAndHub",
             "Collect_LocatePackFrame_Loc5"
         ],
-        "timeout": 2100,
+        "timeout": 2000,
         "on_error": [
-            "Collect_LocatePackFrame_Smart_Swip"
+            "Collect_LocatePackFrame_Loc6",
+            "Collect_LocatePackFrame_Loc7",
+            "Collect_LocatePackFrame_Loc8",
+            "Collect_LocatePackFrame_Loc9"
         ],
         "focus": "CM.L.快速卡带盒定位-位置4"
     },
@@ -397,12 +752,16 @@
             ]
         },
         "next": [
+            "[JumpBack]Collect_LocatePackFrame_Smart_Swip",
+            "[JumpBack]Collect_LocatePackFrame_Loc1_ResetLoc",
             "[JumpBack]Collect_PackLocation_PassFieldsAndHub",
             "Collect_LocatePackFrame_Loc6"
         ],
-        "timeout": 2100,
+        "timeout": 2000,
         "on_error": [
-            "Collect_LocatePackFrame_Smart_Swip"
+            "Collect_LocatePackFrame_Loc7",
+            "Collect_LocatePackFrame_Loc8",
+            "Collect_LocatePackFrame_Loc9"
         ],
         "focus": "CM.L.快速卡带盒定位-位置5"
     },
@@ -437,12 +796,15 @@
             ]
         },
         "next": [
+            "[JumpBack]Collect_LocatePackFrame_Smart_Swip",
+            "[JumpBack]Collect_LocatePackFrame_Loc1_ResetLoc",
             "[JumpBack]Collect_PackLocation_PassFieldsAndHub",
             "Collect_LocatePackFrame_Loc7"
         ],
-        "timeout": 2100,
+        "timeout": 2000,
         "on_error": [
-            "Collect_LocatePackFrame_Smart_Swip"
+            "Collect_LocatePackFrame_Loc8",
+            "Collect_LocatePackFrame_Loc9"
         ],
         "focus": "CM.L.快速卡带盒定位-位置6"
     },
@@ -477,12 +839,14 @@
             ]
         },
         "next": [
+            "[JumpBack]Collect_LocatePackFrame_Smart_Swip",
+            "[JumpBack]Collect_LocatePackFrame_Loc1_ResetLoc",
             "[JumpBack]Collect_PackLocation_PassFieldsAndHub",
             "Collect_LocatePackFrame_Loc8"
         ],
-        "timeout": 2100,
+        "timeout": 2000,
         "on_error": [
-            "Collect_LocatePackFrame_Smart_Swip"
+            "Collect_LocatePackFrame_Loc9"
         ],
         "focus": "CM.L.快速卡带盒定位-位置7"
     },
@@ -517,13 +881,13 @@
             ]
         },
         "next": [
+            "[JumpBack]Collect_LocatePackFrame_Smart_Swip",
+            "[JumpBack]Collect_LocatePackFrame_Loc1_ResetLoc",
             "[JumpBack]Collect_PackLocation_PassFieldsAndHub",
-            "Collect_LocatePackFrame_Loc9"
+            "Collect_LocatePackFrame_Loc9",
+            "Collect_Loc_OutToSwip_Hub"
         ],
-        "timeout": 2100,
-        "on_error": [
-            "Collect_LocatePackFrame_Smart_Swip"
-        ],
+        "timeout": 2000,
         "focus": "CM.L.快速卡带盒定位-位置8"
     },
     "Collect_LocatePackFrame_Loc9": {
@@ -557,12 +921,23 @@
             ]
         },
         "next": [
+            "[JumpBack]Collect_LocatePackFrame_Smart_Swip",
+            "[JumpBack]Collect_LocatePackFrame_Loc1_ResetLoc",
             "[JumpBack]Collect_PackLocation_PassFieldsAndHub",
-            "Collect_LocatePackFrame_Smart_Swip"
+            "Collect_Loc_OutToSwip_Hub"
         ],
         "focus": "CM.L.快速卡带盒定位-位置9"
     },
     "Collect_LocatePackFrame_Loc1_ResetLoc": {
+        "recognition": "TemplateMatch",
+        "roi": [
+            0,
+            581,
+            26,
+            95
+        ],
+        "template": "PackReset.png",
+        "green_mask": true,
         "action": "Swipe",
         "begin": [
             66,
@@ -571,17 +946,216 @@
             1
         ],
         "end": [
-            75,
+            80,
             637,
             1,
             1
         ],
-        "end_hold": 400,
-        "post_wait_freezes": 800,
+        "end_hold": 500,
+        "post_wait_freezes": 1000,
         "doc": "稍微回移复位第一张卡带,向右。注意留够延迟等待动画消除。",
-        "max_hit": 20
+        "max_hit": 40
+    },
+    "Collect_Loc_OutToSwip_Hub": {
+        "doc": "【next修改无效】卡带位识别到页翻页模块接口",
+        "action": "Custom",
+        "custom_action": "ResetTag",
+        "custom_action_param": {
+            "tags": [
+                "LocPage_SmartSwip"
+            ]
+        },
+        "next": [
+            "Collect_Loc_Swip_1Page"
+        ]
+    },
+    "Collect_Loc_Swip_1Page": {
+        "action": "Custom",
+        "custom_action": "PatchBatch",
+        "custom_action_param": {
+            "patches": {
+                "Collect_LocatePackFrame_Smart_Swip": {
+                    "custom_recognition_param": {
+                        "tag": "LocPage_SmartSwip",
+                        "max": 1
+                    },
+                    "focus": "CL.M.智能翻页,到第2页."
+                },
+                "Collect_Loc_OutToSwip_Hub": {
+                    "next": [
+                        "Collect_Loc_Swip_2Page"
+                    ]
+                }
+            },
+            "origins": {
+                "Collect_LocatePackFrame_Smart_Swip": {
+                    "custom_recognition_param": {
+                        "tag": "LocPage_SmartSwip",
+                        "max": 0
+                    }
+                },
+                "Collect_Loc_OutToSwip_Hub": {
+                    "next": [
+                        "Collect_Loc_Swip_1Page"
+                    ]
+                }
+            }
+        },
+        "next": [
+            "[JumpBack]Collect_LocatePackFrame_Smart_Swip",
+            "Collect_Loc_SwipToIn_Hub"
+        ]
+    },
+    "Collect_Loc_Swip_2Page": {
+        "action": "Custom",
+        "custom_action": "PatchBatch",
+        "custom_action_param": {
+            "patches": {
+                "Collect_LocatePackFrame_Smart_Swip": {
+                    "custom_recognition_param": {
+                        "tag": "LocPage_SmartSwip",
+                        "max": 2
+                    },
+                    "focus": "CL.M.智能翻页,到第3页."
+                },
+                "Collect_Loc_OutToSwip_Hub": {
+                    "next": [
+                        "Collect_Loc_Swip_3Page"
+                    ]
+                }
+            },
+            "origins": {
+                "Collect_LocatePackFrame_Smart_Swip": {
+                    "custom_recognition_param": {
+                        "tag": "LocPage_SmartSwip",
+                        "max": 0
+                    }
+                },
+                "Collect_Loc_OutToSwip_Hub": {
+                    "next": [
+                        "Collect_Loc_Swip_1Page"
+                    ]
+                }
+            }
+        },
+        "next": [
+            "[JumpBack]Collect_LocatePackFrame_Smart_Swip",
+            "Collect_Loc_SwipToIn_Hub"
+        ]
+    },
+    "Collect_Loc_Swip_3Page": {
+        "action": "Custom",
+        "custom_action": "PatchBatch",
+        "custom_action_param": {
+            "patches": {
+                "Collect_LocatePackFrame_Smart_Swip": {
+                    "custom_recognition_param": {
+                        "tag": "LocPage_SmartSwip",
+                        "max": 3
+                    },
+                    "focus": "CL.M.智能翻页,到第4页."
+                },
+                "Collect_Loc_OutToSwip_Hub": {
+                    "next": [
+                        "Collect_Loc_Swip_4Page"
+                    ]
+                }
+            },
+            "origins": {
+                "Collect_LocatePackFrame_Smart_Swip": {
+                    "custom_recognition_param": {
+                        "tag": "LocPage_SmartSwip",
+                        "max": 0
+                    }
+                },
+                "Collect_Loc_OutToSwip_Hub": {
+                    "next": [
+                        "Collect_Loc_Swip_1Page"
+                    ]
+                }
+            }
+        },
+        "next": [
+            "[JumpBack]Collect_LocatePackFrame_Smart_Swip",
+            "Collect_Loc_SwipToIn_Hub"
+        ]
+    },
+    "Collect_Loc_Swip_4Page": {
+        "action": "Custom",
+        "custom_action": "PatchBatch",
+        "custom_action_param": {
+            "patches": {
+                "Collect_LocatePackFrame_Smart_Swip": {
+                    "custom_recognition_param": {
+                        "tag": "LocPage_SmartSwip",
+                        "max": 4
+                    },
+                    "focus": "CL.M.智能翻页,到第5页."
+                },
+                "Collect_Loc_OutToSwip_Hub": {
+                    "next": [
+                        "Collect_Loc_Swip_5Page"
+                    ]
+                }
+            },
+            "origins": {
+                "Collect_LocatePackFrame_Smart_Swip": {
+                    "custom_recognition_param": {
+                        "tag": "LocPage_SmartSwip",
+                        "max": 0
+                    }
+                },
+                "Collect_Loc_OutToSwip_Hub": {
+                    "next": [
+                        "Collect_Loc_Swip_1Page"
+                    ]
+                }
+            }
+        },
+        "next": [
+            "[JumpBack]Collect_LocatePackFrame_Smart_Swip",
+            "Collect_Loc_SwipToIn_Hub"
+        ]
+    },
+    "Collect_Loc_Swip_5Page": {
+        "action": "Custom",
+        "custom_action": "PatchBatch",
+        "custom_action_param": {
+            "patches": {
+                "Collect_LocatePackFrame_Smart_Swip": {
+                    "custom_recognition_param": {
+                        "tag": "LocPage_SmartSwip",
+                        "max": 5
+                    },
+                    "focus": "CL.M.智能翻页,到第6页."
+                }
+            },
+            "origins": {
+                "Collect_LocatePackFrame_Smart_Swip": {
+                    "custom_recognition_param": {
+                        "max": 0
+                    }
+                },
+                "Collect_Loc_OutToSwip_Hub": {
+                    "next": [
+                        "Collect_Loc_Swip_1Page"
+                    ]
+                }
+            }
+        },
+        "next": [
+            "[JumpBack]Collect_LocatePackFrame_Smart_Swip",
+            "Collect_Loc_SwipToIn_Hub"
+        ],
+        "doc": "只做到兼容6页,目前已200%溢出非常足够."
     },
     "Collect_LocatePackFrame_Smart_Swip": {
+        "recognition": "Custom",
+        "custom_recognition": "CheckTag",
+        "custom_recognition_param": {
+            "tag": "LocPage_SmartSwip",
+            "max": 0
+        },
         "action": "Custom",
         "custom_action": "SmartSwipe",
         "custom_action_param": {
@@ -612,7 +1186,21 @@
             "threshold": 3.0
         },
         "next": [
-            "Collect_LocatePackFrame_Loc1"
+            "Collect_LocatePackFrame_Smart_Swip_UpdateTag"
+        ]
+    },
+    "Collect_LocatePackFrame_Smart_Swip_UpdateTag": {
+        "action": "Custom",
+        "custom_action": "UpdateTag",
+        "custom_action_param": {
+            "tag": "LocPage_SmartSwip",
+            "value": 1
+        }
+    },
+    "Collect_Loc_SwipToIn_Hub": {
+        "doc": "卡带页翻页到位识别模块接口",
+        "next": [
+            "Collect_PackProbe_IsPresent"
         ]
     },
     "Collect_PackLocation_PassFieldsAndHub": {
