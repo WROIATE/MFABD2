@@ -885,7 +885,7 @@
             "[JumpBack]Collect_LocatePackFrame_Loc1_ResetLoc",
             "[JumpBack]Collect_PackLocation_PassFieldsAndHub",
             "Collect_LocatePackFrame_Loc9",
-            "Collect_Loc_OutToSwip_Hub"
+            "Collect_Loc_OutToSwip_Hub_Ingress"
         ],
         "timeout": 2000,
         "focus": "CM.L.快速卡带盒定位-位置8"
@@ -924,7 +924,7 @@
             "[JumpBack]Collect_LocatePackFrame_Smart_Swip",
             "[JumpBack]Collect_LocatePackFrame_Loc1_ResetLoc",
             "[JumpBack]Collect_PackLocation_PassFieldsAndHub",
-            "Collect_Loc_OutToSwip_Hub"
+            "Collect_Loc_OutToSwip_Hub_Ingress"
         ],
         "focus": "CM.L.快速卡带盒定位-位置9"
     },
@@ -956,7 +956,47 @@
         "doc": "稍微回移复位第一张卡带,向右。注意留够延迟等待动画消除。",
         "max_hit": 40
     },
-    "Collect_Loc_OutToSwip_Hub": {
+    "Collect_Loc_OutToSwip_Hub_Ingress": {
+        "next": [
+            "Collect_Loc_OutToSwip_Hub_Enter_Pin",
+            "[JumpBack]Global_BackPageHub_Once"
+        ]
+    },
+    "Collect_Loc_OutToSwip_Hub_Enter_Pin": {
+        "recognition": "TemplateMatch",
+        "next": [
+            "Collect_Loc_OutToSwip_Hub_Enter_QuickCart_Menu",
+            "[JumpBack]Global_QuickCart_MenuReset"
+        ],
+        "roi": [
+            1122,
+            646,
+            40,
+            38
+        ],
+        "template": [
+            "pin.png"
+        ],
+        "doc": "[通用复位]复位到主界面模块,结束,中继调用"
+    },
+    "Collect_Loc_OutToSwip_Hub_Enter_QuickCart_Menu": {
+        "recognition": "OCR",
+        "focus": "CM.L.调度器",
+        "roi": [
+            32,
+            506,
+            306,
+            125
+        ],
+        "expected": [
+            "最近"
+        ],
+        "doc": "快速卡带已调出,等待后续",
+        "next": [
+            "Collect_Loc_OutToSwip_Hub_Egress"
+        ]
+    },
+    "Collect_Loc_OutToSwip_Hub_Egress": {
         "doc": "【next修改无效】卡带位识别到页翻页模块接口",
         "action": "Custom",
         "custom_action": "ResetTag",
@@ -981,7 +1021,7 @@
                     },
                     "focus": "CL.M.智能翻页,到第2页."
                 },
-                "Collect_Loc_OutToSwip_Hub": {
+                "Collect_Loc_OutToSwip_Hub_Egress": {
                     "next": [
                         "Collect_Loc_Swip_2Page"
                     ]
@@ -994,7 +1034,7 @@
                         "max": 0
                     }
                 },
-                "Collect_Loc_OutToSwip_Hub": {
+                "Collect_Loc_OutToSwip_Hub_Egress": {
                     "next": [
                         "Collect_Loc_Swip_1Page"
                     ]
@@ -1002,8 +1042,7 @@
             }
         },
         "next": [
-            "[JumpBack]Collect_LocatePackFrame_Smart_Swip",
-            "Collect_Loc_SwipToIn_Hub"
+            "Collect_LocatePackFrame_Smart_Swip"
         ]
     },
     "Collect_Loc_Swip_2Page": {
@@ -1018,7 +1057,7 @@
                     },
                     "focus": "CL.M.智能翻页,到第3页."
                 },
-                "Collect_Loc_OutToSwip_Hub": {
+                "Collect_Loc_OutToSwip_Hub_Egress": {
                     "next": [
                         "Collect_Loc_Swip_3Page"
                     ]
@@ -1031,7 +1070,7 @@
                         "max": 0
                     }
                 },
-                "Collect_Loc_OutToSwip_Hub": {
+                "Collect_Loc_OutToSwip_Hub_Egress": {
                     "next": [
                         "Collect_Loc_Swip_1Page"
                     ]
@@ -1039,8 +1078,7 @@
             }
         },
         "next": [
-            "[JumpBack]Collect_LocatePackFrame_Smart_Swip",
-            "Collect_Loc_SwipToIn_Hub"
+            "Collect_LocatePackFrame_Smart_Swip"
         ]
     },
     "Collect_Loc_Swip_3Page": {
@@ -1055,7 +1093,7 @@
                     },
                     "focus": "CL.M.智能翻页,到第4页."
                 },
-                "Collect_Loc_OutToSwip_Hub": {
+                "Collect_Loc_OutToSwip_Hub_Egress": {
                     "next": [
                         "Collect_Loc_Swip_4Page"
                     ]
@@ -1068,7 +1106,7 @@
                         "max": 0
                     }
                 },
-                "Collect_Loc_OutToSwip_Hub": {
+                "Collect_Loc_OutToSwip_Hub_Egress": {
                     "next": [
                         "Collect_Loc_Swip_1Page"
                     ]
@@ -1076,8 +1114,7 @@
             }
         },
         "next": [
-            "[JumpBack]Collect_LocatePackFrame_Smart_Swip",
-            "Collect_Loc_SwipToIn_Hub"
+            "Collect_LocatePackFrame_Smart_Swip"
         ]
     },
     "Collect_Loc_Swip_4Page": {
@@ -1092,7 +1129,7 @@
                     },
                     "focus": "CL.M.智能翻页,到第5页."
                 },
-                "Collect_Loc_OutToSwip_Hub": {
+                "Collect_Loc_OutToSwip_Hub_Egress": {
                     "next": [
                         "Collect_Loc_Swip_5Page"
                     ]
@@ -1105,7 +1142,7 @@
                         "max": 0
                     }
                 },
-                "Collect_Loc_OutToSwip_Hub": {
+                "Collect_Loc_OutToSwip_Hub_Egress": {
                     "next": [
                         "Collect_Loc_Swip_1Page"
                     ]
@@ -1113,8 +1150,7 @@
             }
         },
         "next": [
-            "[JumpBack]Collect_LocatePackFrame_Smart_Swip",
-            "Collect_Loc_SwipToIn_Hub"
+            "Collect_LocatePackFrame_Smart_Swip"
         ]
     },
     "Collect_Loc_Swip_5Page": {
@@ -1136,7 +1172,7 @@
                         "max": 0
                     }
                 },
-                "Collect_Loc_OutToSwip_Hub": {
+                "Collect_Loc_OutToSwip_Hub_Egress": {
                     "next": [
                         "Collect_Loc_Swip_1Page"
                     ]
@@ -1144,8 +1180,7 @@
             }
         },
         "next": [
-            "[JumpBack]Collect_LocatePackFrame_Smart_Swip",
-            "Collect_Loc_SwipToIn_Hub"
+            "Collect_LocatePackFrame_Smart_Swip"
         ],
         "doc": "只做到兼容6页,目前已200%溢出非常足够."
     },
@@ -1195,7 +1230,11 @@
         "custom_action_param": {
             "tag": "LocPage_SmartSwip",
             "value": 1
-        }
+        },
+        "next": [
+            "Collect_LocatePackFrame_Smart_Swip",
+            "Collect_Loc_SwipToIn_Hub"
+        ]
     },
     "Collect_Loc_SwipToIn_Hub": {
         "doc": "卡带页翻页到位识别模块接口",
