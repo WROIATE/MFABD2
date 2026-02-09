@@ -252,6 +252,7 @@
     "recognition": "OCR",
     "action": "Click",
     "next": [
+      "[Anchor]Setup_ToPvP",
       "PVP_AutoBattle_SucCK",
       "PVP_AutoBattle"
     ],
@@ -436,6 +437,11 @@
       0,
       0
     ],
+    "max_hit": 5,
+    "on_error": [
+      "PVP_AutoBattleStart"
+    ],
+    "timeout": 10000,
     "doc": "点击MAX Mini"
   },
   "PVP_AutoBattleMAX_CK": {

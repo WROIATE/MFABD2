@@ -77,13 +77,14 @@
 > 
 - 人物技能请按图中设置
 
- > <img alt="LOGO" src="https://github.com/sunyink/MFABD2/blob/main/ReadMe/IT-2511.jpg"  width="600px"/>
+ > <img alt="LOGO" src="https://github.com/sunyink/MFABD2/blob/main/ReadMe/IT-2601.jpg"  width="600px"/>
  > <img alt="LOGO" src="https://github.com/sunyink/MFABD2/blob/main/ReadMe/3.png"  width="400px"/>
 
 ---
 <details>
   <summary>Mac系统使用指引</summary>
-  经反馈Mac可以使用，配置过程复杂些。可以参考[M9A文档站](https://1999.fan/zh_cn/manual/newbie.html)，因为是同样的框架，软件部署部分是相通的。
+  - 经反馈Mac可以使用，配置过程复杂些。可以参考[M9A文档站](https://1999.fan/zh_cn/manual/newbie.html)，因为是同样的框架，软件部署部分是相通的。<Br>
+  - Mac的Agent功能，在根目录提供一键修复环境脚本，可能需要经常使用。
 </details>
 
 ## 功能一览
@@ -108,8 +109,8 @@
       * [x]  属性选择
       * [x]  均衡刷取
   * [X] 采集派遣 
-    * [X] 采集策略选择
-      * [X] 自定义剧情卡带/角色卡带
+    * [X] 支持卡带资源周常CD
+
   * [X] PVP
     * [X] PVP次数选择
   * [X] 白嫖抽卡
@@ -119,6 +120,9 @@
   * [X] 领取日常任务奖励
     * [X] 公会签到
     * [X] 餐馆结算/常客圣石领取
+    * [X] 餐馆自动升级
+    * [X] 小屋访问
+    * [X] 浏览街机界面
     * [X] 广场每日祈求
   * [X] 活动页版本活动领取（持续适配更新）
   * [X] 领取通行证奖励
@@ -127,13 +131,12 @@
 * [X] 每周独立周常
     * [X] 末日之书一轮
     * [X] 小屋访问点赞
-    * [X] 浏览街机界面
+    * [X] 自动钓鱼
 * [一期] 商店套利 `注1`
 * [ ] 半自动操作：
   * [ ] 爬塔刷层数
   * [ ] 末日之书刷分数
   * [ ] （半自动指：手动调到页面后无限循环刷。**常闭，一次只能开一种**）
-  * [更多技能完善中] 生活技能刷级-砍价
 * [ ] 商店套利（跑商） `注1`
 * [ ] 接管钓鱼 `注2`
   * [更多技能完善中] 生活技能刷级-砍价
@@ -142,7 +145,7 @@
   * [X] 关卡扫荡
     * [X] 难度选择（普通\挑战）
     * [X] 魔兽补刀
-    * [ ] 小游戏扫荡(平时应关闭)
+    * [ ] 小游戏扫荡(平时应关闭)(已隐藏)
 
 
     
@@ -157,7 +160,8 @@
 - [MFAAvalonia](https://github.com/SweetSmellFox/MFAAvalonia) 基于Avalonia的MAAFramework通用GUI项目
 - [MFATools](https://github.com/SweetSmellFox/MFATools) 开发工具
 - [maa-support-extension](https://github.com/neko-para/maa-support-extension) VSCode扩展
-- [SHA](SHA地址)跑商功能初始一整套完整代码，系**京墨**佬倾情提供，感谢他的付出与支持`←注1`
+- [7e5bb2a](https://github.com/sunyink/MFABD2/commit/7e5bb2abed984f6fd3cc254605f00e3b924cd982)跑商功能初始一整套完整代码，系**京墨**佬倾情提供，感谢他的付出与支持`←注1`
+- [adb06bb](https://github.com/sunyink/MFABD2/commit/adb06bbb50f4be4150ca5b64119629af688ac8f9)接管钓鱼初始一整套完整代码系 [@XiaoXKKK](https://github.com/XiaoXKKK) 佬倾情提供，感谢他的付出与支持`←注2`
 ### 规范
 > 如果要参与开发，可以参考文档。必须先本地测试通过再合并，请使用非快速合并-no-ff参数。
 
@@ -167,7 +171,7 @@
 
 
 ## 鸣谢
+本项目由 **[MaaFramework](https://github.com/MaaXYZ/MaaFramework)** 强力驱动！
 
 本项目继承 **[JZPPP/MaaBD2](https://github.com/JZPPP/MaaBD2)** 成果，感谢植树！
-本项目由 **[MaaFramework](https://github.com/MaaXYZ/MaaFramework)** 强力驱动！
 

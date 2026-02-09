@@ -1,0 +1,83 @@
+{
+    "SellFish_Start": {
+        "recognition": "DirectHit",
+        "action": "Click",
+        "target": [
+            827,
+            28,
+            35,
+            38
+        ],
+        "post_delay": 2000,
+        "next": [
+            "SellFish_Step2"
+        ]
+    },
+    "SellFish_Step2": {
+        "recognition": "DirectHit",
+        "action": "Click",
+        "target": [
+            981,
+            638,
+            193,
+            48
+        ],
+        "post_delay": 2000,
+        "next": [
+            "SellFish_Step3"
+        ]
+    },
+    "SellFish_Step3": {
+        "recognition": "DirectHit",
+        "action": "Click",
+        "target": [
+            1004,
+            648,
+            43,
+            25
+        ],
+        "post_delay": 2000,
+        "next": [
+            "SellFish_Step4"
+        ]
+    },
+    "SellFish_Step4": {
+        "recognition": "DirectHit",
+        "action": "Click",
+        "target": [
+            1133,
+            636,
+            48,
+            49
+        ],
+        "post_delay": 2000,
+        "next": [
+            "SellFish_Step5"
+        ]
+    },
+    "SellFish_Step5": {
+        "recognition": "DirectHit",
+        "action": "Click",
+        "target": [
+            662,
+            423,
+            153,
+            38
+        ],
+        "post_delay": 2000,
+        "next": [
+            "SellFish_Step6"
+        ]
+    },
+    "SellFish_Step6": {
+        "recognition": "DirectHit",
+        "action": "Click",
+        "target": [
+            121,
+            24,
+            30,
+            29
+        ],
+        "post_delay": 2000
+    }
+}

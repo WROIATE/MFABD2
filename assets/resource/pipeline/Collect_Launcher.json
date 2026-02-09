@@ -1,0 +1,2753 @@
+{
+    "Collect_StartGame_HomePage": {
+        "next": [
+            "[JumpBack]Collect_PerPetTask",
+            "Collect_Sandplay",
+            "[JumpBack]Global_ToSandBox"
+        ]
+    },
+    "Collect_PerPetTask": {
+        "recognition": "TemplateMatch",
+        "action": "Click",
+        "post_delay": 5000,
+        "focus": "CM.宠物派遣(调试中...错误请回报)",
+        "roi": [
+            234,
+            217,
+            714,
+            412
+        ],
+        "template": [
+            "tanhaoGE.png"
+        ],
+        "threshold": 0.85,
+        "green_mask": true,
+        "target_offset": [
+            -3,
+            -4,
+            6,
+            6
+        ],
+        "doc": "宠物派遣",
+        "max_hit": 1
+    },
+    "Collect_Sandplay": {
+        "recognition": "TemplateMatch",
+        "roi": [
+            1122,
+            646,
+            40,
+            38
+        ],
+        "template": [
+            "pin.png"
+        ],
+        "doc": "拉起成功,进入箱庭",
+        "next": [
+            "Collect_QuickCart_Menu",
+            "[JumpBack]Global_QuickCart_MenuReset"
+        ]
+    },
+    "Collect_QuickCart_Menu": {
+        "recognition": "OCR",
+        "focus": "CM.L.调度器",
+        "roi": [
+            32,
+            506,
+            306,
+            125
+        ],
+        "expected": [
+            "最近"
+        ],
+        "doc": "快速卡带已调出,等待后续",
+        "next": [
+            "[JumpBack]Collect_FeatureSwitch_StoryPack",
+            "[JumpBack]Collect_FeatureSwitch_CharacterPack",
+            "[JumpBack]Collect_FeatureSwitch_EvenPack"
+        ]
+    },
+    "Collect_FeatureSwitch_StoryPack": {
+        "next": [
+            "Collect_QuickCart_SelectType_StoryPack"
+        ],
+        "enabled": true,
+        "max_hit": 1
+    },
+    "Collect_FeatureSwitch_CharacterPack": {
+        "next": [
+            "Collect_QuickCart_SelectType_CharacterPack"
+        ],
+        "enabled": true,
+        "max_hit": 1
+    },
+    "Collect_FeatureSwitch_EvenPack": {
+        "next": [
+            "Collect_QuickCart_SelectType_EventPack"
+        ],
+        "enabled": true,
+        "max_hit": 1
+    },
+    "Collect_QuickCart_SelectType_StoryPack": {
+        "recognition": "OCR",
+        "focus": "CM.L.剧情游戏卡带集",
+        "roi": [
+            185,
+            530,
+            173,
+            51
+        ],
+        "expected": [
+            "剧情游戏卡"
+        ],
+        "action": "Click",
+        "post_delay": 500,
+        "next": [
+            "Collect_QuickCart_StoryPack_OcrCheck",
+            "Collect_QuickCart_SelectType_StoryPack"
+        ]
+    },
+    "Collect_QuickCart_SelectType_CharacterPack": {
+        "recognition": "OCR",
+        "focus": "CM.L.角色游戏卡带集",
+        "roi": [
+            36,
+            527,
+            1104,
+            63
+        ],
+        "expected": [
+            "角色游戏卡"
+        ],
+        "action": "Click",
+        "post_delay": 500,
+        "next": [
+            "Collect_QuickCart_CharacterPack_OcrCheck",
+            "Collect_QuickCart_SelectType_CharacterPack"
+        ]
+    },
+    "Collect_QuickCart_SelectType_EventPack": {
+        "recognition": "OCR",
+        "focus": "CM.L.活动游戏卡带集",
+        "roi": [
+            36,
+            527,
+            1104,
+            63
+        ],
+        "expected": [
+            "活动游戏卡"
+        ],
+        "action": "Click",
+        "post_delay": 500,
+        "next": [
+            "Collect_QuickCart_EventPack_OcrCheck",
+            "Collect_QuickCart_SelectType_EventPack"
+        ]
+    },
+    "Collect_QuickCart_StoryPack_OcrCheck": {
+        "recognition": "ColorMatch",
+        "next": [
+            "Collect_FirstBootPack"
+        ],
+        "focus": "CM.L.剧情-卡带调取完毕",
+        "roi": "Collect_QuickCart_SelectType_StoryPack",
+        "count": 200,
+        "lower": [
+            203,
+            203,
+            202
+        ],
+        "upper": [
+            255,
+            255,
+            255
+        ],
+        "doc": "当前节点链层数标记：2。初次调取卡带菜单完毕，开始初次点击卡带.先复位再to1,to1没判定的!不可直接IsPresent,防止用户行为干扰"
+    },
+    "Collect_QuickCart_CharacterPack_OcrCheck": {
+        "recognition": "ColorMatch",
+        "next": [
+            "Collect_FirstBootPack"
+        ],
+        "roi": "Collect_QuickCart_SelectType_CharacterPack",
+        "upper": [
+            255,
+            255,
+            255
+        ],
+        "lower": [
+            167,
+            167,
+            165
+        ],
+        "count": 300,
+        "focus": "CM.L.角色-卡带调取完毕"
+    },
+    "Collect_QuickCart_EventPack_OcrCheck": {
+        "recognition": "ColorMatch",
+        "next": [
+            "Collect_FirstBootPack"
+        ],
+        "roi": "Collect_QuickCart_SelectType_EventPack",
+        "upper": [
+            255,
+            255,
+            255
+        ],
+        "lower": [
+            167,
+            167,
+            165
+        ],
+        "count": 500,
+        "focus": "CM.L.活动-卡带调取完毕"
+    },
+    "Collect_FirstBootPack": {
+        "next": [
+            "Collect_FirstBootPack_ProbeIsPresent",
+            "[JumpBack]Collect_LocatePackFrame_Loc1_ResetLoc",
+            "Collect_FirstBootPack_To1"
+        ]
+    },
+    "Collect_FirstBootPack_To1": {
+        "action": "Click",
+        "target": [
+            110,
+            626,
+            15,
+            14
+        ],
+        "post_delay": 5000,
+        "focus": "CM.L.卡带类型初次启动,进入1#位置",
+        "next": [
+            "[JumpBack]Global_WaitingForLoading",
+            "[JumpBack]Global_QuickCart_MenuReset",
+            "Collect_LocatePackFrame_Loc1"
+        ]
+    },
+    "Collect_FirstBootPack_ProbeIsPresent": {
+        "recognition": "ColorMatch",
+        "roi": [
+            0,
+            659,
+            201,
+            19
+        ],
+        "method": 40,
+        "lower": [
+            22,
+            67,
+            177
+        ],
+        "upper": [
+            30,
+            241,
+            255
+        ],
+        "count": 2,
+        "focus": "CM.L.初次启动探针确认",
+        "next": [
+            "Collect_PackProbe_IsPresent"
+        ],
+        "timeout": 2000,
+        "on_error": [],
+        "doc": "卡带1位置存在指针"
+    },
+    "Collect_PackProbe_IsPresent": {
+        "focus": "CM.L.当前卡带位置探针存在",
+        "recognition": "OCR",
+        "roi": [
+            32,
+            506,
+            306,
+            125
+        ],
+        "expected": [
+            "最近"
+        ],
+        "next": [
+            "[JumpBack]Collect_LocatePackFrame_Loc1_ResetLoc",
+            "Collect_PackProbe_Loc1",
+            "Collect_PackProbe_Loc2",
+            "Collect_PackProbe_Loc3",
+            "Collect_PackProbe_Loc4",
+            "Collect_PackProbe_Loc5",
+            "Collect_PackProbe_Loc6",
+            "Collect_PackProbe_Loc7",
+            "Collect_PackProbe_Loc8",
+            "Collect_PackProbe_Loc9",
+            "Collect_PackProbe_NotPresent"
+        ],
+        "timeout": 2000
+    },
+    "Collect_PackProbe_Loc1": {
+        "recognition": "ColorMatch",
+        "roi": [
+            0,
+            659,
+            197,
+            19
+        ],
+        "method": 40,
+        "lower": [
+            22,
+            67,
+            177
+        ],
+        "upper": [
+            30,
+            241,
+            255
+        ],
+        "count": 2,
+        "next": [
+            "Collect_LocatePackFrame_Loc2"
+        ],
+        "timeout": 2000
+    },
+    "Collect_PackProbe_Loc2": {
+        "recognition": "ColorMatch",
+        "roi": [
+            119,
+            659,
+            230,
+            19
+        ],
+        "method": 40,
+        "lower": [
+            22,
+            67,
+            177
+        ],
+        "upper": [
+            30,
+            241,
+            255
+        ],
+        "count": 2,
+        "next": [
+            "Collect_LocatePackFrame_Loc3"
+        ],
+        "timeout": 2000
+    },
+    "Collect_PackProbe_Loc3": {
+        "recognition": "ColorMatch",
+        "roi": [
+            262,
+            659,
+            232,
+            19
+        ],
+        "method": 40,
+        "lower": [
+            22,
+            67,
+            177
+        ],
+        "upper": [
+            30,
+            241,
+            255
+        ],
+        "count": 2,
+        "next": [
+            "Collect_LocatePackFrame_Loc4"
+        ],
+        "timeout": 2000
+    },
+    "Collect_PackProbe_Loc4": {
+        "recognition": "ColorMatch",
+        "roi": [
+            406,
+            659,
+            233,
+            19
+        ],
+        "method": 40,
+        "lower": [
+            22,
+            67,
+            177
+        ],
+        "upper": [
+            30,
+            241,
+            255
+        ],
+        "count": 2,
+        "next": [
+            "Collect_LocatePackFrame_Loc5"
+        ],
+        "timeout": 2000
+    },
+    "Collect_PackProbe_Loc5": {
+        "recognition": "ColorMatch",
+        "roi": [
+            552,
+            659,
+            228,
+            19
+        ],
+        "method": 40,
+        "lower": [
+            22,
+            67,
+            177
+        ],
+        "upper": [
+            30,
+            241,
+            255
+        ],
+        "count": 2,
+        "next": [
+            "Collect_LocatePackFrame_Loc6"
+        ],
+        "timeout": 2000
+    },
+    "Collect_PackProbe_Loc6": {
+        "recognition": "ColorMatch",
+        "roi": [
+            697,
+            659,
+            230,
+            19
+        ],
+        "method": 40,
+        "lower": [
+            22,
+            67,
+            177
+        ],
+        "upper": [
+            30,
+            241,
+            255
+        ],
+        "count": 2,
+        "next": [
+            "Collect_LocatePackFrame_Loc7"
+        ],
+        "timeout": 2000
+    },
+    "Collect_PackProbe_Loc7": {
+        "recognition": "ColorMatch",
+        "roi": [
+            841,
+            659,
+            229,
+            19
+        ],
+        "method": 40,
+        "lower": [
+            22,
+            67,
+            177
+        ],
+        "upper": [
+            30,
+            241,
+            255
+        ],
+        "count": 2,
+        "next": [
+            "Collect_LocatePackFrame_Loc8"
+        ],
+        "timeout": 2000
+    },
+    "Collect_PackProbe_Loc8": {
+        "recognition": "ColorMatch",
+        "roi": [
+            985,
+            659,
+            228,
+            19
+        ],
+        "method": 40,
+        "lower": [
+            22,
+            67,
+            177
+        ],
+        "upper": [
+            30,
+            241,
+            255
+        ],
+        "count": 2,
+        "next": [
+            "Collect_LocatePackFrame_Loc9"
+        ],
+        "timeout": 2000
+    },
+    "Collect_PackProbe_Loc9": {
+        "recognition": "ColorMatch",
+        "roi": [
+            1136,
+            659,
+            143,
+            19
+        ],
+        "method": 40,
+        "lower": [
+            22,
+            67,
+            177
+        ],
+        "upper": [
+            30,
+            241,
+            255
+        ],
+        "count": 2,
+        "next": [
+            "Collect_LocatePackFrame_Smart_Swip"
+        ],
+        "timeout": 2000
+    },
+    "Collect_PackProbe_NotPresent": {
+        "recognition": "ColorMatch",
+        "roi": [
+            0,
+            659,
+            1280,
+            19
+        ],
+        "method": 40,
+        "lower": [
+            22,
+            67,
+            177
+        ],
+        "upper": [
+            30,
+            241,
+            255
+        ],
+        "count": 2,
+        "inverse": true,
+        "focus": "<span style=\"color:GoldenRod;\">CM.L.位置探针不存在</span>",
+        "next": [
+            "Collect_LocatePackFrame_Loc1",
+            "[JumpBack]Collect_LocatePackFrame_Loc1_ResetLoc"
+        ]
+    },
+    "探针结束": {},
+    "Collect_LocatePackFrame_Loc1": {
+        "recognition": "TemplateMatch",
+        "template": [
+            "UI_StoryPack.png",
+            "UI_CharacterPack.png",
+            "UI_EventPack.png"
+        ],
+        "green_mask": true,
+        "roi": [
+            0,
+            580,
+            197,
+            114
+        ],
+        "action": "Custom",
+        "custom_action": "PatchByRegex",
+        "custom_action_param": {
+            "pattern": [
+                "^Collect_Pack_(Story|Character|Event)_\\d+$"
+            ],
+            "target_path": [
+                "all_of",
+                0,
+                "roi"
+            ],
+            "value": "$box",
+            "reset_tags": [
+                "PackLocation_ToggleSwitch"
+            ]
+        },
+        "next": [
+            "[JumpBack]Collect_LocatePackFrame_Smart_Swip",
+            "[JumpBack]Collect_LocatePackFrame_Loc1_ResetLoc",
+            "[JumpBack]Collect_PackLocation_PassFieldsAndHub",
+            "Collect_LocatePackFrame_Loc2"
+        ],
+        "timeout": 2000,
+        "focus": "CM.L.快速卡带盒定位-位置1",
+        "doc": "正常范围:[41,580,163,114]/缩小范围:[47,580,145,114],让滑动复位更精确",
+        "on_error": [
+            "Collect_LocatePackFrame_Loc3",
+            "Collect_LocatePackFrame_Loc4",
+            "Collect_LocatePackFrame_Loc5",
+            "Collect_LocatePackFrame_Loc6",
+            "Collect_LocatePackFrame_Loc7",
+            "Collect_LocatePackFrame_Loc8",
+            "Collect_LocatePackFrame_Loc9"
+        ]
+    },
+    "Collect_LocatePackFrame_Loc2": {
+        "recognition": "TemplateMatch",
+        "template": [
+            "UI_StoryPack.png",
+            "UI_CharacterPack.png",
+            "UI_EventPack.png"
+        ],
+        "green_mask": true,
+        "roi": [
+            119,
+            580,
+            230,
+            114
+        ],
+        "action": "Custom",
+        "custom_action": "PatchByRegex",
+        "custom_action_param": {
+            "pattern": [
+                "^Collect_Pack_(Story|Character|Event)_\\d+$"
+            ],
+            "target_path": [
+                "all_of",
+                0,
+                "roi"
+            ],
+            "value": "$box",
+            "reset_tags": [
+                "PackLocation_ToggleSwitch"
+            ]
+        },
+        "next": [
+            "[JumpBack]Collect_LocatePackFrame_Smart_Swip",
+            "[JumpBack]Collect_LocatePackFrame_Loc1_ResetLoc",
+            "[JumpBack]Collect_PackLocation_PassFieldsAndHub",
+            "Collect_LocatePackFrame_Loc3"
+        ],
+        "timeout": 2000,
+        "on_error": [
+            "Collect_LocatePackFrame_Loc4",
+            "Collect_LocatePackFrame_Loc5",
+            "Collect_LocatePackFrame_Loc6",
+            "Collect_LocatePackFrame_Loc7",
+            "Collect_LocatePackFrame_Loc8",
+            "Collect_LocatePackFrame_Loc9"
+        ],
+        "focus": "CM.L.快速卡带盒定位-位置2"
+    },
+    "Collect_LocatePackFrame_Loc3": {
+        "recognition": "TemplateMatch",
+        "template": [
+            "UI_StoryPack.png",
+            "UI_CharacterPack.png",
+            "UI_EventPack.png"
+        ],
+        "green_mask": true,
+        "roi": [
+            262,
+            580,
+            232,
+            114
+        ],
+        "action": "Custom",
+        "custom_action": "PatchByRegex",
+        "custom_action_param": {
+            "pattern": [
+                "^Collect_Pack_(Story|Character|Event)_\\d+$"
+            ],
+            "target_path": [
+                "all_of",
+                0,
+                "roi"
+            ],
+            "value": "$box",
+            "reset_tags": [
+                "PackLocation_ToggleSwitch"
+            ]
+        },
+        "next": [
+            "[JumpBack]Collect_LocatePackFrame_Smart_Swip",
+            "[JumpBack]Collect_LocatePackFrame_Loc1_ResetLoc",
+            "[JumpBack]Collect_PackLocation_PassFieldsAndHub",
+            "Collect_LocatePackFrame_Loc4"
+        ],
+        "timeout": 2000,
+        "on_error": [
+            "Collect_LocatePackFrame_Loc5",
+            "Collect_LocatePackFrame_Loc6",
+            "Collect_LocatePackFrame_Loc7",
+            "Collect_LocatePackFrame_Loc8",
+            "Collect_LocatePackFrame_Loc9"
+        ],
+        "focus": "CM.L.快速卡带盒定位-位置3"
+    },
+    "Collect_LocatePackFrame_Loc4": {
+        "recognition": "TemplateMatch",
+        "template": [
+            "UI_StoryPack.png",
+            "UI_CharacterPack.png",
+            "UI_EventPack.png"
+        ],
+        "green_mask": true,
+        "roi": [
+            406,
+            580,
+            233,
+            114
+        ],
+        "action": "Custom",
+        "custom_action": "PatchByRegex",
+        "custom_action_param": {
+            "pattern": [
+                "^Collect_Pack_(Story|Character|Event)_\\d+$"
+            ],
+            "target_path": [
+                "all_of",
+                0,
+                "roi"
+            ],
+            "value": "$box",
+            "reset_tags": [
+                "PackLocation_ToggleSwitch"
+            ]
+        },
+        "next": [
+            "[JumpBack]Collect_LocatePackFrame_Smart_Swip",
+            "[JumpBack]Collect_LocatePackFrame_Loc1_ResetLoc",
+            "[JumpBack]Collect_PackLocation_PassFieldsAndHub",
+            "Collect_LocatePackFrame_Loc5"
+        ],
+        "timeout": 2000,
+        "on_error": [
+            "Collect_LocatePackFrame_Loc6",
+            "Collect_LocatePackFrame_Loc7",
+            "Collect_LocatePackFrame_Loc8",
+            "Collect_LocatePackFrame_Loc9"
+        ],
+        "focus": "CM.L.快速卡带盒定位-位置4"
+    },
+    "Collect_LocatePackFrame_Loc5": {
+        "recognition": "TemplateMatch",
+        "template": [
+            "UI_StoryPack.png",
+            "UI_CharacterPack.png",
+            "UI_EventPack.png"
+        ],
+        "green_mask": true,
+        "roi": [
+            552,
+            580,
+            228,
+            114
+        ],
+        "action": "Custom",
+        "custom_action": "PatchByRegex",
+        "custom_action_param": {
+            "pattern": [
+                "^Collect_Pack_(Story|Character|Event)_\\d+$"
+            ],
+            "target_path": [
+                "all_of",
+                0,
+                "roi"
+            ],
+            "value": "$box",
+            "reset_tags": [
+                "PackLocation_ToggleSwitch"
+            ]
+        },
+        "next": [
+            "[JumpBack]Collect_LocatePackFrame_Smart_Swip",
+            "[JumpBack]Collect_LocatePackFrame_Loc1_ResetLoc",
+            "[JumpBack]Collect_PackLocation_PassFieldsAndHub",
+            "Collect_LocatePackFrame_Loc6"
+        ],
+        "timeout": 2000,
+        "on_error": [
+            "Collect_LocatePackFrame_Loc7",
+            "Collect_LocatePackFrame_Loc8",
+            "Collect_LocatePackFrame_Loc9"
+        ],
+        "focus": "CM.L.快速卡带盒定位-位置5"
+    },
+    "Collect_LocatePackFrame_Loc6": {
+        "recognition": "TemplateMatch",
+        "template": [
+            "UI_StoryPack.png",
+            "UI_CharacterPack.png",
+            "UI_EventPack.png"
+        ],
+        "green_mask": true,
+        "roi": [
+            697,
+            580,
+            230,
+            114
+        ],
+        "action": "Custom",
+        "custom_action": "PatchByRegex",
+        "custom_action_param": {
+            "pattern": [
+                "^Collect_Pack_(Story|Character|Event)_\\d+$"
+            ],
+            "target_path": [
+                "all_of",
+                0,
+                "roi"
+            ],
+            "value": "$box",
+            "reset_tags": [
+                "PackLocation_ToggleSwitch"
+            ]
+        },
+        "next": [
+            "[JumpBack]Collect_LocatePackFrame_Smart_Swip",
+            "[JumpBack]Collect_LocatePackFrame_Loc1_ResetLoc",
+            "[JumpBack]Collect_PackLocation_PassFieldsAndHub",
+            "Collect_LocatePackFrame_Loc7"
+        ],
+        "timeout": 2000,
+        "on_error": [
+            "Collect_LocatePackFrame_Loc8",
+            "Collect_LocatePackFrame_Loc9"
+        ],
+        "focus": "CM.L.快速卡带盒定位-位置6"
+    },
+    "Collect_LocatePackFrame_Loc7": {
+        "recognition": "TemplateMatch",
+        "template": [
+            "UI_StoryPack.png",
+            "UI_CharacterPack.png",
+            "UI_EventPack.png"
+        ],
+        "green_mask": true,
+        "roi": [
+            841,
+            580,
+            229,
+            114
+        ],
+        "action": "Custom",
+        "custom_action": "PatchByRegex",
+        "custom_action_param": {
+            "pattern": [
+                "^Collect_Pack_(Story|Character|Event)_\\d+$"
+            ],
+            "target_path": [
+                "all_of",
+                0,
+                "roi"
+            ],
+            "value": "$box",
+            "reset_tags": [
+                "PackLocation_ToggleSwitch"
+            ]
+        },
+        "next": [
+            "[JumpBack]Collect_LocatePackFrame_Smart_Swip",
+            "[JumpBack]Collect_LocatePackFrame_Loc1_ResetLoc",
+            "[JumpBack]Collect_PackLocation_PassFieldsAndHub",
+            "Collect_LocatePackFrame_Loc8"
+        ],
+        "timeout": 2000,
+        "on_error": [
+            "Collect_LocatePackFrame_Loc9"
+        ],
+        "focus": "CM.L.快速卡带盒定位-位置7"
+    },
+    "Collect_LocatePackFrame_Loc8": {
+        "recognition": "TemplateMatch",
+        "template": [
+            "UI_StoryPack.png",
+            "UI_CharacterPack.png",
+            "UI_EventPack.png"
+        ],
+        "green_mask": true,
+        "roi": [
+            985,
+            580,
+            228,
+            114
+        ],
+        "action": "Custom",
+        "custom_action": "PatchByRegex",
+        "custom_action_param": {
+            "pattern": [
+                "^Collect_Pack_(Story|Character|Event)_\\d+$"
+            ],
+            "target_path": [
+                "all_of",
+                0,
+                "roi"
+            ],
+            "value": "$box",
+            "reset_tags": [
+                "PackLocation_ToggleSwitch"
+            ]
+        },
+        "next": [
+            "[JumpBack]Collect_LocatePackFrame_Smart_Swip",
+            "[JumpBack]Collect_LocatePackFrame_Loc1_ResetLoc",
+            "[JumpBack]Collect_PackLocation_PassFieldsAndHub",
+            "Collect_LocatePackFrame_Loc9",
+            "Collect_Loc_OutToSwip_Hub_Ingress"
+        ],
+        "timeout": 2000,
+        "focus": "CM.L.快速卡带盒定位-位置8"
+    },
+    "Collect_LocatePackFrame_Loc9": {
+        "recognition": "TemplateMatch",
+        "template": [
+            "UI_StoryPack.png",
+            "UI_CharacterPack.png",
+            "UI_EventPack.png"
+        ],
+        "green_mask": true,
+        "roi": [
+            1136,
+            580,
+            143,
+            114
+        ],
+        "action": "Custom",
+        "custom_action": "PatchByRegex",
+        "custom_action_param": {
+            "pattern": [
+                "^Collect_Pack_(Story|Character|Event)_\\d+$"
+            ],
+            "target_path": [
+                "all_of",
+                0,
+                "roi"
+            ],
+            "value": "$box",
+            "reset_tags": [
+                "PackLocation_ToggleSwitch"
+            ]
+        },
+        "next": [
+            "[JumpBack]Collect_LocatePackFrame_Smart_Swip",
+            "[JumpBack]Collect_LocatePackFrame_Loc1_ResetLoc",
+            "[JumpBack]Collect_PackLocation_PassFieldsAndHub",
+            "Collect_Loc_OutToSwip_Hub_Ingress"
+        ],
+        "focus": "CM.L.快速卡带盒定位-位置9"
+    },
+    "Collect_LocatePackFrame_Loc1_ResetLoc": {
+        "recognition": "TemplateMatch",
+        "roi": [
+            0,
+            581,
+            26,
+            95
+        ],
+        "template": "PackReset.png",
+        "green_mask": true,
+        "action": "Swipe",
+        "begin": [
+            66,
+            637,
+            1,
+            1
+        ],
+        "end": [
+            80,
+            637,
+            1,
+            1
+        ],
+        "end_hold": 500,
+        "post_wait_freezes": 1000,
+        "doc": "稍微回移复位第一张卡带,向右。注意留够延迟等待动画消除。",
+        "max_hit": 40
+    },
+    "Collect_Loc_OutToSwip_Hub_Ingress": {
+        "next": [
+            "Collect_Loc_OutToSwip_Hub_Enter_Pin",
+            "[JumpBack]Global_BackPageHub_Once"
+        ]
+    },
+    "Collect_Loc_OutToSwip_Hub_Enter_Pin": {
+        "recognition": "TemplateMatch",
+        "next": [
+            "Collect_Loc_OutToSwip_Hub_Enter_QuickCart_Menu",
+            "[JumpBack]Global_QuickCart_MenuReset"
+        ],
+        "roi": [
+            1122,
+            646,
+            40,
+            38
+        ],
+        "template": [
+            "pin.png"
+        ],
+        "doc": "[通用复位]复位到主界面模块,结束,中继调用"
+    },
+    "Collect_Loc_OutToSwip_Hub_Enter_QuickCart_Menu": {
+        "recognition": "OCR",
+        "focus": "CM.L.调度器",
+        "roi": [
+            32,
+            506,
+            306,
+            125
+        ],
+        "expected": [
+            "最近"
+        ],
+        "doc": "快速卡带已调出,等待后续",
+        "next": [
+            "Collect_Loc_OutToSwip_Hub_Egress"
+        ]
+    },
+    "Collect_Loc_OutToSwip_Hub_Egress": {
+        "doc": "【next修改无效】卡带位识别到页翻页模块接口",
+        "action": "Custom",
+        "custom_action": "ResetTag",
+        "custom_action_param": {
+            "tags": [
+                "LocPage_SmartSwip"
+            ]
+        },
+        "next": [
+            "Collect_Loc_Swip_1Page"
+        ]
+    },
+    "Collect_Loc_Swip_1Page": {
+        "action": "Custom",
+        "custom_action": "PatchBatch",
+        "custom_action_param": {
+            "patches": {
+                "Collect_LocatePackFrame_Smart_Swip": {
+                    "custom_recognition_param": {
+                        "tag": "LocPage_SmartSwip",
+                        "max": 1
+                    },
+                    "focus": "CL.M.智能翻页,到第2页."
+                },
+                "Collect_Loc_OutToSwip_Hub_Egress": {
+                    "next": [
+                        "Collect_Loc_Swip_2Page"
+                    ]
+                }
+            },
+            "origins": {
+                "Collect_LocatePackFrame_Smart_Swip": {
+                    "custom_recognition_param": {
+                        "tag": "LocPage_SmartSwip",
+                        "max": 0
+                    }
+                },
+                "Collect_Loc_OutToSwip_Hub_Egress": {
+                    "next": [
+                        "Collect_Loc_Swip_1Page"
+                    ]
+                }
+            }
+        },
+        "next": [
+            "Collect_LocatePackFrame_Smart_Swip"
+        ]
+    },
+    "Collect_Loc_Swip_2Page": {
+        "action": "Custom",
+        "custom_action": "PatchBatch",
+        "custom_action_param": {
+            "patches": {
+                "Collect_LocatePackFrame_Smart_Swip": {
+                    "custom_recognition_param": {
+                        "tag": "LocPage_SmartSwip",
+                        "max": 2
+                    },
+                    "focus": "CL.M.智能翻页,到第3页."
+                },
+                "Collect_Loc_OutToSwip_Hub_Egress": {
+                    "next": [
+                        "Collect_Loc_Swip_3Page"
+                    ]
+                }
+            },
+            "origins": {
+                "Collect_LocatePackFrame_Smart_Swip": {
+                    "custom_recognition_param": {
+                        "tag": "LocPage_SmartSwip",
+                        "max": 0
+                    }
+                },
+                "Collect_Loc_OutToSwip_Hub_Egress": {
+                    "next": [
+                        "Collect_Loc_Swip_1Page"
+                    ]
+                }
+            }
+        },
+        "next": [
+            "Collect_LocatePackFrame_Smart_Swip"
+        ]
+    },
+    "Collect_Loc_Swip_3Page": {
+        "action": "Custom",
+        "custom_action": "PatchBatch",
+        "custom_action_param": {
+            "patches": {
+                "Collect_LocatePackFrame_Smart_Swip": {
+                    "custom_recognition_param": {
+                        "tag": "LocPage_SmartSwip",
+                        "max": 3
+                    },
+                    "focus": "CL.M.智能翻页,到第4页."
+                },
+                "Collect_Loc_OutToSwip_Hub_Egress": {
+                    "next": [
+                        "Collect_Loc_Swip_4Page"
+                    ]
+                }
+            },
+            "origins": {
+                "Collect_LocatePackFrame_Smart_Swip": {
+                    "custom_recognition_param": {
+                        "tag": "LocPage_SmartSwip",
+                        "max": 0
+                    }
+                },
+                "Collect_Loc_OutToSwip_Hub_Egress": {
+                    "next": [
+                        "Collect_Loc_Swip_1Page"
+                    ]
+                }
+            }
+        },
+        "next": [
+            "Collect_LocatePackFrame_Smart_Swip"
+        ]
+    },
+    "Collect_Loc_Swip_4Page": {
+        "action": "Custom",
+        "custom_action": "PatchBatch",
+        "custom_action_param": {
+            "patches": {
+                "Collect_LocatePackFrame_Smart_Swip": {
+                    "custom_recognition_param": {
+                        "tag": "LocPage_SmartSwip",
+                        "max": 4
+                    },
+                    "focus": "CL.M.智能翻页,到第5页."
+                },
+                "Collect_Loc_OutToSwip_Hub_Egress": {
+                    "next": [
+                        "Collect_Loc_Swip_5Page"
+                    ]
+                }
+            },
+            "origins": {
+                "Collect_LocatePackFrame_Smart_Swip": {
+                    "custom_recognition_param": {
+                        "tag": "LocPage_SmartSwip",
+                        "max": 0
+                    }
+                },
+                "Collect_Loc_OutToSwip_Hub_Egress": {
+                    "next": [
+                        "Collect_Loc_Swip_1Page"
+                    ]
+                }
+            }
+        },
+        "next": [
+            "Collect_LocatePackFrame_Smart_Swip"
+        ]
+    },
+    "Collect_Loc_Swip_5Page": {
+        "action": "Custom",
+        "custom_action": "PatchBatch",
+        "custom_action_param": {
+            "patches": {
+                "Collect_LocatePackFrame_Smart_Swip": {
+                    "custom_recognition_param": {
+                        "tag": "LocPage_SmartSwip",
+                        "max": 5
+                    },
+                    "focus": "CL.M.智能翻页,到第6页."
+                }
+            },
+            "origins": {
+                "Collect_LocatePackFrame_Smart_Swip": {
+                    "custom_recognition_param": {
+                        "max": 0
+                    }
+                },
+                "Collect_Loc_OutToSwip_Hub_Egress": {
+                    "next": [
+                        "Collect_Loc_Swip_1Page"
+                    ]
+                }
+            }
+        },
+        "next": [
+            "Collect_LocatePackFrame_Smart_Swip"
+        ],
+        "doc": "只做到兼容6页,目前已200%溢出非常足够."
+    },
+    "Collect_LocatePackFrame_Smart_Swip": {
+        "recognition": "Custom",
+        "custom_recognition": "CheckTag",
+        "custom_recognition_param": {
+            "tag": "LocPage_SmartSwip",
+            "max": 0
+        },
+        "action": "Custom",
+        "custom_action": "SmartSwipe",
+        "custom_action_param": {
+            "proxy_node": "Custom_Proxy_Swipe",
+            "action": "Swipe",
+            "begin": [
+                1234,
+                637,
+                1,
+                1
+            ],
+            "end": [
+                106,
+                637,
+                1,
+                1
+            ],
+            "detect_roi": [
+                1064,
+                601,
+                213,
+                52
+            ],
+            "duration": 500,
+            "end_hold": 800,
+            "settle_delay": 1000,
+            "retry_times": 2,
+            "threshold": 3.0
+        },
+        "next": [
+            "Collect_LocatePackFrame_Smart_Swip_UpdateTag"
+        ]
+    },
+    "Collect_LocatePackFrame_Smart_Swip_UpdateTag": {
+        "action": "Custom",
+        "custom_action": "UpdateTag",
+        "custom_action_param": {
+            "tag": "LocPage_SmartSwip",
+            "value": 1
+        },
+        "next": [
+            "Collect_LocatePackFrame_Smart_Swip",
+            "Collect_Loc_SwipToIn_Hub"
+        ]
+    },
+    "Collect_Loc_SwipToIn_Hub": {
+        "doc": "卡带页翻页到位识别模块接口",
+        "next": [
+            "Collect_PackProbe_IsPresent"
+        ]
+    },
+    "Collect_PackLocation_PassFieldsAndHub": {
+        "recognition": "Custom",
+        "custom_recognition": "CheckTag",
+        "custom_recognition_param": {
+            "tag": "PackLocation_ToggleSwitch",
+            "max": 1
+        },
+        "action": "Custom",
+        "custom_action": "UpdateTag",
+        "custom_action_param": {
+            "tag": "PackLocation_ToggleSwitch",
+            "value": 1
+        },
+        "doc": "[路由节点]不可删除。计数器开关，防止同一节点多次进入，下一个节点的action阶段重置计数。",
+        "next": [
+            "Collect_Pack_Story_1",
+            "Collect_Pack_Story_2",
+            "Collect_Pack_Story_3",
+            "Collect_Pack_Story_4",
+            "Collect_Pack_Story_5",
+            "Collect_Pack_Story_6",
+            "Collect_Pack_Story_7",
+            "Collect_Pack_Story_8",
+            "Collect_Pack_Story_9",
+            "Collect_Pack_Story_10",
+            "Collect_Pack_Story_11",
+            "Collect_Pack_Story_12",
+            "Collect_Pack_Story_13",
+            "Collect_Pack_Story_14",
+            "Collect_Pack_Story_15",
+            "Collect_Pack_Story_16",
+            "Collect_Pack_Story_17",
+            "Collect_Pack_Story_18",
+            "Collect_Pack_Story_19",
+            "Collect_Pack_Character_1",
+            "Collect_Pack_Character_2",
+            "Collect_Pack_Character_3",
+            "Collect_Pack_Character_4",
+            "Collect_Pack_Character_5",
+            "Collect_Pack_Character_6",
+            "Collect_Pack_Character_7",
+            "Collect_Pack_Character_8",
+            "Collect_Pack_Event_1",
+            "Collect_Pack_Event_2",
+            "Collect_Pack_Event_3",
+            "Collect_Pack_Event_4"
+        ],
+        "timeout": 1,
+        "pre_delay": 0,
+        "post_delay": 0
+    },
+    "Collect_Pack_Story_1": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "recognition": "TemplateMatch",
+                "template": [
+                    "Cartridges/Q_sp1.png"
+                ],
+                "roi": "Collect_PackLocation_PassFieldsAndHub"
+            },
+            {
+                "recognition": "Custom",
+                "custom_recognition": "CheckCoolDown",
+                "custom_recognition_param": {
+                    "card_name": "Story_01_血骑士",
+                    "cycle_type": "g_weekly"
+                }
+            }
+        ],
+        "box_index": 0,
+        "action": "Custom",
+        "custom_action": "PatchAndClick",
+        "custom_action_param": {
+            "node": "Collect_PackEnd_Ck",
+            "patch": {
+                "action": "Custom",
+                "custom_action": "MarkComplete",
+                "custom_action_param": {
+                    "card_name": "Story_01_血骑士",
+                    "cycle_type": "g_weekly"
+                }
+            },
+            "target_offset": [
+                -5,
+                -3,
+                0,
+                0
+            ]
+        },
+        "timeout": 1,
+        "post_delay": 5000,
+        "next": [
+            "[JumpBack]Global_WaitingForLoading",
+            "Collect_OperationsMain_Sandplay",
+            "Collect_Pack_Story_1"
+        ]
+    },
+    "Collect_Pack_Story_2": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "recognition": "TemplateMatch",
+                "template": [
+                    "Cartridges/Q_sp2.png"
+                ],
+                "roi": "Collect_PackLocation_PassFieldsAndHub"
+            },
+            {
+                "recognition": "Custom",
+                "custom_recognition": "CheckCoolDown",
+                "custom_recognition_param": {
+                    "card_name": "Story_02_苍蓝魔女",
+                    "cycle_type": "g_weekly"
+                }
+            }
+        ],
+        "box_index": 0,
+        "action": "Custom",
+        "custom_action": "PatchAndClick",
+        "custom_action_param": {
+            "node": "Collect_PackEnd_Ck",
+            "patch": {
+                "action": "Custom",
+                "custom_action": "MarkComplete",
+                "custom_action_param": {
+                    "card_name": "Story_02_苍蓝魔女",
+                    "cycle_type": "g_weekly"
+                }
+            },
+            "target_offset": [
+                -5,
+                -3,
+                0,
+                0
+            ]
+        },
+        "timeout": 1,
+        "post_delay": 5000,
+        "next": [
+            "[JumpBack]Global_WaitingForLoading",
+            "Collect_OperationsMain_Sandplay",
+            "Collect_Pack_Story_2"
+        ]
+    },
+    "Collect_Pack_Story_3": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "recognition": "TemplateMatch",
+                "template": [
+                    "Cartridges/Q_sp3.png"
+                ],
+                "roi": "Collect_PackLocation_PassFieldsAndHub"
+            },
+            {
+                "recognition": "Custom",
+                "custom_recognition": "CheckCoolDown",
+                "custom_recognition_param": {
+                    "card_name": "Story_03_迷雾神射手",
+                    "cycle_type": "g_weekly"
+                }
+            }
+        ],
+        "box_index": 0,
+        "action": "Custom",
+        "custom_action": "PatchAndClick",
+        "custom_action_param": {
+            "node": "Collect_PackEnd_Ck",
+            "patch": {
+                "action": "Custom",
+                "custom_action": "MarkComplete",
+                "custom_action_param": {
+                    "card_name": "Story_03_迷雾神射手",
+                    "cycle_type": "g_weekly"
+                }
+            },
+            "target_offset": [
+                -5,
+                -3,
+                0,
+                0
+            ]
+        },
+        "timeout": 1,
+        "post_delay": 5000,
+        "next": [
+            "[JumpBack]Global_WaitingForLoading",
+            "Collect_OperationsMain_Sandplay",
+            "Collect_Pack_Story_3"
+        ]
+    },
+    "Collect_Pack_Story_4": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "recognition": "TemplateMatch",
+                "template": [
+                    "Cartridges/Q_sp4.png"
+                ],
+                "roi": "Collect_PackLocation_PassFieldsAndHub"
+            },
+            {
+                "recognition": "Custom",
+                "custom_recognition": "CheckCoolDown",
+                "custom_recognition_param": {
+                    "card_name": "Story_04_眼镜与猫",
+                    "cycle_type": "g_weekly"
+                }
+            }
+        ],
+        "box_index": 0,
+        "action": "Custom",
+        "custom_action": "PatchAndClick",
+        "custom_action_param": {
+            "node": "Collect_PackEnd_Ck",
+            "patch": {
+                "action": "Custom",
+                "custom_action": "MarkComplete",
+                "custom_action_param": {
+                    "card_name": "Story_04_眼镜与猫",
+                    "cycle_type": "g_weekly"
+                }
+            },
+            "target_offset": [
+                -5,
+                -3,
+                0,
+                0
+            ]
+        },
+        "timeout": 1,
+        "post_delay": 5000,
+        "next": [
+            "[JumpBack]Global_WaitingForLoading",
+            "Collect_OperationsMain_Sandplay",
+            "Collect_Pack_Story_4"
+        ]
+    },
+    "Collect_Pack_Story_5": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "recognition": "TemplateMatch",
+                "template": [
+                    "Cartridges/Q_sp5.png"
+                ],
+                "roi": "Collect_PackLocation_PassFieldsAndHub"
+            },
+            {
+                "recognition": "Custom",
+                "custom_recognition": "CheckCoolDown",
+                "custom_recognition_param": {
+                    "card_name": "Story_05_沙漠之花",
+                    "cycle_type": "g_weekly"
+                }
+            }
+        ],
+        "box_index": 0,
+        "action": "Custom",
+        "custom_action": "PatchAndClick",
+        "custom_action_param": {
+            "node": "Collect_PackEnd_Ck",
+            "patch": {
+                "action": "Custom",
+                "custom_action": "MarkComplete",
+                "custom_action_param": {
+                    "card_name": "Story_05_沙漠之花",
+                    "cycle_type": "g_weekly"
+                }
+            },
+            "target_offset": [
+                -5,
+                -3,
+                0,
+                0
+            ]
+        },
+        "timeout": 1,
+        "post_delay": 5000,
+        "next": [
+            "[JumpBack]Global_WaitingForLoading",
+            "Collect_OperationsMain_Sandplay",
+            "Collect_Pack_Story_5"
+        ]
+    },
+    "Collect_Pack_Story_6": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "recognition": "TemplateMatch",
+                "template": [
+                    "Cartridges/Q_sp6.png"
+                ],
+                "roi": "Collect_PackLocation_PassFieldsAndHub"
+            },
+            {
+                "recognition": "Custom",
+                "custom_recognition": "CheckCoolDown",
+                "custom_recognition_param": {
+                    "card_name": "Story_06_异教塔",
+                    "cycle_type": "g_weekly"
+                }
+            }
+        ],
+        "box_index": 0,
+        "action": "Custom",
+        "custom_action": "PatchAndClick",
+        "custom_action_param": {
+            "node": "Collect_PackEnd_Ck",
+            "patch": {
+                "action": "Custom",
+                "custom_action": "MarkComplete",
+                "custom_action_param": {
+                    "card_name": "Story_06_异教塔",
+                    "cycle_type": "g_weekly"
+                }
+            },
+            "target_offset": [
+                -5,
+                -3,
+                0,
+                0
+            ]
+        },
+        "timeout": 1,
+        "post_delay": 5000,
+        "next": [
+            "[JumpBack]Global_WaitingForLoading",
+            "Collect_OperationsMain_Sandplay",
+            "Collect_Pack_Story_6"
+        ]
+    },
+    "Collect_Pack_Story_7": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "recognition": "TemplateMatch",
+                "template": [
+                    "Cartridges/Q_sp7.png"
+                ],
+                "roi": "Collect_PackLocation_PassFieldsAndHub"
+            },
+            {
+                "recognition": "Custom",
+                "custom_recognition": "CheckCoolDown",
+                "custom_recognition_param": {
+                    "card_name": "Story_07_愤怒天使",
+                    "cycle_type": "g_weekly"
+                }
+            }
+        ],
+        "box_index": 0,
+        "action": "Custom",
+        "custom_action": "PatchAndClick",
+        "custom_action_param": {
+            "node": "Collect_PackEnd_Ck",
+            "patch": {
+                "action": "Custom",
+                "custom_action": "MarkComplete",
+                "custom_action_param": {
+                    "card_name": "Story_07_愤怒天使",
+                    "cycle_type": "g_weekly"
+                }
+            },
+            "target_offset": [
+                -5,
+                -3,
+                0,
+                0
+            ]
+        },
+        "timeout": 1,
+        "post_delay": 5000,
+        "next": [
+            "[JumpBack]Global_WaitingForLoading",
+            "Collect_OperationsMain_Sandplay",
+            "Collect_Pack_Story_7"
+        ]
+    },
+    "Collect_Pack_Story_8": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "recognition": "TemplateMatch",
+                "template": [
+                    "Cartridges/Q_sp8.png"
+                ],
+                "roi": "Collect_PackLocation_PassFieldsAndHub"
+            },
+            {
+                "recognition": "Custom",
+                "custom_recognition": "CheckCoolDown",
+                "custom_recognition_param": {
+                    "card_name": "Story_08_血之狂想曲",
+                    "cycle_type": "g_weekly"
+                }
+            }
+        ],
+        "box_index": 0,
+        "action": "Custom",
+        "custom_action": "PatchAndClick",
+        "custom_action_param": {
+            "node": "Collect_PackEnd_Ck",
+            "patch": {
+                "action": "Custom",
+                "custom_action": "MarkComplete",
+                "custom_action_param": {
+                    "card_name": "Story_08_血之狂想曲",
+                    "cycle_type": "g_weekly"
+                }
+            },
+            "target_offset": [
+                -5,
+                -3,
+                0,
+                0
+            ]
+        },
+        "timeout": 1,
+        "post_delay": 5000,
+        "next": [
+            "[JumpBack]Global_WaitingForLoading",
+            "Collect_OperationsMain_Sandplay",
+            "Collect_Pack_Story_8"
+        ]
+    },
+    "Collect_Pack_Story_9": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "recognition": "TemplateMatch",
+                "template": [
+                    "Cartridges/Q_sp9.png"
+                ],
+                "roi": "Collect_PackLocation_PassFieldsAndHub"
+            },
+            {
+                "recognition": "Custom",
+                "custom_recognition": "CheckCoolDown",
+                "custom_recognition_param": {
+                    "card_name": "Story_09_铁假面",
+                    "cycle_type": "g_weekly"
+                }
+            }
+        ],
+        "box_index": 0,
+        "action": "Custom",
+        "custom_action": "PatchAndClick",
+        "custom_action_param": {
+            "node": "Collect_PackEnd_Ck",
+            "patch": {
+                "action": "Custom",
+                "custom_action": "MarkComplete",
+                "custom_action_param": {
+                    "card_name": "Story_09_铁假面",
+                    "cycle_type": "g_weekly"
+                }
+            },
+            "target_offset": [
+                -5,
+                -3,
+                0,
+                0
+            ]
+        },
+        "timeout": 1,
+        "post_delay": 5000,
+        "next": [
+            "[JumpBack]Global_WaitingForLoading",
+            "Collect_OperationsMain_Sandplay",
+            "Collect_Pack_Story_9"
+        ]
+    },
+    "Collect_Pack_Story_10": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "recognition": "TemplateMatch",
+                "template": [
+                    "Cartridges/Q_sp10.png"
+                ],
+                "roi": "Collect_PackLocation_PassFieldsAndHub"
+            },
+            {
+                "recognition": "Custom",
+                "custom_recognition": "CheckCoolDown",
+                "custom_recognition_param": {
+                    "card_name": "Story_10_霍尔蒙克斯",
+                    "cycle_type": "g_weekly"
+                }
+            }
+        ],
+        "box_index": 0,
+        "action": "Custom",
+        "custom_action": "PatchAndClick",
+        "custom_action_param": {
+            "node": "Collect_PackEnd_Ck",
+            "patch": {
+                "action": "Custom",
+                "custom_action": "MarkComplete",
+                "custom_action_param": {
+                    "card_name": "Story_10_霍尔蒙克斯",
+                    "cycle_type": "g_weekly"
+                }
+            },
+            "target_offset": [
+                -5,
+                -3,
+                0,
+                0
+            ]
+        },
+        "timeout": 1,
+        "post_delay": 5000,
+        "next": [
+            "[JumpBack]Global_WaitingForLoading",
+            "Collect_OperationsMain_Sandplay",
+            "Collect_Pack_Story_10"
+        ]
+    },
+    "Collect_Pack_Story_11": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "recognition": "TemplateMatch",
+                "template": [
+                    "Cartridges/Q_sp11.png"
+                ],
+                "roi": "Collect_PackLocation_PassFieldsAndHub"
+            },
+            {
+                "recognition": "Custom",
+                "custom_recognition": "CheckCoolDown",
+                "custom_recognition_param": {
+                    "card_name": "Story_11_虚假游戏",
+                    "cycle_type": "g_weekly"
+                }
+            }
+        ],
+        "box_index": 0,
+        "action": "Custom",
+        "custom_action": "PatchAndClick",
+        "custom_action_param": {
+            "node": "Collect_PackEnd_Ck",
+            "patch": {
+                "action": "Custom",
+                "custom_action": "MarkComplete",
+                "custom_action_param": {
+                    "card_name": "Story_11_虚假游戏",
+                    "cycle_type": "g_weekly"
+                }
+            },
+            "target_offset": [
+                -5,
+                -3,
+                0,
+                0
+            ]
+        },
+        "timeout": 1,
+        "post_delay": 5000,
+        "next": [
+            "[JumpBack]Global_WaitingForLoading",
+            "Collect_OperationsMain_Sandplay",
+            "Collect_Pack_Story_11"
+        ]
+    },
+    "Collect_Pack_Story_12": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "recognition": "TemplateMatch",
+                "template": [
+                    "Cartridges/Q_sp12.png"
+                ],
+                "roi": "Collect_PackLocation_PassFieldsAndHub"
+            },
+            {
+                "recognition": "Custom",
+                "custom_recognition": "CheckCoolDown",
+                "custom_recognition_param": {
+                    "card_name": "Story_12_黑羽毛",
+                    "cycle_type": "g_weekly"
+                }
+            }
+        ],
+        "box_index": 0,
+        "action": "Custom",
+        "custom_action": "PatchAndClick",
+        "custom_action_param": {
+            "node": "Collect_PackEnd_Ck",
+            "patch": {
+                "action": "Custom",
+                "custom_action": "MarkComplete",
+                "custom_action_param": {
+                    "card_name": "Story_12_黑羽毛",
+                    "cycle_type": "g_weekly"
+                }
+            },
+            "target_offset": [
+                -5,
+                -3,
+                0,
+                0
+            ]
+        },
+        "timeout": 1,
+        "post_delay": 5000,
+        "next": [
+            "[JumpBack]Global_WaitingForLoading",
+            "Collect_OperationsMain_Sandplay",
+            "Collect_Pack_Story_12"
+        ]
+    },
+    "Collect_Pack_Story_13": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "recognition": "TemplateMatch",
+                "template": [
+                    "Cartridges/Q_sp13.png"
+                ],
+                "roi": "Collect_PackLocation_PassFieldsAndHub"
+            },
+            {
+                "recognition": "Custom",
+                "custom_recognition": "CheckCoolDown",
+                "custom_recognition_param": {
+                    "card_name": "Story_13_雪之歌",
+                    "cycle_type": "g_weekly"
+                }
+            }
+        ],
+        "box_index": 0,
+        "action": "Custom",
+        "custom_action": "PatchAndClick",
+        "custom_action_param": {
+            "node": "Collect_PackEnd_Ck",
+            "patch": {
+                "action": "Custom",
+                "custom_action": "MarkComplete",
+                "custom_action_param": {
+                    "card_name": "Story_13_雪之歌",
+                    "cycle_type": "g_weekly"
+                }
+            },
+            "target_offset": [
+                -5,
+                -3,
+                0,
+                0
+            ]
+        },
+        "timeout": 1,
+        "post_delay": 5000,
+        "next": [
+            "[JumpBack]Global_WaitingForLoading",
+            "Collect_OperationsMain_Sandplay",
+            "Collect_Pack_Story_13"
+        ]
+    },
+    "Collect_Pack_Story_14": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "recognition": "TemplateMatch",
+                "template": [
+                    "Cartridges/Q_sp14.png"
+                ],
+                "roi": "Collect_PackLocation_PassFieldsAndHub"
+            },
+            {
+                "recognition": "Custom",
+                "custom_recognition": "CheckCoolDown",
+                "custom_recognition_param": {
+                    "card_name": "Story_14_神圣审判",
+                    "cycle_type": "g_weekly"
+                }
+            }
+        ],
+        "box_index": 0,
+        "action": "Custom",
+        "custom_action": "PatchAndClick",
+        "custom_action_param": {
+            "node": "Collect_PackEnd_Ck",
+            "patch": {
+                "action": "Custom",
+                "custom_action": "MarkComplete",
+                "custom_action_param": {
+                    "card_name": "Story_14_神圣审判",
+                    "cycle_type": "g_weekly"
+                }
+            },
+            "target_offset": [
+                -5,
+                -3,
+                0,
+                0
+            ]
+        },
+        "timeout": 1,
+        "post_delay": 5000,
+        "next": [
+            "[JumpBack]Global_WaitingForLoading",
+            "Collect_OperationsMain_Sandplay",
+            "Collect_Pack_Story_14"
+        ]
+    },
+    "Collect_Pack_Story_15": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "recognition": "TemplateMatch",
+                "template": [
+                    "Cartridges/Q_sp15.png"
+                ],
+                "roi": "Collect_PackLocation_PassFieldsAndHub"
+            },
+            {
+                "recognition": "Custom",
+                "custom_recognition": "CheckCoolDown",
+                "custom_recognition_param": {
+                    "card_name": "Story_15_复仇的誓言",
+                    "cycle_type": "g_weekly"
+                }
+            }
+        ],
+        "box_index": 0,
+        "action": "Custom",
+        "custom_action": "PatchAndClick",
+        "custom_action_param": {
+            "node": "Collect_PackEnd_Ck",
+            "patch": {
+                "action": "Custom",
+                "custom_action": "MarkComplete",
+                "custom_action_param": {
+                    "card_name": "Story_15_复仇的誓言",
+                    "cycle_type": "g_weekly"
+                }
+            },
+            "target_offset": [
+                -5,
+                -3,
+                0,
+                0
+            ]
+        },
+        "timeout": 1,
+        "post_delay": 5000,
+        "next": [
+            "[JumpBack]Global_WaitingForLoading",
+            "Collect_OperationsMain_Sandplay",
+            "Collect_Pack_Story_15"
+        ]
+    },
+    "Collect_Pack_Story_16": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "recognition": "TemplateMatch",
+                "template": [
+                    "Cartridges/Q_sp16.png"
+                ],
+                "roi": "Collect_PackLocation_PassFieldsAndHub"
+            },
+            {
+                "recognition": "Custom",
+                "custom_recognition": "CheckCoolDown",
+                "custom_recognition_param": {
+                    "card_name": "Story_16_三国同盟",
+                    "cycle_type": "g_weekly"
+                }
+            }
+        ],
+        "box_index": 0,
+        "action": "Custom",
+        "custom_action": "PatchAndClick",
+        "custom_action_param": {
+            "node": "Collect_PackEnd_Ck",
+            "patch": {
+                "action": "Custom",
+                "custom_action": "MarkComplete",
+                "custom_action_param": {
+                    "card_name": "Story_16_三国同盟",
+                    "cycle_type": "g_weekly"
+                }
+            },
+            "target_offset": [
+                -5,
+                -3,
+                0,
+                0
+            ]
+        },
+        "timeout": 1,
+        "post_delay": 5000,
+        "next": [
+            "[JumpBack]Global_WaitingForLoading",
+            "Collect_OperationsMain_Sandplay",
+            "Collect_Pack_Story_16"
+        ]
+    },
+    "Collect_Pack_Story_17": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "recognition": "TemplateMatch",
+                "template": [
+                    "Cartridges/Q_sp17.png"
+                ],
+                "roi": "Collect_PackLocation_PassFieldsAndHub"
+            },
+            {
+                "recognition": "Custom",
+                "custom_recognition": "CheckCoolDown",
+                "custom_recognition_param": {
+                    "card_name": "Story_17_试炼之路",
+                    "cycle_type": "g_weekly"
+                }
+            }
+        ],
+        "box_index": 0,
+        "action": "Custom",
+        "custom_action": "PatchAndClick",
+        "custom_action_param": {
+            "node": "Collect_PackEnd_Ck",
+            "patch": {
+                "action": "Custom",
+                "custom_action": "MarkComplete",
+                "custom_action_param": {
+                    "card_name": "Story_17_试炼之路",
+                    "cycle_type": "g_weekly"
+                }
+            },
+            "target_offset": [
+                -5,
+                -3,
+                0,
+                0
+            ]
+        },
+        "timeout": 1,
+        "post_delay": 5000,
+        "next": [
+            "[JumpBack]Global_WaitingForLoading",
+            "Collect_OperationsMain_Sandplay",
+            "Collect_Pack_Story_17"
+        ]
+    },
+    "Collect_Pack_Story_18": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "recognition": "TemplateMatch",
+                "template": [
+                    "Cartridges/Q_sp18.png"
+                ],
+                "roi": "Collect_PackLocation_PassFieldsAndHub"
+            },
+            {
+                "recognition": "Custom",
+                "custom_recognition": "CheckCoolDown",
+                "custom_recognition_param": {
+                    "card_name": "Story_18_救赎",
+                    "cycle_type": "g_weekly"
+                }
+            }
+        ],
+        "box_index": 0,
+        "action": "Custom",
+        "custom_action": "PatchAndClick",
+        "custom_action_param": {
+            "node": "Collect_PackEnd_Ck",
+            "patch": {
+                "action": "Custom",
+                "custom_action": "MarkComplete",
+                "custom_action_param": {
+                    "card_name": "Story_18_救赎",
+                    "cycle_type": "g_weekly"
+                }
+            },
+            "target_offset": [
+                -5,
+                -3,
+                0,
+                0
+            ]
+        },
+        "timeout": 1,
+        "post_delay": 5000,
+        "next": [
+            "[JumpBack]Global_WaitingForLoading",
+            "Collect_OperationsMain_Sandplay",
+            "Collect_Pack_Story_18"
+        ]
+    },
+    "Collect_Pack_Story_19": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "recognition": "TemplateMatch",
+                "template": [
+                    "Cartridges/Q_sp19.png"
+                ],
+                "roi": "Collect_PackLocation_PassFieldsAndHub"
+            },
+            {
+                "recognition": "Custom",
+                "custom_recognition": "CheckCoolDown",
+                "custom_recognition_param": {
+                    "card_name": "Story_19_被遗忘的战争",
+                    "cycle_type": "g_weekly"
+                }
+            }
+        ],
+        "box_index": 0,
+        "action": "Custom",
+        "custom_action": "PatchAndClick",
+        "custom_action_param": {
+            "node": "Collect_PackEnd_Ck",
+            "patch": {
+                "action": "Custom",
+                "custom_action": "MarkComplete",
+                "custom_action_param": {
+                    "card_name": "Story_19_被遗忘的战争",
+                    "cycle_type": "g_weekly"
+                }
+            },
+            "target_offset": [
+                -5,
+                -3,
+                0,
+                0
+            ]
+        },
+        "timeout": 1,
+        "post_delay": 5000,
+        "next": [
+            "[JumpBack]Global_WaitingForLoading",
+            "Collect_OperationsMain_Sandplay",
+            "Collect_Pack_Story_19"
+        ]
+    },
+    "Collect_Pack_Character_1": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "recognition": "TemplateMatch",
+                "template": [
+                    "Cartridges/Q_cp1.png"
+                ],
+                "roi": "Collect_PackLocation_PassFieldsAndHub"
+            },
+            {
+                "recognition": "Custom",
+                "custom_recognition": "CheckCoolDown",
+                "custom_recognition_param": {
+                    "card_name": "Character_1_杰登之门",
+                    "cycle_type": "g_weekly"
+                }
+            }
+        ],
+        "box_index": 0,
+        "action": "Custom",
+        "custom_action": "PatchAndClick",
+        "custom_action_param": {
+            "node": "Collect_PackEnd_Ck",
+            "patch": {
+                "action": "Custom",
+                "custom_action": "MarkComplete",
+                "custom_action_param": {
+                    "card_name": "Character_1_杰登之门",
+                    "cycle_type": "g_weekly"
+                }
+            },
+            "target_offset": [
+                -5,
+                -3,
+                0,
+                0
+            ]
+        },
+        "timeout": 1,
+        "post_delay": 5000,
+        "next": [
+            "[JumpBack]Global_WaitingForLoading",
+            "Collect_OperationsMain_Sandplay",
+            "Collect_Pack_Character_1"
+        ]
+    },
+    "Collect_Pack_Character_2": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "recognition": "TemplateMatch",
+                "template": [
+                    "Cartridges/Q_cp2.png"
+                ],
+                "roi": "Collect_PackLocation_PassFieldsAndHub"
+            },
+            {
+                "recognition": "Custom",
+                "custom_recognition": "CheckCoolDown",
+                "custom_recognition_param": {
+                    "card_name": "Character_2_火晶片",
+                    "cycle_type": "g_weekly"
+                }
+            }
+        ],
+        "box_index": 0,
+        "action": "Custom",
+        "custom_action": "PatchAndClick",
+        "custom_action_param": {
+            "node": "Collect_PackEnd_Ck",
+            "patch": {
+                "action": "Custom",
+                "custom_action": "MarkComplete",
+                "custom_action_param": {
+                    "card_name": "Character_2_火晶片",
+                    "cycle_type": "g_weekly"
+                }
+            },
+            "target_offset": [
+                -5,
+                -3,
+                0,
+                0
+            ]
+        },
+        "timeout": 1,
+        "post_delay": 5000,
+        "next": [
+            "[JumpBack]Global_WaitingForLoading",
+            "Collect_OperationsMain_Sandplay",
+            "Collect_Pack_Character_2"
+        ]
+    },
+    "Collect_Pack_Character_3": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "recognition": "TemplateMatch",
+                "template": [
+                    "Cartridges/Q_cp3.png"
+                ],
+                "roi": "Collect_PackLocation_PassFieldsAndHub"
+            },
+            {
+                "recognition": "Custom",
+                "custom_recognition": "CheckCoolDown",
+                "custom_recognition_param": {
+                    "card_name": "Character_3_美丽无望",
+                    "cycle_type": "g_weekly"
+                }
+            }
+        ],
+        "box_index": 0,
+        "action": "Custom",
+        "custom_action": "PatchAndClick",
+        "custom_action_param": {
+            "node": "Collect_PackEnd_Ck",
+            "patch": {
+                "action": "Custom",
+                "custom_action": "MarkComplete",
+                "custom_action_param": {
+                    "card_name": "Character_3_美丽无望",
+                    "cycle_type": "g_weekly"
+                }
+            },
+            "target_offset": [
+                -5,
+                -3,
+                0,
+                0
+            ]
+        },
+        "timeout": 1,
+        "post_delay": 5000,
+        "next": [
+            "[JumpBack]Global_WaitingForLoading",
+            "Collect_OperationsMain_Sandplay",
+            "Collect_Pack_Character_3"
+        ]
+    },
+    "Collect_Pack_Character_4": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "recognition": "TemplateMatch",
+                "template": [
+                    "Cartridges/Q_cp4.png"
+                ],
+                "roi": "Collect_PackLocation_PassFieldsAndHub"
+            },
+            {
+                "recognition": "Custom",
+                "custom_recognition": "CheckCoolDown",
+                "custom_recognition_param": {
+                    "card_name": "Character_4_大逃脱",
+                    "cycle_type": "g_weekly"
+                }
+            }
+        ],
+        "box_index": 0,
+        "action": "Custom",
+        "custom_action": "PatchAndClick",
+        "custom_action_param": {
+            "node": "Collect_PackEnd_Ck",
+            "patch": {
+                "action": "Custom",
+                "custom_action": "MarkComplete",
+                "custom_action_param": {
+                    "card_name": "Character_4_大逃脱",
+                    "cycle_type": "g_weekly"
+                }
+            },
+            "target_offset": [
+                -5,
+                -3,
+                0,
+                0
+            ]
+        },
+        "timeout": 1,
+        "post_delay": 5000,
+        "next": [
+            "[JumpBack]Global_WaitingForLoading",
+            "Collect_OperationsMain_Sandplay",
+            "Collect_Pack_Character_4"
+        ]
+    },
+    "Collect_Pack_Character_5": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "recognition": "TemplateMatch",
+                "template": [
+                    "Cartridges/Q_cp5.png"
+                ],
+                "roi": "Collect_PackLocation_PassFieldsAndHub"
+            },
+            {
+                "recognition": "Custom",
+                "custom_recognition": "CheckCoolDown",
+                "custom_recognition_param": {
+                    "card_name": "Character_5_鲁的迷宫",
+                    "cycle_type": "g_weekly"
+                }
+            }
+        ],
+        "box_index": 0,
+        "action": "Custom",
+        "custom_action": "PatchAndClick",
+        "custom_action_param": {
+            "node": "Collect_PackEnd_Ck",
+            "patch": {
+                "action": "Custom",
+                "custom_action": "MarkComplete",
+                "custom_action_param": {
+                    "card_name": "Character_5_鲁的迷宫",
+                    "cycle_type": "g_weekly"
+                }
+            },
+            "target_offset": [
+                -5,
+                -3,
+                0,
+                0
+            ]
+        },
+        "timeout": 1,
+        "post_delay": 5000,
+        "next": [
+            "[JumpBack]Global_WaitingForLoading",
+            "Collect_OperationsMain_Sandplay",
+            "Collect_Pack_Character_5"
+        ]
+    },
+    "Collect_Pack_Character_6": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "recognition": "TemplateMatch",
+                "template": [
+                    "Cartridges/Q_cp6.png"
+                ],
+                "roi": "Collect_PackLocation_PassFieldsAndHub"
+            },
+            {
+                "recognition": "Custom",
+                "custom_recognition": "CheckCoolDown",
+                "custom_recognition_param": {
+                    "card_name": "Character_6_御剑传",
+                    "cycle_type": "g_weekly"
+                }
+            }
+        ],
+        "box_index": 0,
+        "action": "Custom",
+        "custom_action": "PatchAndClick",
+        "custom_action_param": {
+            "node": "Collect_PackEnd_Ck",
+            "patch": {
+                "action": "Custom",
+                "custom_action": "MarkComplete",
+                "custom_action_param": {
+                    "card_name": "Character_6_御剑传",
+                    "cycle_type": "g_weekly"
+                }
+            },
+            "target_offset": [
+                -5,
+                -3,
+                0,
+                0
+            ]
+        },
+        "timeout": 1,
+        "post_delay": 5000,
+        "next": [
+            "[JumpBack]Global_WaitingForLoading",
+            "Collect_OperationsMain_Sandplay",
+            "Collect_Pack_Character_6"
+        ]
+    },
+    "Collect_Pack_Character_7": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "recognition": "TemplateMatch",
+                "template": [
+                    "Cartridges/Q_cp7.png"
+                ],
+                "roi": "Collect_PackLocation_PassFieldsAndHub"
+            },
+            {
+                "recognition": "Custom",
+                "custom_recognition": "CheckCoolDown",
+                "custom_recognition_param": {
+                    "card_name": "Character_7_合约之战",
+                    "cycle_type": "g_weekly"
+                }
+            }
+        ],
+        "box_index": 0,
+        "action": "Custom",
+        "custom_action": "PatchAndClick",
+        "custom_action_param": {
+            "node": "Collect_PackEnd_Ck",
+            "patch": {
+                "action": "Custom",
+                "custom_action": "MarkComplete",
+                "custom_action_param": {
+                    "card_name": "Character_7_合约之战",
+                    "cycle_type": "g_weekly"
+                }
+            },
+            "target_offset": [
+                -5,
+                -3,
+                0,
+                0
+            ]
+        },
+        "timeout": 1,
+        "post_delay": 5000,
+        "next": [
+            "[JumpBack]Global_WaitingForLoading",
+            "Collect_OperationsMain_Sandplay",
+            "Collect_Pack_Character_7"
+        ]
+    },
+    "Collect_Pack_Character_8": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "recognition": "TemplateMatch",
+                "template": [
+                    "Cartridges/Q_cp8.png"
+                ],
+                "roi": "Collect_PackLocation_PassFieldsAndHub"
+            },
+            {
+                "recognition": "Custom",
+                "custom_recognition": "CheckCoolDown",
+                "custom_recognition_param": {
+                    "card_name": "Character_8_妖魔讨伐团",
+                    "cycle_type": "g_weekly"
+                }
+            }
+        ],
+        "box_index": 0,
+        "action": "Custom",
+        "custom_action": "PatchAndClick",
+        "custom_action_param": {
+            "node": "Collect_PackEnd_Ck",
+            "patch": {
+                "action": "Custom",
+                "custom_action": "MarkComplete",
+                "custom_action_param": {
+                    "card_name": "Character_8_妖魔讨伐团",
+                    "cycle_type": "g_weekly"
+                }
+            },
+            "target_offset": [
+                -5,
+                -3,
+                0,
+                0
+            ]
+        },
+        "timeout": 1,
+        "post_delay": 5000,
+        "next": [
+            "[JumpBack]Global_WaitingForLoading",
+            "Collect_OperationsMain_Sandplay",
+            "Collect_Pack_Character_8"
+        ]
+    },
+    "Collect_Pack_Event_1": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "recognition": "TemplateMatch",
+                "template": [
+                    "Cartridges/Q_vp1.png"
+                ],
+                "roi": "Collect_PackLocation_PassFieldsAndHub"
+            },
+            {
+                "recognition": "Custom",
+                "custom_recognition": "CheckCoolDown",
+                "custom_recognition_param": {
+                    "card_name": "Event_1_夏日骑士",
+                    "cycle_type": "g_weekly"
+                }
+            }
+        ],
+        "box_index": 0,
+        "action": "Custom",
+        "custom_action": "PatchAndClick",
+        "custom_action_param": {
+            "node": "Collect_PackEnd_Ck",
+            "patch": {
+                "action": "Custom",
+                "custom_action": "MarkComplete",
+                "custom_action_param": {
+                    "card_name": "Event_1_夏日骑士",
+                    "cycle_type": "g_weekly"
+                }
+            },
+            "target_offset": [
+                -5,
+                -3,
+                0,
+                0
+            ]
+        },
+        "timeout": 1,
+        "post_delay": 5000,
+        "next": [
+            "[JumpBack]Global_WaitingForLoading",
+            "Collect_OperationsMain_Sandplay",
+            "Collect_Pack_Event_1"
+        ]
+    },
+    "Collect_Pack_Event_2": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "recognition": "TemplateMatch",
+                "template": [
+                    "Cartridges/Q_vp2.png"
+                ],
+                "roi": "Collect_PackLocation_PassFieldsAndHub"
+            },
+            {
+                "recognition": "Custom",
+                "custom_recognition": "CheckCoolDown",
+                "custom_recognition_param": {
+                    "card_name": "Event_2_恶梦之冬",
+                    "cycle_type": "g_weekly"
+                }
+            }
+        ],
+        "box_index": 0,
+        "action": "Custom",
+        "custom_action": "PatchAndClick",
+        "custom_action_param": {
+            "node": "Collect_PackEnd_Ck",
+            "patch": {
+                "action": "Custom",
+                "custom_action": "MarkComplete",
+                "custom_action_param": {
+                    "card_name": "Event_2_恶梦之冬",
+                    "cycle_type": "g_weekly"
+                }
+            },
+            "target_offset": [
+                -5,
+                -3,
+                0,
+                0
+            ]
+        },
+        "timeout": 1,
+        "post_delay": 5000,
+        "next": [
+            "[JumpBack]Global_WaitingForLoading",
+            "Collect_OperationsMain_Sandplay",
+            "Collect_Pack_Event_2"
+        ]
+    },
+    "Collect_Pack_Event_3": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "recognition": "TemplateMatch",
+                "template": [
+                    "Cartridges/Q_vp3.png"
+                ],
+                "roi": "Collect_PackLocation_PassFieldsAndHub"
+            },
+            {
+                "recognition": "Custom",
+                "custom_recognition": "CheckCoolDown",
+                "custom_recognition_param": {
+                    "card_name": "Event_3_海滨天使",
+                    "cycle_type": "g_weekly"
+                }
+            }
+        ],
+        "box_index": 0,
+        "action": "Custom",
+        "custom_action": "PatchAndClick",
+        "custom_action_param": {
+            "node": "Collect_PackEnd_Ck",
+            "patch": {
+                "action": "Custom",
+                "custom_action": "MarkComplete",
+                "custom_action_param": {
+                    "card_name": "Event_3_海滨天使",
+                    "cycle_type": "g_weekly"
+                }
+            },
+            "target_offset": [
+                -5,
+                -3,
+                0,
+                0
+            ]
+        },
+        "timeout": 1,
+        "post_delay": 5000,
+        "next": [
+            "[JumpBack]Global_WaitingForLoading",
+            "Collect_OperationsMain_Sandplay",
+            "Collect_Pack_Event_3"
+        ]
+    },
+    "Collect_Pack_Event_4": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "recognition": "TemplateMatch",
+                "template": [
+                    "Cartridges/Q_vp4.png"
+                ],
+                "roi": "Collect_PackLocation_PassFieldsAndHub"
+            },
+            {
+                "recognition": "Custom",
+                "custom_recognition": "CheckCoolDown",
+                "custom_recognition_param": {
+                    "card_name": "Event_4_记忆边缘",
+                    "cycle_type": "g_weekly"
+                }
+            }
+        ],
+        "box_index": 0,
+        "action": "Custom",
+        "custom_action": "PatchAndClick",
+        "custom_action_param": {
+            "node": "Collect_PackEnd_Ck",
+            "patch": {
+                "action": "Custom",
+                "custom_action": "MarkComplete",
+                "custom_action_param": {
+                    "card_name": "Event_4_记忆边缘",
+                    "cycle_type": "g_weekly"
+                }
+            },
+            "target_offset": [
+                -5,
+                -3,
+                0,
+                0
+            ]
+        },
+        "timeout": 1,
+        "post_delay": 5000,
+        "next": [
+            "[JumpBack]Global_WaitingForLoading",
+            "Collect_OperationsMain_Sandplay",
+            "Collect_Pack_Event_4"
+        ]
+    }
+}

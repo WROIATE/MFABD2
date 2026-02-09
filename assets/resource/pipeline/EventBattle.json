@@ -9,6 +9,7 @@
     "recognition": "OCR",
     "action": "Click",
     "next": [
+      "[JumpBack]Global_WaitingForLoading",
       "Event_NormalBattle_Start",
       "Event_GoinEvent"
     ],

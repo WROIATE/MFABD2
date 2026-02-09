@@ -1,13 +1,127 @@
 {
-  "Test_HomePage": {
+  "Test_HomePage_C": {
     "next": [
-      "Check_Weekly_Task"
+      "Test_HomePage"
+    ],
+    "action": "Custom",
+    "custom_action": "PatchNode",
+    "custom_action_param": {
+      "node": "Test_HomePage_1",
+      "patch": {
+        "next": [
+          "Test_HomePage_B"
+        ],
+        "timeout": 30000
+      },
+      "origin": {
+        "next": [
+          "Check_Weekly_Task"
+        ],
+        "timeout": 10000
+      }
+    }
+  },
+  "Test_HomePage_R": {
+    "doc": "周触发器测试起点",
+    "recognition": "Custom",
+    "custom_recognition": "CheckCoolDown",
+    "custom_recognition_param": {
+      "card_name": "Map_01"
+    },
+    "next": [
+      "Test_HomePage_0"
+    ],
+    "timeout": 100,
+    "on_error": [
+      "Test_HomePage_1"
+    ],
+    "focus": "G=0.流程启动"
+  },
+  "Test_HomePage": {
+    "doc": "周触发器测试起点",
+    "action": "Custom",
+    "custom_action": "CheckCoolDown",
+    "custom_action_param": {
+      "card_name": "Map_01"
+    },
+    "next": [
+      "Test_HomePage_0"
+    ],
+    "timeout": 5000,
+    "on_error": [
+      "Test_HomePage_1"
+    ],
+    "focus": "G=0.流程启动"
+  },
+  "Test_HomePage_0": {
+    "focus": "测试=0,通过",
+    "action": "Custom",
+    "custom_action": "MarkComplete",
+    "custom_action_param": {
+      "card_name": "Map_01",
+      "cycle_type": "g_weekly"
+    }
+  },
+  "Test_HomePage_1": {
+    "focus": "测试=1,失败"
+  },
+  "Test_HomePage_B": {
+    "doc": "计数器测试起点",
+    "next": [
+      "Test_HomePage_B_main"
+    ],
+    "timeout": 2000,
+    "on_error": [
+      "Test_HomePage_B_Err"
+    ]
+  },
+  "Test_HomePage_B_main": {
+    "doc": "检测次数!",
+    "recognition": "Custom",
+    "custom_recognition": "CheckTag",
+    "custom_recognition_param": {
+      "tag": "Item_Count",
+      "max": 3
+    },
+    "next": [
+      "Test_HomePage_B_Action"
     ],
     "on_error": [
-      "errer"
+      "Test_HomePage_B_Err"
+    ]
+  },
+  "Test_HomePage_B_Action": {
+    "focus": "计数+1了",
+    "action": "Custom",
+    "custom_action": "UpdateTag",
+    "custom_action_param": {
+      "tag": "Item_Count",
+      "value": 1
+    },
+    "next": [
+      "Test_HomePage_B_main"
     ],
-    "focus": "G=0.流程启动",
-    "doc": "开始周任务检测流程"
+    "timeout": 2000,
+    "on_error": [
+      "Test_HomePage_B_Err"
+    ]
+  },
+  "Test_HomePage_B_Err": {
+    "focus": "失败了",
+    "next": [
+      "Test_HomePage_C_End"
+    ]
+  },
+  "Test_HomePage_C_End": {
+    "focus": "重置Test_HomePage_1",
+    "action": "Custom",
+    "custom_action": "RestoreNode",
+    "custom_action_param": {
+      "node": "Test_HomePage_1"
+    },
+    "next": [
+      "Test_HomePage"
+    ]
   },
   "Check_Weekly_Task": {
     "next": [
@@ -211,5 +325,186 @@
       "Gacha-homepage.png"
     ],
     "green_mask": false
+  },
+  "test_smart_scroller": {
+    "action": "Custom",
+    "custom_action": "SmartSwipe",
+    "custom_action_param": {
+      "proxy_node": "Custom_Proxy_Swipe",
+      "action": "Swipe",
+      "begin": [
+        1025,
+        640,
+        0,
+        0
+      ],
+      "end": [
+        117,
+        640,
+        0,
+        0
+      ],
+      "detect_roi": [
+        1062,
+        594,
+        198,
+        80
+      ],
+      "duration": 500,
+      "end_hold": 1000,
+      "settle_delay": 500,
+      "retry_times": 2,
+      "threshold": 3.0
+    },
+    "next": [
+      "test_smart_scroller"
+    ],
+    "timeout": 2000
+  },
+  "test_ocr_decision": {
+    "recognition": "OCR",
+    "expected": "(\\d+)",
+    "roi": [
+      1090,
+      66,
+      91,
+      163
+    ],
+    "action": "Custom",
+    "custom_action": "OCR_RankAndPatch",
+    "custom_action_param": {
+      "filter_regex": "(\\d+)",
+      "number_mode": "int",
+      "sort_mode": "asc",
+      "pick_index": 1,
+      "replacement_list": [
+        [
+          230,
+          120,
+          0,
+          0
+        ],
+        [
+          230,
+          175,
+          0,
+          0
+        ],
+        [
+          230,
+          230,
+          0,
+          0
+        ],
+        [
+          230,
+          290,
+          0,
+          0
+        ],
+        [
+          230,
+          350,
+          0,
+          0
+        ]
+      ],
+      "target_node": "Buy_Best_Item",
+      "target_param": "target"
+    },
+    "next": [
+      "Buy_Best_Item"
+    ]
+  },
+  "Buy_Best_Item": {
+    "action": "Click",
+    "target": [
+      0,
+      0,
+      0,
+      0
+    ]
+  },
+  "test_runtask0": {
+    "roi": [
+      122,
+      627,
+      13,
+      10
+    ],
+    "next": [
+      "test_runtask"
+    ]
+  },
+  "test_runtask": {
+    "action": "Custom",
+    "custom_action": "RunTask",
+    "custom_action_param": {
+      "entry": "test_runtask2",
+      "param": {
+        "test_runtask2": {
+          "target": "test_runtask0"
+        }
+      }
+    }
+  },
+  "test_runtask2": {
+    "action": "Click"
+  },
+  "test_PatchBatch": {
+    "action": {
+      "type": "Custom",
+      "param": {
+        "custom_action": "PatchBatch",
+        "custom_action_param": {
+          "patches": {
+            "test_PatchBatch1": {
+              "next": [
+                "test_PatchBatch2"
+              ]
+            },
+            "test_PatchBatch2": {
+              "next": [
+                "test_PatchBatch3"
+              ]
+            }
+          }
+        }
+      }
+    },
+    "next": [
+      "test_PatchBatch1"
+    ]
+  },
+  "test_PatchBatch1": {},
+  "test_PatchBatch2": {},
+  "test_PatchBatch3": {},
+  "test_daly": {
+    "pre_wait_freezes": {
+      "target": [
+        615,
+        257,
+        47,
+        44
+      ],
+      "method": 5,
+      "rate_limit": 500,
+      "time": 2000,
+      "timeout": 30000,
+      "threshold": 0.95
+    }
+  },
+  "test_seejson": {
+    "action": "Custom",
+    "custom_action": "PatchByRegex",
+    "custom_action_param": {
+      "pattern": [
+        "Shop*",
+        "Battle$"
+      ],
+      "patch": {
+        "timeout": 5000
+      }
+    }
   }
 }
