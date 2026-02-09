@@ -223,7 +223,7 @@
         "next": [
             "[JumpBack]Global_WaitingForLoading",
             "[JumpBack]Global_QuickCart_MenuReset",
-            "Collect_PackProbe_IsPresent"
+            "Collect_LocatePackFrame_Loc1"
         ]
     },
     "Collect_FirstBootPack_ProbeIsPresent": {
