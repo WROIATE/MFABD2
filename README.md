@@ -3,15 +3,22 @@
   <img alt="LOGO" src="https://github.com/sunyink/MFABD2/blob/main/ReadMe/logo.png" width="180" height="180" />
 
 
-# MaaBD2-棕色尘埃2自动化助手
-[![License](https://img.shields.io/badge/License-MIT%2FApache--2.0-blue)](./LICENSE)
-[![.NET Version](https://img.shields.io/badge/.NET-≥%2010-512BD4?logo=csharp)](https://dotnet.microsoft.com/download/dotnet/10.0)
-[![月提交](https://img.shields.io/github/commit-activity/m/sunyink/MFABD2?label=开发活跃度&color=blue)](https://github.com/sunyink/MFABD2/commits/main)
-[![给项目点赞](https://img.shields.io/github/stars/sunyink/MFABD2?style=social&label=给项目点赞)](https://github.com/sunyink/MFABD2)
-<br>
+# MaaBD2 - 棕色尘埃2自动化助手
+
+[![Stable Version](https://img.shields.io/github/v/release/sunyink/MFABD2?label=正式版&color=green&logo=github)](https://github.com/sunyink/MFABD2/releases/latest)
+[![Beta Version](https://img.shields.io/github/v/tag/sunyink/MFABD2?include_prereleases&filter=*beta*&label=公测版&color=blue&logo=github)](https://github.com/sunyink/MFABD2/releases?q=beta&expanded=true)
 <a href="https://mirrorchyan.com/zh/projects?rid=MFABD2" target="_blank"><img alt="mirrorc" src="https://img.shields.io/badge/Mirror%E9%85%B1-%239af3f6?logo=countingworkspro&logoColor=4f46e5"></a>
-[![构建状态](https://img.shields.io/badge/构建状态-通过-success?logo=githubactions)](https://github.com/sunyink/MFABD2/actions)
-[![最新版本](https://img.shields.io/github/v/release/sunyink/MFABD2?label=最新版本&logo=github&color=green)](https://github.com/sunyink/MFABD2/releases)
+
+[![Build Status](https://img.shields.io/github/actions/workflow/status/sunyink/MFABD2/install.yml?label=构建状态&logo=githubactions)](https://github.com/sunyink/MFABD2/actions/workflows/install.yml)
+[![License](https://img.shields.io/badge/License-MIT%2FApache--2.0-blue)](./LICENSE)
+[![Stars](https://img.shields.io/github/stars/sunyink/MFABD2?label=给项目点赞&color=f39c12&logo=github)](https://github.com/sunyink/MFABD2)
+
+[![Main 活跃度](https://img.shields.io/github/commit-activity/m/sunyink/MFABD2?label=稳定版活跃度&color=brightgreen)](https://github.com/sunyink/MFABD2/commits/main)
+[![Dev 活跃度](https://img.shields.io/github/commit-activity/m/sunyink/MFABD2/develop?label=公测版活跃度&color=blue)](https://github.com/sunyink/MFABD2/tree/develop)
+[![.NET Version](https://img.shields.io/badge/.NET-≥%2010-512BD4?logo=csharp)](https://dotnet.microsoft.com/download/dotnet/10.0)
+
+
+
 </div>
 
 本项目基于 [MaaFramework](https://github.com/MaaXYZ/MaaFramework) 所提供的项目模板进行开发的棕色尘埃2自动化助手。
@@ -45,23 +52,23 @@
   
   尽量在良好网络环境下运行。触发重连转圈可能吞掉那一瞬间操作导致错误，故失误概率可以是罕见、偶尔、泪目。
 
-  1.推荐使用MuMu模拟器12运行游戏（可以直接使用国际版or自行配置Google环境），模拟器显示建议设置为`平板版 1920*1080 (DPI ≈ 270 or 280)`。
+###  1.推荐使用MuMu模拟器12运行游戏（可以直接使用国际版or自行配置Google环境），模拟器显示建议设置为`平板版 1920*1080 (DPI ≈ 270 or 280)`。
 > - 多模拟器运作需要一定ADB知识。参考：adb.exe可视为windows服务，默认服务端口号`5037`，模拟器为其客户端，有各自的客户端口号。Mumu模拟器根据多开器编号决定`Adb端口号`，默认`0`号为`16384`、`1`号为`16416`。国际版与普通版可以共存。后启动的版本的端口号遵循前者规律+1，如`16385`。通常adb开启一个就可以控制多个模拟器，不建议多版本Adb并行启动，可能影响识别，可以自定义ADB路径与端口解决。
   
 
- 2.**当前游戏内设置已支持自动设定**，但需要先切到简体中文。
+### 2.**当前游戏内设置已支持自动设定**，但需要先切到简体中文。
     
   在此贴出游戏内设置的设定值备用：均为默认基础上，其中设置 `操作-选择操作方式-点击地面` `图像-分辨率-FHD`、`图像-游戏开始画面-主界面`、`通知-黄色圆点-不使用` 。
  > 画面质量异常请进行检查，步骤2后仍异常可尝试切换渲染方法。_一般经验，新机器`Vulkan`、旧机器`DirectX`表现较好。_
 
- 3.任务流程已基本实现箱庭地图状态识别、技能传送阵自行生成、几乎所有自行复位(餐馆卡带例外，请避免从餐馆下线)。推荐在`剧情主线地图`、`传送阵上`结束游戏。
+### 3.任务流程已基本实现箱庭地图状态识别、技能传送阵自行生成、几乎所有自行复位(餐馆卡带例外，请避免从餐馆下线)。推荐在`剧情主线地图`、`传送阵上`结束游戏。
  > 利用025.08新出的‘快速卡带’功能，已实现采集卡带自定义选择；需要在‘快速卡带’页面，将意向关卡标黄，如此标黄卡带就会移动到最前，操作顺序决定标黄卡带的排序；每日采集只能去3个卡带，利用下拉菜单分配剧情卡带/角色卡带。
 
- 4.一些配置如下，配置一次就可以了
+### 4.一些配置如下，配置一次就可以了
 
- （除强化目标等级、金币消耗限额外，已支持自动设置，但建议检查。）
+ **（除强化目标等级、金币消耗限额外，已支持自动设置，但建议检查。）**
 
- 装备请保留一件 SR/UR +9的装备用来精炼
+ **装备请保留一件 SR/UR +9的装备用来精炼**
  >
 >   PVP战斗和分解装备的设置如图，请手动设置一次即可（技能位置与装备强化等设置为模拟器本地保存，不会影响其他端游戏；强化设置老登可以自行适度上强度；PVP设置10倍也是可以的。）
 
