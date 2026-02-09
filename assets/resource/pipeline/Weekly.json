@@ -1,95 +1,150 @@
 {
-  "Weekly_HomePage": {
+  "Weekly_Start": {
     "next": [
-      "Weekly_WeeklySelector",
-      "Weekly_Freselector"
+      "[JumpBack]Weekly_Arcade_Hub",
+      "[JumpBack]Weekly_VisitCabin_Hub",
+      "[JumpBack]Weekly_LastNight_Hub",
+      "[JumpBack]Weekly_Flishing_Hub"
     ]
   },
-  "Weekly_WeeklySelector": {
-    "next": [
-      "Weekly_TotalStart"
-    ]
-  },
-  "Weekly_Freselector": {
-    "next": [
-      "Weekly_TotalStart"
-    ]
-  },
-  "Weekly_TotalStart": {
+  "Weekly_LastNight_Hub": {
+    "enabled": true,
     "next": [
       "Weekly_LastNight_Start"
-    ]
+    ],
+    "timeout": 1,
+    "max_hit": 1,
+    "doc": "末日之书"
   },
-  "Weekly_HomePageHub0": {
+  "Weekly_Arcade_Hub": {
+    "enabled": true,
     "next": [
-      "Weekly_HomePageHub",
-      "Weekly_HomePageHub1",
-      "Weekly_HomePageHub2"
+      "Weekly_Arcade_Start"
     ],
-    "focus": "WB.恢复到主界面"
+    "timeout": 1,
+    "max_hit": 1,
+    "doc": "街机"
   },
-  "Weekly_HomePageHub": {
-    "recognition": "TemplateMatch",
-    "action": "Click",
-    "post_delay": 2000,
-    "focus": "G=0.页面预期内，普通启动。M.箱庭地图run已确认",
-    "roi": [
-      1047,
-      516,
-      107,
-      110
+  "Weekly_VisitCabin_Hub": {
+    "enabled": true,
+    "next": [
+      "Weekly_VisitCabin_Start"
     ],
-    "template": [
-      "Run.png"
-    ],
-    "green_mask": true,
-    "target": [
-      1186,
-      46,
-      0,
-      0
-    ],
-    "doc": "找到run-点击返回主页"
+    "timeout": 1,
+    "max_hit": 1,
+    "doc": "小屋"
   },
-  "Weekly_HomePageHub1": {
-    "recognition": "TemplateMatch",
-    "post_delay": 2000,
-    "focus": "G=0.页面预期内，普通启动。BM.箱庭地图pin已确认",
-    "roi": [
-      1108,
-      637,
-      65,
-      57
+  "Weekly_Flishing_Hub": {
+    "enabled": true,
+    "next": [
+      "Weekly_Fishing_Start"
     ],
-    "template": [
-      "pin.png"
+    "timeout": 1,
+    "max_hit": 1,
+    "doc": "每周1条鱼"
+  },
+  "Weekly_Fishing_Start": {
+    "recognition": "Custom",
+    "custom_recognition": "CheckCoolDown",
+    "custom_recognition_param": {
+      "card_name": "Gameplay_fishing",
+      "cycle_type": "g_weekly"
+    },
+    "action": "Custom",
+    "custom_action": "PatchBatch",
+    "custom_action_param": {
+      "node": "Custom_Fishing_Task",
+      "patches": {
+        "Custom_Fishing_Task": {
+          "action": {
+            "param": {
+              "custom_action_param": {
+                "max_count": 1
+              }
+            }
+          },
+          "next": "[Anchor]Weekly_Fishing"
+        }
+      }
+    },
+    "next": [
+      "Weekly_Fishing_Anchor"
     ]
   },
-  "Weekly_HomePageHub2": {
+  "Weekly_Fishing_Anchor": {
+    "anchor": [
+      "Weekly_Fishing"
+    ],
+    "next": [
+      "Weekly_Fishing_Anchor_Goto",
+      "Weekly_Fishing_Anchor_Done"
+    ],
+    "timeout": 1
+  },
+  "Weekly_Fishing_Anchor_Goto": {
+    "max_hit": 1,
+    "next": [
+      "Fishing_Entry"
+    ]
+  },
+  "Weekly_Fishing_Anchor_Done": {
+    "action": "Custom",
+    "custom_action": "MarkComplete",
+    "custom_action_param": {
+      "card_name": "Gameplay_fishing",
+      "cycle_type": "g_weekly"
+    },
+    "next": [
+      "Weekly_Fishing_Back"
+    ]
+  },
+  "Weekly_Fishing_Back": {
     "recognition": "TemplateMatch",
+    "roi": [
+      1154,
+      19,
+      64,
+      56
+    ],
+    "template": [
+      "UI_Dock.png"
+    ],
     "action": "Click",
     "post_delay": 3000,
-    "focus": "G=1.页面非预期，点击返回按钮",
+    "next": [
+      "Weekly_Fishing_Back_Msg",
+      "Weekly_Fishing_Back"
+    ]
+  },
+  "Weekly_Fishing_Back_Msg": {
+    "recognition": "OCR",
+    "expected": [
+      "确认"
+    ],
     "roi": [
-      1,
-      1,
-      231,
-      124
+      665,
+      394,
+      124,
+      155
     ],
-    "template": [
-      "BackButGe.png",
-      "BackButGe2.png"
-    ],
-    "green_mask": true,
-    "doc": "其他页面，返回按钮"
+    "action": "Click",
+    "post_delay": 2000,
+    "next": [
+      "Global_ToSandBox",
+      "Weekly_Fishing_Back_Msg"
+    ]
   },
   "Weekly_LastNight_Start": {
+    "action": "Custom",
+    "custom_action": "CheckCoolDown",
+    "custom_action_param": {
+      "card_name": "Gameplay_LastNight",
+      "cycle_type": "g_weekly"
+    },
     "next": [
       "Weekly_LastNight_Ind",
       "Weekly_LastNight_HomePage",
-      "[JumpBack]Weekly_HomePageHub",
-      "[JumpBack]Weekly_HomePageHub2",
-      "[JumpBack]Weekly_HomePageHub1"
+      "[JumpBack]Global_ToHomePage"
     ]
   },
   "Weekly_LastNight_HomePage": {
@@ -282,7 +337,7 @@
     "next": [
       "Weekly_LastNight_MaybeNew",
       "Weekly_LastNight_MenuPageEnd",
-      "Weekly_LastNight_BackPVEPage",
+      "Weekly_LastNight_Pin",
       "Weekly_LastNight_LeavButt"
     ],
     "post_delay": 1500,
@@ -296,16 +351,30 @@
       "离开"
     ]
   },
+  "Weekly_LastNight_Pin": {
+    "recognition": "TemplateMatch",
+    "next": [
+      "Weekly_LastNight_End"
+    ],
+    "roi": [
+      1122,
+      646,
+      40,
+      38
+    ],
+    "template": [
+      "pin.png"
+    ],
+    "doc": ""
+  },
   "Weekly_LastNight_MaybeNew": {
     "recognition": "OCR",
     "action": "Click",
     "next": [
       "Weekly_LastNight_MenuPageEnd",
-      "Weekly_LastNight_HomePageHub2",
-      "Weekly_LastNight_BackPVEPage",
       "Weekly_LastNight_MaybeNew"
     ],
-    "post_delay": 1000,
+    "post_delay": 1500,
     "roi": [
       736,
       146,
@@ -320,10 +389,10 @@
   "Weekly_LastNight_MenuPageEnd": {
     "recognition": "OCR",
     "action": "Click",
+    "post_delay": 2000,
     "next": [
-      "Weekly_LastNight_HomePageHub2",
       "Weekly_LastNight_MenuPageEnd",
-      "Weekly_LastNight_BackPVEPage"
+      "Weekly_LastNight_End"
     ],
     "roi": [
       189,
@@ -341,162 +410,27 @@
       0
     ]
   },
-  "Weekly_LastNight_HomePageHub2": {
-    "recognition": "TemplateMatch",
-    "action": "Click",
-    "next": [
-      "Weekly_LastNight_BackPVEPage",
-      "Weekly_LastNight_HomePageHub2"
-    ],
-    "post_delay": 2000,
-    "focus": "G=1.页面非预期，点击返回按钮",
-    "roi": [
-      1,
-      1,
-      231,
-      124
-    ],
-    "template": [
-      "BackButGe.png",
-      "BackButGe2.png"
-    ],
-    "green_mask": true,
-    "doc": "其他页面，返回按钮"
-  },
-  "Weekly_LastNight_BackPVEPage": {
-    "recognition": "TemplateMatch",
-    "action": "Click",
-    "next": [
-      "Weekly_LastNight_BackHomePage2",
-      "Weekly_LastNight_BackPVEPage"
-    ],
-    "post_delay": 2000,
-    "focus": "WLM.开始离开卡带",
-    "roi": [
-      1122,
-      646,
-      40,
-      38
-    ],
-    "template": [
-      "pin.png"
-    ],
-    "target": [
-      1186,
-      46,
-      0,
-      0
-    ],
-    "doc": "找到图钉-点击返回主页"
-  },
-  "Weekly_LastNight_BackHomePage2": {
-    "recognition": "OCR",
-    "action": "Click",
-    "next": [
-      "Weekly_LastNight_PVEBookSwipe",
-      "Weekly_LastNight_BackHomePage2"
-    ],
-    "post_delay": 2000,
-    "roi": [
-      98,
-      656,
-      66,
-      32
-    ],
-    "expected": [
-      "抽抽乐"
-    ],
-    "target": [
-      1111,
-      650,
-      0,
-      0
-    ],
-    "doc": "识别左下抽抽乐-主页-点击选择章节"
-  },
-  "Weekly_LastNight_PVEBookSwipe": {
-    "recognition": "OCR",
-    "action": "Swipe",
-    "next": [
-      "Weekly_LastNight_TouchPVEBook"
-    ],
-    "roi": [
-      118,
-      505,
-      95,
-      42
-    ],
-    "expected": [
-      "活动游戏卡"
-    ],
-    "begin": [
-      30,
-      300,
-      0,
-      0
-    ],
-    "end": [
-      30,
-      700,
-      0,
-      0
-    ],
-    "doc": "识别活动游戏卡-上划"
-  },
-  "Weekly_LastNight_TouchPVEBook": {
-    "recognition": "TemplateMatch",
-    "action": "Click",
-    "target_offset": [
-      -20,
-      25,
-      0,
-      0
-    ],
-    "next": [
-      "Weekly_LastNight_FinBackMapPage",
-      "Weekly_LastNight_TouchPVEBook"
-    ],
-    "post_delay": 5000,
-    "focus": "PM.复位用卡带已找到",
-    "roi": [
-      405,
-      157,
-      78,
-      38
-    ],
-    "template": [
-      "pve2.png"
-    ],
-    "doc": "点击PVE本子2"
-  },
-  "Weekly_LastNight_FinBackMapPage": {
-    "recognition": "TemplateMatch",
-    "next": [
-      "Weekly_LastNight_End"
-    ],
-    "focus": "WLM.卡带复位完成，结束~",
-    "roi": [
-      1122,
-      646,
-      40,
-      38
-    ],
-    "template": [
-      "pin.png"
-    ],
-    "doc": "识别右下图钉-章节主页"
-  },
   "Weekly_LastNight_End": {
+    "action": "Custom",
+    "custom_action": "MarkComplete",
+    "custom_action_param": {
+      "card_name": "Gameplay_LastNight",
+      "cycle_type": "g_weekly"
+    },
     "next": [
-      "Weekly_VisitCabin_Start"
+      "Global_BackToQC1"
     ]
   },
   "Weekly_VisitCabin_Start": {
+    "action": "Custom",
+    "custom_action": "CheckCoolDown",
+    "custom_action_param": {
+      "card_name": "UI_Cabin_Like",
+      "cycle_type": "g_weekly"
+    },
     "next": [
       "Weekly_VisitCabin_HomePage",
-      "[JumpBack]Weekly_HomePageHub",
-      "[JumpBack]Weekly_HomePageHub2",
-      "[JumpBack]Weekly_HomePageHub1"
+      "[JumpBack]Global_ToHomePage"
     ],
     "focus": "WVM.访问小屋开始"
   },
@@ -730,10 +664,7 @@
     "recognition": "OCR",
     "action": "Click",
     "next": [
-      "Weekly_VisitCabin_LeavToHomePage",
-      "[JumpBack]Weekly_HomePageHub",
-      "[JumpBack]Weekly_HomePageHub1",
-      "[JumpBack]Weekly_HomePageHub2"
+      "Weekly_VisitCabin_End"
     ],
     "post_delay": 2000,
     "roi": [
@@ -752,34 +683,35 @@
       0
     ]
   },
-  "Weekly_VisitCabin_LeavToHomePage": {
-    "recognition": "TemplateMatch",
-    "next": [
-      "Weekly_VisitCabin_End"
-    ],
-    "roi": [
-      1047,
-      516,
-      107,
-      110
-    ],
-    "template": [
-      "Run.png"
-    ],
-    "green_mask": true
-  },
   "Weekly_VisitCabin_End": {
+    "action": "Custom",
+    "custom_action": "MarkComplete",
+    "custom_action_param": {
+      "targets": [
+        {
+          "card_name": "UI_Cabin_Like",
+          "cycle_type": "g_weekly"
+        },
+        {
+          "card_name": "UI_Cabin_Visit",
+          "cycle_type": "g_daily"
+        }
+      ]
+    },
     "next": [
-      "Weekly_Arcade_Start"
-    ],
-    "focus": "WVM.访问小屋结束"
+      "Global_ToHomePage"
+    ]
   },
   "Weekly_Arcade_Start": {
+    "action": "Custom",
+    "custom_action": "CheckCoolDown",
+    "custom_action_param": {
+      "card_name": "UI_Arcade",
+      "cycle_type": "g_weekly"
+    },
     "next": [
       "Weekly_Arcade_HomePage",
-      "[JumpBack]Weekly_HomePageHub",
-      "[JumpBack]Weekly_HomePageHub1",
-      "[JumpBack]Weekly_HomePageHub2"
+      "[JumpBack]Global_ToHomePage"
     ],
     "focus": "WAM.访问街机开始"
   },
@@ -825,9 +757,14 @@
   },
   "Weekly_Arcade_InCk": {
     "recognition": "OCR",
+    "action": "Custom",
+    "custom_action": "MarkComplete",
+    "custom_action_param": {
+      "card_name": "UI_Arcade",
+      "cycle_type": "g_weekly"
+    },
     "next": [
-      "Weekly_Arcade_LeavToHomePage",
-      "[JumpBack]Weekly_HomePageHub2"
+      "Global_ToHomePage"
     ],
     "focus": "WAM.街机已进入",
     "roi": [
@@ -845,25 +782,5 @@
       0,
       0
     ]
-  },
-  "Weekly_Arcade_LeavToHomePage": {
-    "recognition": "TemplateMatch",
-    "next": [
-      "Weekly_Arcade_End"
-    ],
-    "focus": "WAM.回到庭箱",
-    "roi": [
-      1047,
-      516,
-      107,
-      110
-    ],
-    "template": [
-      "Run.png"
-    ],
-    "green_mask": true
-  },
-  "Weekly_Arcade_End": {
-    "focus": "WAM.访问街机结束"
   }
 }

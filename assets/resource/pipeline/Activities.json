@@ -7,15 +7,41 @@
     "doc": "起始节点-分流"
   },
   "Activities_HomePageHub": {
-    "recognition": "OCR",
-    "roi": [
-      98,
-      656,
-      66,
-      32
-    ],
-    "expected": [
-      "抽抽乐"
+    "recognition": "And",
+    "all_of": [
+      {
+        "recognition": "OCR",
+        "roi": [
+          98,
+          656,
+          66,
+          32
+        ],
+        "expected": [
+          "抽抽乐"
+        ]
+      },
+      {
+        "recognition": "ColorMatch",
+        "roi": [
+          104,
+          664,
+          51,
+          17
+        ],
+        "method": 40,
+        "lower": [
+          0,
+          0,
+          218
+        ],
+        "upper": [
+          149,
+          5,
+          255
+        ],
+        "count": 150
+      }
     ],
     "next": [
       "Activities_InIndex",
@@ -252,11 +278,7 @@
       223,
       195,
       120
-    ],
-    "template": [
-      "ActiveRollOnGe.png"
-    ],
-    "green_mask": true
+    ]
   },
   "Activities_GetBorn": {
     "recognition": "OCR",
@@ -581,59 +603,46 @@
     "doc": "返回首页"
   },
   "Activities_BackHomePage": {
-    "recognition": "OCR",
+    "recognition": "And",
+    "all_of": [
+      {
+        "recognition": "OCR",
+        "roi": [
+          98,
+          656,
+          66,
+          32
+        ],
+        "expected": [
+          "抽抽乐"
+        ]
+      },
+      {
+        "recognition": "ColorMatch",
+        "roi": [
+          104,
+          664,
+          51,
+          17
+        ],
+        "method": 40,
+        "lower": [
+          0,
+          0,
+          218
+        ],
+        "upper": [
+          149,
+          5,
+          255
+        ],
+        "count": 150
+      }
+    ],
     "next": [
       "Activities_InIndex",
-      "Activities_BackMapPage"
+      "Global_ToHomePage_Enter"
     ],
-    "roi": [
-      95,
-      643,
-      74,
-      49
-    ],
-    "expected": [
-      "抽抽乐"
-    ],
-    "doc": "找到图钉-点击返回主页"
-  },
-  "Activities_BackMapPage": {
-    "recognition": "OCR",
-    "action": "Click",
-    "next": [
-      "Activities_FinBackMapPage",
-      "Activities_BackMapPage"
-    ],
-    "roi": [
-      95,
-      643,
-      74,
-      49
-    ],
-    "expected": [
-      "抽抽乐"
-    ],
-    "target": [
-      120,
-      35,
-      0,
-      0
-    ],
-    "doc": "识别左下抽抽乐-返回地图页"
-  },
-  "Activities_FinBackMapPage": {
-    "recognition": "TemplateMatch",
-    "next": [],
-    "focus": "GA.退出活动成功",
-    "roi": [
-      1122,
-      646,
-      40,
-      38
-    ],
-    "template": [
-      "pin.png"
-    ],
-    "doc": "识别右下图钉-章节主页"
+    "doc": "返回主页"
   }
 }

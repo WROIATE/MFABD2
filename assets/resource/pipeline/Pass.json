@@ -1,135 +1,92 @@
 {
   "Pass_HomePage": {
     "next": [
-      "Pass_HomePageHub",
-      "Pass_HomePageHub1",
-      "Pass_HomePageHub2"
+      "Pass_InToPass",
+      "[JumpBack]Global_ToHomePage"
     ]
   },
-  "Pass_HomePageHub": {
-    "recognition": "TemplateMatch",
+  "Pass_InToPass": {
+    "recognition": "And",
+    "all_of": [
+      {
+        "recognition": "OCR",
+        "roi": [
+          98,
+          656,
+          66,
+          32
+        ],
+        "expected": [
+          "抽抽乐"
+        ]
+      },
+      {
+        "recognition": "ColorMatch",
+        "roi": [
+          104,
+          664,
+          51,
+          17
+        ],
+        "method": 40,
+        "lower": [
+          0,
+          0,
+          218
+        ],
+        "upper": [
+          149,
+          5,
+          255
+        ],
+        "count": 150
+      }
+    ],
     "action": "Click",
-    "next": [
-      "Pass_EnterPass",
-      "Pass_HomePageHub",
-      "Pass_HomePageHub1"
-    ],
-    "post_delay": 2000,
-    "focus": "G=0.页面预期内，普通启动。M.箱庭地图run已确认",
-    "roi": [
-      1047,
-      516,
-      107,
-      110
-    ],
-    "template": [
-      "Run.png"
-    ],
-    "green_mask": true,
-    "target": [
-      1186,
-      46,
-      0,
-      0
-    ],
-    "doc": "找到run-点击返回主页"
-  },
-  "Pass_HomePageHub1": {
-    "recognition": "TemplateMatch",
-    "action": "Click",
-    "next": [
-      "Pass_EnterPass",
-      "Pass_HomePageHub",
-      "Pass_HomePageHub1"
-    ],
-    "post_delay": 2000,
-    "focus": "G=0.页面预期内，普通启动。BM.箱庭地图pin已确认",
-    "roi": [
-      1108,
-      637,
-      65,
-      57
-    ],
-    "template": [
-      "pin.png"
-    ],
-    "target": [
-      1186,
-      46,
-      0,
-      0
-    ]
-  },
-  "Pass_HomePageHub2": {
-    "recognition": "TemplateMatch",
-    "action": "Click",
-    "next": [
-      "Pass_HomePageHub",
-      "Pass_HomePageHub1",
-      "Pass_HomePageHub2"
-    ],
-    "post_delay": 2000,
-    "focus": "G=1.页面非预期，点击返回按钮",
-    "roi": [
-      1,
-      1,
-      231,
-      124
-    ],
-    "template": [
-      "BackButGe.png",
-      "BackButGe2.png"
-    ],
-    "green_mask": true,
-    "doc": "其他页面，返回按钮"
-  },
-  "Pass_BackHomePage": {
-    "recognition": "TemplateMatch",
-    "action": "Click",
-    "next": [
-      "Pass_EnterPass"
-    ],
-    "roi": [
-      1122,
-      646,
-      40,
-      38
-    ],
-    "template": [
-      "pin.png"
-    ],
-    "target": [
-      1186,
-      46,
-      0,
-      0
-    ],
-    "doc": "找到图钉-点击返回主页(弃用)"
-  },
-  "Pass_EnterPass": {
-    "recognition": "OCR",
-    "action": "Click",
-    "next": [
-      "Pass_SelectPass"
-    ],
-    "focus": "PM.尝试进入通行证页面",
-    "post_delay": 1000,
-    "roi": [
-      98,
-      656,
-      66,
-      32
-    ],
-    "expected": [
-      "抽抽乐"
-    ],
     "target": [
       1063,
       210,
       0,
       0
     ],
+    "post_delay": 1000,
+    "next": [
+      "Pass_EnterPass",
+      "Pass_InToPass"
+    ],
+    "timeout": 5000,
+    "focus": "PM.尝试进入通行证页面",
     "doc": "识别左下抽抽乐-点击通行证"
+  },
+  "Pass_EnterPass": {
+    "recognition": "OCR",
+    "expected": "通行证",
+    "roi": [
+      179,
+      6,
+      148,
+      65
+    ],
+    "focus": "PM.通行证页面确认",
+    "next": [
+      "Pass_SelectPass",
+      "[JumpBack]Pass_TrySwip"
+    ]
+  },
+  "Pass_TrySwip": {
+    "action": "Swipe",
+    "begin": [
+      216,
+      518
+    ],
+    "end": [
+      214,
+      190
+    ],
+    "duration": 500,
+    "end_hold": 500,
+    "focus": "PM.尝试滑动寻找红点",
+    "max_hit": 2
   },
   "Pass_SelectPass": {
     "recognition": "TemplateMatch",
@@ -263,7 +220,7 @@
     "recognition": "OCR",
     "action": "Click",
     "next": [
-      "Pass_BackMapPage"
+      "Global_ToHomePage"
     ],
     "post_delay": 1000,
     "roi": [
@@ -275,49 +232,6 @@
     "expected": [
       "通行证"
     ],
-    "target": [
-      120,
-      35,
-      0,
-      0
-    ],
-    "doc": "返回"
-  },
-  "Pass_BackMapPage": {
-    "recognition": "OCR",
-    "action": "Click",
-    "next": [
-      "Pass_FinBackMapPage"
-    ],
-    "roi": [
-      98,
-      656,
-      66,
-      32
-    ],
-    "expected": [
-      "抽抽乐"
-    ],
-    "target": [
-      120,
-      35,
-      0,
-      0
-    ],
-    "doc": "识别左下抽抽乐-返回地图页"
-  },
-  "Pass_FinBackMapPage": {
-    "recognition": "TemplateMatch",
-    "next": [],
-    "roi": [
-      1122,
-      646,
-      40,
-      38
-    ],
-    "template": [
-      "pin.png"
-    ],
-    "doc": "识别右下图钉-章节主页"
+    "doc": "刷完了"
   }
 }

@@ -73,9 +73,11 @@
       381
     ],
     "expected": [
-      "查看概率"
+      "查看概率",
+      "必得.*服装",
+      "每个账号限购1次"
     ],
-    "doc": "识别抽卡页"
+    "doc": "识别抽卡页,后补充文段为特殊卡池"
   },
   "GachaADV_GachaPage2": {
     "recognition": "OCR",
@@ -106,7 +108,9 @@
     ],
     "expected": [
       "查看概率",
-      "兑换"
+      "兑换",
+      "必得.*服装",
+      "每个账号限购1次"
     ],
     "doc": "确认已在抽卡页"
   },
@@ -215,7 +219,9 @@
     ],
     "expected": [
       "查看概率",
-      "兑换"
+      "兑换",
+      "必得.*服装",
+      "每个账号限购1次"
     ],
     "doc": "确认已在抽卡页"
   },
@@ -378,7 +384,9 @@
     "recognition": "OCR",
     "expected": [
       "兑换",
-      "查看概率"
+      "查看概率",
+      "必得.*服装",
+      "每个账号限购1次"
     ],
     "next": [
       "[JumpBack]GachaADV_TouchFreeGacha",
@@ -498,7 +506,9 @@
     "recognition": "OCR",
     "expected": [
       "兑换",
-      "查看概率"
+      "查看概率",
+      "必得.*服装",
+      "每个账号限购1次"
     ],
     "next": [
       "[JumpBack]GachaADV_TouchFreeGacha",
@@ -614,7 +624,9 @@
     "recognition": "OCR",
     "expected": [
       "兑换",
-      "查看概率"
+      "查看概率",
+      "必得.*服装",
+      "每个账号限购1次"
     ],
     "next": [
       "[JumpBack]GachaADV_TouchFreeGacha",
@@ -745,7 +757,9 @@
     "recognition": "OCR",
     "expected": [
       "兑换",
-      "查看概率"
+      "查看概率",
+      "必得.*服装",
+      "每个账号限购1次"
     ],
     "next": [
       "[JumpBack]GachaADV_TouchFreeGacha",
@@ -855,7 +869,9 @@
     "recognition": "OCR",
     "expected": [
       "兑换",
-      "查看概率"
+      "查看概率",
+      "必得.*服装",
+      "每个账号限购1次"
     ],
     "next": [
       "[JumpBack]GachaADV_TouchFreeGacha",
@@ -1533,7 +1549,9 @@
     ],
     "expected": [
       "查看概率",
-      "兑换"
+      "兑换",
+      "必得.*服装",
+      "每个账号限购1次"
     ],
     "doc": "确认已在抽卡页"
   },
