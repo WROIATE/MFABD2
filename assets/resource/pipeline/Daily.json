@@ -155,21 +155,47 @@
     "max_hit": 1
   },
   "Daily_Busin_Hub_Post": {
-    "recognition": "OCR",
+    "recognition": "And",
+    "all_of": [
+      {
+        "recognition": "OCR",
+        "roi": [
+          98,
+          656,
+          66,
+          32
+        ],
+        "expected": [
+          "抽抽乐"
+        ]
+      },
+      {
+        "recognition": "ColorMatch",
+        "roi": [
+          104,
+          664,
+          51,
+          17
+        ],
+        "method": 40,
+        "lower": [
+          0,
+          0,
+          218
+        ],
+        "upper": [
+          149,
+          5,
+          255
+        ],
+        "count": 150
+      }
+    ],
     "next": [
       "Daily_BusinReward_img",
       "Daily_BusinReward"
     ],
     "focus": "GOM.餐馆日结组件",
-    "roi": [
-      98,
-      656,
-      66,
-      32
-    ],
-    "expected": [
-      "抽抽乐"
-    ],
     "doc": "识别左下抽抽乐"
   },
   "Daily_BusinReward": {
