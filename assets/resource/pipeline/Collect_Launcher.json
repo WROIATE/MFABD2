@@ -569,7 +569,7 @@
                     "patch": {
                         "next": [
                             "Collect_LocatePackFrame_Smart_Swip",
-                            "Collect_LocatePackFrame_Loc1"
+                            "$self"
                         ]
                     },
                     "origin": {
@@ -639,7 +639,7 @@
                     "patch": {
                         "next": [
                             "Collect_LocatePackFrame_Smart_Swip",
-                            "Collect_LocatePackFrame_Loc2"
+                            "$self"
                         ]
                     },
                     "origin": {
@@ -707,7 +707,7 @@
                     "patch": {
                         "next": [
                             "Collect_LocatePackFrame_Smart_Swip",
-                            "Collect_LocatePackFrame_Loc3"
+                            "$self"
                         ]
                     },
                     "origin": {
@@ -774,7 +774,7 @@
                     "patch": {
                         "next": [
                             "Collect_LocatePackFrame_Smart_Swip",
-                            "Collect_LocatePackFrame_Loc4"
+                            "$self"
                         ]
                     },
                     "origin": {
@@ -840,7 +840,7 @@
                     "patch": {
                         "next": [
                             "Collect_LocatePackFrame_Smart_Swip",
-                            "Collect_LocatePackFrame_Loc5"
+                            "$self"
                         ]
                     },
                     "origin": {
@@ -905,7 +905,7 @@
                     "patch": {
                         "next": [
                             "Collect_LocatePackFrame_Smart_Swip",
-                            "Collect_LocatePackFrame_Loc6"
+                            "$self"
                         ]
                     },
                     "origin": {
@@ -969,7 +969,7 @@
                     "patch": {
                         "next": [
                             "Collect_LocatePackFrame_Smart_Swip",
-                            "Collect_LocatePackFrame_Loc7"
+                            "$self"
                         ]
                     },
                     "origin": {
@@ -1032,7 +1032,7 @@
                     "patch": {
                         "next": [
                             "Collect_LocatePackFrame_Smart_Swip",
-                            "Collect_LocatePackFrame_Loc8"
+                            "$self"
                         ]
                     },
                     "origin": {
@@ -1093,7 +1093,7 @@
                     "patch": {
                         "next": [
                             "Collect_LocatePackFrame_Smart_Swip",
-                            "Collect_LocatePackFrame_Loc9"
+                            "$self"
                         ]
                     },
                     "origin": {
