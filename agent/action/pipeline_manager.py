@@ -219,7 +219,15 @@ from recognition.counter import TAG_STORE
 #             "origin": {                             // 对于深度修改，origin 依然需要填写合并用字典格式
 #                 "all_of": [{"roi": [0,0,0,0]}] 
 #             }
-#         }
+#         },
+#         {
+#             "pattern": "^Collect_LocatePackFrame_Loc[2-9]$", 
+#             "patch": {                              // [选填] 修改方案 3: 动态自我引用 ($self)
+#                 "next": [
+#                     "Collect_Loc_OutToSwip_Hub_Ingress",
+#                     "[JumpBack]$self"               // $self 会在运行时被自动替换为实际匹配到的节点真名
+#                 ]                                   // (例如匹配到 Loc9 时，这里会变成 [JumpBack]Collect_LocatePackFrame_Loc9)
+#             }
 #     ]
 # }
 # ------------------------------------------------------------------------------
@@ -632,7 +640,7 @@ class PatchBatch(CustomAction):
 @AgentServer.custom_action("PatchByRegex")
 class PatchByRegex(CustomAction):
     def run(self, context: Context, argv: CustomAction.RunArg) -> bool:
-        global NODE_BACKUPS # 引入全局账本
+        global NODE_BACKUPS 
         
         params = parse_json_arg(argv)
         _process_reset_tags(params)
@@ -649,8 +657,21 @@ class PatchByRegex(CustomAction):
         matched_count = 0
         
         rules = params.get("rules")
-        if not rules:
-            rules = [params] 
+        if rules is None:
+            rules = [params]
+
+        # ==========================================
+        # 💡 [新增] 动态替换 $self 的辅助函数
+        # 它可以钻进字典或数组的最深处，把 "$self" 换成节点真名
+        # ==========================================
+        def replace_self(data, current_node_name):
+            if isinstance(data, str):
+                return data.replace("$self", current_node_name)
+            elif isinstance(data, list):
+                return [replace_self(item, current_node_name) for item in data]
+            elif isinstance(data, dict):
+                return {k: replace_self(v, current_node_name) for k, v in data.items()}
+            return data
         
         try:
             for rule in rules:
@@ -663,7 +684,7 @@ class PatchByRegex(CustomAction):
                 target_path = rule.get("target_path") 
                 deep_value = rule.get("value") 
                 simple_patch = rule.get("patch") 
-                origin_data = rule.get("origin") # 读取用户手填的还原锚点
+                origin_data = rule.get("origin") 
                 
                 final_deep_value = deep_value
                 if final_deep_value == "$box": 
@@ -675,9 +696,7 @@ class PatchByRegex(CustomAction):
                         base_config = override_dict.get(node_name, original_config)
                         
                         if regex.search(node_name):
-                            # ==========================================
-                            # 📖 影子账本登记：将正则命中的每一个节点都记录在案
-                            # ==========================================
+                            # 影子账本登记
                             if origin_data and node_name not in NODE_BACKUPS:
                                 NODE_BACKUPS[node_name] = copy.deepcopy(origin_data)
                             
@@ -688,14 +707,27 @@ class PatchByRegex(CustomAction):
                                 try:
                                     for key in target_path[:-1]:
                                         cursor = cursor[key]
-                                    cursor[target_path[-1]] = final_deep_value
+                                        
+                                    # [应用 $self]: 给深度路径赋的值进行检查替换
+                                    actual_val = replace_self(final_deep_value, node_name)
+                                    cursor[target_path[-1]] = actual_val
+                                    
                                     override_dict[node_name] = new_config
                                     matched_count += 1
-                                except: continue
+                                except Exception as e:
+                                    # [改进] 抛出警告，吃掉报错的隐患已修复
+                                    utils.mfaalog.warning(f"[Py] 深度路径修改失败 [{node_name}]: {e}")
+                                    continue
+                                    
                             elif simple_patch:
                                 patch_copy = copy.deepcopy(simple_patch)
                                 if patch_copy.get("roi") == "$box":
                                     patch_copy["roi"] = current_roi
+                                
+                                # [应用 $self]: 对整个补丁包进行检查替换
+                                patch_copy = replace_self(patch_copy, node_name)
+                                
+                                # 保留你原本的覆盖逻辑，交由 MAA 底层处理合并
                                 override_dict[node_name] = patch_copy
                                 matched_count += 1
 
@@ -704,5 +736,5 @@ class PatchByRegex(CustomAction):
                 utils.mfaalog.info(f"[Py] ⚡ [PatchRegex] 注入 {matched_count} 个节点的修改。")
             return True
         except Exception as e:
-            utils.mfaalog.error(f"[Py] PatchByRegex 异常: {e}")
+            utils.mfaalog.error(f"[Py] PatchByRegex 整体异常: {e}")
             return False
