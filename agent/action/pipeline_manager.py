@@ -161,9 +161,9 @@ from recognition.counter import TAG_STORE
 #     "type": "Custom",
 #     "param": {
 #         "custom_action": "RestoreNode",
-#         "custom_action_param": {
-#             "node": "Battle_Node"  <-- 只要名字，系统去账本里找原版数据
-#         }
+        # "custom_action_param": {
+        #     "node": "Battle_Node"  <-- 只要名字，系统去账本里找原版数据
+        # }
 #     }
 # }
 #
@@ -198,7 +198,109 @@ from recognition.counter import TAG_STORE
 #     }
 # }
 # ==============================================================================
-
+# 7. PatchByRegex (正则批量覆写 - 增强账本支持版)
+# ------------------------------------------------------------------------------
+# 场景：通过正则表达式一次性修改大批节点。完全支持影子账本和多规则并发。
+#
+# "action": "Custom",
+# "custom_action": "PatchByRegex",
+# "custom_action_param": {
+#     "reset_tags": ["TagA"],                 // [选填] 旁作用：顺手重置计数器
+#     "rules": [                              // 规则数组（如果是单套规则，可省略 rules 直接写在外层）
+#         {
+#             "pattern": ".*_Swip_.*",                // [必填] 要匹配的节点正则
+#             "patch": { "timeout": 5000 },           // [选填] 修改方案 1: 浅层合并覆盖
+#             "origin": { "timeout": 10000 }          // [关键] 登记账本：为所有匹配到的节点统一指定此还原数据
+#         },
+#         {
+#             "pattern": "^Collect_Pack_.*",
+#             "target_path": ["all_of", 0, "roi"],    // [选填] 修改方案 2: 深度路径替换(专用于替换数组内字段,先全部获取,由py合并后再全量覆盖)
+#             "value": "$box",
+#             "origin": {                             // 对于深度修改，origin 依然需要填写合并用字典格式
+#                 "all_of": [{"roi": [0,0,0,0]}] 
+#             }
+#         }
+#     ]
+# }
+# ------------------------------------------------------------------------------
+# {
+#     "💡模板_单套正则修改_附带账本记录": {
+#         "action": "Custom",
+#         "custom_action": "PatchByRegex",
+#         "custom_action_param": {
+#             "reset_tags": [
+#                 "PackLocation_ToggleSwitch"
+#             ],
+#             "pattern": [
+#                 "^Collect_LocatePackFrame_Smart_Swip$"
+#             ],
+#             "target_path": [
+#                 "custom_recognition_param",
+#                 "max"
+#             ],
+#             "value": 3,
+#             "origin": {
+#                 "custom_recognition_param": {
+#                     "max": 0,
+#                     "tag": "LocPage_SmartSwip"
+#                 }
+#             }
+#         },
+#         "doc": "用法：把正则匹配到的节点，按照 target_path 修改。同时把 origin 字典塞入账本。下次无论用单点 RestoreNode 还是 ResetAll，系统都会取这个 origin 来恢复它。"
+#     },
+#     "💡模板_多套规则_高级独立账本操作": {
+#         "action": "Custom",
+#         "custom_action": "PatchByRegex",
+#         "custom_action_param": {
+#             "rules": [
+#                 {
+#                     "pattern": [
+#                         "^Collect_Pack_(Story|Character|Event)_\\d+$"
+#                     ],
+#                     "target_path": [
+#                         "all_of",
+#                         0,
+#                         "roi"
+#                     ],
+#                     "value": "$box",
+#                     "origin": {
+#                         "all_of": [
+#                             {
+#                                 "roi": [1183, 603, 51, 56]
+#                             }
+#                         ]
+#                     }
+#                 },
+#                 {
+#                     "pattern": [
+#                         "^Shop_Buy_Item_.*$"
+#                     ],
+#                     "patch": {
+#                         "timeout": 5000,
+#                         "next": ["Shop_Out"]
+#                     },
+#                     "origin": {
+#                         "timeout": 15000,
+#                         "next": ["Shop_Continue"]
+#                     }
+#                 }
+#             ]
+#         },
+#         "doc": "用法：每个 rule 是独立的宇宙。A 类节点登记 A 类的 origin，B 类节点登记 B 类的 origin，互不干涉。"
+#     },
+#     "💡模板_单点还原_精准恢复某个特定节点": {
+#         "action": "Custom",
+#         "custom_action": "RestoreNode",
+#         "custom_action_param": {
+#             "node": "Shop_Buy_Item_3"
+#         },
+#         "next": [
+#             "Next_Pipeline_Node"
+#         ],
+#         "doc": "高阶运用：上面的正则虽然改了所有的 Shop_Buy_Item，但我现在只觉得 3 号买完了，我单独对 3 号调用 RestoreNode，把它从影子账本里单独拉出来恢复。"
+#     }
+# }
+# ==============================================================================
 # --- 全局影子账本 ---
 # 格式: { "NodeName": { "original_key": "original_value" } }
 NODE_BACKUPS = {}          # 影子账本：记录被修改节点的原值
@@ -525,33 +627,15 @@ class PatchBatch(CustomAction):
             utils.mfaalog.error(f"[Py] PatchBatch 失败: {e}")
             return False
         
-# PatchByRegex (正则批量覆写 - 增强版)
+# PatchByRegex (正则批量覆写 - 增强兼容版)
 # ==============================================================================
-# 场景：把所有 "Shop_Buy_*" 的节点超时时间都改成 5秒
 @AgentServer.custom_action("PatchByRegex")
 class PatchByRegex(CustomAction):
     def run(self, context: Context, argv: CustomAction.RunArg) -> bool:
+        global NODE_BACKUPS # [新增] 必须引入全局账本
+        
         params = parse_json_arg(argv)
-        # --- 1. 先执行副作用 (重置计数器) ---
         _process_reset_tags(params)
-
-        # --- 2. 正常业务逻辑 ---
-        patterns = params.get("pattern")
-        
-        # --- 参数解析 ---
-        # 模式 A: 深度修改 (指定路径 target_path + value)
-        target_path = params.get("target_path") 
-        deep_value = params.get("value") 
-        
-        # 模式 B: 简单覆盖 (指定 patch 字典)
-        simple_patch = params.get("patch") 
-        
-        # 校验
-        if not patterns:
-            utils.mfaalog.error("[Py] PatchByRegex: 缺少 pattern 参数")
-            return False
-            
-        if isinstance(patterns, str): patterns = [patterns]
 
         _ensure_cache_loaded()
         if not ALL_NODES_CACHE:
@@ -561,37 +645,63 @@ class PatchByRegex(CustomAction):
         if argv.box and getattr(argv.box, 'w', 0) > 0:
             current_roi = [int(argv.box.x), int(argv.box.y), int(argv.box.w), int(argv.box.h)]
         
-        final_deep_value = deep_value
-        if final_deep_value == "$box": final_deep_value = current_roi
-        
         override_dict = {}
         matched_count = 0
         
+        rules = params.get("rules")
+        if not rules:
+            rules = [params] 
+        
         try:
-            for pat in patterns:
-                regex = re.compile(pat)
-                for node_name, original_config in ALL_NODES_CACHE.items():
-                    if regex.search(node_name):
-                        if target_path:
-                            new_config = copy.deepcopy(original_config)
-                            cursor = new_config
-                            try:
-                                for key in target_path[:-1]:
-                                    cursor = cursor[key]
-                                cursor[target_path[-1]] = final_deep_value
-                                override_dict[node_name] = new_config
+            for rule in rules:
+                patterns = rule.get("pattern")
+                if not patterns: 
+                    continue
+                if isinstance(patterns, str): 
+                    patterns = [patterns]
+                
+                target_path = rule.get("target_path") 
+                deep_value = rule.get("value") 
+                simple_patch = rule.get("patch") 
+                origin_data = rule.get("origin") # [新增] 读取用户手填的还原锚点
+                
+                final_deep_value = deep_value
+                if final_deep_value == "$box": 
+                    final_deep_value = current_roi
+                
+                for pat in patterns:
+                    regex = re.compile(pat)
+                    for node_name, original_config in ALL_NODES_CACHE.items():
+                        base_config = override_dict.get(node_name, original_config)
+                        
+                        if regex.search(node_name):
+                            # ==========================================
+                            # 📖 影子账本登记：将正则命中的每一个节点都记录在案
+                            # ==========================================
+                            if origin_data and node_name not in NODE_BACKUPS:
+                                NODE_BACKUPS[node_name] = copy.deepcopy(origin_data)
+                            
+                            # 执行修改
+                            if target_path:
+                                new_config = copy.deepcopy(base_config)
+                                cursor = new_config
+                                try:
+                                    for key in target_path[:-1]:
+                                        cursor = cursor[key]
+                                    cursor[target_path[-1]] = final_deep_value
+                                    override_dict[node_name] = new_config
+                                    matched_count += 1
+                                except: continue
+                            elif simple_patch:
+                                patch_copy = copy.deepcopy(simple_patch)
+                                if patch_copy.get("roi") == "$box":
+                                    patch_copy["roi"] = current_roi
+                                override_dict[node_name] = patch_copy
                                 matched_count += 1
-                            except: continue
-                        elif simple_patch:
-                            patch_copy = copy.deepcopy(simple_patch)
-                            if patch_copy.get("roi") == "$box":
-                                patch_copy["roi"] = current_roi
-                            override_dict[node_name] = patch_copy
-                            matched_count += 1
 
             if override_dict:
                 context.override_pipeline(override_dict)
-                utils.mfaalog.info(f"[Py] ⚡ [PatchRegex] 注入 {matched_count} 个节点。")
+                utils.mfaalog.info(f"[Py] ⚡ [PatchRegex] 注入 {matched_count} 个节点的修改，已支持影子账本。")
             return True
         except Exception as e:
             utils.mfaalog.error(f"[Py] PatchByRegex 异常: {e}")
