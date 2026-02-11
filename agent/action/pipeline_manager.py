@@ -351,7 +351,7 @@ def _ensure_cache_loaded(force_refresh=False):
 
 def _process_reset_tags(params: dict):
     """
-    [新增] 通用副作用：处理标签重置
+    [新增] 通用旁作用：处理标签重置
     在任何 Action 里调用这个函数，就能顺手把计数器清了
     """
     global TAG_STORE
@@ -375,7 +375,7 @@ def _process_reset_tags(params: dict):
                 TAG_STORE[tag] = 0
                 
     if reset_logs:
-        utils.mfaalog.info(f"[Py] 🧹 [副作用] 顺手清零了标签: {reset_logs}")
+        utils.mfaalog.info(f"[Py] 🧹 [旁作用] 顺手清零了标签: {reset_logs}")
 
 @AgentServer.custom_action("PatchNode")
 class PatchNode(CustomAction):
@@ -627,12 +627,12 @@ class PatchBatch(CustomAction):
             utils.mfaalog.error(f"[Py] PatchBatch 失败: {e}")
             return False
         
-# PatchByRegex (正则批量覆写 - 增强兼容版)
+# PatchByRegex (正则批量覆写)
 # ==============================================================================
 @AgentServer.custom_action("PatchByRegex")
 class PatchByRegex(CustomAction):
     def run(self, context: Context, argv: CustomAction.RunArg) -> bool:
-        global NODE_BACKUPS # [新增] 必须引入全局账本
+        global NODE_BACKUPS # 引入全局账本
         
         params = parse_json_arg(argv)
         _process_reset_tags(params)
@@ -663,7 +663,7 @@ class PatchByRegex(CustomAction):
                 target_path = rule.get("target_path") 
                 deep_value = rule.get("value") 
                 simple_patch = rule.get("patch") 
-                origin_data = rule.get("origin") # [新增] 读取用户手填的还原锚点
+                origin_data = rule.get("origin") # 读取用户手填的还原锚点
                 
                 final_deep_value = deep_value
                 if final_deep_value == "$box": 
@@ -701,7 +701,7 @@ class PatchByRegex(CustomAction):
 
             if override_dict:
                 context.override_pipeline(override_dict)
-                utils.mfaalog.info(f"[Py] ⚡ [PatchRegex] 注入 {matched_count} 个节点的修改，已支持影子账本。")
+                utils.mfaalog.info(f"[Py] ⚡ [PatchRegex] 注入 {matched_count} 个节点的修改。")
             return True
         except Exception as e:
             utils.mfaalog.error(f"[Py] PatchByRegex 异常: {e}")
