@@ -729,8 +729,10 @@ class PatchByRegex(CustomAction):
                                     # 处理 $box
                                     actual_val = final_deep_value
                                     if actual_val == "$box":
+                                        # 无效 ROI 直接跳过本次修改，防止注入 [0,0,0,0]
                                         if not current_roi or current_roi == [0,0,0,0]:
-                                            utils.mfaalog.warning(f"[Py] ⚠️ [PatchRegex] 规则试图注入 $box，但当前无有效 ROI！节点: {node_name}")
+                                            utils.mfaalog.warning(f"[Py] ⚠️ [PatchRegex] 规则试图注入 $box 但无有效 ROI，跳过此节点: {node_name}")
+                                            continue 
                                         actual_val = current_roi
                                     
                                     # 处理 $self
@@ -750,9 +752,12 @@ class PatchByRegex(CustomAction):
                                 
                                 # 处理 $box
                                 if patch_copy.get("roi") == "$box":
+                                    # [修正] 无效 ROI 只删字段，保留 timeout/next 等其他修改
                                     if not current_roi or current_roi == [0,0,0,0]:
-                                        utils.mfaalog.warning(f"[Py] ⚠️ [PatchRegex] 规则试图注入 $box，但当前无有效 ROI！节点: {node_name}")
-                                    patch_copy["roi"] = current_roi
+                                        utils.mfaalog.warning(f"[Py] ⚠️ [PatchRegex] 规则试图注入 $box 但无有效 ROI，已移除该 ROI 字段，其他参数继续生效: {node_name}")
+                                        del patch_copy["roi"]
+                                    else:
+                                        patch_copy["roi"] = current_roi
                                 
                                 # 处理 $self
                                 patch_copy = replace_self(patch_copy, node_name)
