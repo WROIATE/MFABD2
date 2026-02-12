@@ -436,7 +436,7 @@ class RestoreNode(CustomAction):
 
         if not backup_data:
             utils.mfaalog.warning(f"[Py] ⚠️ 无法还原 [{target_node}]：未在Patch时登记origin，也未传入backup参数")
-            return False
+            return True
 
         try:
             context.override_pipeline({target_node: backup_data})
