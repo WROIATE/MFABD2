@@ -649,6 +649,7 @@ class PatchByRegex(CustomAction):
         if not ALL_NODES_CACHE:
             return False
 
+        # 获取当前识别到的框
         current_roi = [0,0,0,0]
         if argv.box and getattr(argv.box, 'w', 0) > 0:
             current_roi = [int(argv.box.x), int(argv.box.y), int(argv.box.w), int(argv.box.h)]
@@ -656,6 +657,7 @@ class PatchByRegex(CustomAction):
         override_dict = {}
         matched_count = 0
         
+        # 兼容性处理：如果没有 rules 数组，把外层参数当作单条规则处理
         rules = params.get("rules")
         if rules is None:
             rules = [params]
@@ -664,13 +666,24 @@ class PatchByRegex(CustomAction):
         # 💡 [新增] 动态替换 $self 的辅助函数
         # 它可以钻进字典或数组的最深处，把 "$self" 换成节点真名
         # ==========================================
-        def replace_self(data, current_node_name):
+
+        # --- 内部辅助函数：深度合并字典 (防止 simple_patch 抹除原有属性) ---
+        def deep_merge(tgt, src):
+            for k, v in src.items():
+                if isinstance(v, dict) and k in tgt and isinstance(tgt[k], dict):
+                    deep_merge(tgt[k], v)
+                else:
+                    tgt[k] = copy.deepcopy(v)
+            return tgt
+
+        # --- 内部辅助函数：动态替换 $self 占位符 ---
+        def replace_self(data, node_name):
             if isinstance(data, str):
-                return data.replace("$self", current_node_name)
+                return data.replace("$self", node_name)
             elif isinstance(data, list):
-                return [replace_self(item, current_node_name) for item in data]
+                return [replace_self(item, node_name) for item in data]
             elif isinstance(data, dict):
-                return {k: replace_self(v, current_node_name) for k, v in data.items()}
+                return {k: replace_self(v, node_name) for k, v in data.items()}
             return data
         
         try:
@@ -687,48 +700,67 @@ class PatchByRegex(CustomAction):
                 origin_data = rule.get("origin") 
                 
                 final_deep_value = deep_value
-                if final_deep_value == "$box": 
-                    final_deep_value = current_roi
                 
                 for pat in patterns:
                     regex = re.compile(pat)
                     for node_name, original_config in ALL_NODES_CACHE.items():
+                        # 获取当前节点的最新状态（可能是原始配置，也可能是被前一条规则修改过的配置）
                         base_config = override_dict.get(node_name, original_config)
                         
                         if regex.search(node_name):
-                            # 影子账本登记
+                            # ------------------------------------------------------
+                            # [逻辑警告] 影子账本登记：先到先得原则
+                            # ------------------------------------------------------
+                            # 只有当该节点尚未在账本中时，才记录 origin。
+                            # 这意味着如果多个规则都试图设定 origin，只有第一条生效。
+                            # 设计意图：防止多次修改导致“原始还原点”被后续规则污染。
+                            # ------------------------------------------------------
                             if origin_data and node_name not in NODE_BACKUPS:
                                 NODE_BACKUPS[node_name] = copy.deepcopy(origin_data)
                             
-                            # 执行修改
+                            # === 模式 1: 深度路径替换 ===
                             if target_path:
                                 new_config = copy.deepcopy(base_config)
                                 cursor = new_config
                                 try:
                                     for key in target_path[:-1]:
                                         cursor = cursor[key]
-                                        
-                                    # [应用 $self]: 给深度路径赋的值进行检查替换
-                                    actual_val = replace_self(final_deep_value, node_name)
-                                    cursor[target_path[-1]] = actual_val
                                     
+                                    # 处理 $box
+                                    actual_val = final_deep_value
+                                    if actual_val == "$box":
+                                        if not current_roi or current_roi == [0,0,0,0]:
+                                            utils.mfaalog.warning(f"[Py] ⚠️ [PatchRegex] 规则试图注入 $box，但当前无有效 ROI！节点: {node_name}")
+                                        actual_val = current_roi
+                                    
+                                    # 处理 $self
+                                    actual_val = replace_self(actual_val, node_name)
+                                    
+                                    cursor[target_path[-1]] = actual_val
                                     override_dict[node_name] = new_config
                                     matched_count += 1
                                 except Exception as e:
-                                    # [改进] 抛出警告，吃掉报错的隐患已修复
                                     utils.mfaalog.warning(f"[Py] 深度路径修改失败 [{node_name}]: {e}")
                                     continue
                                     
+                            # === 模式 2: 浅层补丁合并 ===
                             elif simple_patch:
+                                new_config = copy.deepcopy(base_config)
                                 patch_copy = copy.deepcopy(simple_patch)
+                                
+                                # 处理 $box
                                 if patch_copy.get("roi") == "$box":
+                                    if not current_roi or current_roi == [0,0,0,0]:
+                                        utils.mfaalog.warning(f"[Py] ⚠️ [PatchRegex] 规则试图注入 $box，但当前无有效 ROI！节点: {node_name}")
                                     patch_copy["roi"] = current_roi
                                 
-                                # [应用 $self]: 对整个补丁包进行检查替换
+                                # 处理 $self
                                 patch_copy = replace_self(patch_copy, node_name)
                                 
-                                # 保留你原本的覆盖逻辑，交由 MAA 底层处理合并
-                                override_dict[node_name] = patch_copy
+                                # 使用 deep_merge 安全合并，防止抹除原节点其他属性
+                                deep_merge(new_config, patch_copy)
+                                
+                                override_dict[node_name] = new_config
                                 matched_count += 1
 
             if override_dict:
