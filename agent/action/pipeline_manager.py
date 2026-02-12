@@ -161,9 +161,9 @@ from recognition.counter import TAG_STORE
 #     "type": "Custom",
 #     "param": {
 #         "custom_action": "RestoreNode",
-#         "custom_action_param": {
-#             "node": "Battle_Node"  <-- 只要名字，系统去账本里找原版数据
-#         }
+        # "custom_action_param": {
+        #     "node": "Battle_Node"  <-- 只要名字，系统去账本里找原版数据
+        # }
 #     }
 # }
 #
@@ -198,7 +198,117 @@ from recognition.counter import TAG_STORE
 #     }
 # }
 # ==============================================================================
-
+# 7. PatchByRegex (正则批量覆写 - 增强账本支持版)
+# ------------------------------------------------------------------------------
+# 场景：通过正则表达式一次性修改大批节点。完全支持影子账本和多规则并发。
+#
+# "action": "Custom",
+# "custom_action": "PatchByRegex",
+# "custom_action_param": {
+#     "reset_tags": ["TagA"],                 // [选填] 旁作用：顺手重置计数器
+#     "rules": [                              // 规则数组（如果是单套规则，可省略 rules 直接写在外层）
+#         {
+#             "pattern": ".*_Swip_.*",                // [必填] 要匹配的节点正则
+#             "patch": { "timeout": 5000 },           // [选填] 修改方案 1: 浅层合并覆盖
+#             "origin": { "timeout": 10000 }          // [关键] 登记账本：为所有匹配到的节点统一指定此还原数据
+#         },
+#         {
+#             "pattern": "^Collect_Pack_.*",
+#             "target_path": ["all_of", 0, "roi"],    // [选填] 修改方案 2: 深度路径替换(专用于替换数组内字段,先全部获取,由py合并后再全量覆盖)
+#             "value": "$box",
+#             "origin": {                             // 对于深度修改，origin 依然需要填写合并用字典格式
+#                 "all_of": [{"roi": [0,0,0,0]}] 
+#             }
+#         },
+#         {
+#             "pattern": "^Collect_LocatePackFrame_Loc[2-9]$", 
+#             "patch": {                              // [选填] 修改方案 3: 动态自我引用 ($self)
+#                 "next": [
+#                     "Collect_Loc_OutToSwip_Hub_Ingress",
+#                     "[JumpBack]$self"               // $self 会在运行时被自动替换为实际匹配到的节点真名
+#                 ]                                   // (例如匹配到 Loc9 时，这里会变成 [JumpBack]Collect_LocatePackFrame_Loc9)
+#             }
+#     ]
+# }
+# ------------------------------------------------------------------------------
+# {
+#     "💡模板_单套正则修改_附带账本记录": {
+#         "action": "Custom",
+#         "custom_action": "PatchByRegex",
+#         "custom_action_param": {
+#             "reset_tags": [
+#                 "PackLocation_ToggleSwitch"
+#             ],
+#             "pattern": [
+#                 "^Collect_LocatePackFrame_Smart_Swip$"
+#             ],
+#             "target_path": [
+#                 "custom_recognition_param",
+#                 "max"
+#             ],
+#             "value": 3,
+#             "origin": {
+#                 "custom_recognition_param": {
+#                     "max": 0,
+#                     "tag": "LocPage_SmartSwip"
+#                 }
+#             }
+#         },
+#         "doc": "用法：把正则匹配到的节点，按照 target_path 修改。同时把 origin 字典塞入账本。下次无论用单点 RestoreNode 还是 ResetAll，系统都会取这个 origin 来恢复它。"
+#     },
+#     "💡模板_多套规则_高级独立账本操作": {
+#         "action": "Custom",
+#         "custom_action": "PatchByRegex",
+#         "custom_action_param": {
+#             "rules": [
+#                 {
+#                     "pattern": [
+#                         "^Collect_Pack_(Story|Character|Event)_\\d+$"
+#                     ],
+#                     "target_path": [
+#                         "all_of",
+#                         0,
+#                         "roi"
+#                     ],
+#                     "value": "$box",
+#                     "origin": {
+#                         "all_of": [
+#                             {
+#                                 "roi": [1183, 603, 51, 56]
+#                             }
+#                         ]
+#                     }
+#                 },
+#                 {
+#                     "pattern": [
+#                         "^Shop_Buy_Item_.*$"
+#                     ],
+#                     "patch": {
+#                         "timeout": 5000,
+#                         "next": ["Shop_Out"]
+#                     },
+#                     "origin": {
+#                         "timeout": 15000,
+#                         "next": ["Shop_Continue"]
+#                     }
+#                 }
+#             ]
+#         },
+#         "doc": "用法：每个 rule 是独立的宇宙。A 类节点登记 A 类的 origin，B 类节点登记 B 类的 origin，互不干涉。"
+#     },
+#     "💡模板_单点还原_精准恢复某个特定节点": {
+#         "action": "Custom",
+#         "custom_action": "RestoreNode",
+#         "custom_action_param": {
+#             "node": "Shop_Buy_Item_3"
+#         },
+#         "next": [
+#             "Next_Pipeline_Node"
+#         ],
+#         "doc": "高阶运用：上面的正则虽然改了所有的 Shop_Buy_Item，但我现在只觉得 3 号买完了，我单独对 3 号调用 RestoreNode，把它从影子账本里单独拉出来恢复。"
+#     }
+# }
+# ==============================================================================
 # --- 全局影子账本 ---
 # 格式: { "NodeName": { "original_key": "original_value" } }
 NODE_BACKUPS = {}          # 影子账本：记录被修改节点的原值
@@ -249,7 +359,7 @@ def _ensure_cache_loaded(force_refresh=False):
 
 def _process_reset_tags(params: dict):
     """
-    [新增] 通用副作用：处理标签重置
+    [新增] 通用旁作用：处理标签重置
     在任何 Action 里调用这个函数，就能顺手把计数器清了
     """
     global TAG_STORE
@@ -273,7 +383,7 @@ def _process_reset_tags(params: dict):
                 TAG_STORE[tag] = 0
                 
     if reset_logs:
-        utils.mfaalog.info(f"[Py] 🧹 [副作用] 顺手清零了标签: {reset_logs}")
+        utils.mfaalog.info(f"[Py] 🧹 [旁作用] 顺手清零了标签: {reset_logs}")
 
 @AgentServer.custom_action("PatchNode")
 class PatchNode(CustomAction):
@@ -525,74 +635,143 @@ class PatchBatch(CustomAction):
             utils.mfaalog.error(f"[Py] PatchBatch 失败: {e}")
             return False
         
-# PatchByRegex (正则批量覆写 - 增强版)
+# PatchByRegex (正则批量覆写)
 # ==============================================================================
-# 场景：把所有 "Shop_Buy_*" 的节点超时时间都改成 5秒
 @AgentServer.custom_action("PatchByRegex")
 class PatchByRegex(CustomAction):
     def run(self, context: Context, argv: CustomAction.RunArg) -> bool:
+        global NODE_BACKUPS 
+        
         params = parse_json_arg(argv)
-        # --- 1. 先执行副作用 (重置计数器) ---
         _process_reset_tags(params)
-
-        # --- 2. 正常业务逻辑 ---
-        patterns = params.get("pattern")
-        
-        # --- 参数解析 ---
-        # 模式 A: 深度修改 (指定路径 target_path + value)
-        target_path = params.get("target_path") 
-        deep_value = params.get("value") 
-        
-        # 模式 B: 简单覆盖 (指定 patch 字典)
-        simple_patch = params.get("patch") 
-        
-        # 校验
-        if not patterns:
-            utils.mfaalog.error("[Py] PatchByRegex: 缺少 pattern 参数")
-            return False
-            
-        if isinstance(patterns, str): patterns = [patterns]
 
         _ensure_cache_loaded()
         if not ALL_NODES_CACHE:
             return False
 
+        # 获取当前识别到的框
         current_roi = [0,0,0,0]
         if argv.box and getattr(argv.box, 'w', 0) > 0:
             current_roi = [int(argv.box.x), int(argv.box.y), int(argv.box.w), int(argv.box.h)]
         
-        final_deep_value = deep_value
-        if final_deep_value == "$box": final_deep_value = current_roi
-        
         override_dict = {}
         matched_count = 0
         
+        # 兼容性处理：如果没有 rules 数组，把外层参数当作单条规则处理
+        rules = params.get("rules")
+        if rules is None:
+            rules = [params]
+
+        # ==========================================
+        # 💡 [新增] 动态替换 $self 的辅助函数
+        # 它可以钻进字典或数组的最深处，把 "$self" 换成节点真名
+        # ==========================================
+
+        # --- 内部辅助函数：深度合并字典 (防止 simple_patch 抹除原有属性) ---
+        def deep_merge(tgt, src):
+            for k, v in src.items():
+                if isinstance(v, dict) and k in tgt and isinstance(tgt[k], dict):
+                    deep_merge(tgt[k], v)
+                else:
+                    tgt[k] = copy.deepcopy(v)
+            return tgt
+
+        # --- 内部辅助函数：动态替换 $self 占位符 ---
+        def replace_self(data, node_name):
+            if isinstance(data, str):
+                return data.replace("$self", node_name)
+            elif isinstance(data, list):
+                return [replace_self(item, node_name) for item in data]
+            elif isinstance(data, dict):
+                return {k: replace_self(v, node_name) for k, v in data.items()}
+            return data
+        
         try:
-            for pat in patterns:
-                regex = re.compile(pat)
-                for node_name, original_config in ALL_NODES_CACHE.items():
-                    if regex.search(node_name):
-                        if target_path:
-                            new_config = copy.deepcopy(original_config)
-                            cursor = new_config
-                            try:
-                                for key in target_path[:-1]:
-                                    cursor = cursor[key]
-                                cursor[target_path[-1]] = final_deep_value
+            for rule in rules:
+                patterns = rule.get("pattern")
+                if not patterns: 
+                    continue
+                if isinstance(patterns, str): 
+                    patterns = [patterns]
+                
+                target_path = rule.get("target_path") 
+                deep_value = rule.get("value") 
+                simple_patch = rule.get("patch") 
+                origin_data = rule.get("origin") 
+                
+                final_deep_value = deep_value
+                
+                for pat in patterns:
+                    regex = re.compile(pat)
+                    for node_name, original_config in ALL_NODES_CACHE.items():
+                        # 获取当前节点的最新状态（可能是原始配置，也可能是被前一条规则修改过的配置）
+                        base_config = override_dict.get(node_name, original_config)
+                        
+                        if regex.search(node_name):
+                            # ------------------------------------------------------
+                            # [逻辑警告] 影子账本登记：先到先得原则
+                            # ------------------------------------------------------
+                            # 只有当该节点尚未在账本中时，才记录 origin。
+                            # 这意味着如果多个规则都试图设定 origin，只有第一条生效。
+                            # 设计意图：防止多次修改导致“原始还原点”被后续规则污染。
+                            # ------------------------------------------------------
+                            if origin_data and node_name not in NODE_BACKUPS:
+                                NODE_BACKUPS[node_name] = copy.deepcopy(origin_data)
+                            
+                            # === 模式 1: 深度路径替换 ===
+                            if target_path:
+                                new_config = copy.deepcopy(base_config)
+                                cursor = new_config
+                                try:
+                                    for key in target_path[:-1]:
+                                        cursor = cursor[key]
+                                    
+                                    # 处理 $box
+                                    actual_val = final_deep_value
+                                    if actual_val == "$box":
+                                        # 无效 ROI 直接跳过本次修改，防止注入 [0,0,0,0]
+                                        if not current_roi or current_roi == [0,0,0,0]:
+                                            utils.mfaalog.warning(f"[Py] ⚠️ [PatchRegex] 规则试图注入 $box 但无有效 ROI，跳过此节点: {node_name}")
+                                            continue 
+                                        actual_val = current_roi
+                                    
+                                    # 处理 $self
+                                    actual_val = replace_self(actual_val, node_name)
+                                    
+                                    cursor[target_path[-1]] = actual_val
+                                    override_dict[node_name] = new_config
+                                    matched_count += 1
+                                except Exception as e:
+                                    utils.mfaalog.warning(f"[Py] 深度路径修改失败 [{node_name}]: {e}")
+                                    continue
+                                    
+                            # === 模式 2: 浅层补丁合并 ===
+                            elif simple_patch:
+                                new_config = copy.deepcopy(base_config)
+                                patch_copy = copy.deepcopy(simple_patch)
+                                
+                                # 处理 $box
+                                if patch_copy.get("roi") == "$box":
+                                    # [修正] 无效 ROI 只删字段，保留 timeout/next 等其他修改
+                                    if not current_roi or current_roi == [0,0,0,0]:
+                                        utils.mfaalog.warning(f"[Py] ⚠️ [PatchRegex] 规则试图注入 $box 但无有效 ROI，已移除该 ROI 字段，其他参数继续生效: {node_name}")
+                                        del patch_copy["roi"]
+                                    else:
+                                        patch_copy["roi"] = current_roi
+                                
+                                # 处理 $self
+                                patch_copy = replace_self(patch_copy, node_name)
+                                
+                                # 使用 deep_merge 安全合并，防止抹除原节点其他属性
+                                deep_merge(new_config, patch_copy)
+                                
                                 override_dict[node_name] = new_config
                                 matched_count += 1
-                            except: continue
-                        elif simple_patch:
-                            patch_copy = copy.deepcopy(simple_patch)
-                            if patch_copy.get("roi") == "$box":
-                                patch_copy["roi"] = current_roi
-                            override_dict[node_name] = patch_copy
-                            matched_count += 1
 
             if override_dict:
                 context.override_pipeline(override_dict)
-                utils.mfaalog.info(f"[Py] ⚡ [PatchRegex] 注入 {matched_count} 个节点。")
+                utils.mfaalog.info(f"[Py] ⚡ [PatchRegex] 注入 {matched_count} 个节点的修改。")
             return True
         except Exception as e:
-            utils.mfaalog.error(f"[Py] PatchByRegex 异常: {e}")
+            utils.mfaalog.error(f"[Py] PatchByRegex 整体异常: {e}")
             return False

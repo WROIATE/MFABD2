@@ -533,7 +533,6 @@
             "[JumpBack]Collect_LocatePackFrame_Loc1_ResetLoc"
         ]
     },
-    "探针结束": {},
     "Collect_LocatePackFrame_Loc1": {
         "recognition": "TemplateMatch",
         "template": [
@@ -551,28 +550,49 @@
         "action": "Custom",
         "custom_action": "PatchByRegex",
         "custom_action_param": {
-            "pattern": [
-                "^Collect_Pack_(Story|Character|Event)_\\d+$"
+            "rules": [
+                {
+                    "pattern": [
+                        "^Collect_Pack_(Story|Character|Event)_\\d+$"
+                    ],
+                    "target_path": [
+                        "all_of",
+                        0,
+                        "roi"
+                    ],
+                    "value": "$box"
+                },
+                {
+                    "pattern": [
+                        "Collect_LocatePackFrame_Smart_Swip_UpdateTag"
+                    ],
+                    "patch": {
+                        "next": [
+                            "Collect_LocatePackFrame_Smart_Swip",
+                            "$self"
+                        ]
+                    },
+                    "origin": {
+                        "next": [
+                            "Collect_LocatePackFrame_Smart_Swip",
+                            "Collect_Loc_SwipToIn_Hub"
+                        ]
+                    }
+                }
             ],
-            "target_path": [
-                "all_of",
-                0,
-                "roi"
-            ],
-            "value": "$box",
             "reset_tags": [
                 "PackLocation_ToggleSwitch"
             ]
         },
         "next": [
-            "[JumpBack]Collect_LocatePackFrame_Smart_Swip",
+            "Collect_LocatePackFrame_Smart_Swip",
             "[JumpBack]Collect_LocatePackFrame_Loc1_ResetLoc",
             "[JumpBack]Collect_PackLocation_PassFieldsAndHub",
             "Collect_LocatePackFrame_Loc2"
         ],
         "timeout": 2000,
         "focus": "CM.L.快速卡带盒定位-位置1",
-        "doc": "正常范围:[41,580,163,114]/缩小范围:[47,580,145,114],让滑动复位更精确",
+        "doc": "正常范围:[41,580,163,114]/缩小范围:[47,580,145,114],让滑动复位更精确|custom动作解析:批量替换卡带识别节点、修改swip使得next返回此处、重置swip的计数器",
         "on_error": [
             "Collect_LocatePackFrame_Loc3",
             "Collect_LocatePackFrame_Loc4",
@@ -600,21 +620,42 @@
         "action": "Custom",
         "custom_action": "PatchByRegex",
         "custom_action_param": {
-            "pattern": [
-                "^Collect_Pack_(Story|Character|Event)_\\d+$"
+            "rules": [
+                {
+                    "pattern": [
+                        "^Collect_Pack_(Story|Character|Event)_\\d+$"
+                    ],
+                    "target_path": [
+                        "all_of",
+                        0,
+                        "roi"
+                    ],
+                    "value": "$box"
+                },
+                {
+                    "pattern": [
+                        "Collect_LocatePackFrame_Smart_Swip_UpdateTag"
+                    ],
+                    "patch": {
+                        "next": [
+                            "Collect_LocatePackFrame_Smart_Swip",
+                            "$self"
+                        ]
+                    },
+                    "origin": {
+                        "next": [
+                            "Collect_LocatePackFrame_Smart_Swip",
+                            "Collect_Loc_SwipToIn_Hub"
+                        ]
+                    }
+                }
             ],
-            "target_path": [
-                "all_of",
-                0,
-                "roi"
-            ],
-            "value": "$box",
             "reset_tags": [
                 "PackLocation_ToggleSwitch"
             ]
         },
         "next": [
-            "[JumpBack]Collect_LocatePackFrame_Smart_Swip",
+            "Collect_LocatePackFrame_Smart_Swip",
             "[JumpBack]Collect_LocatePackFrame_Loc1_ResetLoc",
             "[JumpBack]Collect_PackLocation_PassFieldsAndHub",
             "Collect_LocatePackFrame_Loc3"
@@ -647,21 +688,42 @@
         "action": "Custom",
         "custom_action": "PatchByRegex",
         "custom_action_param": {
-            "pattern": [
-                "^Collect_Pack_(Story|Character|Event)_\\d+$"
+            "rules": [
+                {
+                    "pattern": [
+                        "^Collect_Pack_(Story|Character|Event)_\\d+$"
+                    ],
+                    "target_path": [
+                        "all_of",
+                        0,
+                        "roi"
+                    ],
+                    "value": "$box"
+                },
+                {
+                    "pattern": [
+                        "Collect_LocatePackFrame_Smart_Swip_UpdateTag"
+                    ],
+                    "patch": {
+                        "next": [
+                            "Collect_LocatePackFrame_Smart_Swip",
+                            "$self"
+                        ]
+                    },
+                    "origin": {
+                        "next": [
+                            "Collect_LocatePackFrame_Smart_Swip",
+                            "Collect_Loc_SwipToIn_Hub"
+                        ]
+                    }
+                }
             ],
-            "target_path": [
-                "all_of",
-                0,
-                "roi"
-            ],
-            "value": "$box",
             "reset_tags": [
                 "PackLocation_ToggleSwitch"
             ]
         },
         "next": [
-            "[JumpBack]Collect_LocatePackFrame_Smart_Swip",
+            "Collect_LocatePackFrame_Smart_Swip",
             "[JumpBack]Collect_LocatePackFrame_Loc1_ResetLoc",
             "[JumpBack]Collect_PackLocation_PassFieldsAndHub",
             "Collect_LocatePackFrame_Loc4"
@@ -693,21 +755,42 @@
         "action": "Custom",
         "custom_action": "PatchByRegex",
         "custom_action_param": {
-            "pattern": [
-                "^Collect_Pack_(Story|Character|Event)_\\d+$"
+            "rules": [
+                {
+                    "pattern": [
+                        "^Collect_Pack_(Story|Character|Event)_\\d+$"
+                    ],
+                    "target_path": [
+                        "all_of",
+                        0,
+                        "roi"
+                    ],
+                    "value": "$box"
+                },
+                {
+                    "pattern": [
+                        "Collect_LocatePackFrame_Smart_Swip_UpdateTag"
+                    ],
+                    "patch": {
+                        "next": [
+                            "Collect_LocatePackFrame_Smart_Swip",
+                            "$self"
+                        ]
+                    },
+                    "origin": {
+                        "next": [
+                            "Collect_LocatePackFrame_Smart_Swip",
+                            "Collect_Loc_SwipToIn_Hub"
+                        ]
+                    }
+                }
             ],
-            "target_path": [
-                "all_of",
-                0,
-                "roi"
-            ],
-            "value": "$box",
             "reset_tags": [
                 "PackLocation_ToggleSwitch"
             ]
         },
         "next": [
-            "[JumpBack]Collect_LocatePackFrame_Smart_Swip",
+            "Collect_LocatePackFrame_Smart_Swip",
             "[JumpBack]Collect_LocatePackFrame_Loc1_ResetLoc",
             "[JumpBack]Collect_PackLocation_PassFieldsAndHub",
             "Collect_LocatePackFrame_Loc5"
@@ -738,21 +821,42 @@
         "action": "Custom",
         "custom_action": "PatchByRegex",
         "custom_action_param": {
-            "pattern": [
-                "^Collect_Pack_(Story|Character|Event)_\\d+$"
+            "rules": [
+                {
+                    "pattern": [
+                        "^Collect_Pack_(Story|Character|Event)_\\d+$"
+                    ],
+                    "target_path": [
+                        "all_of",
+                        0,
+                        "roi"
+                    ],
+                    "value": "$box"
+                },
+                {
+                    "pattern": [
+                        "Collect_LocatePackFrame_Smart_Swip_UpdateTag"
+                    ],
+                    "patch": {
+                        "next": [
+                            "Collect_LocatePackFrame_Smart_Swip",
+                            "$self"
+                        ]
+                    },
+                    "origin": {
+                        "next": [
+                            "Collect_LocatePackFrame_Smart_Swip",
+                            "Collect_Loc_SwipToIn_Hub"
+                        ]
+                    }
+                }
             ],
-            "target_path": [
-                "all_of",
-                0,
-                "roi"
-            ],
-            "value": "$box",
             "reset_tags": [
                 "PackLocation_ToggleSwitch"
             ]
         },
         "next": [
-            "[JumpBack]Collect_LocatePackFrame_Smart_Swip",
+            "Collect_LocatePackFrame_Smart_Swip",
             "[JumpBack]Collect_LocatePackFrame_Loc1_ResetLoc",
             "[JumpBack]Collect_PackLocation_PassFieldsAndHub",
             "Collect_LocatePackFrame_Loc6"
@@ -782,21 +886,42 @@
         "action": "Custom",
         "custom_action": "PatchByRegex",
         "custom_action_param": {
-            "pattern": [
-                "^Collect_Pack_(Story|Character|Event)_\\d+$"
+            "rules": [
+                {
+                    "pattern": [
+                        "^Collect_Pack_(Story|Character|Event)_\\d+$"
+                    ],
+                    "target_path": [
+                        "all_of",
+                        0,
+                        "roi"
+                    ],
+                    "value": "$box"
+                },
+                {
+                    "pattern": [
+                        "Collect_LocatePackFrame_Smart_Swip_UpdateTag"
+                    ],
+                    "patch": {
+                        "next": [
+                            "Collect_LocatePackFrame_Smart_Swip",
+                            "$self"
+                        ]
+                    },
+                    "origin": {
+                        "next": [
+                            "Collect_LocatePackFrame_Smart_Swip",
+                            "Collect_Loc_SwipToIn_Hub"
+                        ]
+                    }
+                }
             ],
-            "target_path": [
-                "all_of",
-                0,
-                "roi"
-            ],
-            "value": "$box",
             "reset_tags": [
                 "PackLocation_ToggleSwitch"
             ]
         },
         "next": [
-            "[JumpBack]Collect_LocatePackFrame_Smart_Swip",
+            "Collect_LocatePackFrame_Smart_Swip",
             "[JumpBack]Collect_LocatePackFrame_Loc1_ResetLoc",
             "[JumpBack]Collect_PackLocation_PassFieldsAndHub",
             "Collect_LocatePackFrame_Loc7"
@@ -825,21 +950,42 @@
         "action": "Custom",
         "custom_action": "PatchByRegex",
         "custom_action_param": {
-            "pattern": [
-                "^Collect_Pack_(Story|Character|Event)_\\d+$"
+            "rules": [
+                {
+                    "pattern": [
+                        "^Collect_Pack_(Story|Character|Event)_\\d+$"
+                    ],
+                    "target_path": [
+                        "all_of",
+                        0,
+                        "roi"
+                    ],
+                    "value": "$box"
+                },
+                {
+                    "pattern": [
+                        "Collect_LocatePackFrame_Smart_Swip_UpdateTag"
+                    ],
+                    "patch": {
+                        "next": [
+                            "Collect_LocatePackFrame_Smart_Swip",
+                            "$self"
+                        ]
+                    },
+                    "origin": {
+                        "next": [
+                            "Collect_LocatePackFrame_Smart_Swip",
+                            "Collect_Loc_SwipToIn_Hub"
+                        ]
+                    }
+                }
             ],
-            "target_path": [
-                "all_of",
-                0,
-                "roi"
-            ],
-            "value": "$box",
             "reset_tags": [
                 "PackLocation_ToggleSwitch"
             ]
         },
         "next": [
-            "[JumpBack]Collect_LocatePackFrame_Smart_Swip",
+            "Collect_LocatePackFrame_Smart_Swip",
             "[JumpBack]Collect_LocatePackFrame_Loc1_ResetLoc",
             "[JumpBack]Collect_PackLocation_PassFieldsAndHub",
             "Collect_LocatePackFrame_Loc8"
@@ -867,21 +1013,42 @@
         "action": "Custom",
         "custom_action": "PatchByRegex",
         "custom_action_param": {
-            "pattern": [
-                "^Collect_Pack_(Story|Character|Event)_\\d+$"
+            "rules": [
+                {
+                    "pattern": [
+                        "^Collect_Pack_(Story|Character|Event)_\\d+$"
+                    ],
+                    "target_path": [
+                        "all_of",
+                        0,
+                        "roi"
+                    ],
+                    "value": "$box"
+                },
+                {
+                    "pattern": [
+                        "Collect_LocatePackFrame_Smart_Swip_UpdateTag"
+                    ],
+                    "patch": {
+                        "next": [
+                            "Collect_LocatePackFrame_Smart_Swip",
+                            "$self"
+                        ]
+                    },
+                    "origin": {
+                        "next": [
+                            "Collect_LocatePackFrame_Smart_Swip",
+                            "Collect_Loc_SwipToIn_Hub"
+                        ]
+                    }
+                }
             ],
-            "target_path": [
-                "all_of",
-                0,
-                "roi"
-            ],
-            "value": "$box",
             "reset_tags": [
                 "PackLocation_ToggleSwitch"
             ]
         },
         "next": [
-            "[JumpBack]Collect_LocatePackFrame_Smart_Swip",
+            "Collect_LocatePackFrame_Smart_Swip",
             "[JumpBack]Collect_LocatePackFrame_Loc1_ResetLoc",
             "[JumpBack]Collect_PackLocation_PassFieldsAndHub",
             "Collect_LocatePackFrame_Loc9",
@@ -907,21 +1074,42 @@
         "action": "Custom",
         "custom_action": "PatchByRegex",
         "custom_action_param": {
-            "pattern": [
-                "^Collect_Pack_(Story|Character|Event)_\\d+$"
+            "rules": [
+                {
+                    "pattern": [
+                        "^Collect_Pack_(Story|Character|Event)_\\d+$"
+                    ],
+                    "target_path": [
+                        "all_of",
+                        0,
+                        "roi"
+                    ],
+                    "value": "$box"
+                },
+                {
+                    "pattern": [
+                        "Collect_LocatePackFrame_Smart_Swip_UpdateTag"
+                    ],
+                    "patch": {
+                        "next": [
+                            "Collect_LocatePackFrame_Smart_Swip",
+                            "$self"
+                        ]
+                    },
+                    "origin": {
+                        "next": [
+                            "Collect_LocatePackFrame_Smart_Swip",
+                            "Collect_Loc_SwipToIn_Hub"
+                        ]
+                    }
+                }
             ],
-            "target_path": [
-                "all_of",
-                0,
-                "roi"
-            ],
-            "value": "$box",
             "reset_tags": [
                 "PackLocation_ToggleSwitch"
             ]
         },
         "next": [
-            "[JumpBack]Collect_LocatePackFrame_Smart_Swip",
+            "Collect_LocatePackFrame_Smart_Swip",
             "[JumpBack]Collect_LocatePackFrame_Loc1_ResetLoc",
             "[JumpBack]Collect_PackLocation_PassFieldsAndHub",
             "Collect_Loc_OutToSwip_Hub_Ingress"
@@ -957,6 +1145,11 @@
         "max_hit": 40
     },
     "Collect_Loc_OutToSwip_Hub_Ingress": {
+        "action": "Custom",
+        "custom_action": "RestoreNode",
+        "custom_action_param": {
+            "node": "Collect_LocatePackFrame_Smart_Swip_UpdateTag"
+        },
         "next": [
             "Collect_Loc_OutToSwip_Hub_Enter_Pin",
             "[JumpBack]Global_BackPageHub_Once"
