@@ -1,6 +1,9 @@
 {
     "SellFish_Start": {
-        "recognition": "DirectHit",
+        "recognition": "TemplateMatch",
+        "template": [
+            "Fish/Sell_ico.png"
+        ],
         "action": "Click",
         "target": [
             827,
@@ -10,18 +13,38 @@
         ],
         "post_delay": 2000,
         "next": [
+            "SellFish_Step2_NoFish",
             "SellFish_Step2"
         ]
     },
+    "SellFish_Step2_NoFish": {
+        "recognition": "OCR",
+        "roi": [
+            585,
+            397,
+            254,
+            118
+        ],
+        "expected": [
+            "^(?=.*[没有])(?=.*[可出售的道具]).{4,10}$"
+        ],
+        "focus": "没有鱼获",
+        "next": [
+            "SellFish_Step6"
+        ]
+    },
     "SellFish_Step2": {
-        "recognition": "DirectHit",
-        "action": "Click",
-        "target": [
+        "recognition": "OCR",
+        "expected": [
+            "一键出售"
+        ],
+        "roi": [
             981,
             638,
             193,
             48
         ],
+        "action": "Click",
         "post_delay": 2000,
         "next": [
             "SellFish_Step3"
@@ -39,7 +62,8 @@
         "post_delay": 2000,
         "next": [
             "SellFish_Step4"
-        ]
+        ],
+        "focus": "全选"
     },
     "SellFish_Step4": {
         "recognition": "DirectHit",
@@ -53,16 +77,20 @@
         "post_delay": 2000,
         "next": [
             "SellFish_Step5"
-        ]
+        ],
+        "focus": "出售按钮"
     },
     "SellFish_Step5": {
-        "recognition": "DirectHit",
+        "recognition": "OCR",
+        "expected": [
+            "确认"
+        ],
         "action": "Click",
-        "target": [
+        "roi": [
             662,
-            423,
+            399,
             153,
-            38
+            94
         ],
         "post_delay": 2000,
         "next": [
@@ -70,14 +98,18 @@
         ]
     },
     "SellFish_Step6": {
-        "recognition": "DirectHit",
-        "action": "Click",
-        "target": [
-            121,
-            24,
-            30,
-            29
+        "recognition": "TemplateMatch",
+        "template": [
+            "Fish/back.png"
         ],
-        "post_delay": 2000
+        "action": "Click",
+        "roi": [
+            120,
+            20,
+            39,
+            43
+        ],
+        "post_delay": 2000,
+        "focus": "返回钓鱼"
     }
 }

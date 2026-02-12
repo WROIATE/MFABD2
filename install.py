@@ -106,6 +106,15 @@ def install_resource():
         dirs_exist_ok=True,
     )
     
+    # ================= [MFAA布局文件预配置写入开始] =================
+    # 单文件适配: 显式复制 assets/mfa_layout.json 到 install/resource/
+    # 这样您就不需要改变文件结构，它会自动归位
+    layout_src = working_dir / "assets" / "mfa_layout.json"
+    if layout_src.exists():
+        print(f"📦 检测到自定义布局，正在注入: {layout_src}")
+        shutil.copy2(layout_src, install_path / "resource" / "mfa_layout.json")
+    # ================= [预配置写入结束] =================
+
     # 分别处理 MD 和 JSON 文件换行符
     all_success = True
     
