@@ -102,6 +102,24 @@ class HSVShapeMatching(CustomRecognition):
         context: Context,
         argv: CustomRecognition.AnalyzeArg,
     ) -> Union[CustomRecognition.AnalyzeResult, Optional[RectType]]:
+        """
+        通过 HSV 阈值将输入图像转换为白底黑形状的二值化图像，并将该处理结果传递给指定的内部识别节点进行匹配。
+        
+        Parameters:
+            context (Context): 运行时上下文，用于调用内部识别节点（通过 context.run_recognition）。
+            argv (CustomRecognition.AnalyzeArg): 分析参数封装；其中：
+                - argv.custom_recognition_param (str): JSON 字符串，期望包含以下可选/必需字段：
+                    - "target_node" 或兼容的旧字段 "recognition" (str, 必需)：要调用的内部识别节点名称。
+                    - "lower_hsv" (list[int], 可选)：HSV 下阈值，默认 [0, 0, 120]。
+                    - "upper_hsv" (list[int], 可选)：HSV 上阈值，默认 [180, 50, 255]。
+                    - "debug" (bool, 可选)：为 true 时保存处理后的调试图像。
+                - argv.image: 输入图像，要求为 BGR 格式的 NumPy 数组。
+        
+        Returns:
+            CustomRecognition.AnalyzeResult | None: 
+                - 当内部识别节点命中时返回包含识别框和原始识别详情的 AnalyzeResult。
+                - 当未命中或发生错误时返回 `None`。
+        """
         try:
             # 1. 解析参数
             params = json.loads(argv.custom_recognition_param)
