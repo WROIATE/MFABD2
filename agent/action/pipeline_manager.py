@@ -433,6 +433,13 @@ class PatchNode(CustomAction):
 @AgentServer.custom_action("RestoreNode")
 class RestoreNode(CustomAction):
     def run(self, context: Context, argv: CustomAction.RunArg) -> bool:
+        """
+        将指定节点的配置还原为先前保存的备份或调用时提供的备份数据。
+        
+        尝试按优先级从内部备份账本中读取目标节点的备份；如果不存在，则使用参数中 `backup` 字段（兼容旧写法）。如果既没有备份也未提供 `backup`，记录警告并作为无操作返回成功状态；如果恢复过程中发生异常则返回失败。
+        Returns:
+            True 如果成功应用恢复或在无备份时作为无操作完成，False 如果缺少必需的 `node` 参数或恢复过程中发生错误。
+        """
         global NODE_BACKUPS
         params = parse_json_arg(argv)
         target_node = params.get("node")
@@ -464,6 +471,17 @@ class RestoreNode(CustomAction):
 @AgentServer.custom_action("RestoreBatch")
 class RestoreBatch(CustomAction):
     def run(self, context: Context, argv: CustomAction.RunArg) -> bool:
+        """
+        根据备份账本（NODE_BACKUPS）将参数中指定的节点批量还原到管线上下文。
+        
+        函数会处理 params 中的重置标签（reset_tags）作为一项副作用。params 需包含 "nodes" 字段且为节点名列表；函数将从全局备份中挑选存在的节点并通过 context.override_pipeline 应用还原。若列表中有未找到的备份会记录警告并忽略之；当没有有效还原项时视为无操作并返回成功。
+        
+        Parameters:
+            argv (CustomAction.RunArg): 运行时参数，解析后应包含 "nodes" 键，对应要还原的节点名列表。
+        
+        Returns:
+            bool: `True` 如果还原已完成或没有需要还原的节点（包括内部异常被抑制的情况），`False` 如果输入参数无效（例如 "nodes" 缺失或不是列表）。
+        """
         global NODE_BACKUPS
         params = parse_json_arg(argv)
         
@@ -510,6 +528,14 @@ class RestoreBatch(CustomAction):
 @AgentServer.custom_action("ResetAll")
 class ResetAll(CustomAction):
     def run(self, context: Context, argv: CustomAction.RunArg) -> bool:
+        """
+        将所有已保存的节点备份批量还原到管线并清空备份账本。
+        
+        在有备份时调用管线的 override_pipeline 来恢复所有节点配置，随后清空 NODE_BACKUPS 以移除已应用的备份记录；如果没有备份则立即返回成功。
+        
+        Returns:
+            True 如果所有备份已成功还原或没有需要重置的节点，False 如果在还原过程中发生错误。
+        """
         global NODE_BACKUPS
         
         if not NODE_BACKUPS:
