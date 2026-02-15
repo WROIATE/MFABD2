@@ -733,26 +733,6 @@
                 }
             ]
         },
-        "活动图小游戏扫荡": {
-            "description": "旧版本活动卡带相关，日常关闭！",
-            "type": "switch",
-            "cases": [
-                {
-                    "name": "No",
-                    "pipeline_override": {}
-                },
-                {
-                    "name": "Yes",
-                    "pipeline_override": {
-                        "Event_MiniGame_Start": {
-                            "next": [
-                                "Event_Explore"
-                            ]
-                        }
-                    }
-                }
-            ]
-        },
         "活动图快速战斗难度": {
             "description": "先手动通过最后一关（第15关），解锁快速战斗；<br>选择相应难度选项，可实现快速战斗打完免费AP。<br>误选会没有效果，浪费时间。<br>Tip:一共两个难度，分别有首通奖励~",
             "type": "select",
@@ -785,17 +765,33 @@
             "cases": [
                 {
                     "name": "No",
-                    "pipeline_override": {}
+                    "pipeline_override": {
+                        "Event_Mamono_Hub": {
+                            "max_hit": 0
+                        }
+                    }
                 },
                 {
                     "name": "Yes",
+                    "pipeline_override": {}
+                }
+            ]
+        },
+        "活动图小游戏扫荡": {
+            "description": "小活动相关，日常关闭！",
+            "type": "switch",
+            "cases": [
+                {
+                    "name": "No",
                     "pipeline_override": {
-                        "Even_MamonoFollowUp_Start": {
-                            "next": [
-                                "Even_MamonoFollowUp_InMamono"
-                            ]
+                        "Event_MiniGame_Hub": {
+                            "max_hit": 0
                         }
                     }
+                },
+                {
+                    "name": "Yes",
+                    "pipeline_override": {}
                 }
             ]
         },
