@@ -501,11 +501,11 @@ class RestoreBatch(CustomAction):
             utils.mfaalog.info(f"[Py] 🔙 批量还原成功: {list(restore_dict.keys())}")
             return True
         except Exception as e:
-            # 发生未知代码异常？打印堆栈，然后返回 True
+            # 发生未知代码异常？打印堆栈，然后返回 ....# 有待讨论，如果复位失败可能意外中断整个节点链
             utils.mfaalog.error(f"[Py] 💥 RestoreBatch 发生严重异常 (已抑制): {e}")
             import traceback
             utils.mfaalog.error(traceback.format_exc())
-            return True
+            return False
 
 @AgentServer.custom_action("ResetAll")
 class ResetAll(CustomAction):

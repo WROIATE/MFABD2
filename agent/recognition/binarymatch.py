@@ -104,7 +104,12 @@ class HSVShapeMatching(CustomRecognition):
     ) -> Union[CustomRecognition.AnalyzeResult, Optional[RectType]]:
         try:
             # 1. 解析参数
-            params = json.loads(argv.custom_recognition_param)
+            raw = argv.custom_recognition_param
+            raw = argv.custom_recognition_param
+            if isinstance(raw, dict):
+                params = raw
+            else:
+                params = json.loads(str(raw))
             
             # 兼容性处理：优先读取 target_node，如果没有则尝试读取 recognition
             # (防止旧配置导致参数丢失)
@@ -137,7 +142,19 @@ class HSVShapeMatching(CustomRecognition):
             # -------------------------------------------------
             if debug_mode:
                 import time
-                filename = f"debug_hsv_{int(time.time())}.png"
+                import os
+                debug_dir = "debug_images"
+                if not os.path.exists(debug_dir):
+                    try: os.makedirs(debug_dir)
+                    except: pass
+
+                # 文件名格式: debug_hsv_[节点名]_[时间戳_毫秒].png
+                # 例如: debug_hsv_FindBunny_Core_1725123456_789.png
+                timestamp = f"{time.time():.3f}".replace('.', '_')
+                safe_node_name = recognition_node.replace('/', '_').replace('\\', '_')
+                
+                filename = f"{debug_dir}/debug_hsv_{safe_node_name}_{timestamp}.png"
+                
                 cv2.imwrite(filename, processed_img)
                 mfaalog.info(f"[HSVShapeMatching] 调试模式已开启，处理图已保存至: {filename}")
 
