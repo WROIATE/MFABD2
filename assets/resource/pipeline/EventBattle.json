@@ -142,8 +142,9 @@
     "recognition": "OCR",
     "action": "Click",
     "next": [
-      "Event_FastNormalBattle",
-      "Event_EnterNormalBattle"
+      "Event_Battle_IsMenu",
+      "Event_EnterNormalBattle",
+      "[JumpBack]Global_WaitingForLoading"
     ],
     "on_error": [
       "Event_Event_Main_Return",
@@ -167,6 +168,29 @@
       0
     ],
     "doc": "点击普通战斗"
+  },
+  "Event_Battle_IsMenu": {
+    "recognition": "OCR",
+    "post_delay": 1000,
+    "focus": "EM.活动.战斗关卡页面",
+    "roi": [
+      626,
+      235,
+      189,
+      54
+    ],
+    "expected": [
+      "在战斗中获胜"
+    ],
+    "next": [
+      "Event_FastNormalBattle"
+    ],
+    "timeout": 4000,
+    "on_error": [
+      "Event_Event_Main_Return",
+      "[JumpBack]Global_BackPageHub_Once"
+    ],
+    "doc": "判定，处于一般/挑战 战斗页面"
   },
   "Event_FastNormalBattle": {
     "recognition": "OCR",
@@ -750,6 +774,10 @@
     "next": [
       "Event_MiniGame_CLR"
     ],
+    "timeout": 5000,
+    "on_error": [
+      "Global_ToHomePage"
+    ],
     "focus": "快速完成OCR"
   },
   "Event_MiniGame_CLR": {
@@ -771,11 +799,7 @@
       "Event_MiniGame_Confirm",
       "Event_MiniGame_CLR"
     ],
-    "focus": "快速完成-CLR亮色可点击",
-    "timeout": 5000,
-    "on_error": [
-      "Global_ToHomePage"
-    ]
+    "focus": "快速完成-CLR亮色可点击"
   },
   "Event_MiniGame_Confirm": {
     "recognition": "OCR",
