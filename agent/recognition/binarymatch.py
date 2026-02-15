@@ -105,7 +105,6 @@ class HSVShapeMatching(CustomRecognition):
         try:
             # 1. 解析参数
             raw = argv.custom_recognition_param
-            raw = argv.custom_recognition_param
             if isinstance(raw, dict):
                 params = raw
             else:
@@ -145,8 +144,10 @@ class HSVShapeMatching(CustomRecognition):
                 import os
                 debug_dir = "debug_images"
                 if not os.path.exists(debug_dir):
-                    try: os.makedirs(debug_dir)
-                    except: pass
+                     try:  
+                        os.makedirs(debug_dir, exist_ok=True)  
+                     except OSError as e:  
+                        mfaalog.warning(f"[HSVShapeMatching] 创建调试目录失败: {e}") 
 
                 # 文件名格式: debug_hsv_[节点名]_[时间戳_毫秒].png
                 # 例如: debug_hsv_FindBunny_Core_1725123456_789.png
