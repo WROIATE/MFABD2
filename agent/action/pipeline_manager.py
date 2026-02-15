@@ -168,6 +168,19 @@ from recognition.counter import TAG_STORE
 # }
 #
 # ------------------------------------------------------------------------------
+# 4-2. RestoreBatch (复数还原)
+# ------------------------------------------------------------------------------
+# "action": {
+#     "type": "Custom",
+#     "param": {
+#         "custom_action": "RestoreBatch",
+        # "custom_action_param": {
+        #     "nodes": ["Node_A", "Node_B", "Node_C"],  <-- 只要名字，系统去账本里找原版数据
+        #     "reset_tags": ["Tag_To_Reset"] // [可选] 顺手重置计数器
+        # }
+#     }
+# }
+# ------------------------------------------------------------------------------
 # 5. ResetAll (一键重置/批量还原)
 # ------------------------------------------------------------------------------
 # "action": {
@@ -446,6 +459,52 @@ class RestoreNode(CustomAction):
             return True
         except Exception as e:
             utils.mfaalog.error(f"[Py] RestoreNode 失败: {e}")
+            return False
+
+@AgentServer.custom_action("RestoreBatch")
+class RestoreBatch(CustomAction):
+    def run(self, context: Context, argv: CustomAction.RunArg) -> bool:
+        global NODE_BACKUPS
+        params = parse_json_arg(argv)
+        
+        # 1. [旁作用] 处理计数器重置
+        _process_reset_tags(params)
+
+        # 2. 获取目标节点列表
+        target_nodes = params.get("nodes")
+        
+        if not target_nodes or not isinstance(target_nodes, list):
+            utils.mfaalog.warning("[Py] RestoreBatch 参数错误: 'nodes' 必须是列表")
+            return False
+
+        # 3. 构建还原字典
+        restore_dict = {}
+        missing_nodes = []
+
+        for node in target_nodes:
+            if node in NODE_BACKUPS:
+                restore_dict[node] = NODE_BACKUPS[node]
+            else:
+                missing_nodes.append(node)
+
+        # 记录一下没找到的（可能是还没被Patch过，或者拼写错误）
+        if missing_nodes:
+            utils.mfaalog.warning(f"[Py] ⚠️ RestoreBatch: 账本中未找到以下节点的备份 (忽略): {missing_nodes}")
+
+        if not restore_dict:
+            utils.mfaalog.warning("[Py] ⚠️ RestoreBatch: 没有可还原的有效节点")
+            return True
+
+        try:
+            # 4. 执行批量还原
+            context.override_pipeline(restore_dict)
+            utils.mfaalog.info(f"[Py] 🔙 批量还原成功: {list(restore_dict.keys())}")
+            return True
+        except Exception as e:
+            # 发生未知代码异常？打印堆栈，然后返回 ....# 有待讨论，如果复位失败可能意外中断整个节点链
+            utils.mfaalog.error(f"[Py] 💥 RestoreBatch 发生严重异常 (已抑制): {e}")
+            import traceback
+            utils.mfaalog.error(traceback.format_exc())
             return False
 
 @AgentServer.custom_action("ResetAll")

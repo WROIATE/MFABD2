@@ -252,7 +252,6 @@
     "recognition": "OCR",
     "action": "Click",
     "next": [
-      "[Anchor]Setup_ToPvP",
       "PVP_AutoBattle_SucCK",
       "PVP_AutoBattle"
     ],
