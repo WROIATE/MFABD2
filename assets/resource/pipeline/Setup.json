@@ -105,6 +105,13 @@
     "Setup_Entry5": {
         "enabled": true,
         "max_hit": 1,
+        "next": [
+            "Setup_Skill_Swich"
+        ],
+        "timeout": 1
+    },
+    "Setup_Skill_Swich": {
+        "max_hit": 1,
         "recognition": "Custom",
         "custom_recognition": "CheckCoolDown",
         "custom_recognition_param": {
@@ -121,12 +128,17 @@
         "next": [
             "Setup_SkillScan_Now"
         ],
-        "timeout": 1,
         "doc": "【注意引用位置，应在有pin图标的正常地图 | 需要用JumpBack调用】该节点为开关作用.设计为每日最多运行一次."
     },
     "Setup_Entry6": {
         "enabled": true,
         "max_hit": 1,
+        "next": [
+            "Setup_EquipUp_Swich"
+        ],
+        "timeout": 1
+    },
+    "Setup_EquipUp_Swich": {
         "recognition": "Custom",
         "custom_recognition": "CheckCoolDown",
         "custom_recognition_param": {
@@ -146,12 +158,17 @@
             "[JumpBack]Setup_EquipUp_CheckBox_L2",
             "[JumpBack]Setup_EquipUp_CheckBox_L3",
             "[JumpBack]Setup_EquipUp_CheckBox_L4"
-        ],
-        "timeout": 1
+        ]
     },
     "Setup_Entry7": {
         "enabled": true,
         "max_hit": 1,
+        "next": [
+            "Setup_EquipDec_Swich"
+        ],
+        "timeout": 1
+    },
+    "Setup_EquipDec_Swich": {
         "recognition": "Custom",
         "custom_recognition": "CheckCoolDown",
         "custom_recognition_param": {
@@ -172,8 +189,7 @@
             "[JumpBack]Setup_EquipDec_CheckBox_L2",
             "[JumpBack]Setup_EquipDec_CheckBox_L3",
             "[JumpBack]Setup_EquipDec_CheckBox_L4"
-        ],
-        "timeout": 1
+        ]
     },
     "Setup_SkillScan_Now": {
         "focus": "Set.技能放置检查开始",
