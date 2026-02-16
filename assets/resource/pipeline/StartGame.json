@@ -37,8 +37,8 @@
   "StartGame_LoadingPage": {
     "recognition": "OCR",
     "next": [
-      "StartGame_Update",
-      "StartGame_UpdateData",
+      "StartGame_Update_PGM",
+      "StartGame_Update_Data",
       "[JumpBack]StartGame_PayFailed",
       "StartGame_Error_API",
       "StartGame_Error_AM",
@@ -65,14 +65,14 @@
     ],
     "timeout": 120000
   },
-  "StartGame_Update": {
+  "StartGame_Update_PGM": {
     "recognition": "OCR",
     "next": [
-      "StartGame_UpdateCk"
+      "StartGame_Update_PGM_Click"
     ],
     "post_delay": 15000,
     "pre_wait_freezes": 5000,
-    "focus": "更新通知",
+    "focus": "SM.需要更新-程式",
     "roi": [
       462,
       176,
@@ -80,21 +80,22 @@
       143
     ],
     "expected": [
-      "更新通知"
+      "更新通知",
+      "前往商店"
     ],
-    "doc": "游戏版本更新"
+    "doc": "游戏程序更新.'商店'特征词是防错预判加入的"
   },
-  "StartGame_UpdateCk": {
+  "StartGame_Update_PGM_Click": {
     "recognition": "OCR",
     "action": "Click",
     "next": [
-      "StartGame_UpdateDataing"
-    ],
-    "on_error": [
       "StartGame_UpdateCloseGame"
     ],
+    "on_error": [
+      "StartGame_Update_Data_DownLoading"
+    ],
     "post_delay": 8000,
-    "focus": "更新确定按钮",
+    "focus": "SM.需要更新-程式,确认",
     "roi": [
       487,
       400,
@@ -125,6 +126,7 @@
     "action": "Click",
     "next": [
       "StartGame_UpdateShopEnd",
+      "[JumpBack]StartGame_UpdateEngShop_StatusOCR",
       "[JumpBack]StartGame_UpdateEngShopnothink"
     ],
     "timeout": 50000,
@@ -135,10 +137,25 @@
       1047,
       331
     ],
+    "focus": "外部更新,开始.",
     "expected": [
       "Update",
       "更新"
     ]
+  },
+  "StartGame_UpdateEngShop_StatusOCR": {
+    "recognition": "OCR",
+    "roi": [
+      162,
+      257,
+      504,
+      108
+    ],
+    "expected": [
+      "Cancel"
+    ],
+    "post_delay": 10000,
+    "focus": "外部更新,下载中..."
   },
   "StartGame_UpdateEngShopnothink": {
     "recognition": "OCR",
@@ -173,17 +190,17 @@
       "Play",
       "启动"
     ],
-    "package": "com.android.vending"
+    "package": "com.android.vending",
+    "focus": "外部更新End.回到初始."
   },
-  "StartGame_UpdateData": {
+  "StartGame_Update_Data": {
     "recognition": "OCR",
-    "action": "Click",
     "next": [
-      "StartGame_UpdateData2",
-      "StartGame_UpdateData"
+      "StartGame_Update_Data_Click",
+      "StartGame_Update_Data"
     ],
-    "post_delay": 20000,
-    "focus": "SM.数据下载",
+    "post_delay": 10000,
+    "focus": "SM.需要更新-数据",
     "roi": [
       403,
       169,
@@ -195,33 +212,33 @@
     ],
     "doc": "下载数据"
   },
-  "StartGame_UpdateData2": {
+  "StartGame_Update_Data_Click": {
     "recognition": "OCR",
     "action": "Click",
     "next": [
-      "StartGame_UpdateDataing",
+      "StartGame_Update_Data_DownLoading",
       "StartGame_TouchStart"
     ],
     "on_error": [
       "StartGame_LoadingPage"
     ],
     "post_delay": 30000,
-    "focus": "SM.数据下载",
+    "focus": "SM.需要更新-数据,下载",
     "roi": [
-      658,
-      530,
-      96,
-      34
+      657,
+      453,
+      94,
+      200
     ],
     "expected": [
       "下载"
     ],
     "doc": "下载数据"
   },
-  "StartGame_UpdateDataing": {
+  "StartGame_Update_Data_DownLoading": {
     "recognition": "OCR",
     "next": [
-      "[JumpBack]StartGame_UpdateDataing",
+      "[JumpBack]StartGame_Update_Data_DownLoading",
       "[JumpBack]StartGame_PayFailed",
       "StartGame_TouchStart"
     ],
@@ -245,8 +262,8 @@
   "StartGame_Loading": {
     "recognition": "OCR",
     "next": [
-      "StartGame_Update",
-      "StartGame_UpdateData",
+      "StartGame_Update_PGM",
+      "StartGame_Update_Data",
       "[JumpBack]StartGame_PayFailed",
       "StartGame_LinkDown",
       "StartGame_TouchStart",

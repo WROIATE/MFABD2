@@ -185,6 +185,11 @@
             255,
             255
         ],
+        "action": "Custom",
+        "custom_action": "RestoreNode",
+        "custom_action_param": {
+            "node": "Collect_LocatePackFrame_Smart_Swip"
+        },
         "doc": "当前节点链层数标记：2。初次调取卡带菜单完毕，开始初次点击卡带.先复位再to1,to1没判定的!不可直接IsPresent,防止用户行为干扰"
     },
     "Collect_QuickCart_CharacterPack_OcrCheck": {
@@ -203,6 +208,11 @@
             167,
             165
         ],
+        "action": "Custom",
+        "custom_action": "RestoreNode",
+        "custom_action_param": {
+            "node": "Collect_LocatePackFrame_Smart_Swip"
+        },
         "count": 300,
         "focus": "CM.L.角色-卡带调取完毕"
     },
@@ -222,6 +232,11 @@
             167,
             165
         ],
+        "action": "Custom",
+        "custom_action": "RestoreNode",
+        "custom_action_param": {
+            "node": "Collect_LocatePackFrame_Smart_Swip"
+        },
         "count": 500,
         "focus": "CM.L.活动-卡带调取完毕"
     },
