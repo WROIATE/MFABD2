@@ -46,6 +46,9 @@ jobs:
         with:
           fetch-depth: 0
       - id: set_tag
+        # 通过环境变量传递 Commit Message，防止反引号注入攻击
+        env:
+          HEAD_COMMIT_MSG: ${{ github.event.head_commit.message }}
         run: |
           # 使用环境变量获取引用信息
           is_tag_push=false
@@ -54,7 +57,7 @@ jobs:
           fi
           
           # 获取提交信息（用于检测 [deploy-beta]）
-          commit_message="${{ github.event.head_commit.message }}"
+          commit_message="$HEAD_COMMIT_MSG"
           
           if [ "$is_tag_push" = true ]; then
             # 正式标签：直接使用标签名
@@ -546,10 +549,11 @@ jobs:
       - name: Set release body
         id: set_release_body
         run: |
-          content=$(cat CHANGES.md)
-          echo "content<<EOF" >> $GITHUB_OUTPUT
-          echo "$content" >> $GITHUB_OUTPUT
-          echo "EOF" >> $GITHUB_OUTPUT
+          # 使用随机定界符防止内容包含 EOF 导致截断
+          EOF=$(dd if=/dev/urandom bs=15 count=1 status=none | base64)
+          echo "content<<$EOF" >> $GITHUB_OUTPUT
+          cat CHANGES.md >> $GITHUB_OUTPUT
+          echo "$EOF" >> $GITHUB_OUTPUT
 
   release:
     if: (needs.meta.outputs.is_tag_push == 'true') || contains(needs.meta.outputs.tag, '-beta') || contains(needs.meta.outputs.tag, '-alpha') || (github.event_name == 'workflow_dispatch' && contains(needs.meta.outputs.tag, '-ci'))
@@ -596,14 +600,17 @@ jobs:
         shell: bash
         env:
             tag: ${{ needs.meta.outputs.tag }}
-            body: ${{ needs.changelog.outputs.release_body }}
+            CHANGELOG_BODY: ${{ needs.changelog.outputs.release_body }}
             GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           echo "安全触发镜像服务: 版本=$tag"
+          # 将 " 替换为 \"
+          ESCAPED_BODY="${CHANGELOG_BODY//\"/\\\"}"
           # 触发包发布流程
           gh workflow run --repo $GITHUB_REPOSITORY --ref ${{ github.ref }} mirrorchyan.yml -f tag=$tag
-          # 触发更新信息推送流程
-          gh workflow run --repo $GITHUB_REPOSITORY --ref ${{ github.ref }} mirrorchyan_release_note.yml -f tag=$tag -f body="$body"
+          
+          # 触发更新信息推送流程 (现在可以安全处理带引号的日志了)
+          gh workflow run --repo $GITHUB_REPOSITORY --ref ${{ github.ref }} mirrorchyan_release_note.yml -f tag=$tag -f body="$ESCAPED_BODY"
 
   notify:
     needs: [meta, install]
