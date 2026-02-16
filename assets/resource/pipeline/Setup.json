@@ -8,25 +8,82 @@
         "doc": "流程开发说明：_Str为总触发器=强制运行所有。| _Entry为选择性入口=按需 | 节点_Switch为开关，运行一次后续操作 | 可根据入口选择需要的操作开关~"
     },
     "Setup_Entry1": {
-        "recognition": "TemplateMatch",
-        "roi": [
-            134,
-            465,
-            202,
-            188
-        ],
-        "template": [
-            "UI_Arrowkeys.png"
-        ],
-        "green_mask": true,
-        "threshold": 0.6,
         "next": [
-            "[JumpBack]Setup_Main_Switch",
-            "[JumpBack]Setup_Equip_Switch",
-            "[JumpBack]Setup_SetSkill_Switch"
+            "Setup_Entry1_Swich"
+        ],
+        "timeout": 2000,
+        "max_hit": 1
+    },
+    "Setup_Entry1_Swich": {
+        "recognition": "Or",
+        "any_of": [
+            {
+                "recognition": "Custom",
+                "custom_recognition": "HSVShapeMatching",
+                "custom_recognition_param": {
+                    "target_node": "Setup_SkillScan_wasd_Bin",
+                    "lower_hsv": [
+                        0,
+                        0,
+                        66
+                    ],
+                    "upper_hsv": [
+                        180,
+                        28,
+                        255
+                    ]
+                }
+            },
+            {
+                "recognition": "Custom",
+                "custom_recognition": "HSVShapeMatching",
+                "custom_recognition_param": {
+                    "target_node": "Setup_SkillScan_wasd_Bin",
+                    "lower_hsv": [
+                        0,
+                        0,
+                        66
+                    ],
+                    "upper_hsv": [
+                        180,
+                        17,
+                        255
+                    ]
+                }
+            },
+            {
+                "recognition": "TemplateMatch",
+                "roi": [
+                    134,
+                    465,
+                    202,
+                    188
+                ],
+                "template": [
+                    "UI_Arrowkeys.png"
+                ],
+                "green_mask": true,
+                "threshold": 0.6
+            }
+        ],
+        "next": [
+            "Setup_Main_Switch"
         ],
         "timeout": 3000,
         "focus": "SMSP.触发设置按需调整,原因:移动方式不应为方向键"
+    },
+    "Setup_SkillScan_wasd_Bin": {
+        "recognition": "TemplateMatch",
+        "template": [
+            "Binary/Binary_wasd_Nol.png"
+        ],
+        "roi": [
+            136,
+            475,
+            194,
+            169
+        ],
+        "doc": "【不要删不要改后挪用】custom需要调用此节点的识别"
     },
     "Setup_Entry2": {
         "recognition": "ColorMatch",
@@ -105,6 +162,13 @@
     "Setup_Entry5": {
         "enabled": true,
         "max_hit": 1,
+        "next": [
+            "Setup_Skill_Swich"
+        ],
+        "timeout": 1
+    },
+    "Setup_Skill_Swich": {
+        "max_hit": 1,
         "recognition": "Custom",
         "custom_recognition": "CheckCoolDown",
         "custom_recognition_param": {
@@ -121,12 +185,17 @@
         "next": [
             "Setup_SkillScan_Now"
         ],
-        "timeout": 1,
         "doc": "【注意引用位置，应在有pin图标的正常地图 | 需要用JumpBack调用】该节点为开关作用.设计为每日最多运行一次."
     },
     "Setup_Entry6": {
         "enabled": true,
         "max_hit": 1,
+        "next": [
+            "Setup_EquipUp_Swich"
+        ],
+        "timeout": 1
+    },
+    "Setup_EquipUp_Swich": {
         "recognition": "Custom",
         "custom_recognition": "CheckCoolDown",
         "custom_recognition_param": {
@@ -146,12 +215,17 @@
             "[JumpBack]Setup_EquipUp_CheckBox_L2",
             "[JumpBack]Setup_EquipUp_CheckBox_L3",
             "[JumpBack]Setup_EquipUp_CheckBox_L4"
-        ],
-        "timeout": 1
+        ]
     },
     "Setup_Entry7": {
         "enabled": true,
         "max_hit": 1,
+        "next": [
+            "Setup_EquipDec_Swich"
+        ],
+        "timeout": 1
+    },
+    "Setup_EquipDec_Swich": {
         "recognition": "Custom",
         "custom_recognition": "CheckCoolDown",
         "custom_recognition_param": {
@@ -172,8 +246,7 @@
             "[JumpBack]Setup_EquipDec_CheckBox_L2",
             "[JumpBack]Setup_EquipDec_CheckBox_L3",
             "[JumpBack]Setup_EquipDec_CheckBox_L4"
-        ],
-        "timeout": 1
+        ]
     },
     "Setup_SkillScan_Now": {
         "focus": "Set.技能放置检查开始",
@@ -388,7 +461,7 @@
                 "recognition": "Custom",
                 "custom_recognition": "HSVShapeMatching",
                 "custom_recognition_param": {
-                    "target_node": "Setup_SkillScan_Skill1_Bin",
+                    "target_node": "Setup_SkillScan_Skill3_Bin",
                     "lower_hsv": [
                         0,
                         0,
@@ -405,7 +478,7 @@
                 "recognition": "Custom",
                 "custom_recognition": "HSVShapeMatching",
                 "custom_recognition_param": {
-                    "target_node": "Setup_SkillScan_Skill1_Bin",
+                    "target_node": "Setup_SkillScan_Skill3_Bin",
                     "lower_hsv": [
                         0,
                         0,
@@ -826,7 +899,7 @@
         "next": [
             "Setup_SetSkill_Switch"
         ],
-        "focus": "Set.技能摆放-复审校验不通过/n/n开始技能复位"
+        "focus": "Set.技能摆放-复审校验不通过\n\n开始技能复位"
     },
     "Setup_Main_Switch": {
         "recognition": "TemplateMatch",
