@@ -222,7 +222,7 @@ from recognition.counter import TAG_STORE
 #         },
 #         {
 #             "pattern": "^Collect_LocatePackFrame_Loc[2-9]$", 
-#             "patch": {                              // [选填] 修改方案 3: 动态自我引用 ($self)
+#             "patch": {                              // [选填] 修改方案 3: 动态自我引用 ($self) #这里有问题,可能会拿到匹配节点名称
 #                 "next": [
 #                     "Collect_Loc_OutToSwip_Hub_Ingress",
 #                     "[JumpBack]$self"               // $self 会在运行时被自动替换为实际匹配到的节点真名
