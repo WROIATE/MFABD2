@@ -842,7 +842,7 @@
         "next": [
             "Setup_SetSkill_Switch"
         ],
-        "focus": "Set.技能摆放-复审校验不通过/n/n开始技能复位"
+        "focus": "Set.技能摆放-复审校验不通过\n\n开始技能复位"
     },
     "Setup_Main_Switch": {
         "recognition": "TemplateMatch",
