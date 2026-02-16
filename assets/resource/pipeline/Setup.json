@@ -461,7 +461,7 @@
                 "recognition": "Custom",
                 "custom_recognition": "HSVShapeMatching",
                 "custom_recognition_param": {
-                    "target_node": "Setup_SkillScan_Skill1_Bin",
+                    "target_node": "Setup_SkillScan_Skill3_Bin",
                     "lower_hsv": [
                         0,
                         0,
@@ -478,7 +478,7 @@
                 "recognition": "Custom",
                 "custom_recognition": "HSVShapeMatching",
                 "custom_recognition_param": {
-                    "target_node": "Setup_SkillScan_Skill1_Bin",
+                    "target_node": "Setup_SkillScan_Skill3_Bin",
                     "lower_hsv": [
                         0,
                         0,
