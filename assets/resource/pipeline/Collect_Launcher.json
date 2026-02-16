@@ -6,6 +6,26 @@
             "[JumpBack]Global_ToSandBox"
         ]
     },
+    "Collect_StartGame_HomePage_OnlyOnce": {
+        "action": "Custom",
+        "custom_action": "PatchNode",
+        "custom_action_param": {
+            "node": "Collect_PackEnd_Ck",
+            "patch": {
+                "next": [
+                    "Collect_PackEnd_Ck_OnlyOnce"
+                ]
+            },
+            "origin": {
+                "next": []
+            }
+        },
+        "next": [
+            "[JumpBack]Collect_PerPetTask",
+            "Collect_Sandplay",
+            "[JumpBack]Global_ToSandBox"
+        ]
+    },
     "Collect_PerPetTask": {
         "recognition": "TemplateMatch",
         "action": "Click",

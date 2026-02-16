@@ -1104,5 +1104,9 @@
     ],
     "green_mask": true,
     "doc": "其他页面，返回按钮"
+  },
+  "Collect_PackEnd_Ck_OnlyOnce": {
+    "action": "StopTask",
+    "focus": "CM.N.仅进行1张卡带策略-强制结束流程"
   }
 }

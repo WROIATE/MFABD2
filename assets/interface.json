@@ -30,7 +30,6 @@
         },
         {
             "name": "PC",
-            "label": "PC端",
             "path": [
                 "./resource",
                 "./resource/PC"
@@ -62,10 +61,10 @@
             "description": "<b>快速狩猎扫荡</b>：旧称`地图扫荡`。消耗每日免费的米饭、火把刷取资源。<br><br> <span style=\"color:Crimson;font-size:16px\">注意：请在狩猎场`1.野猪洞穴`已打完的基础上，确保目标狩猎场已通关</span>"
         },
         {
-            "name": "[执行]地图采集",
-            "entry": "Collect_StartGame_HomePage",
+            "name": "[执行]地图采集[单章]",
+            "entry": "Collect_StartGame_HomePage_OnlyOnce",
             "default_check": true,
-            "description": "**地图采集**：进入卡带，对有传送阵地图进行`探查`、`吸取`、`召集`。<br>**注意:**应当先将传送阵激活，并探明周围箱庭迷雾，使得区域地图上能完整显示明亮的传送阵图标。<br><span style=\"color: Crimson;\"><b>已适配周常卡带CD：</b></span><br>将在软件根目录生成名为`agent_save_data.json`的存档文件，用于记录周期标记与运行时间标记，<b>只打刷新CD内没刷过的关卡</b>。<br>刷取顺序，先按照卡带框从左到右，再按照`故事`、`角色`、`活动`大类顺序。<br>存档文件可以`手动迁移`到新的MFA构建物中保留进度。",
+            "description": "**流程:**`[执行]地图采集[完整]`的单卡带模式。先吸取一张卡带的资源，来完成日常任务。",
             "option": [
                 "第三图采集额外等待"
             ]
@@ -166,6 +165,15 @@
             "default_check": true,
             "entry": "Mail_HomePage",
             "description": "**领取邮件：**`主界面`下，`邮件`图标内的奖励。包括一般、商品。<br>没有新邮件红点是不会进入邮件页面的。"
+        },
+        {
+            "name": "[执行]地图采集[完整]",
+            "entry": "Collect_StartGame_HomePage",
+            "default_check": true,
+            "description": "**地图采集**：进入卡带，对有传送阵地图进行`探查`、`吸取`、`召集`。<span style=\"color: Crimson;\"><b></b></span><br>**注意:**应当先将传送阵激活，并探明周围箱庭迷雾，使得区域地图上能完整显示明亮的传送阵图标。<br><span style=\"color: Crimson;\"><b>已适配周常卡带CD：</b></span><br>将在软件根目录生成名为`agent_save_data.json`的存档文件，用于记录周期标记与运行时间标记，<b>只打刷新CD内没刷过的关卡</b>。<br>刷取顺序，先按照卡带框从左到右，再按照`故事`、`角色`、`活动`大类顺序。<br>存档文件可以`手动迁移`到新的MFA构建物中保留进度。",
+            "option": [
+                "第三图采集额外等待"
+            ]
         },
         {
             "name": "[开发中]商店套利",
