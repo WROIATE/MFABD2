@@ -246,7 +246,7 @@ jobs:
           repository: SweetSmellFox/MFAAvalonia
           latest: false
           tag: ${{ env.MFAA_TAG }}
-          fileName: "MFAAvalonia-*-${{ matrix.os == 'macos' && 'osx' || matrix.os }}*"
+          fileName: "MFAAvalonia-*-${{ matrix.os == 'macos' && 'osx' || matrix.os }}-${{ matrix.arch == 'aarch64' && 'arm64' || 'x64' }}*"
           out-file-path: "MFA"
           extract: true
 
