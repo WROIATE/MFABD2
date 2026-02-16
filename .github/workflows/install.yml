@@ -298,43 +298,60 @@ jobs:
         if: matrix.os == 'win'
         shell: bash
         run: |
-          # === 决策逻辑：根据架构分流 ===
-          # x86_64 -> 使用经过验证的 Python 3.10
-          # aarch64 -> 使用支持 ARM 的 Python 3.11 (3.10无官方ARM包)
-          
+          # === 1. 架构分流与决策 ===
           if [[ "${{ matrix.arch }}" == "aarch64" ]]; then
-             echo "检测到 Windows ARM64：切换至 Python 3.11"
+             echo "🌟 [Win-ARM64] 切换 Python 3.11 并强制升级 Numpy 2.x"
+             
+             # Win-ARM64 必须用 Python 3.11+
              PYTHON_URL="https://www.python.org/ftp/python/3.11.9/python-3.11.9-embed-arm64.zip"
              PYTHON_VER="3.11"
              PIP_PLATFORM="win_arm64"
+             
+             # 【关键】Win-ARM64 只有 Numpy 2.3+ 的包
+             # 我们这里指定安装最新版，稍后会把 requirements.txt 里的旧版限制删掉
+             NUMPY_REQ="numpy>=2.3.0"
+             
           else
-             echo "检测到 Windows x64：保持使用 Python 3.10"
+             echo "✅ [Win-x64] 保持 Python 3.10 和 Numpy 1.26.4"
              PYTHON_URL="https://www.python.org/ftp/python/3.10.11/python-3.10.11-embed-amd64.zip"
              PYTHON_VER="3.10"
              PIP_PLATFORM="win_amd64"
+             # x64 继续用稳定的旧版
+             NUMPY_REQ="numpy==1.26.4"
           fi
 
-          echo "⬇️ 正在下载: $PYTHON_URL"
+          # === 2. 下载与解压 ===
+          echo "⬇️ Downloading: $PYTHON_URL"
           curl -L -o python_embed.zip "$PYTHON_URL"
           
           mkdir -p install/python
           7z x python_embed.zip -oinstall/python
           
-          # 开启 site 支持 (通用匹配法，兼容 3.10 和 3.11 的 pth 文件名)
-          # Python 3.10 的是 python310._pth, 3.11 的是 python311._pth
+          # 开启 site 支持
           python3 -c "import pathlib; p = next(pathlib.Path('install/python').glob('*._pth')); p.write_text(p.read_text().replace('#import site', 'import site'))"
-          
-          echo "=== Debug: Content of requirements.txt ==="
-          cat requirements.txt
-          echo "=========================================="
 
-          # 安装依赖 (动态使用上面定义好的 platform 和 version 变量)
+          # === 3. [关键修复] 处理 requirements.txt 冲突 ===
+          # 如果是 ARM64，必须删掉 requirements.txt 里 'numpy<2' 这一行，
+          # 否则 pip 会报错说：你命令里要安装 2.3，但文件里限制 <2，互相矛盾。
+          if [[ "${{ matrix.arch }}" == "aarch64" ]]; then
+             echo "✂️ [Win-ARM64] 正在移除 requirements.txt 中的 numpy<2 限制..."
+             # 使用 python 处理，避免 sed 在 mac/linux 上的语法差异
+             python3 -c "import sys; lines = [l for l in open('requirements.txt') if 'numpy' not in l]; open('requirements.txt', 'w').write(''.join(lines))"
+             echo "=== 修改后的 requirements.txt ==="
+             cat requirements.txt
+          fi
+
+          # === 4. 安装依赖 ===
+          echo "📦 Installing Dependencies (Numpy: $NUMPY_REQ)..."
+          
+          # 注意：这里我们把 $NUMPY_REQ 放在 requirements.txt 之前
+          # 并且加上了 requirements.txt (已经去除了冲突项)
           python3 -m pip install \
             --platform $PIP_PLATFORM \
             --python-version $PYTHON_VER \
             --only-binary=:all: \
             --no-cache-dir \
-            numpy==1.26.4 \
+            "$NUMPY_REQ" \
             -r requirements.txt \
             maafw==$MAA_VERSION \
             --target install/python/Lib/site-packages
