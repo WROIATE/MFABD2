@@ -427,13 +427,14 @@ jobs:
           if [[ "${{ matrix.is_android }}" == "false" ]]; then
             if [ -d "MFA" ]; then
               mkdir -p install
-              # 这里的 cleanup 移到专门的步骤里做，防止 rsync 前没删干净
+              # 这里的 cleanup 移到专门的步骤里做，防止 bach 前没删干净
+
               # 为了稳健，先在源目录删一次
               find MFA -name "*.zip" -delete 2>/dev/null || true
               find MFA -name "*.tar.gz" -delete 2>/dev/null || true
               
-              # 使用 rsync 覆盖
-              rsync -av MFA/ install/
+              # 使用 bach 覆盖
+              cp -rf MFA/* install/
             fi
 
           # 3. [安卓逻辑] 合并 MaaFramework Core
