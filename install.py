@@ -4,6 +4,12 @@ import sys
 import re
 import os
 
+# 解决 Windows CI 环境下打印 Emoji 报错的问题
+# 本地编辑器报错,作为次选手段,先注释掉看看yml-env效果.
+# if hasattr(sys.stdout, 'reconfigure'):
+#     sys.stdout.reconfigure(encoding='utf-8')
+#     sys.stderr.reconfigure(encoding='utf-8')
+
 try:
     import jsonc
 except ImportError as e:

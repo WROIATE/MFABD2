@@ -370,6 +370,10 @@ jobs:
       - name: Setup Embed Python (Windows)
         if: matrix.os == 'win'
         shell: bash
+        env:
+          #强制 Python 使用 UTF-8 模式
+          PYTHONUTF8: 1 
+          PYTHONIOENCODING: utf-8
         run: |
           echo "⬇️ Downloading Python Embed ${{ matrix.embed_version }} for ${{ matrix.py_arch }}..."
           
@@ -410,6 +414,10 @@ jobs:
       # ----------------------------------------------------------------
       - name: Install & Merge
         shell: bash
+        env:
+          #强制 Python 使用 UTF-8 模式
+          PYTHONUTF8: 1 
+          PYTHONIOENCODING: utf-8
         run: |
           # 1. 运行 install.py (生成配置、版本号等)
           # install.py 需要处理好路径分隔符
