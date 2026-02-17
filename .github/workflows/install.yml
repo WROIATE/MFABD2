@@ -219,7 +219,7 @@ jobs:
           fetch-depth: 0
 
       - name: Set up Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: "3.10"
 
@@ -362,7 +362,7 @@ jobs:
       # 设置构建环境的 Python (用于运行 install.py 等脚本)
       # 这里的版本不影响 Windows 打包进去的嵌入式 Python 版本
       - name: Set up Build Environment
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: "3.10"
 
@@ -372,7 +372,6 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install requests json-with-comments
-          pip install requests
 
       # ----------------------------------------------------------------
       # 📦 资源下载 (根据 Matrix 变量动态处理)
@@ -492,13 +491,13 @@ jobs:
           if [[ "${{ matrix.is_android }}" == "false" ]]; then
             if [ -d "MFA" ]; then
               mkdir -p install
-              # 这里的 cleanup 移到专门的步骤里做，防止 bach 前没删干净
+              # 这里的 cleanup 移到专门的步骤里做，防止 bash 前没删干净
 
               # 为了稳健，先在源目录删一次
               find MFA -name "*.zip" -delete 2>/dev/null || true
               find MFA -name "*.tar.gz" -delete 2>/dev/null || true
               
-              # 使用 bach 覆盖
+              # 使用 bash 覆盖
               cp -rf MFA/* install/
             fi
 
@@ -620,7 +619,7 @@ jobs:
           fetch-depth: 0
 
       - name: Set up Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: "3.x"
 
