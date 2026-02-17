@@ -1,7 +1,10 @@
 import json
-import cv2
+import time
+import os
+import traceback
 import numpy as np
 from typing import Union, Optional
+from PIL import Image
 
 from maa.agent.agent_server import AgentServer
 from maa.custom_recognition import CustomRecognition
@@ -103,22 +106,12 @@ class HSVShapeMatching(CustomRecognition):
         argv: CustomRecognition.AnalyzeArg,
     ) -> Union[CustomRecognition.AnalyzeResult, Optional[RectType]]:
         """
-        通过 HSV 阈值将输入图像转换为白底黑形状的二值化图像，并将该处理结果传递给指定的内部识别节点进行匹配。
+        [Pillow 兼容版] HSV 形状匹配识别器
         
-        Parameters:
-            context (Context): 运行时上下文，用于调用内部识别节点（通过 context.run_recognition）。
-            argv (CustomRecognition.AnalyzeArg): 分析参数封装；其中：
-                - argv.custom_recognition_param (str): JSON 字符串，期望包含以下可选/必需字段：
-                    - "target_node" 或兼容的旧字段 "recognition" (str, 必需)：要调用的内部识别节点名称。
-                    - "lower_hsv" (list[int], 可选)：HSV 下阈值，默认 [0, 0, 120]。
-                    - "upper_hsv" (list[int], 可选)：HSV 上阈值，默认 [180, 50, 255]。
-                    - "debug" (bool, 可选)：为 true 时保存处理后的调试图像。
-                - argv.image: 输入图像，要求为 BGR 格式的 NumPy 数组。
-        
-        Returns:
-            CustomRecognition.AnalyzeResult | None: 
-                - 当内部识别节点命中时返回包含识别框和原始识别详情的 AnalyzeResult。
-                - 当未命中或发生错误时返回 `None`。
+        特性：
+        1. 零依赖：移除 OpenCV 依赖，兼容 Windows ARM64。
+        2. 无感迁移：JSON 配置保持 OpenCV 标准 (H:0-180, S:0-255, V:0-255)。
+           代码内部自动映射到 Pillow 标准 (H:0-255)。
         """
         try:
             # 1. 解析参数
@@ -128,67 +121,109 @@ class HSVShapeMatching(CustomRecognition):
             else:
                 params = json.loads(str(raw))
             
-            # 兼容性处理：优先读取 target_node，如果没有则尝试读取 recognition
-            # (防止旧配置导致参数丢失)
             recognition_node = params.get("target_node") or params.get("recognition")
             debug_mode = params.get("debug", False)
             
             if not recognition_node:
-                mfaalog.error(f"[HSVShapeMatching] 参数错误: 未找到 'target_node'。当前参数: {params}")
+                mfaalog.error("[HSVShapeMatching] 参数错误: 未找到 'target_node'")
                 return None
 
-            img = argv.image # 获取当前截图 (BGR格式)
+            # img 是 BGR 格式的 Numpy 数组
+            img_bgr = argv.image 
             
-            # 2. 核心逻辑：HSV 过滤与二值化
+            # 2. 预处理：BGR -> RGB
             # -------------------------------------------------
-            hsv_img = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
-            
-            # 获取阈值，提供一组针对“半透明白色物体”的默认值
-            lower_hsv = np.array(params.get("lower_hsv", [0, 0, 120]))
-            upper_hsv = np.array(params.get("upper_hsv", [180, 50, 255]))
+            # OpenCV 图片是 BGR，Pillow 需要 RGB。
+            # 使用 numpy 切片反转通道，速度极快。
+            img_rgb = img_bgr[..., ::-1]
 
-            # 生成掩码 (Mask): 在范围内的像素=255(白)，不在=0(黑)
-            mask = cv2.inRange(hsv_img, lower_hsv, upper_hsv)
+            # Numpy -> PIL Image
+            pil_img = Image.fromarray(img_rgb)
             
-            # 图像反转 -> 生成【白底黑图】
-            # 因为 MAA 的 TemplateMatch 对白底黑线稿的兼容性通常更好
-            processed_img = np.full_like(img, 255) # 创建全白底图
-            processed_img[mask > 0] = [0, 0, 0]    # 将掩码区域（目标）涂黑
+            # 转 HSV (Pillow 标准: H:0-255, S:0-255, V:0-255)
+            hsv_pil = pil_img.convert("HSV")
+            hsv_np = np.array(hsv_pil)
 
-            # 3. 调试输出
+            # 3. 核心逻辑：阈值映射与过滤
+            # -------------------------------------------------
+            # 获取用户配置的 OpenCV 标准阈值 (H: 0-180)
+            user_lower = params.get("lower_hsv", [0, 0, 120])
+            user_upper = params.get("upper_hsv", [180, 50, 255])
+
+            # --- [关键算法：坐标系映射] ---
+            # 目的：将用户输入的 0-180 映射到 PIL 的 0-255
+            # 策略：Min向下取整，Max向上取整，确保范围只大不小
+            
+            def map_h_opencv_to_pillow(h_opencv, is_upper_bound=False):
+                # 转换系数
+                ratio = 255.0 / 180.0
+                val = h_opencv * ratio
+                if is_upper_bound:
+                    # 上限：向上取整 (Ceil)，防止浮点误差切掉边缘
+                    return min(255, int(np.ceil(val)))
+                else:
+                    # 下限：向下取整 (Floor)
+                    return max(0, int(np.floor(val)))
+
+            # 构建 PIL 标准的阈值数组
+            # H 通道做映射，S/V 通道保持不变 (两者都是 0-255)
+            lower_hsv_pil = np.array([
+                map_h_opencv_to_pillow(user_lower[0], is_upper_bound=False),
+                user_lower[1],
+                user_lower[2]
+            ])
+            
+            upper_hsv_pil = np.array([
+                map_h_opencv_to_pillow(user_upper[0], is_upper_bound=True),
+                user_upper[1],
+                user_upper[2]
+            ])
+
+            # 生成掩码 (利用 Numpy 广播机制)
+            # 逻辑：(Pixel >= Lower) AND (Pixel <= Upper)
+            mask = np.all((hsv_np >= lower_hsv_pil) & (hsv_np <= upper_hsv_pil), axis=-1)
+            
+            # 4. 二值化与输出构建
+            # -------------------------------------------------
+            # 创建全白底图 (注意：输出需要 BGR 格式给 MAA，所以直接用 shape 即可)
+            # 这里我们直接创建一个和原图一样大小的白色 BGR 图片
+            processed_bgr = np.full_like(img_bgr, 255)
+            
+            # 将掩码区域（目标）涂黑 [0, 0, 0]
+            processed_bgr[mask] = [0, 0, 0]
+
+            # 5. 调试输出
             # -------------------------------------------------
             if debug_mode:
-                import time
-                import os
                 debug_dir = "debug_images"
                 if not os.path.exists(debug_dir):
-                     try:  
-                        os.makedirs(debug_dir, exist_ok=True)  
-                     except OSError as e:  
-                        mfaalog.warning(f"[HSVShapeMatching] 创建调试目录失败: {e}") 
+                     try: os.makedirs(debug_dir, exist_ok=True)  
+                     except OSError as e: 
+                      mfaalog.debug(f"[HSVShapeMatching] 创建调试目录失败: {e}")
 
-                # 文件名格式: debug_hsv_[节点名]_[时间戳_毫秒].png
-                # 例如: debug_hsv_FindBunny_Core_1725123456_789.png
                 timestamp = f"{time.time():.3f}".replace('.', '_')
                 safe_node_name = recognition_node.replace('/', '_').replace('\\', '_')
                 
-                filename = f"{debug_dir}/debug_hsv_{safe_node_name}_{timestamp}.png"
+                # 在文件名里标记这是 PIL 处理的，方便区分
+                filename = f"{debug_dir}/debug_pil_{safe_node_name}_{timestamp}.png"
                 
-                cv2.imwrite(filename, processed_img)
-                mfaalog.info(f"[HSVShapeMatching] 调试模式已开启，处理图已保存至: {filename}")
+                # 保存调试图
+                # 注意：processed_bgr 是 BGR 格式，保存前要转回 RGB 给 PIL 存
+                # 或者如果你有 cv2 可以用 cv2.imwrite，但在无 cv2 环境下必须用 PIL
+                debug_save_img = Image.fromarray(processed_bgr[..., ::-1])
+                debug_save_img.save(filename)
+                
+                mfaalog.info(f"[HSVShapeMatching] 调试图已保存: {filename} (H范围: {lower_hsv_pil[0]}~{upper_hsv_pil[0]})")
 
-            # 4. 移交识别
+            # 6. 移交识别
             # -------------------------------------------------
-            # 注意：这里传进去的是【黑色的图标形状 + 纯白背景】
-            # 你的 template 图片也必须是【黑色的图标形状 + 纯白背景】
-            reco_detail = context.run_recognition(recognition_node, processed_img)
+            # 这里的 processed_bgr 已经是标准的 BGR numpy 数组
+            # 且已经是【白底黑图】，完全符合 Core 节点的预期
+            reco_detail = context.run_recognition(recognition_node, processed_bgr)
 
             if reco_detail and reco_detail.hit:
-                # 命中目标，返回结果
-                # (可选：打印匹配度，方便微调 threshold)
                 if reco_detail.best_result:
-                     mfaalog.debug(f"[HSVShapeMatching] 命中目标: {recognition_node}, Score: {reco_detail.best_result.score:.4f}")
-                
+                     mfaalog.debug(f"[HSVShapeMatching] 命中目标: {recognition_node}")
                 return CustomRecognition.AnalyzeResult(
                     box=reco_detail.box,
                     detail=reco_detail.raw_detail
@@ -197,5 +232,6 @@ class HSVShapeMatching(CustomRecognition):
             return None
 
         except Exception as e:
-            mfaalog.error(f"[HSVShapeMatching] 执行异常: {e}")
+            # 打印堆栈以便排查
+            mfaalog.error(f"[HSVShapeMatching] 执行异常:\n{traceback.format_exc()}")
             return None
