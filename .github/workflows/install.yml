@@ -476,7 +476,7 @@ jobs:
           rm -f *.zip *.tar.gz 
           rm -rf MFA AndroidCore
           # 清理 install 目录里可能被拷进去的压缩包
-          find install -name "*.zip" -delete 2>/dev/null || true
+          find install -name "*.zip" ! -name "python*.zip" -delete 2>/dev/null || true
           find install -name "*.tar.gz" -delete 2>/dev/null || true
           echo "✅ Cleanup done."
 
