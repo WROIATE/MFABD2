@@ -10,13 +10,14 @@ on:
       - ".github/workflows/install.yml"
       - "assets/**"
       - "**.py"
-  pull_request:
-    branches:
-      - "**"
-    paths:
-      - ".github/workflows/install.yml"
-      - "assets/**"
-      - "**.py"
+  # 防止在PR中运行两次    
+  # pull_request:
+  #   branches:
+  #     - "**"
+  #   paths:
+  #     - ".github/workflows/install.yml"
+  #     - "assets/**"
+  #     - "**.py"
   workflow_dispatch:
     inputs:
       deploy_beta:
@@ -36,6 +37,11 @@ on:
         description: "⚠️ 说明 / Note"
         required: false
         default: "不勾选任何选项，手动触发即为CI发版"
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}-${{ inputs.deploy_alpha || 'false' }}-${{ inputs.deploy_beta || 'false' }}
+  cancel-in-progress: true
+       
 
 jobs:
   meta:
@@ -142,8 +148,6 @@ jobs:
           extract: true
 
       # 3. 探测内核版本
-      # 3. 探测内核版本 (修复版)
-      # 3. 探测内核版本 (修复版)
       - name: Detect Core Version
         id: detect_maa
         run: |
@@ -205,60 +209,196 @@ jobs:
       maa_version: ${{ steps.detect_maa.outputs.version }}
       mfaa_tag: ${{ steps.parse_config.outputs.mfaa_tag }}
 
-  install:
+  resource_check:
+    name: Check Resources
     needs: meta
-    runs-on: macos-latest
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.10"
+
+      - name: Install maafw
+        env:
+          TARGET_VERSION: ${{ needs.meta.outputs.maa_version }}
+        run: |
+            python -m pip install --upgrade pip
+            echo "📦 Installing maafw==$TARGET_VERSION (Linux)..."
+            python -m pip install maafw=="$TARGET_VERSION"
+
+      - name: Restore Assets (Clone from Resource Repo)
+        uses: actions/checkout@v4
+        with:
+          repository: sunyink/MFABD2-Assets
+          ref: master
+          path: temp_assets
+          fetch-depth: 1
+      
+      - name: Merge Assets
+        shell: bash
+        run: |
+          mkdir -p assets/MaaCommonAssets
+          cp -r temp_assets/MaaCommonAssets/* assets/MaaCommonAssets/
+          rm -rf temp_assets
+
+      - name: Check Resource
+        run: |
+            # 赋予执行权限，防止 Linux 下报错
+            chmod +x ./check_resource.py
+            python ./check_resource.py ./assets/resource/
+  install:
+    needs: [meta, resource_check]
+    # 动态选择运行环境：Win跑Win，Mac跑Mac，Linux/安卓跑Ubuntu
+    runs-on: ${{ matrix.runner }}
 
     env:
       MAA_VERSION: ${{ needs.meta.outputs.maa_version }}
       MFAA_TAG: ${{ needs.meta.outputs.mfaa_tag }}
+
+      # 解决 Windows 乱码问题 
+      PYTHONUTF8: 1
+      PYTHONIOENCODING: utf-8
+      # 解决部分 Windows 终端不认 ANSI 颜色的问题（可选）
+      TERM: xterm
+
     strategy:
-      matrix:
-        os: [win, macos, linux, android]
-        arch: [aarch64, x86_64]
       fail-fast: false
+      matrix:
+        include:
+          # -------------------------------------------------------------------
+          # 🪟 Windows (x86_64) - 使用 Python 3.10
+          # -------------------------------------------------------------------
+          - os: win
+            arch: x86_64
+            runner: windows-latest
+            mfa_os: "win"
+            mfa_arch: "x64"
+            # Windows 专用配置
+            embed_version: "3.10.11" # Python 嵌入包版本
+            py_ver_short: "3.10"     # 用于 pip 参数
+            py_arch: "amd64"         # Python 官网文件名后缀
+            pip_plat: "win_amd64"    # pip 平台标签
+            numpy_req: "numpy<2"
+            is_android: false
+
+          # -------------------------------------------------------------------
+          # 🪟 Windows (ARM64) - 使用 Python 3.11 (原生支持更好)
+          # -------------------------------------------------------------------
+          - os: win
+            arch: aarch64
+            runner: windows-latest
+            mfa_os: "win"
+            mfa_arch: "arm64"
+            # Windows 专用配置 (切到 3.11)
+            embed_version: "3.11.9"
+            py_ver_short: "3.11"
+            py_arch: "arm64"
+            pip_plat: "win_arm64"
+            numpy_req: "numpy>=2" # winarm64 没有<2的预编译包.
+            is_android: false
+
+          # -------------------------------------------------------------------
+          # 🍎 macOS (x64)
+          # -------------------------------------------------------------------
+          - os: macos
+            arch: x86_64
+            runner: macos-latest
+            mfa_os: "osx"
+            mfa_arch: "x64"
+            numpy_req: "numpy<2"
+            is_android: false
+
+          # -------------------------------------------------------------------
+          # 🍎 macOS (ARM64)
+          # -------------------------------------------------------------------
+          - os: macos
+            arch: aarch64
+            runner: macos-latest
+            mfa_os: "osx"
+            mfa_arch: "arm64"
+            numpy_req: "numpy<2"
+            is_android: false
+
+          # -------------------------------------------------------------------
+          # 🐧 Linux (x64)
+          # -------------------------------------------------------------------
+          - os: linux
+            arch: x86_64
+            runner: ubuntu-latest
+            mfa_os: "linux"
+            mfa_arch: "x64"
+            numpy_req: "numpy<2"
+            is_android: false
+
+          # -------------------------------------------------------------------
+          # 🐧 Linux (ARM64)
+          # -------------------------------------------------------------------
+          - os: linux
+            arch: aarch64
+            runner: ubuntu-latest
+            mfa_os: "linux"
+            mfa_arch: "arm64"
+            numpy_req: "numpy<2"
+            is_android: false
+
+          # -------------------------------------------------------------------
+          # 🤖 Android (ARM64) - 特殊逻辑
+          # -------------------------------------------------------------------
+          - os: android
+            arch: aarch64
+            runner: ubuntu-latest
+            is_android: true
 
     steps:
       - uses: actions/checkout@v4
         with:
           submodules: true
 
-      # 新增：设置 Python 环境
-      - name: Set up Python
-        uses: actions/setup-python@v4
+      # 设置构建环境的 Python (用于运行 install.py 等脚本)
+      # 这里的版本不影响 Windows 打包进去的嵌入式 Python 版本
+      - name: Set up Build Environment
+        uses: actions/setup-python@v5
         with:
-          python-version: "3.x"
+          python-version: "3.10"
 
-      # 使用 meta 探测到的版本号安装 MaaFramework Python 绑定
-      - name: Install Requirements
+      # 显式指定 bash，确保在 Windows 上也能用 cp/rm/mkdir 等命令
+      - name: Install Build Dependencies
+        shell: bash
         run: |
           python -m pip install --upgrade pip
-          pip install -r requirements.txt
-          # 显式安装探测到的匹配版本
-          echo "Installing matched core: maafw==$MAA_VERSION"
-          pip install maafw==$MAA_VERSION
+          pip install requests json-with-comments
 
+      # ----------------------------------------------------------------
+      # 📦 资源下载 (根据 Matrix 变量动态处理)
+      # ----------------------------------------------------------------
+
+      # [桌面端] 下载 MFAAvalonia
       - name: Download MFAAvalonia
-        id: download_mfa
-        if: matrix.os != 'android'
+        if: matrix.is_android == false
         uses: robinraju/release-downloader@v1
         with:
           repository: SweetSmellFox/MFAAvalonia
           latest: false
           tag: ${{ env.MFAA_TAG }}
-          fileName: "MFAAvalonia-*-${{ matrix.os == 'macos' && 'osx' || matrix.os }}-${{ matrix.arch == 'aarch64' && 'arm64' || 'x64' }}*"
+          # 直接使用 Matrix 里的变量，无需复杂判断
+          fileName: "MFAAvalonia-*-${{ matrix.mfa_os }}-${{ matrix.mfa_arch }}*"
           out-file-path: "MFA"
           extract: true
 
-          # [新增] 专门为 Android 下载 MaaFramework 内核
+      # [安卓端] 下载 MaaFramework Core
       - name: Download MaaFramework (Android)
-        if: matrix.os == 'android'
+        if: matrix.is_android == true
         uses: robinraju/release-downloader@v1
         with:
           repository: MaaXYZ/MaaFramework
           latest: false
           tag: "${{ env.MAA_VERSION }}"
-          # Android 将通配符逻辑调整为匹配 "MAA-android-{架构}-xxxx"
+          # Android 文件名格式通常是 MAA-android-arm64-xxxx
           fileName: "MAA-android-${{ matrix.arch }}*"
           out-file-path: "AndroidCore"
           extract: true
@@ -276,262 +416,199 @@ jobs:
         run: |
           # 创建目标目录结构（如果不存在）
           mkdir -p assets/MaaCommonAssets
-
-          # 将临时目录里的 MaaCommonAssets 里的内容，移动到主仓库的 assets/MaaCommonAssets 下
-          # 这样就解开了 "MaaCommonAssets/MaaCommonAssets" 的套娃
+          # 解开 MaaCommonAssets/MaaCommonAssets 套娃
           cp -r temp_assets/MaaCommonAssets/* assets/MaaCommonAssets/
-
-          # 清理临时目录
           rm -rf temp_assets
+          echo "✅ 资源合并完成"
 
-          # 验证
-          echo "✅ 资源合并完成，当前 assets 目录结构："
-          ls -R assets/
-
-      - name: Clean up MFAAvalonia archive
-        if: matrix.os != 'android'
-        shell: bash
-        run: |
-          ARCHIVE_FILE_PATH="${{ fromJson(steps.download_mfa.outputs.downloaded_files)[0] }}"
-          rm -f "${ARCHIVE_FILE_PATH}"
-
+      # ----------------------------------------------------------------
+      # Windows 专属：嵌入式 Python 打包
+      # ----------------------------------------------------------------
       - name: Setup Embed Python (Windows)
         if: matrix.os == 'win'
         shell: bash
         run: |
-          # === 1. 架构分流与决策 ===
-          if [[ "${{ matrix.arch }}" == "aarch64" ]]; then
-             echo "🌟 [Win-ARM64] 切换 Python 3.11 并强制升级 Numpy 2.x"
-             
-             # Win-ARM64 必须用 Python 3.11+
-             PYTHON_URL="https://www.python.org/ftp/python/3.11.9/python-3.11.9-embed-arm64.zip"
-             PYTHON_VER="3.11"
-             PIP_PLATFORM="win_arm64"
-             
-             # 【关键】Win-ARM64 只有 Numpy 2.3+ 的包
-             # 我们这里指定安装最新版，稍后会把 requirements.txt 里的旧版限制删掉
-             NUMPY_REQ="numpy>=2.3.0"
-             
-          else
-             echo "✅ [Win-x64] 保持 Python 3.10 和 Numpy 1.26.4"
-             PYTHON_URL="https://www.python.org/ftp/python/3.10.11/python-3.10.11-embed-amd64.zip"
-             PYTHON_VER="3.10"
-             PIP_PLATFORM="win_amd64"
-             # x64 继续用稳定的旧版
-             NUMPY_REQ="numpy==1.26.4"
-          fi
-
-          # === 2. 下载与解压 ===
-          echo "⬇️ Downloading: $PYTHON_URL"
-          curl -L -o python_embed.zip "$PYTHON_URL"
+          echo "⬇️ Downloading Python Embed ${{ matrix.embed_version }} for ${{ matrix.py_arch }}..."
           
+          # 1. 下载：利用 Matrix 变量 (支持 3.10 和 3.11)
+          curl -L -o python_embed.zip "https://www.python.org/ftp/python/${{ matrix.embed_version }}/python-${{ matrix.embed_version }}-embed-${{ matrix.py_arch }}.zip"
+
+          # 2. 解压 (Windows Runner 自带 7z)
           mkdir -p install/python
           7z x python_embed.zip -oinstall/python
           
           # 开启 site 支持
           python3 -c "import pathlib; p = next(pathlib.Path('install/python').glob('*._pth')); p.write_text(p.read_text().replace('#import site', 'import site'))"
 
-          # === 3. [关键修复] 处理 requirements.txt 冲突 ===
-          # 如果是 ARM64，必须删掉 requirements.txt 里 'numpy<2' 这一行，
-          # 否则 pip 会报错说：你命令里要安装 2.3，但文件里限制 <2，互相矛盾。
-          if [[ "${{ matrix.arch }}" == "aarch64" ]]; then
-             echo "✂️ [Win-ARM64] 正在移除 requirements.txt 中的 numpy<2 限制..."
-             # 使用 python 处理，避免 sed 在 mac/linux 上的语法差异
-             python3 -c "import sys; lines = [l for l in open('requirements.txt') if 'numpy' not in l]; open('requirements.txt', 'w').write(''.join(lines))"
-             echo "=== 修改后的 requirements.txt ==="
-             cat requirements.txt
-          fi
+          # 3. 开启 site 支持
+          # 注意：这里我们构造 python3x._pth 文件名，因为 3.10 是 python310._pth，3.11 是 python311._pth
+          # 简单的做法是通配符，或者用 Python 脚本找
+          python3 -c "
+          import pathlib
+          import re
+          pth_file = next(pathlib.Path('install/python').glob('python*._pth'))
+          print(f'Modifying {pth_file}')
+          pth_file.write_text(pth_file.read_text().replace('#import site', 'import site'))
+          "
 
-          # === 4. 安装依赖 ===
-          echo "📦 Installing Dependencies (Numpy: $NUMPY_REQ)..."
+          echo "📦 Installing Dependencies for ${{ matrix.pip_plat }} (Python ${{ matrix.py_ver_short }})..."
           
-          # 注意：这里我们把 $NUMPY_REQ 放在 requirements.txt 之前
-          # 并且加上了 requirements.txt (已经去除了冲突项)
+          # 4. 重点：安装依赖
+          # 使用 --only-binary=:all: 强制下载 Wheel 包 (这对 Pillow/Numpy 在 Windows 上至关重要)
+          
+          # 使用 Python 精准剔除 numpy，防止误伤注释或其他包
+          python3 -c "
+          import re
+          with open('requirements.txt', 'r') as f_in, open('requirements_no_numpy.txt', 'w') as f_out:
+              for line in f_in:
+                  # 正则解释：
+                  # ^\s* : 行首允许有空格
+                  # numpy      : 必须是 numpy
+                  # \s* : 允许 numpy 后面有空格
+                  # ([<>=!~;]|$) : 后面必须跟着版本比较符、分号，或者是行尾
+                  if not re.match(r'^\s*numpy\s*([<>=!~;]|$)', line, re.IGNORECASE):
+                      f_out.write(line)
+          "
+
           python3 -m pip install \
-            --platform $PIP_PLATFORM \
-            --python-version $PYTHON_VER \
+            --platform ${{ matrix.pip_plat }} \
+            --python-version ${{ matrix.py_ver_short }} \
             --only-binary=:all: \
             --no-cache-dir \
-            "$NUMPY_REQ" \
-            -r requirements.txt \
-            maafw==$MAA_VERSION \
-            --target install/python/Lib/site-packages
+            --target install/python/Lib/site-packages \
+            "${{ matrix.numpy_req }}" \
+            -r requirements_no_numpy.txt \
+            maafw==$MAA_VERSION
+
+      # ----------------------------------------------------------------
+      # 🏗️ 构建与组装
+      # ----------------------------------------------------------------
       - name: Install & Merge
         shell: bash
         run: |
-          # 1. 运行 install.py (处理配置、注入版本号、生成资源目录等)
-          # install.py 会创建 'install' 目录并放入 resource 和 agent
+          # 1. 运行 install.py (生成配置、版本号等)
+          # install.py 需要处理好路径分隔符
           python ./install.py ${{ needs.meta.outputs.tag }} ${{ matrix.os }} ${{ env.MAA_VERSION }}
 
-          # 2. [桌面端逻辑] 合并 MFAAvalonia 到 install 目录
-          if [[ "${{ matrix.os }}" != "android" ]]; then
+          # 2. [桌面端逻辑] 合并 MFAAvalonia
+          if [[ "${{ matrix.is_android }}" == "false" ]]; then
             if [ -d "MFA" ]; then
               mkdir -p install
-              # 使用 rsync 覆盖，确保 UI 和 Core 都在正确位置
-              rsync -av MFA/ install/
+              # 这里的 cleanup 移到专门的步骤里做，防止 bash 前没删干净
+
+              # 为了稳健，先在源目录删一次
+              find MFA -name "*.zip" -delete 2>/dev/null || true
+              find MFA -name "*.tar.gz" -delete 2>/dev/null || true
+              
+              # 使用 bash 覆盖
+              cp -rf MFA/* install/
             fi
 
-          # 3. [新增][安卓逻辑] 合并 MaaFramework Core 到 install 目录
+          # 3. [安卓逻辑] 合并 MaaFramework Core
           else
             echo "🤖 处理 Android 内核合并..."
             if [ -d "AndroidCore" ]; then
-              # AndroidCore 解压后通常包含 bin, lib, share, include 等
-              # 我们将它们直接复制到 install 根目录下
               cp -r AndroidCore/* install/
               echo "✅ Android 内核已合并"
             else
-              echo "❌ 未找到 AndroidCore 目录，下载可能失败"
+              echo "❌ 未找到 AndroidCore 目录"
               exit 1
             fi
           fi
 
-      # [核心修复 1] 强力清理残留的压缩包 (解决根目录 85MB 问题)
+      # [核心修复 1] 强力清理残留的压缩包
       - name: Cleanup Archives
         shell: bash
         run: |
           echo "🧹 Cleaning up zip/tar.gz files..."
-          # 1. 删除根目录的
           rm -f *.zip *.tar.gz 
-          # 2. 删除 MFA 源目录的
-          rm -f MFA/*.zip MFA/*.tar.gz
-          # 3. [关键补刀] 删除 install 目录里被 rsync 拷进去的
-          rm -f install/*.zip install/*.tar.gz
-          # 4.删安卓构建包
-          rm -rf AndroidCore
-
+          rm -rf MFA AndroidCore
+          # 清理 install 目录里可能被拷进去的压缩包
+          find install -name "*.zip" ! -name "python*.zip" -delete 2>/dev/null || true
+          find install -name "*.tar.gz" -delete 2>/dev/null || true
           echo "✅ Cleanup done."
 
-      # [核心修复 2] 还原原版逻辑：利用矩阵 (Matrix) 清理 runtimes
-      # 既然我们下载的是"全家桶"，那我们就根据 matrix.os 和 matrix.arch 把不需要的肢解掉
+      # [核心修复 2] 原版逻辑：利用 Python 脚本清理不匹配的 Runtimes
       - name: Prune Runtimes (Architecture Slimming)
-        if: matrix.os != 'android'
+        if: matrix.is_android == false
         shell: bash
         run: |
           python3 -c "
-          import shutil
-          import os
+          import shutil, os
           from pathlib import Path
 
-          # 获取矩阵定义的'正确'架构
-          # win / macos / linux
-          matrix_os = '${{ matrix.os }}'
-          # x86_64 / aarch64
-          matrix_arch = '${{ matrix.arch }}'
+          # 从 Matrix 获取目标特征
+          target_os = '${{ matrix.mfa_os }}'      # win, osx, linux
+          target_arch = '${{ matrix.mfa_arch }}'  # x64, arm64
 
-          print(f'🎯 Target: {matrix_os}-{matrix_arch}')
-
+          print(f'🎯 Target Runtime: {target_os}-{target_arch}')
+          
           # 定义需要保留的关键词
-          # 例如: 如果是 win-x86_64，我们保留 'win' 和 'x64'/'amd64'
           keep_keywords = []
-
-          if matrix_os == 'win': keep_keywords.append('win')
-          elif matrix_os == 'macos': keep_keywords.append('osx') # runtimes里通常叫osx
-          elif matrix_os == 'linux': keep_keywords.append('linux')
-
-          if matrix_arch == 'x86_64': 
-              keep_keywords.extend(['x64', 'amd64'])
-          elif matrix_arch == 'aarch64': 
-              keep_keywords.extend(['arm64', 'aarch64'])
+          keep_keywords.append(target_os)
+          if target_arch == 'x64': keep_keywords.extend(['x64', 'amd64'])
+          else: keep_keywords.extend(['arm64', 'aarch64'])
 
           runtimes_dir = Path('install/runtimes')
           if runtimes_dir.exists():
-              initial_size = sum(f.stat().st_size for f in runtimes_dir.rglob('*') if f.is_file())
-              print(f'📦 Runtimes size before: {initial_size/1024/1024:.2f} MB')
-
               for p in runtimes_dir.iterdir():
-                  if p.is_dir():
-                      # 逻辑：如果文件夹名字里【不包含】任何一个保留关键词，就删掉
-                      # 比如: 文件夹叫 'osx-arm64'，但我想要 'win' -> 删！
-                      # 比如: 文件夹叫 'win-arm64'，我想要 'win' 和 'x64' -> 缺x64 -> 删！
-                      
-                      # 检查是否包含OS关键词
-                      match_os = any(k in p.name for k in keep_keywords if k in ['win', 'osx', 'linux'])
-                      # 检查是否包含架构关键词
-                      match_arch = any(k in p.name for k in keep_keywords if k in ['x64', 'amd64', 'arm64', 'aarch64'])
-
-                      if not (match_os and match_arch):
-                          print(f'🗑️ Pruning mismatched runtime: {p.name}')
-                          shutil.rmtree(p)
-                      else:
-                          print(f'✅ Keeping runtime: {p.name}')
-                          
-              final_size = sum(f.stat().st_size for f in runtimes_dir.rglob('*') if f.is_file())
-              print(f'🎉 Runtimes size after: {final_size/1024/1024:.2f} MB')
-          else:
-              print('⚠️ No runtimes directory found.')
+                  if not p.is_dir(): continue
+                  
+                  # 逻辑：必须包含 OS，且必须包含架构
+                  # 1. 检查是否匹配 OS (如果不包含 target_os 且包含其他os名字 -> 删)
+                  name = p.name.lower()
+                  # 这里做一个简化的强匹配逻辑：
+                  # 只要文件夹名字里包含了 'win','linux','osx' 中的任意一个，它就必须包含 target_os
+                  has_os_tag = any(k in name for k in ['win', 'linux', 'osx'])
+                  if has_os_tag and target_os not in name:
+                      shutil.rmtree(p); continue
+                  
+                  # 2. 检查架构
+                  has_arch_tag = any(k in name for k in ['x64', 'amd64', 'arm64', 'aarch64'])
+                  # 检查是否包含我们要的架构
+                  match_target_arch = any(k in name for k in keep_keywords if k in ['x64', 'amd64', 'arm64', 'aarch64'])
+                  
+                  if has_arch_tag and not match_target_arch:
+                       print(f'🗑️ Pruning mismatched arch: {name}')
+                       shutil.rmtree(p)
           "
+
       - name: Inject Announcement & Verify
         shell: bash
         run: |
           echo "::group::🚀 开始注入公告"
-
-          # 1. 运行 Python 脚本
           python scripts/inject_announcement.py "${{ needs.meta.outputs.tag }}"
-
           echo "::endgroup::"
 
           echo "::group::👀 验证注入结果"
-
-          # 2. [修正] 路径改为 install/resource/Announcement/1.公告.md
           TARGET="install/resource/Announcement/1.公告.md"
-
           if [ -f "$TARGET" ]; then
             echo "✅ 成功定位文件: $TARGET"
-            echo "----------------------------------------"
-            # 查找锚点，并显示后面 15 行
-            grep -A 15 "" "$TARGET" || (echo "⚠️ 未找到锚点，打印头部:" && head -n 20 "$TARGET")
-            echo "----------------------------------------"
+            grep -A 15 "" "$TARGET" || head -n 20 "$TARGET"
           else
-            echo "❌ 验证失败：文件不存在 ($TARGET)"
-            # 调试：列出 install 目录看看结构
-            ls -R install/
-            exit 1
+            echo "⚠️ 验证失败：文件不存在 ($TARGET) - 可能是安卓版或路径变更"
           fi
-
           echo "::endgroup::"
 
-      # 删除 Python 包内的冗余 bin 目录
-      # 针对 MFABD2 的目录结构 (install/python/Lib/site-packages/maa/bin)
-      # 这一步会扫描 install 目录下所有的 maa/bin 并删除
-      # =======================================================
-
-      - name: Remove redundant MAA binaries (Deduplication)
-        if: matrix.os != 'android'
+      - name: Remove redundant MAA binaries (Win Only)
+        if: matrix.os == 'win'
+        shell: bash
         run: |
+          # 仅针对 Windows，因为只有 Windows 下载了 Python 包
           python3 -c "
           import shutil
           from pathlib import Path
-
-          root = Path('install')
-
-          # 1. 寻找源 plugins 目录 (在 python 包里)
-          src_plugins = next(root.rglob('**/site-packages/maa/bin/plugins'), None)
-
-          # 2. 寻找目标 native 目录 (在 runtimes 里)
-          # 假设 install/runtimes 下只有一个平台文件夹，或者我们只关心 native 层级
-          target_native = next(root.rglob('runtimes/*/native'), None)
-
-          # 3. 如果两者都存在，执行移动
-          if src_plugins and target_native and src_plugins.exists():
-              dest_plugins = target_native / 'plugins'
-              if not dest_plugins.exists():
-                  print(f'Moving plugins from {src_plugins} to {dest_plugins}')
-                  shutil.move(str(src_plugins), str(dest_plugins))
-              else:
-                  print(f'Target plugins dir already exists: {dest_plugins}')
-
-          # 4. 安全删除所有冗余的 bin 目录
-          for p in root.rglob('**/site-packages/maa/bin'):
-              if p.is_dir():
+          # 删除 install/python/.../maa/bin，因为 runtimes 里已经有了
+          for p in Path('install').rglob('**/site-packages/maa/bin'):
+              if p.is_dir(): 
                   print(f'Removing redundant bin: {p}')
                   shutil.rmtree(p)
           "
 
       - uses: actions/upload-artifact@v4
         with:
-          name: MFABD2-${{ needs.meta.outputs.tag }}-${{ matrix.os }}-${{ matrix.arch }}
+          name: MFABD2-${{ needs.meta.outputs.tag }}-${{ matrix.os }}-${{ matrix.is_android && 'arm64' || matrix.arch }}
           path: "install"
-
   changelog:
     name: Generate changelog
     runs-on: ubuntu-latest
@@ -545,7 +622,7 @@ jobs:
           fetch-depth: 0
 
       - name: Set up Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: "3.x"
 
