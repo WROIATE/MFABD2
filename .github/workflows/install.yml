@@ -213,7 +213,7 @@ jobs:
     env:
       MAA_VERSION: ${{ needs.meta.outputs.maa_version }}
       MFAA_TAG: ${{ needs.meta.outputs.mfaa_tag }}
-      
+
       # 解决 Windows 乱码问题 
       PYTHONUTF8: 1
       PYTHONIOENCODING: utf-8
@@ -237,6 +237,7 @@ jobs:
             py_ver_short: "3.10"     # 用于 pip 参数
             py_arch: "amd64"         # Python 官网文件名后缀
             pip_plat: "win_amd64"    # pip 平台标签
+            numpy_req: "numpy<2"
             is_android: false
 
           # -------------------------------------------------------------------
@@ -252,6 +253,7 @@ jobs:
             py_ver_short: "3.11"
             py_arch: "arm64"
             pip_plat: "win_arm64"
+            numpy_req: "numpy>=2" # winarm64 没有<2的预编译包.
             is_android: false
 
           # -------------------------------------------------------------------
@@ -262,6 +264,7 @@ jobs:
             runner: macos-latest
             mfa_os: "osx"
             mfa_arch: "x64"
+            numpy_req: "numpy<2"
             is_android: false
 
           # -------------------------------------------------------------------
@@ -272,6 +275,7 @@ jobs:
             runner: macos-latest
             mfa_os: "osx"
             mfa_arch: "arm64"
+            numpy_req: "numpy<2"
             is_android: false
 
           # -------------------------------------------------------------------
@@ -282,6 +286,7 @@ jobs:
             runner: ubuntu-latest
             mfa_os: "linux"
             mfa_arch: "x64"
+            numpy_req: "numpy<2"
             is_android: false
 
           # -------------------------------------------------------------------
@@ -292,6 +297,7 @@ jobs:
             runner: ubuntu-latest
             mfa_os: "linux"
             mfa_arch: "arm64"
+            numpy_req: "numpy<2"
             is_android: false
 
           # -------------------------------------------------------------------
@@ -376,10 +382,6 @@ jobs:
       - name: Setup Embed Python (Windows)
         if: matrix.os == 'win'
         shell: bash
-        env:
-          #强制 Python 使用 UTF-8 模式
-          PYTHONUTF8: 1 
-          PYTHONIOENCODING: utf-8
         run: |
           echo "⬇️ Downloading Python Embed ${{ matrix.embed_version }} for ${{ matrix.py_arch }}..."
           
@@ -405,14 +407,29 @@ jobs:
           
           # 4. 重点：安装依赖
           # 使用 --only-binary=:all: 强制下载 Wheel 包 (这对 Pillow/Numpy 在 Windows 上至关重要)
+          
+          # 使用 Python 精准剔除 numpy，防止误伤注释或其他包
+          python3 -c "
+          import re
+          with open('requirements.txt', 'r') as f_in, open('requirements_no_numpy.txt', 'w') as f_out:
+              for line in f_in:
+                  # 正则解释：
+                  # ^\s* : 行首允许有空格
+                  # numpy      : 必须是 numpy
+                  # \s* : 允许 numpy 后面有空格
+                  # ([<>=!~;]|$) : 后面必须跟着版本比较符、分号，或者是行尾
+                  if not re.match(r'^\s*numpy\s*([<>=!~;]|$)', line, re.IGNORECASE):
+                      f_out.write(line)
+          "
+
           python3 -m pip install \
             --platform ${{ matrix.pip_plat }} \
             --python-version ${{ matrix.py_ver_short }} \
             --only-binary=:all: \
             --no-cache-dir \
             --target install/python/Lib/site-packages \
-            "numpy<2" \
-            -r requirements.txt \
+            "${{ matrix.numpy_req }}" \
+            -r requirements_no_numpy.txt \
             maafw==$MAA_VERSION
 
       # ----------------------------------------------------------------
@@ -420,10 +437,6 @@ jobs:
       # ----------------------------------------------------------------
       - name: Install & Merge
         shell: bash
-        env:
-          #强制 Python 使用 UTF-8 模式
-          PYTHONUTF8: 1 
-          PYTHONIOENCODING: utf-8
         run: |
           # 1. 运行 install.py (生成配置、版本号等)
           # install.py 需要处理好路径分隔符
