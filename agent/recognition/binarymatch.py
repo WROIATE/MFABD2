@@ -1,6 +1,7 @@
 import json
 import time
 import os
+import traceback
 import numpy as np
 from typing import Union, Optional
 from PIL import Image
@@ -124,7 +125,7 @@ class HSVShapeMatching(CustomRecognition):
             debug_mode = params.get("debug", False)
             
             if not recognition_node:
-                mfaalog.error(f"[HSVShapeMatching] 参数错误: 未找到 'target_node'")
+                mfaalog.error("[HSVShapeMatching] 参数错误: 未找到 'target_node'")
                 return None
 
             # img 是 BGR 格式的 Numpy 数组
@@ -197,7 +198,8 @@ class HSVShapeMatching(CustomRecognition):
                 debug_dir = "debug_images"
                 if not os.path.exists(debug_dir):
                      try: os.makedirs(debug_dir, exist_ok=True)  
-                     except: pass
+                     except OSError as e: 
+                      mfaalog.debug(f"[HSVShapeMatching] 创建调试目录失败: {e}")
 
                 timestamp = f"{time.time():.3f}".replace('.', '_')
                 safe_node_name = recognition_node.replace('/', '_').replace('\\', '_')
@@ -230,8 +232,6 @@ class HSVShapeMatching(CustomRecognition):
             return None
 
         except Exception as e:
-            mfaalog.error(f"[HSVShapeMatching] 执行异常: {e}")
             # 打印堆栈以便排查
-            import traceback
-            traceback.print_exc()
+            mfaalog.error(f"[HSVShapeMatching] 执行异常:\n{traceback.format_exc()}")
             return None

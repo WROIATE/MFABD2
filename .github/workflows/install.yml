@@ -604,7 +604,7 @@ jobs:
 
       - uses: actions/upload-artifact@v4
         with:
-          name: MFABD2-${{ needs.meta.outputs.tag }}-${{ matrix.os }}-${{ matrix.arch }}
+          name: MFABD2-${{ needs.meta.outputs.tag }}-${{ matrix.os }}-${{ matrix.is_android && 'arm64' || matrix.arch }}
           path: "install"
   changelog:
     name: Generate changelog
