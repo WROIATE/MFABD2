@@ -213,6 +213,12 @@ jobs:
     env:
       MAA_VERSION: ${{ needs.meta.outputs.maa_version }}
       MFAA_TAG: ${{ needs.meta.outputs.mfaa_tag }}
+      
+      # 解决 Windows 乱码问题 
+      PYTHONUTF8: 1
+      PYTHONIOENCODING: utf-8
+      # 解决部分 Windows 终端不认 ANSI 颜色的问题（可选）
+      TERM: xterm
 
     strategy:
       fail-fast: false
