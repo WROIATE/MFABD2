@@ -8,16 +8,40 @@
     },
     "Collect_StartGame_HomePage_OnlyOnce": {
         "action": "Custom",
-        "custom_action": "PatchNode",
+        "custom_action": "PatchBatch",
         "custom_action_param": {
-            "node": "Collect_PackEnd_Ck",
-            "patch": {
-                "next": [
-                    "Collect_PackEnd_Ck_OnlyOnce"
-                ]
+            "patches": {
+                "Collect_PackEnd_Ck": {
+                    "next": [
+                        "Collect_PackEnd_Ck_OnlyOnce"
+                    ]
+                },
+                "Collect_Skill3_2": {
+                    "next": [
+                        "Collect_Skill3_2",
+                        "[JumpBack]Collect_OnlyOnce_SkillUsed",
+                        "Collect_Skill3_2_Used",
+                        "Collect_Skill3_3_perOcr",
+                        "Collect_Skill3_3_Nothing",
+                        "Collect_Skill3_3",
+                        "Collect_Skill_TapReset"
+                    ]
+                }
             },
-            "origin": {
-                "next": []
+            "origins": {
+                "Collect_PackEnd_Ck": {
+                    "next": []
+                },
+                "Collect_Skill3_2": {
+                    "next": [
+                        "Collect_Skill3_2",
+                        "Collect_Skill3_2_Used",
+                        "Collect_Skill3_3_perOcr",
+                        "Collect_Skill3_3_Nothing",
+                        "Collect_Skill3_3",
+                        "Collect_Skill_TapReset"
+                    ]
+                }
             }
         },
         "next": [
