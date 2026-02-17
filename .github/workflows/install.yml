@@ -210,22 +210,25 @@ jobs:
       mfaa_tag: ${{ steps.parse_config.outputs.mfaa_tag }}
 
   resource_check:
-    name: Check
-    # 🔗 必须等待 meta 跑完，拿到 maa_version 才能跑
+    name: Check Resources
     needs: meta
-    runs-on: macos-latest
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.10"
 
       - name: Install maafw
         env:
           TARGET_VERSION: ${{ needs.meta.outputs.maa_version }}
         run: |
             python -m pip install --upgrade pip
-            echo "📦 Installing maafw==$TARGET_VERSION to match Core..."
-            # 💡 核心修改：安装与 Meta 探测到的 C++ Core 完全一致的 Python 包
+            echo "📦 Installing maafw==$TARGET_VERSION (Linux)..."
             python -m pip install maafw=="$TARGET_VERSION"
 
       - name: Restore Assets (Clone from Resource Repo)
@@ -245,8 +248,9 @@ jobs:
 
       - name: Check Resource
         run: |
-            python ./check_resource.py ./assets/resource/    
-
+            # 赋予执行权限，防止 Linux 下报错
+            chmod +x ./check_resource.py
+            python ./check_resource.py ./assets/resource/
   install:
     needs: [meta, resource_check]
     # 动态选择运行环境：Win跑Win，Mac跑Mac，Linux/安卓跑Ubuntu
