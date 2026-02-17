@@ -3,7 +3,8 @@
         {
             "name": "安卓端",
             "label": "模拟器",
-            "type": "Adb"
+            "type": "Adb",
+            "permission_required": true
         },
         {
             "name": "PC客户端",
@@ -15,7 +16,8 @@
                 "mouse": "PostMessageWithCursorPos",
                 "keyboard": "PostMessageWithCursorPos"
             },
-            "display_raw": true
+            "permission_required": true,
+            "display_short_side": 720
         }
     ],
     "resource": [

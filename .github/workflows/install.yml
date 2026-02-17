@@ -436,6 +436,9 @@ jobs:
           # 2. 解压 (Windows Runner 自带 7z)
           mkdir -p install/python
           7z x python_embed.zip -oinstall/python
+          
+          # 开启 site 支持
+          python3 -c "import pathlib; p = next(pathlib.Path('install/python').glob('*._pth')); p.write_text(p.read_text().replace('#import site', 'import site'))"
 
           # 3. 开启 site 支持
           # 注意：这里我们构造 python3x._pth 文件名，因为 3.10 是 python310._pth，3.11 是 python311._pth
