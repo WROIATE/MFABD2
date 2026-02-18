@@ -208,9 +208,33 @@
                 "半自动末日之书(从‘去战斗’页面开始)"
             ],
             "description": "**半自动操作：日常关闭。**使用时注意启动页面。<br>（未来计划...）作为小工具在其他页面打开，∞拖延。 "
+        },
+        {
+            "name": "test-task",
+            "entry": "Batch_Modify_Levels",
+            "option": [
+                "测试替换"
+            ]
         }
     ],
     "option": {
+        "测试替换": {
+            "type": "input",
+            "inputs": [
+                {
+                    "name": "替换关卡",
+                    "pipeline_type": "string",
+                    "default": ""
+                }
+            ],
+            "pipeline_override": {
+                "Batch_Modify_Levels": {
+                    "attach": {
+                        "user_levels": "{替换关卡}"
+                    }
+                }
+            }
+        },
         "采集方案": {
             "description": "决定2件事:<br>1、切卡入口是箱庭快速卡带按钮，还是主页面卡带老菜单。<br>2、快速卡带的类型顺序 or 固定卡带的刷取内容",
             "cases": []
@@ -1121,6 +1145,101 @@
                     "name": "No",
                     "pipeline_override": {
                         "Daily_Square_Hub": {
+                            "enabled": false
+                        }
+                    }
+                }
+            ]
+        },
+        "采集卡带屏蔽": {
+            "description": "开启屏蔽标记的卡带,不会被识别/不会打周期标记.",
+            "type": "switch",
+            "cases": [
+                {
+                    "name": "No",
+                    "description": "不打:不打航线图，全刷狩猎场。",
+                    "pipeline_override": {}
+                },
+                {
+                    "name": "Yes",
+                    "option": [
+                        "故事卡带屏蔽",
+                        "角色卡带屏蔽",
+                        "活动卡带屏蔽"
+                    ]
+                }
+            ]
+        },
+        "故事卡带屏蔽": {
+            "type": "switch",
+            "cases": [
+                {
+                    "name": "No",
+                    "pipeline_override": {}
+                },
+                {
+                    "name": "Yes",
+                    "option": [
+                        "Story_01_血骑士",
+                        "Story_02_苍蓝魔女"
+                    ]
+                }
+            ]
+        },
+        "角色卡带屏蔽": {
+            "type": "switch",
+            "cases": [
+                {
+                    "name": "No",
+                    "pipeline_override": {}
+                },
+                {
+                    "name": "Yes",
+                    "option": []
+                }
+            ]
+        },
+        "活动卡带屏蔽": {
+            "type": "switch",
+            "cases": [
+                {
+                    "name": "No",
+                    "pipeline_override": {}
+                },
+                {
+                    "name": "Yes",
+                    "option": []
+                }
+            ]
+        },
+        "Story_01_血骑士": {
+            "type": "switch",
+            "cases": [
+                {
+                    "name": "No",
+                    "pipeline_override": {}
+                },
+                {
+                    "name": "Yes",
+                    "pipeline_override": {
+                        "Collect_Pack_Story_1": {
+                            "enabled": false
+                        }
+                    }
+                }
+            ]
+        },
+        "Story_02_苍蓝魔女": {
+            "type": "switch",
+            "cases": [
+                {
+                    "name": "No",
+                    "pipeline_override": {}
+                },
+                {
+                    "name": "Yes",
+                    "pipeline_override": {
+                        "Collect_Pack_Story_2": {
                             "enabled": false
                         }
                     }
