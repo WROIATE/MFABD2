@@ -598,5 +598,39 @@
   },
   "Level_5_Start": {
     "max_hit": 1
+  },
+  "Batch_Modify_Levels_list": {
+    "action": "Custom",
+    "custom_action": "BatchNumericPatch",
+    "custom_action_param": {
+      "node_name": "Batch_Modify_Levels_list",
+      "rule_list": [
+        {
+          "attach_key": "user_levels",
+          "input_string": "",
+          "pre_string": "Level_",
+          "post_string": "_Start",
+          "patch": {
+            "enable": false
+          }
+        },
+        {
+          "attach_key": "user_levels",
+          "input_string": "",
+          "pre_string": "Leve_",
+          "post_string": "_Star",
+          "patch": {
+            "enable": false
+          }
+        }
+      ]
+    },
+    "next": [
+      "[JumpBack]Level_1_Start",
+      "[JumpBack]Level_2_Start",
+      "[JumpBack]Level_3_Start",
+      "[JumpBack]Level_4_Start",
+      "[JumpBack]Level_5_Start"
+    ]
   }
 }

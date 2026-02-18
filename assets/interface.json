@@ -211,7 +211,7 @@
         },
         {
             "name": "test-task",
-            "entry": "Batch_Modify_Levels",
+            "entry": "Batch_Modify_Levels_list",
             "option": [
                 "测试替换"
             ]
@@ -229,6 +229,11 @@
             ],
             "pipeline_override": {
                 "Batch_Modify_Levels": {
+                    "attach": {
+                        "user_levels": "{替换关卡}"
+                    }
+                },
+                "Batch_Modify_Levels_list": {
                     "attach": {
                         "user_levels": "{替换关卡}"
                     }
