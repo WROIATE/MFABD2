@@ -66,6 +66,7 @@
             "default_check": true,
             "description": "**流程:**`[执行]地图采集[完整]`的单卡带模式。先吸取一张卡带的资源，来完成日常任务。",
             "option": [
+                "采集卡带屏蔽",
                 "第三图采集额外等待"
             ]
         },
@@ -172,6 +173,7 @@
             "default_check": true,
             "description": "**地图采集**：进入卡带，对有传送阵地图进行`探查`、`吸取`、`召集`。<span style=\"color: Crimson;\"><b></b></span><br>**注意:**应当先将传送阵激活，并探明周围箱庭迷雾，使得区域地图上能完整显示明亮的传送阵图标。<br><span style=\"color: Crimson;\"><b>已适配周常卡带CD：</b></span><br>将在软件根目录生成名为`agent_save_data.json`的存档文件，用于记录周期标记与运行时间标记，<b>只打刷新CD内没刷过的关卡</b>。<br>刷取顺序，先按照卡带框从左到右，再按照`故事`、`角色`、`活动`大类顺序。<br>存档文件可以`手动迁移`到新的MFA构建物中保留进度。",
             "option": [
+                "采集卡带屏蔽",
                 "第三图采集额外等待"
             ]
         },
@@ -208,38 +210,9 @@
                 "半自动末日之书(从‘去战斗’页面开始)"
             ],
             "description": "**半自动操作：日常关闭。**使用时注意启动页面。<br>（未来计划...）作为小工具在其他页面打开，∞拖延。 "
-        },
-        {
-            "name": "test-task",
-            "entry": "Batch_Modify_Levels_list",
-            "option": [
-                "测试替换"
-            ]
         }
     ],
     "option": {
-        "测试替换": {
-            "type": "input",
-            "inputs": [
-                {
-                    "name": "替换关卡",
-                    "pipeline_type": "string",
-                    "default": ""
-                }
-            ],
-            "pipeline_override": {
-                "Batch_Modify_Levels": {
-                    "attach": {
-                        "user_levels": "{替换关卡}"
-                    }
-                },
-                "Batch_Modify_Levels_list": {
-                    "attach": {
-                        "user_levels": "{替换关卡}"
-                    }
-                }
-            }
-        },
         "采集方案": {
             "description": "决定2件事:<br>1、切卡入口是箱庭快速卡带按钮，还是主页面卡带老菜单。<br>2、快速卡带的类型顺序 or 固定卡带的刷取内容",
             "cases": []
@@ -1162,11 +1135,19 @@
             "cases": [
                 {
                     "name": "No",
-                    "description": "不打:不打航线图，全刷狩猎场。",
+                    "description": "",
                     "pipeline_override": {}
                 },
                 {
                     "name": "Yes",
+                    "pipeline_override": {
+                        "Collect_Sandplay": {
+                            "next": [
+                                "Collect_BlackList_User",
+                                "[JumpBack]Global_QuickCart_MenuReset"
+                            ]
+                        }
+                    },
                     "option": [
                         "故事卡带屏蔽",
                         "角色卡带屏蔽",
@@ -1176,80 +1157,64 @@
             ]
         },
         "故事卡带屏蔽": {
-            "type": "switch",
-            "cases": [
+            "type": "input",
+            "description": "输入要屏蔽的卡带章节编号。用逗号隔开(,)，支持范围(~)。",
+            "inputs": [
                 {
-                    "name": "No",
-                    "pipeline_override": {}
-                },
-                {
-                    "name": "Yes",
-                    "option": [
-                        "Story_01_血骑士",
-                        "Story_02_苍蓝魔女"
-                    ]
+                    "name": "要屏蔽的剧情游戏卡",
+                    "pipeline_type": "string",
+                    "default": "",
+                    "verify": "^[0-9\\s,，;\\-~～]*$",
+                    "pattern_msg": "请输入数字，支持区间(1-3)和逗号(1,5)"
                 }
-            ]
+            ],
+            "pipeline_override": {
+                "Custom_Fishing_Task": {
+                    "attach": {
+                        "StoryPack": "{要屏蔽的剧情游戏卡}"
+                    }
+                }
+            }
         },
         "角色卡带屏蔽": {
-            "type": "switch",
-            "cases": [
+            "type": "input",
+            "description": "输入要屏蔽的卡带章节编号。用逗号隔开(,)，支持范围(~)。",
+            "inputs": [
                 {
-                    "name": "No",
-                    "pipeline_override": {}
-                },
-                {
-                    "name": "Yes",
-                    "option": []
+                    "name": "要屏蔽的剧情游戏卡",
+                    "pipeline_type": "string",
+                    "default": "",
+                    "verify": "^[0-9\\s,，;\\-~～]*$",
+                    "pattern_msg": "请输入数字，支持区间(1-3)和逗号(1,5)"
                 }
-            ]
+            ],
+            "pipeline_override": {
+                "Custom_Fishing_Task": {
+                    "attach": {
+                        "CharacterPack": "{要屏蔽的剧情游戏卡}"
+                    }
+                }
+            }
         },
         "活动卡带屏蔽": {
-            "type": "switch",
-            "cases": [
+            "type": "input",
+            "description": "输入要屏蔽的卡带章节编号。用逗号隔开(,)，支持范围(~)。",
+            "inputs": [
                 {
-                    "name": "No",
-                    "pipeline_override": {}
-                },
-                {
-                    "name": "Yes",
-                    "option": []
+                    "name": "要屏蔽的剧情游戏卡",
+                    "pipeline_type": "string",
+                    "default": "",
+                    "verify": "^[0-9\\s,，;\\-~～]*$",
+                    "pattern_msg": "请输入数字，支持区间(1-3)和逗号(1,5)"
                 }
-            ]
-        },
-        "Story_01_血骑士": {
-            "type": "switch",
-            "cases": [
-                {
-                    "name": "No",
-                    "pipeline_override": {}
-                },
-                {
-                    "name": "Yes",
-                    "pipeline_override": {
-                        "Collect_Pack_Story_1": {
-                            "enabled": false
-                        }
+            ],
+            "pipeline_override": {
+                "Custom_Fishing_Task": {
+                    "attach": {
+                        "EventPack": "{要屏蔽的剧情游戏卡}"
                     }
                 }
-            ]
-        },
-        "Story_02_苍蓝魔女": {
-            "type": "switch",
-            "cases": [
-                {
-                    "name": "No",
-                    "pipeline_override": {}
-                },
-                {
-                    "name": "Yes",
-                    "pipeline_override": {
-                        "Collect_Pack_Story_2": {
-                            "enabled": false
-                        }
-                    }
-                }
-            ]
+            }
         },
         "目标次数": {
             "description": "钓到指定条数鱼后停止",

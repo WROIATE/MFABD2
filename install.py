@@ -188,11 +188,10 @@ def install_chores():
     if "mac" in target_os or "osx" in target_os:
         print(f"🍎 [Mac] 正在处理引导脚本...")
 
-        # === 配置文件名 (这里必须和你仓库里的实际文件名一个字不差) ===
-        # 你的实际文件名是 "修复"，之前代码写的是 "安装"，导致找不到文件
+        # === 配置文件名
         script_name = "AKeySetup_一键全依赖修复_mac.command"
         
-        # 你的路径结构是: scripts/release/文件名
+        # 路径结构是: scripts/release/文件名
         src_script = working_dir / "scripts" / "release" / script_name
         dst_script = install_path / script_name
 
