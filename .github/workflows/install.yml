@@ -312,6 +312,7 @@ jobs:
             mfa_arch: "x64"
             numpy_req: "numpy<2"
             is_android: false
+            standalone_url: "https://github.com/indygreg/python-build-standalone/releases/download/20240107/cpython-3.10.13+20240107-x86_64-apple-darwin-install_only.tar.gz"
 
           # -------------------------------------------------------------------
           # 🍎 macOS (ARM64)
@@ -323,6 +324,7 @@ jobs:
             mfa_arch: "arm64"
             numpy_req: "numpy<2"
             is_android: false
+            standalone_url: "https://github.com/indygreg/python-build-standalone/releases/download/20240107/cpython-3.10.13+20240107-aarch64-apple-darwin-install_only.tar.gz"
 
           # -------------------------------------------------------------------
           # 🐧 Linux (x64)
@@ -479,6 +481,48 @@ jobs:
             "${{ matrix.numpy_req }}" \
             -r requirements_no_numpy.txt \
             maafw==$MAA_VERSION
+
+      # ----------------------------------------------------------------
+      # [新增] macOS 专属：Portable Python 打包
+      # ----------------------------------------------------------------
+      - name: Setup Portable Python (macOS)
+        if: matrix.os == 'macos'
+        shell: bash
+        run: |
+          echo "⬇️ Downloading Portable Python for macOS..."
+          curl -L -o python_mac.tar.gz "${{ matrix.standalone_url }}"
+          
+          # 解压 (standalone 包结构通常是 python/install/...)
+          mkdir -p temp_python
+          tar -xzf python_mac.tar.gz -C temp_python
+          
+          # 移动到 install/python
+          mkdir -p install/python
+          cp -r temp_python/python/install/* install/python/
+          rm -rf temp_python python_mac.tar.gz
+
+          # 设置权限 (非常重要)
+          chmod +x install/python/bin/python3
+          
+          echo "📦 Installing Dependencies (macOS)..."
+          PY_EXEC="install/python/bin/python3"
+          
+          # 剔除 numpy
+          python3 -c "
+          import re
+          with open('requirements.txt', 'r') as f_in, open('requirements_no_numpy.txt', 'w') as f_out:
+              for line in f_in:
+                  if not re.match(r'^\s*numpy\s*([<>=!~;]|$)', line, re.IGNORECASE):
+                      f_out.write(line)
+          "
+          
+          # 安装依赖到便携版环境
+          "$PY_EXEC" -m pip install --upgrade pip
+          "$PY_EXEC" -m pip install "${{ matrix.numpy_req }}" -r requirements_no_numpy.txt maafw==$MAA_VERSION
+          
+          # 清理缓存
+          "$PY_EXEC" -m pip cache purge
+          find install/python -name "__pycache__" -type d -exec rm -rf {} +     
 
       # ----------------------------------------------------------------
       # 🏗️ 构建与组装

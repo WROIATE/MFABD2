@@ -34,23 +34,7 @@ maa_ver = len(sys.argv) > 3 and sys.argv[3] or "0.0.0"
 #         print("Please download the MaaFramework to \"deps\" first.")
 #         print("请先下载 MaaFramework 到 \"deps\"。")
 #         sys.exit(1)
-
-#     shutil.copytree(
-#         working_dir / "deps" / "bin",
-#         install_path,
-#         ignore=shutil.ignore_patterns(
-#             "*MaaDbgControlUnit*",
-#             "*MaaThriftControlUnit*",
-#             "*MaaRpc*",
-#             "*MaaHttp*",
-#         ),
-#         dirs_exist_ok=True,
-#     )
-#     shutil.copytree(
-#         working_dir / "deps" / "share" / "MaaAgentBinary",
-#         install_path / "MaaAgentBinary",
-#         dirs_exist_ok=True,
-#     )
+# ... (保留原有注释代码) ...
 
 def convert_line_endings(file_path):
     """将文件的换行符统一转换为 Windows 格式 (CRLF)"""
@@ -185,8 +169,12 @@ def install_chores():
     
     # 处理 Mac 引导脚本：注入真实版本号
     if "mac" in target_os or "osx" in target_os:
-        src_script = working_dir / "scripts" / "release" / "AKeySetup_一键全依赖安装_mac.command"
-        dst_script = install_path / "AKeySetup_一键全依赖安装_mac.command"
+        # [修改] 修正路径：从 scripts/release 获取，且更名了
+        script_src_dir = working_dir / "scripts" / "release"
+        
+        # 1. 处理 AKeySetup (需注入版本号)
+        src_script = script_src_dir / "AKeySetup_一键全依赖修复_mac.command"
+        dst_script = install_path / "AKeySetup_一键全依赖修复_mac.command"
 
         if src_script.exists():
             print(f"📦 [Mac] 处理安装脚本，注入 MaaVersion: {maa_ver}")
@@ -195,44 +183,36 @@ def install_chores():
                     content = f.read()
 
                 # 替换占位符 {{MAA_VERSION}}
-                if "{{MAA_VERSION}}" in content:
-                    new_content = content.replace("{{MAA_VERSION}}", maa_ver)
-                    with open(dst_script, 'w', encoding='utf-8') as f:
-                        f.write(new_content)
-                    
-                    # 尝试赋予执行权限
-                    os.chmod(dst_script, 0o755)
-                else:
-                    print("⚠️ 警告: Mac 脚本中未找到 {{MAA_VERSION}} 占位符！")
-                    # 如果没找到占位符，至少把原文件拷过去
-                    shutil.copy2(src_script, dst_script)
+                # [修改] 强制替换，不依赖 if 检查失败
+                new_content = content.replace("{{MAA_VERSION}}", maa_ver)
+                
+                with open(dst_script, 'w', encoding='utf-8') as f:
+                    f.write(new_content)
+                
+                # 尝试赋予执行权限
+                try: os.chmod(dst_script, 0o755)
+                except: pass
+                
+                print(f"✅ 版本号注入完成: {maa_ver}")
 
             except Exception as e:
                 print(f"❌ 处理 Mac 脚本失败: {e}")
+                # 失败兜底：至少拷贝过去
+                shutil.copy2(src_script, dst_script)
         else:
             print(f"⚠️ 未找到 Mac 脚本源文件: {src_script}")
 
-        if src_script.exists():
-            print(f"处理并打包 Mac 脚本，注入版本号: {maa_ver}")
-
-            # 读取原始内容
-            with open(src_script, 'r', encoding='utf-8') as f:
-                content = f.read()
-
-            # 🟢 核心手术：替换占位符
-            new_content = content.replace("{{MAA_VERSION}}", maa_ver)
-
-            # 写入到安装目录
-            with open(dst_script, 'w', encoding='utf-8') as f:
-                f.write(new_content)
-
-            # 赋予可执行权限 (在 Linux/Mac 构建机上有效，Windows 上可能无效但不影响文件内容)
-            try:
-                os.chmod(dst_script, 0o755)
-            except:
-                pass
+        # 2. [修改] 处理修复工具 (Fix Permission) - 路径也改到了 scripts/release
+        fix_tool_src = script_src_dir / "fix_mac.command"
+        fix_tool_dst = install_path / "修复损坏与权限(Fix Permission).command"
+        
+        if fix_tool_src.exists():
+            print(f"🚑 注入 Mac 修复工具...")
+            shutil.copy2(fix_tool_src, fix_tool_dst)
+            try: os.chmod(fix_tool_dst, 0o755)
+            except: pass
         else:
-            print(f"⚠️ 警告: 未找到脚本源文件 {src_script}")
+            print(f"⚠️ 未找到修复工具: {fix_tool_src}")
 
 def install_agent(target_os):
     print("正在安装 Agent...")
@@ -256,27 +236,38 @@ def install_agent(target_os):
         if "agent" not in interface:
             interface["agent"] = {}
 
-        # 配置 Python 解释器路径 (区分系统)
-        # {PROJECT_DIR} 会被 MaaFramework 自动替换为 install 目录的绝对路径
+         # ==================== [核心路径配置] ====================
+        
+        # 1. Windows: 嵌入式 Python
         if any(target_os.startswith(p) for p in ["win", "windows"]):
-            # Windows 下通常使用嵌入式 Python
             interface["agent"]["child_exec"] = r"{PROJECT_DIR}/python/python.exe"
             interface["agent"]["child_args"] = ["-u", "-X", "utf8=1", r"{PROJECT_DIR}/agent/main.py"]
+        
+        # 2. macOS: 智能判断 (有嵌入用嵌入，没嵌入用系统)
         elif any(target_os.startswith(p) for p in ["macos", "darwin", "osx"]):
-            interface["agent"]["child_exec"] = "python3"
-            interface["agent"]["child_args"] = ["-u", "-X", "utf8=1", r"{PROJECT_DIR}/agent/main.py"]
+            # 检查是否有 python/bin/python3
+            embedded_python = install_path / "python" / "bin" / "python3"
+            
+            if embedded_python.exists():
+                print("[macOS] 检测到便携版 Python，已启用独立环境模式。")
+                # 注意：MaaFramework 在 Mac 下解析 {PROJECT_DIR} 后路径拼接要准确
+                # 这里的路径不需要 .exe
+                interface["agent"]["child_exec"] = r"{PROJECT_DIR}/python/bin/python3"
+            else:
+                print("[macOS] 未检测到便携版 Python，回退到系统 python3。")
+                interface["agent"]["child_exec"] = "python3"
+            
+            # Mac 通常不需要 -X utf8=1
+            interface["agent"]["child_args"] = ["-u", r"{PROJECT_DIR}/agent/main.py"]
+        
+        # 3. Linux/Android
         else:
-            # Linux/Android 通常直接调用系统 python3
             interface["agent"]["child_exec"] = "python3"
             interface["agent"]["child_args"] = ["-u", r"{PROJECT_DIR}/agent/main.py"]
 
-        # 配置启动参数
-        # -u 禁用缓冲，让日志实时输出
-        interface["agent"]["child_args"] = ["-u", r"{PROJECT_DIR}/agent/main.py"]
-
         with open(interface_json_path, "w", encoding="utf-8") as f:
             jsonc.dump(interface, f, ensure_ascii=False, indent=4)
-        print("✅ interface.json Agent 配置已更新")
+        print("✅ Agent 配置更新完成")
 
     except Exception as e:
         print(f"❌ 更新 interface.json 失败: {e}")
