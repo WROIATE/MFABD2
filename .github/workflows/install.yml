@@ -495,10 +495,14 @@ jobs:
           # 解压 (standalone 包结构通常是 python/install/...)
           mkdir -p temp_python
           tar -xzf python_mac.tar.gz -C temp_python
+
+          # 💡 调试输出一下目录结构，防止以后包结构又变
+          echo "📂 预计解压后的目录结构如下："
+          ls -la temp_python/python/
           
           # 移动到 install/python
           mkdir -p install/python
-          cp -r temp_python/python/install/* install/python/
+          cp -r temp_python/python/* install/python/
           rm -rf temp_python python_mac.tar.gz
 
           # 设置权限 (非常重要)
