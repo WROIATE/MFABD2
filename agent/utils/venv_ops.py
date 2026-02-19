@@ -2,67 +2,130 @@ import os
 import sys
 import subprocess
 import site
+import shutil
+import hashlib
 from pathlib import Path
 from . import mfaalog  # 日志工具
 
-# ---------------------------------------------------------
-# 配置区：在这里指定开发环境下强制需要的版本
-# 这解决了 requirements.txt 里没有 maafw 的问题
-# ---------------------------------------------------------
+# =========================================================
+# [配置区] 环境与依赖设定
+# =========================================================
 DEV_MAAFW_VERSION = "5.5.0" 
-# 定义虚拟环境文件夹名称
 VENV_NAME = ".venv"
-# ---------------------------------------------------------
+PREFERRED_PYTHON_VERSION = "3.10"
+# =========================================================
 
 def get_venv_path(project_root: Path) -> Path:
     return project_root / VENV_NAME
 
 def is_running_in_venv() -> bool:
-    """检查当前是否已经在虚拟环境中运行"""
-    # 核心原理：比较 sys.prefix (当前环境) 和 sys.base_prefix (系统环境)
     return sys.prefix != sys.base_prefix
 
 def get_venv_executable(venv_path: Path) -> Path:
-    """获取虚拟环境中的 python.exe 路径"""
     if sys.platform == "win32":
         return venv_path / "Scripts" / "python.exe"
     else:
         return venv_path / "bin" / "python"
 
+def check_existing_venv_version(venv_path: Path):
+    """[新增] 读取现有虚拟环境的配置文件，检查版本是否匹配"""
+    cfg_path = venv_path / "pyvenv.cfg"
+    if not cfg_path.exists():
+        return
+    
+    try:
+        with open(cfg_path, 'r', encoding='utf-8') as f:
+            for line in f:
+                if line.startswith('version'):
+                    # 提取版本号，如 "version = 3.11.4" -> "3.11.4"
+                    ver = line.split('=')[1].strip()
+                    if not ver.startswith(PREFERRED_PYTHON_VERSION):
+                        mfaalog.warning(f"⚠️ [环境提示] 当前虚拟环境版本为 {ver}，与首选版本 {PREFERRED_PYTHON_VERSION} 不匹配！")
+                        mfaalog.warning("💡 如果遇到兼容性问题，建议删除 .venv 文件夹让程序重新创建。")
+                    break
+    except Exception as e:
+        mfaalog.debug(f"读取 pyvenv.cfg 失败: {e}")
+
+def find_preferred_python() -> str:
+    current_version = f"{sys.version_info.major}.{sys.version_info.minor}"
+    
+    if current_version != PREFERRED_PYTHON_VERSION:
+        # 明确指出这是宿主环境，避免与虚拟环境混淆
+        mfaalog.info(f"💡 [环境提示] 当前外部终端使用的宿主 Python 版本 ({current_version}) 与首选开发版本 ({PREFERRED_PYTHON_VERSION}) 不一致。")
+        mfaalog.info(f"正在系统中寻找 Python {PREFERRED_PYTHON_VERSION} 以为您克隆标准的虚拟隔离环境...")
+        
+    if sys.platform == "win32":
+        try:
+            cmd = ["py", f"-{PREFERRED_PYTHON_VERSION}", "-c", "import sys; print(sys.executable)"]
+            result = subprocess.run(cmd, capture_output=True, text=True, check=True)
+            return result.stdout.strip()
+        except (subprocess.CalledProcessError, FileNotFoundError):
+            mfaalog.warning(f"⚠️ 未能通过 py 启动器找到 Python {PREFERRED_PYTHON_VERSION}，将回退使用 ({current_version})。")
+    else:
+        target_cmd = f"python{PREFERRED_PYTHON_VERSION}"
+        path = shutil.which(target_cmd)
+        if path:
+            return path
+        mfaalog.warning(f"⚠️ 未在环境变量中找到 {target_cmd}，将回退使用 ({current_version})。")
+            
+    return sys.executable
 def create_venv(venv_path: Path):
-    """如果不存在，创建虚拟环境"""
     if venv_path.exists() and (venv_path / "pyvenv.cfg").exists():
-        mfaalog.debug("虚拟环境已存在，跳过创建")
+        mfaalog.debug("虚拟环境已存在，跳过创建。")
+        check_existing_venv_version(venv_path) # [修复] 在跳过创建时，补充版本检查提示
         return
 
     mfaalog.info(f"正在创建虚拟环境: {venv_path} ...")
+    base_python = find_preferred_python()
+    mfaalog.info(f"🔧 使用基础解释器: {base_python}")
+    
     try:
-        # 使用 venv 模块创建
-        subprocess.check_call([sys.executable, "-m", "venv", str(venv_path)])
-        mfaalog.info("虚拟环境创建成功")
+        subprocess.check_call([base_python, "-m", "venv", str(venv_path)])
+        mfaalog.info("✅ 虚拟环境创建成功")
     except subprocess.CalledProcessError as e:
-        mfaalog.error(f"创建虚拟环境失败: {e}")
+        mfaalog.error(f"❌ 创建失败: {e}")
         raise
 
-def install_deps(venv_python: Path, project_root: Path):
-    """
-    1. 安装 requirements.txt (通用依赖)
-    2. 强制安装 maafw (特定版本)
-    """
-    # --- 第1步：安装 requirements.txt (这里面没有 maa) ---
+def get_deps_hash(project_root: Path) -> str:
+    """[新增] 计算依赖项的 MD5 指纹"""
+    req_file = project_root / "requirements.txt"
+    # 将框架版本和 requirements 的内容拼接在一起计算
+    content = f"MAAFW:{DEV_MAAFW_VERSION}\n"
+    if req_file.exists():
+        content += req_file.read_text(encoding='utf-8')
+    return hashlib.md5(content.encode('utf-8')).hexdigest()
+
+def install_deps(venv_python: Path, project_root: Path, venv_path: Path):
+    """安装依赖 (带指纹缓存与核心库完整性双重校验)"""
+    marker_file = venv_path / ".deps_marker"
+    current_hash = get_deps_hash(project_root)
+
+    # [升级] 检查指纹是否一致，并快速校验核心库是否存在
+    if marker_file.exists():
+        if marker_file.read_text(encoding='utf-8').strip() == current_hash:
+            # 额外做一个毫秒级的完整性探测，防止只删了 Lib 但没删标记文件的情况
+            try:
+                # 使用虚拟环境的 Python 尝试导入 maa，不输出多余信息
+                subprocess.check_call(
+                    [str(venv_python), "-c", "import maa"], 
+                    stdout=subprocess.DEVNULL, 
+                    stderr=subprocess.DEVNULL
+                )
+                mfaalog.info("⚡ 依赖库指纹一致且核心库完整，跳过 pip 安装步骤。")
+                return
+            except subprocess.CalledProcessError:
+                mfaalog.warning("⚠️ 发现缓存指纹匹配，但核心库 (maa) 丢失！可能是环境被手动破坏。准备重新安装...")
+
+    mfaalog.info("📦 依赖配置有更新或未安装，开始拉取依赖...")
+    
     req_file = project_root / "requirements.txt"
     if req_file.exists():
-        mfaalog.info("正在同步 requirements.txt (通用依赖)...")
-        # 这里的关键是使用 venv 里的 python 去执行 pip
         subprocess.check_call([
             str(venv_python), "-m", "pip", "install", 
-            "-i", "https://pypi.tuna.tsinghua.edu.cn/simple", # 国内源
+            "-i", "https://pypi.tuna.tsinghua.edu.cn/simple", 
             "-r", str(req_file)
         ])
     
-    # --- 第2步：强制补全 maafw (核心修复) ---
-    # 模拟 CI 的行为，不管 txt 里有没有，这里强行装上匹配的版本
-    mfaalog.info(f"正在强制注入 maafw=={DEV_MAAFW_VERSION} ...")
     try:
         subprocess.check_call([
             str(venv_python), "-m", "pip", "install",
@@ -71,21 +134,17 @@ def install_deps(venv_python: Path, project_root: Path):
         ])
     except Exception as e:
         mfaalog.warning(f"指定版本安装失败: {e}，尝试模糊匹配...")
-        # 如果指定版本失败，尝试安装 5.4 系列的最新版
         subprocess.check_call([
             str(venv_python), "-m", "pip", "install",
             "-i", "https://pypi.tuna.tsinghua.edu.cn/simple",
             "maafw>=5.4,<5.5"
         ])
     
-    mfaalog.info("所有依赖安装/检查完成")
+    # 全部安装成功后，写入新指纹
+    marker_file.write_text(current_hash, encoding='utf-8')
+    mfaalog.info("✅ 依赖安装完成并已更新指纹缓存。")
 
 def ensure_venv(project_root: Path):
-    """
-    主逻辑：
-    1. 检查是否在 venv 里
-    2. 如果不是，检查/创建 venv，安装依赖，然后重启自身
-    """
     if is_running_in_venv():
         mfaalog.debug("当前已在虚拟环境中运行")
         return
@@ -93,24 +152,16 @@ def ensure_venv(project_root: Path):
     venv_path = get_venv_path(project_root)
     venv_python = get_venv_executable(venv_path)
 
-    # 1. 创建环境
     create_venv(venv_path)
+    # [修改] 传入 venv_path 以便读写 marker 文件
+    install_deps(venv_python, project_root, venv_path)
 
-    # 2. 安装依赖 (为了加快启动速度，可以加个标记文件判断是否需要更新，这里简化为每次检查)
-    install_deps(venv_python, project_root)
-
-    # 3. 重启自身
     mfaalog.info(f"正在切换到虚拟环境: {venv_python}")
-    
-    # 构建新的启动命令
-    # sys.argv[0] 是当前脚本路径，sys.argv[1:] 是参数 (socket_id)
     args = [str(venv_python), sys.argv[0]] + sys.argv[1:]
-    
     mfaalog.info(">>> 重启 Agent 进程 >>>")
     
-    # 核心魔法：用新的 Python 进程替换当前进程
     if sys.platform == "win32":
         subprocess.run(args)
-        sys.exit(0) # 退出当前旧进程
+        sys.exit(0)
     else:
         os.execv(str(venv_python), args)
