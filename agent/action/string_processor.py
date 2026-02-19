@@ -106,7 +106,8 @@ class BatchNumericPatch(CustomAction):
                             if len(parts) == 2 and parts[0].strip() and parts[1].strip():
                                 start = int(parts[0].strip())
                                 end = int(parts[1].strip())
-                                if start > end: start, end = end, start
+                                if start > end:
+                                    start, end = end, start
                                 for i in range(start, end + 1):
                                     final_number_set.add(i)
                                     
