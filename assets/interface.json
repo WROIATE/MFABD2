@@ -66,6 +66,7 @@
             "default_check": true,
             "description": "**流程:**`[执行]地图采集[完整]`的单卡带模式。先吸取一张卡带的资源，来完成日常任务。",
             "option": [
+                "采集卡带屏蔽",
                 "第三图采集额外等待"
             ]
         },
@@ -172,6 +173,7 @@
             "default_check": true,
             "description": "**地图采集**：进入卡带，对有传送阵地图进行`探查`、`吸取`、`召集`。<span style=\"color: Crimson;\"><b></b></span><br>**注意:**应当先将传送阵激活，并探明周围箱庭迷雾，使得区域地图上能完整显示明亮的传送阵图标。<br><span style=\"color: Crimson;\"><b>已适配周常卡带CD：</b></span><br>将在软件根目录生成名为`agent_save_data.json`的存档文件，用于记录周期标记与运行时间标记，<b>只打刷新CD内没刷过的关卡</b>。<br>刷取顺序，先按照卡带框从左到右，再按照`故事`、`角色`、`活动`大类顺序。<br>存档文件可以`手动迁移`到新的MFA构建物中保留进度。",
             "option": [
+                "采集卡带屏蔽",
                 "第三图采集额外等待"
             ]
         },
@@ -1126,6 +1128,93 @@
                     }
                 }
             ]
+        },
+        "采集卡带屏蔽": {
+            "description": "开启屏蔽标记的卡带,不会被识别/不会打周期标记.",
+            "type": "switch",
+            "cases": [
+                {
+                    "name": "No",
+                    "description": "",
+                    "pipeline_override": {}
+                },
+                {
+                    "name": "Yes",
+                    "pipeline_override": {
+                        "Collect_Sandplay": {
+                            "next": [
+                                "Collect_BlackList_User",
+                                "[JumpBack]Global_QuickCart_MenuReset"
+                            ]
+                        }
+                    },
+                    "option": [
+                        "故事卡带屏蔽",
+                        "角色卡带屏蔽",
+                        "活动卡带屏蔽"
+                    ]
+                }
+            ]
+        },
+        "故事卡带屏蔽": {
+            "type": "input",
+            "description": "输入要屏蔽的卡带章节编号。用逗号隔开(,)，支持范围(~)。",
+            "inputs": [
+                {
+                    "name": "要屏蔽的剧情游戏卡",
+                    "pipeline_type": "string",
+                    "default": "",
+                    "verify": "^[0-9\\s,，;\\-~～]*$",
+                    "pattern_msg": "请输入数字，支持区间(1-3)和逗号(1,5)"
+                }
+            ],
+            "pipeline_override": {
+                "Collect_BlackList_User": {
+                    "attach": {
+                        "StoryPack": "{要屏蔽的剧情游戏卡}"
+                    }
+                }
+            }
+        },
+        "角色卡带屏蔽": {
+            "type": "input",
+            "description": "输入要屏蔽的卡带章节编号。用逗号隔开(,)，支持范围(~)。",
+            "inputs": [
+                {
+                    "name": "要屏蔽的角色游戏卡",
+                    "pipeline_type": "string",
+                    "default": "",
+                    "verify": "^[0-9\\s,，;\\-~～]*$",
+                    "pattern_msg": "请输入数字，支持区间(1-3)和逗号(1,5)"
+                }
+            ],
+            "pipeline_override": {
+                "Collect_BlackList_User": {
+                    "attach": {
+                        "CharacterPack": "{要屏蔽的角色游戏卡}"
+                    }
+                }
+            }
+        },
+        "活动卡带屏蔽": {
+            "type": "input",
+            "description": "输入要屏蔽的卡带章节编号。用逗号隔开(,)，支持范围(~)。",
+            "inputs": [
+                {
+                    "name": "要屏蔽的活动游戏卡",
+                    "pipeline_type": "string",
+                    "default": "",
+                    "verify": "^[0-9\\s,，;\\-~～]*$",
+                    "pattern_msg": "请输入数字，支持区间(1-3)和逗号(1,5)"
+                }
+            ],
+            "pipeline_override": {
+                "Collect_BlackList_User": {
+                    "attach": {
+                        "EventPack": "{要屏蔽的活动游戏卡}"
+                    }
+                }
+            }
         },
         "目标次数": {
             "description": "钓到指定条数鱼后停止",
