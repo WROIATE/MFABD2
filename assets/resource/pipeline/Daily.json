@@ -780,7 +780,7 @@
           "node": "Weekly_VisitCabin_TabChg",
           "patch": {
             "next": [
-              "[Acchor]Daily_Cabin"
+              "[Anchor]Daily_Cabin"
             ]
           }
         }
@@ -788,7 +788,8 @@
     },
     "next": [
       "Daily_VisitCabin_Anchor"
-    ]
+    ],
+    "focus": "DVC.P.每日锚点调用周流程,并patch出口"
   },
   "Daily_VisitCabin_Anchor": {
     "anchor": [
