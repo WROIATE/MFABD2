@@ -325,7 +325,8 @@ jobs:
         if: steps.fetch_activities.outputs.total_count != '0'
         uses: Y2Nk4/qmsg-action@master
         with:
-          qq: ${{ secrets.QMSG_NOTIFY_QQ }}
+          # qq: ${{ needs.meta.outputs.version_type == 'ci' && secrets.QMSG_QQ_DEV || secrets.QMSG_QQ_PUB }}
+          # groups: ${{ needs.meta.outputs.version_type == 'ci' && secrets.QMSG_GROUPS_DEV || secrets.QMSG_GROUPS_PUB }}
           groups: ${{ secrets.QMSG_NOTIFY_GROUPS }}
           key: ${{ secrets.QMSG_KEY }}
           message: ${{ steps.generate_message.outputs.message }}
