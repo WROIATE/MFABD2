@@ -178,61 +178,57 @@ def install_resource():
         jsonc.dump(interface, f, ensure_ascii=False, indent=4)
 
 def install_chores():
+    # 1. 基础文件复制 (保持不变)
     shutil.copy2(working_dir / "README.md", install_path)
     shutil.copy2(working_dir / "LICENSE", install_path)
     shutil.copy2(working_dir / "LICENSE-APACHE", install_path)
     shutil.copy2(working_dir / "LICENSE-MIT", install_path)
     
-    # 处理 Mac 引导脚本：注入真实版本号
+    # 2. Mac 专属脚本处理
     if "mac" in target_os or "osx" in target_os:
-        src_script = working_dir / "scripts" / "release" / "AKeySetup_一键全依赖安装_mac.command"
-        dst_script = install_path / "AKeySetup_一键全依赖安装_mac.command"
+        print(f"🍎 [Mac] 正在处理引导脚本...")
+
+        # === 配置文件名
+        script_name = "AKeySetup_一键全依赖修复_mac.command"
+        
+        # 路径结构是: scripts/release/文件名
+        src_script = working_dir / "scripts" / "release" / script_name
+        dst_script = install_path / script_name
 
         if src_script.exists():
-            print(f"📦 [Mac] 处理安装脚本，注入 MaaVersion: {maa_ver}")
+            print(f"📦 发现脚本文件: {src_script}")
             try:
+                # 读取内容
                 with open(src_script, 'r', encoding='utf-8') as f:
                     content = f.read()
 
-                # 替换占位符 {{MAA_VERSION}}
+                # 注入版本号
                 if "{{MAA_VERSION}}" in content:
-                    new_content = content.replace("{{MAA_VERSION}}", maa_ver)
-                    with open(dst_script, 'w', encoding='utf-8') as f:
-                        f.write(new_content)
-                    
-                    # 尝试赋予执行权限
-                    os.chmod(dst_script, 0o755)
+                    print(f"   -> 注入版本号: {maa_ver}")
+                    content = content.replace("{{MAA_VERSION}}", maa_ver)
                 else:
-                    print("⚠️ 警告: Mac 脚本中未找到 {{MAA_VERSION}} 占位符！")
-                    # 如果没找到占位符，至少把原文件拷过去
-                    shutil.copy2(src_script, dst_script)
+                    print("⚠️ [警告] 脚本中未找到 {{MAA_VERSION}} 占位符，将原样复制")
 
+                # 写入到安装目录
+                with open(dst_script, 'w', encoding='utf-8') as f:
+                    f.write(content)
+                
+                # 尝试赋予执行权限 (让用户解压后能直接双击运行)
+                try: 
+                    os.chmod(dst_script, 0o755)
+                    print("   -> 已赋予执行权限 (+x)")
+                except Exception as e: 
+                    print(f"   -> ⚠️ 权限设置失败 (不影响文件内容): {e}")
+
+                print("✅ Mac 引导脚本处理完成")
+                
             except Exception as e:
-                print(f"❌ 处理 Mac 脚本失败: {e}")
+                print(f"❌ [错误] 处理脚本内容时发生异常: {e}")
         else:
-            print(f"⚠️ 未找到 Mac 脚本源文件: {src_script}")
-
-        if src_script.exists():
-            print(f"处理并打包 Mac 脚本，注入版本号: {maa_ver}")
-
-            # 读取原始内容
-            with open(src_script, 'r', encoding='utf-8') as f:
-                content = f.read()
-
-            # 🟢 核心手术：替换占位符
-            new_content = content.replace("{{MAA_VERSION}}", maa_ver)
-
-            # 写入到安装目录
-            with open(dst_script, 'w', encoding='utf-8') as f:
-                f.write(new_content)
-
-            # 赋予可执行权限 (在 Linux/Mac 构建机上有效，Windows 上可能无效但不影响文件内容)
-            try:
-                os.chmod(dst_script, 0o755)
-            except:
-                pass
-        else:
-            print(f"⚠️ 警告: 未找到脚本源文件 {src_script}")
+            # 这是一个致命错误，打印出来方便你在 CI 日志里看到
+            print(f"❌ [错误] 根本找不到脚本文件！")
+            print(f"   -> 寻找路径: {src_script}")
+            print(f"   -> 当前目录: {working_dir}")
 
 def install_agent(target_os):
     print("正在安装 Agent...")

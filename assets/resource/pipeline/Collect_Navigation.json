@@ -1105,7 +1105,28 @@
     "green_mask": true,
     "doc": "其他页面，返回按钮"
   },
+  "Collect_OnlyOnce_SkillUsed": {
+    "focus": "CB.单次吸取已完成",
+    "next": [
+      "Collect_OnlyOnce_SkillUsed_Active"
+    ],
+    "max_hit": 1
+  },
+  "Collect_OnlyOnce_SkillUsed_Active": {
+    "action": "Custom",
+    "custom_action": "PatchNode",
+    "custom_action_param": {
+      "node": "Collect_PackEnd_Ck_OnlyOnce",
+      "patch": {
+        "enabled": true
+      },
+      "origin": {
+        "enabled": false
+      }
+    }
+  },
   "Collect_PackEnd_Ck_OnlyOnce": {
+    "enabled": false,
     "action": "StopTask",
     "focus": "CM.N.仅进行1张卡带策略-强制结束流程"
   }

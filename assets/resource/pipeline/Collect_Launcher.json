@@ -8,16 +8,40 @@
     },
     "Collect_StartGame_HomePage_OnlyOnce": {
         "action": "Custom",
-        "custom_action": "PatchNode",
+        "custom_action": "PatchBatch",
         "custom_action_param": {
-            "node": "Collect_PackEnd_Ck",
-            "patch": {
-                "next": [
-                    "Collect_PackEnd_Ck_OnlyOnce"
-                ]
+            "patches": {
+                "Collect_PackEnd_Ck": {
+                    "next": [
+                        "Collect_PackEnd_Ck_OnlyOnce"
+                    ]
+                },
+                "Collect_Skill3_2": {
+                    "next": [
+                        "Collect_Skill3_2",
+                        "[JumpBack]Collect_OnlyOnce_SkillUsed",
+                        "Collect_Skill3_2_Used",
+                        "Collect_Skill3_3_perOcr",
+                        "Collect_Skill3_3_Nothing",
+                        "Collect_Skill3_3",
+                        "Collect_Skill_TapReset"
+                    ]
+                }
             },
-            "origin": {
-                "next": []
+            "origins": {
+                "Collect_PackEnd_Ck": {
+                    "next": []
+                },
+                "Collect_Skill3_2": {
+                    "next": [
+                        "Collect_Skill3_2",
+                        "Collect_Skill3_2_Used",
+                        "Collect_Skill3_3_perOcr",
+                        "Collect_Skill3_3_Nothing",
+                        "Collect_Skill3_3",
+                        "Collect_Skill_TapReset"
+                    ]
+                }
             }
         },
         "next": [
@@ -63,6 +87,47 @@
             "pin.png"
         ],
         "doc": "拉起成功,进入箱庭",
+        "next": [
+            "Collect_QuickCart_Menu",
+            "[JumpBack]Global_QuickCart_MenuReset"
+        ]
+    },
+    "Collect_BlackList_User": {
+        "focus": "<span style=\"color:Crimson\">CM.P.检查用户卡带黑名单</span>",
+        "action": "Custom",
+        "custom_action": "BatchNumericPatch",
+        "custom_action_param": {
+            "node_name": "Collect_BlackList_User",
+            "rule_list": [
+                {
+                    "attach_key": "StoryPack",
+                    "input_string": "",
+                    "pre_string": "Collect_Pack_Story_",
+                    "post_string": "",
+                    "patch": {
+                        "enabled": false
+                    }
+                },
+                {
+                    "attach_key": "CharacterPack",
+                    "input_string": "",
+                    "pre_string": "Collect_Pack_Character_",
+                    "post_string": "",
+                    "patch": {
+                        "enabled": false
+                    }
+                },
+                {
+                    "attach_key": "EventPack",
+                    "input_string": "",
+                    "pre_string": "Collect_Pack_Event_",
+                    "post_string": "",
+                    "patch": {
+                        "enabled": false
+                    }
+                }
+            ]
+        },
         "next": [
             "Collect_QuickCart_Menu",
             "[JumpBack]Global_QuickCart_MenuReset"
