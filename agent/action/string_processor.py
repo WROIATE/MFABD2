@@ -36,14 +36,14 @@ class BatchNumericPatch(CustomAction):
 
             # 2. 构建规则队列
             rules_to_process = []
-            if "rule_list" in top_params and isinstance(top_params["rule_list"], list):
-                rules_to_process = top_params["rule_list"]
+            if isinstance(top_params, dict) and "rule_list" in top_params and isinstance(top_params["rule_list"], list): # type: ignore
+                rules_to_process = top_params["rule_list"] # type: ignore
             else:
                 rules_to_process = [top_params]
 
             # 获取公共上下文
             # [关键] 这里必须是 task.json 那个节点的 Key，否则读不到 attach
-            current_node_name = top_params.get("node_name", "")
+            current_node_name = top_params.get("node_name", "") if isinstance(top_params, dict) else ""
             node_attach_data = {}
             
             if current_node_name:
@@ -53,7 +53,7 @@ class BatchNumericPatch(CustomAction):
                 else:
                     mfaalog.warning(f"[BatchPatch] 未找到节点对象或Attach为空: {current_node_name}")
             else:
-                 mfaalog.warning("[BatchPatch] node_name 未配置，将无法读取 Attach")
+                mfaalog.warning("[BatchPatch] node_name 未配置，将无法读取 Attach")
 
             final_override_dict = {}
 
@@ -109,7 +109,13 @@ class BatchNumericPatch(CustomAction):
                                 if start > end: start, end = end, start
                                 for i in range(start, end + 1):
                                     final_number_set.add(i)
-                        except: pass
+                                    
+                            else:
+                                mfaalog.warning(f"[BatchPatch] 范围格式无效: '{token}'")
+                        except (ValueError, IndexError) as e:
+                            # 捕获具体的转换错误，不吞没其他逻辑错误
+                            mfaalog.warning(f"[BatchPatch] 解析范围出错 '{token}': {e}")
+
                     else:
                         try:
                             final_number_set.add(int(token))
@@ -123,7 +129,10 @@ class BatchNumericPatch(CustomAction):
                 item_list = list(final_number_set)
                 try:
                     item_list.sort(key=lambda x: int(x) if isinstance(x, int) or (isinstance(x, str) and x.isdigit()) else str(x))
-                except:
+                except Exception as e:
+                    # 只有当包含无法比较的类型时才会进这里（智能排序失败）
+                    # 记录一条 Debug 日志即可，因为这可能是合法的纯文本输入
+                    mfaalog.debug(f"[BatchPatch] 智能排序失败 (输入可能包含非数字)，回退到字符串排序: {e}")
                     item_list.sort(key=str)
 
                 for item in item_list:
@@ -139,7 +148,7 @@ class BatchNumericPatch(CustomAction):
             return CustomAction.RunResult(success=True)
 
         except Exception as e:
-            mfaalog.error(f"[BatchPatch] 异常: {e}")
+            mfaalog.error(f"[BatchPatch] 致命异常: {e}")
             import traceback
             traceback.print_exc()
             # [修正] 即使异常也建议返回 Success=True 防止卡死，或者 False 中断任务

@@ -573,7 +573,7 @@
       "pre_string": "Level_",
       "post_string": "_Start",
       "patch": {
-        "enable": false
+        "enabled": false
       }
     },
     "next": [
@@ -611,7 +611,7 @@
           "pre_string": "Level_",
           "post_string": "_Start",
           "patch": {
-            "enable": false
+            "enabled": false
           }
         },
         {
@@ -620,7 +620,7 @@
           "pre_string": "Leve_",
           "post_string": "_Star",
           "patch": {
-            "enable": false
+            "enabled": false
           }
         }
       ]

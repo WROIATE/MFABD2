@@ -1169,7 +1169,7 @@
                 }
             ],
             "pipeline_override": {
-                "Custom_Fishing_Task": {
+                "Collect_BlackList_User": {
                     "attach": {
                         "StoryPack": "{要屏蔽的剧情游戏卡}"
                     }
@@ -1181,7 +1181,7 @@
             "description": "输入要屏蔽的卡带章节编号。用逗号隔开(,)，支持范围(~)。",
             "inputs": [
                 {
-                    "name": "要屏蔽的剧情游戏卡",
+                    "name": "要屏蔽的角色游戏卡",
                     "pipeline_type": "string",
                     "default": "",
                     "verify": "^[0-9\\s,，;\\-~～]*$",
@@ -1189,9 +1189,9 @@
                 }
             ],
             "pipeline_override": {
-                "Custom_Fishing_Task": {
+                "Collect_BlackList_User": {
                     "attach": {
-                        "CharacterPack": "{要屏蔽的剧情游戏卡}"
+                        "CharacterPack": "{要屏蔽的角色游戏卡}"
                     }
                 }
             }
@@ -1201,7 +1201,7 @@
             "description": "输入要屏蔽的卡带章节编号。用逗号隔开(,)，支持范围(~)。",
             "inputs": [
                 {
-                    "name": "要屏蔽的剧情游戏卡",
+                    "name": "要屏蔽的活动游戏卡",
                     "pipeline_type": "string",
                     "default": "",
                     "verify": "^[0-9\\s,，;\\-~～]*$",
@@ -1209,9 +1209,9 @@
                 }
             ],
             "pipeline_override": {
-                "Custom_Fishing_Task": {
+                "Collect_BlackList_User": {
                     "attach": {
-                        "EventPack": "{要屏蔽的剧情游戏卡}"
+                        "EventPack": "{要屏蔽的活动游戏卡}"
                     }
                 }
             }
