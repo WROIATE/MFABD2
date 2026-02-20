@@ -669,7 +669,8 @@
                     "patch": {
                         "next": [
                             "Collect_LocatePackFrame_Smart_Swip",
-                            "Collect_LocatePackFrame_Loc1"
+                            "Collect_LocatePackFrame_Loc1",
+                            "[JumpBack]Collect_LocatePackFrame_Loc1_ResetLoc"
                         ]
                     },
                     "origin": {
@@ -739,7 +740,8 @@
                     "patch": {
                         "next": [
                             "Collect_LocatePackFrame_Smart_Swip",
-                            "Collect_LocatePackFrame_Loc2"
+                            "Collect_LocatePackFrame_Loc2",
+                            "[JumpBack]Collect_LocatePackFrame_Loc1_ResetLoc"
                         ]
                     },
                     "origin": {
@@ -807,7 +809,8 @@
                     "patch": {
                         "next": [
                             "Collect_LocatePackFrame_Smart_Swip",
-                            "Collect_LocatePackFrame_Loc3"
+                            "Collect_LocatePackFrame_Loc3",
+                            "[JumpBack]Collect_LocatePackFrame_Loc1_ResetLoc"
                         ]
                     },
                     "origin": {
@@ -874,7 +877,8 @@
                     "patch": {
                         "next": [
                             "Collect_LocatePackFrame_Smart_Swip",
-                            "Collect_LocatePackFrame_Loc4"
+                            "Collect_LocatePackFrame_Loc4",
+                            "[JumpBack]Collect_LocatePackFrame_Loc1_ResetLoc"
                         ]
                     },
                     "origin": {
@@ -940,7 +944,8 @@
                     "patch": {
                         "next": [
                             "Collect_LocatePackFrame_Smart_Swip",
-                            "Collect_LocatePackFrame_Loc5"
+                            "Collect_LocatePackFrame_Loc5",
+                            "[JumpBack]Collect_LocatePackFrame_Loc1_ResetLoc"
                         ]
                     },
                     "origin": {
@@ -1005,7 +1010,8 @@
                     "patch": {
                         "next": [
                             "Collect_LocatePackFrame_Smart_Swip",
-                            "Collect_LocatePackFrame_Loc6"
+                            "Collect_LocatePackFrame_Loc6",
+                            "[JumpBack]Collect_LocatePackFrame_Loc1_ResetLoc"
                         ]
                     },
                     "origin": {
@@ -1069,7 +1075,8 @@
                     "patch": {
                         "next": [
                             "Collect_LocatePackFrame_Smart_Swip",
-                            "Collect_LocatePackFrame_Loc7"
+                            "Collect_LocatePackFrame_Loc7",
+                            "[JumpBack]Collect_LocatePackFrame_Loc1_ResetLoc"
                         ]
                     },
                     "origin": {
@@ -1132,7 +1139,8 @@
                     "patch": {
                         "next": [
                             "Collect_LocatePackFrame_Smart_Swip",
-                            "Collect_LocatePackFrame_Loc8"
+                            "Collect_LocatePackFrame_Loc8",
+                            "[JumpBack]Collect_LocatePackFrame_Loc1_ResetLoc"
                         ]
                     },
                     "origin": {
@@ -1193,7 +1201,8 @@
                     "patch": {
                         "next": [
                             "Collect_LocatePackFrame_Smart_Swip",
-                            "Collect_LocatePackFrame_Loc9"
+                            "Collect_LocatePackFrame_Loc9",
+                            "[JumpBack]Collect_LocatePackFrame_Loc1_ResetLoc"
                         ]
                     },
                     "origin": {
@@ -2393,6 +2402,7 @@
                 "template": [
                     "Cartridges/Q_sp18.png"
                 ],
+                "threshold": 0.85,
                 "roi": "Collect_PackLocation_PassFieldsAndHub"
             },
             {
@@ -2675,6 +2685,7 @@
                 "template": [
                     "Cartridges/Q_cp5.png"
                 ],
+                "threshold": 0.85,
                 "roi": "Collect_PackLocation_PassFieldsAndHub"
             },
             {
