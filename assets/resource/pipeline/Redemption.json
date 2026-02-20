@@ -330,12 +330,11 @@
       "Redemption_Evil_Redemption_QuickBatt"
     ],
     "roi": [
-      231,
-      110,
-      5,
-      5
+      225,
+      109,
+      38,
+      35
     ],
-    "method": 4,
     "lower": [
       255,
       255,
@@ -345,7 +344,8 @@
       255,
       255,
       255
-    ]
+    ],
+    "count": 20
   },
   "Redemption_Evil_Redemption_SelLv-1": {
     "recognition": "TemplateMatch",
@@ -366,7 +366,8 @@
       -95,
       0,
       0
-    ]
+    ],
+    "max_hit": 30
   },
   "Redemption_Evil_Redemption_QuickBatt": {
     "recognition": "OCR",
