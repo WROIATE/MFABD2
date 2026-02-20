@@ -534,11 +534,11 @@
         ],
         "focus": "箱庭",
         "next": [
-            "Collect_NviMap_SpeciaEveMap1#_Field"
+            "Collect_NviMap_SpeciaEveMap1#_Field1#"
         ],
         "doc": "[情况2]离得太近,识别失败.返回到箱庭,直接点击箱庭地图图标."
     },
-    "Collect_NviMap_SpeciaEveMap1#_Field": {
+    "Collect_NviMap_SpeciaEveMap1#_Field1#": {
         "recognition": "Or",
         "any_of": [
             {
@@ -609,10 +609,10 @@
         ],
         "focus": "箱庭",
         "next": [
-            "Collect_NviMap_SpeciaEveMap2#_Field"
+            "Collect_NviMap_SpeciaEveMap1#_Field1#2#"
         ]
     },
-    "Collect_NviMap_SpeciaEveMap2#_Field": {
+    "Collect_NviMap_SpeciaEveMap1#_Field1#2#": {
         "recognition": "Or",
         "any_of": [
             {
@@ -647,15 +647,16 @@
         "next": [
             "[JumpBack]Collect_TeleporCircle_OnFoot_LoopFoot",
             "[JumpBack]Global_WaitingForLoading",
-            "[JumpBack]Collect_NviMap_SpeciaEveMap1#_CallSkill2#"
+            "[JumpBack]Collect_NviMap_SpeciaEveMap1#_CallSkill2#",
+            "Collect_NviMap_SpeciaEveMap1#_ResetPatch"
         ]
     },
-    "Collect_NviMap_SpeciaEveMap1#_CallSkill2#": {
-        "doc": "未来用新的anchor替换",
-        "max_hit": 1,
-        "next": [
-            "Collect_NviMap_Specia_SkillModCall"
-        ]
+    "Collect_NviMap_SpeciaEveMap1#_ResetPatch": {
+        "action": "Custom",
+        "custom_action": "RestoreNode",
+        "custom_action_param": {
+            "node": "Collect_Skill_TapReset"
+        }
     },
     "Collect_TeleporCircle_OnFoot_StateResolGroup_Step1_Lift": {
         "doc": "两层级的导航地图箭头状态识别,来判断最左/中间/最右 ;+地图安全/危险来辅助操作 | Step2_Right下面为判定为最右",

@@ -283,6 +283,7 @@ jobs:
           fi
           
           # --- 3. 处理标签 ---
+          # 标签区块已禁用
           # if [ "$LABEL_COUNT" -gt 0 ]; then
           #   MESSAGE="$MESSAGE"$'\n'"🏷️ 标签 ($LABEL_COUNT)"
           #   LEN=$(echo "$SUMMARY_DATA" | jq '.labels | length')
