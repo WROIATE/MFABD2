@@ -147,7 +147,7 @@ jobs:
                 ISSUE_TITLE=$(curl -s -H "Authorization: token $GH_TOKEN" "$ISSUE_URL" | jq -r '.title' | sed 's/"/\\"/g')
                 AUTHOR=$(echo "$comment" | jq -r '.user.login')
                 BODY=$(echo "$comment" | jq -r '.body' | sed 's/"/\\"/g' | tr '\n' ' ')
-                PREVIEW=$(echo "$BODY" | cut -c 1-15)
+                PREVIEW=$(echo "$BODY" | cut -c 1-30)
                 
                 if [ $COMMENT_COUNT -gt 0 ]; then COMMENTS_ARRAY="$COMMENTS_ARRAY,"; fi
                 COMMENTS_ARRAY="$COMMENTS_ARRAY{\"number\": $ISSUE_NUMBER, \"title\": \"$ISSUE_TITLE\", \"author\": \"$AUTHOR\", \"preview\": \"$PREVIEW\"}"
@@ -267,7 +267,7 @@ jobs:
           if [ "$COMMENT_COUNT" -gt 0 ]; then
             MESSAGE="$MESSAGE"$'\n'"💬 新评论 ($COMMENT_COUNT)"
             LEN=$(echo "$SUMMARY_DATA" | jq '.comments | length')
-            LIMIT=3
+            LIMIT=5
             for i in $(seq 0 $((LEN-1))); do
                 if [ "$i" -ge "$LIMIT" ]; then
                    MESSAGE="$MESSAGE"$'\n'"  ...等 $((COMMENT_COUNT-LIMIT)) 条评论"
@@ -283,18 +283,18 @@ jobs:
           fi
           
           # --- 3. 处理标签 ---
-          if [ "$LABEL_COUNT" -gt 0 ]; then
-            MESSAGE="$MESSAGE"$'\n'"🏷️ 标签 ($LABEL_COUNT)"
-            LEN=$(echo "$SUMMARY_DATA" | jq '.labels | length')
-            LIMIT=3
-            for i in $(seq 0 $((LEN-1))); do
-                if [ "$i" -ge "$LIMIT" ]; then break; fi
-                ITEM=$(echo "$SUMMARY_DATA" | jq -r ".labels[$i]")
-                NUM=$(echo "$ITEM" | jq -r '.number')
-                CHANGE=$(echo "$ITEM" | jq -r '.change')
-                MESSAGE="$MESSAGE"$'\n'"  - [#$NUM] $CHANGE"
-            done
-          fi
+          # if [ "$LABEL_COUNT" -gt 0 ]; then
+          #   MESSAGE="$MESSAGE"$'\n'"🏷️ 标签 ($LABEL_COUNT)"
+          #   LEN=$(echo "$SUMMARY_DATA" | jq '.labels | length')
+          #   LIMIT=3
+          #   for i in $(seq 0 $((LEN-1))); do
+          #       if [ "$i" -ge "$LIMIT" ]; then break; fi
+          #       ITEM=$(echo "$SUMMARY_DATA" | jq -r ".labels[$i]")
+          #       NUM=$(echo "$ITEM" | jq -r '.number')
+          #       CHANGE=$(echo "$ITEM" | jq -r '.change')
+          #       MESSAGE="$MESSAGE"$'\n'"  - [#$NUM] $CHANGE"
+          #   done
+          # fi
           
           # --- 4. 处理分配 ---
           if [ "$ASSIGN_COUNT" -gt 0 ]; then
@@ -327,6 +327,6 @@ jobs:
         with:
           # qq: ${{ needs.meta.outputs.version_type == 'ci' && secrets.QMSG_QQ_DEV || secrets.QMSG_QQ_PUB }}
           # groups: ${{ needs.meta.outputs.version_type == 'ci' && secrets.QMSG_GROUPS_DEV || secrets.QMSG_GROUPS_PUB }}
-          groups: ${{ secrets.QMSG_NOTIFY_GROUPS }}
+          groups: ${{ secrets.QMSG_GROUPS_PUB }}
           key: ${{ secrets.QMSG_KEY }}
           message: ${{ steps.generate_message.outputs.message }}

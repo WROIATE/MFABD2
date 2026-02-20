@@ -162,7 +162,7 @@ jobs:
         with:
           # qq: ${{ needs.meta.outputs.version_type == 'ci' && secrets.QMSG_QQ_DEV || secrets.QMSG_QQ_PUB }}
           # groups: ${{ needs.meta.outputs.version_type == 'ci' && secrets.QMSG_GROUPS_DEV || secrets.QMSG_GROUPS_PUB }}
-          groups: ${{ secrets.QMSG_NOTIFY_GROUPS }}
+          groups: ${{ secrets.QMSG_GROUPS_DEV }}
           key: ${{ secrets.QMSG_KEY }}
           message: |
             ${{ steps.prepare_message.outputs.title }}
