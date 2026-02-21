@@ -189,7 +189,8 @@ CYCLE_STRATEGIES = {
 class CooldownManager:
     # ✅ 既然 PersistentStore 是静态类，这里甚至不需要 __init__
     def __init__(self):
-        pass
+        #性能优化：将本地时区在类初始化时缓存下来，避免每次重复调用系统 API
+        self._local_tz = datetime.now().astimezone().tzinfo
 
     def _get_storage_key(self, card_name, strategy_name):
         """生成唯一存储键名 (防止不同策略共用同一个名字导致冲突)"""
@@ -197,7 +198,7 @@ class CooldownManager:
 
     def _get_local_timezone(self):
         """获取电脑当前的本地时区"""
-        return datetime.now().astimezone().tzinfo
+        return self._local_tz
 
     def _str_to_utc_timestamp(self, time_str):
         """

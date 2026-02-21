@@ -122,7 +122,8 @@
         ],
         "next": [
             "Arbitrage_OperationsMain_Sandplay",
-            "Arbitrage_Card5#_Goin"
+            "Arbitrage_Card5#_Goin",
+            "[JumpBack]Global_WaitingForLoading"
         ],
         "post_delay": 3000,
         "roi": [
