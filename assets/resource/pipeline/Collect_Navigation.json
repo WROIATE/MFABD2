@@ -790,7 +790,8 @@
     "next": [
       "[Anchor]Arbitrage5",
       "Collect_Skill_Start",
-      "Collect_ClickTelepor_TargetClass_PurpleProcess"
+      "Collect_ClickTelepor_TargetClass_PurpleProcess",
+      "[JumpBack]Global_WaitingForLoading"
     ],
     "post_delay": 5000,
     "focus": "CM.N.选择次选传送阵",
@@ -820,7 +821,8 @@
     "next": [
       "[Anchor]Arbitrage5",
       "Collect_Skill_Start",
-      "Collect_ClickTelepor_TargetClass_White"
+      "Collect_ClickTelepor_TargetClass_White",
+      "[JumpBack]Global_WaitingForLoading"
     ],
     "post_delay": 5000,
     "focus": "CM.N.区域地图.tp1.选择首选传送阵图标",
@@ -847,7 +849,8 @@
     "recognition": "TemplateMatch",
     "next": [
       "Collect_Skill_Start",
-      "Collect_ClickTelepor_TargetClass_White"
+      "Collect_ClickTelepor_TargetClass_White",
+      "[JumpBack]Global_WaitingForLoading"
     ],
     "post_delay": 5000,
     "focus": "CM.N.区域地图.tp1.找到传送阵图标",

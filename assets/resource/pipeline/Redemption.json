@@ -1,151 +1,80 @@
 {
   "Redemption_HomePage": {
     "next": [
-      "Redemption_HomePageHub",
-      "Redemption_HomePageHub2",
-      "Redemption_HomePageHub1"
+      "[JumpBack]Global_QuickCart_MenuReset",
+      "[JumpBack]Global_ToSandBox",
+      "Redemption_Menu"
     ]
   },
-  "Redemption_HomePageHub": {
-    "recognition": "TemplateMatch",
-    "action": "Click",
-    "next": [
-      "Redemption_HomePage2",
-      "Redemption_HomePageHub",
-      "Redemption_HomePageHub1"
-    ],
-    "post_delay": 3000,
-    "focus": "G=0.页面预期内，普通启动。M.箱庭地图run已确认",
-    "roi": [
-      1047,
-      516,
-      107,
-      110
-    ],
-    "template": [
-      "Run.png"
-    ],
-    "green_mask": true,
-    "target": [
-      1186,
-      46,
-      0,
-      0
-    ],
-    "doc": "找到run-点击返回主页"
-  },
-  "Redemption_HomePageHub1": {
-    "recognition": "TemplateMatch",
-    "action": "Click",
-    "next": [
-      "Redemption_HomePage2",
-      "Redemption_HomePageHub",
-      "Redemption_HomePageHub1"
-    ],
-    "post_delay": 3000,
-    "focus": "G=0.页面预期内，普通启动。BM.箱庭地图pin已确认",
-    "roi": [
-      1108,
-      637,
-      65,
-      57
-    ],
-    "template": [
-      "pin.png"
-    ],
-    "target": [
-      1186,
-      46,
-      0,
-      0
-    ]
-  },
-  "Redemption_HomePageHub2": {
-    "recognition": "TemplateMatch",
-    "action": "Click",
-    "next": [
-      "Redemption_HomePageHub",
-      "Redemption_HomePageHub1",
-      "Redemption_HomePageHub2"
-    ],
-    "post_delay": 2000,
-    "focus": "G=1.页面非预期，点击返回按钮",
-    "roi": [
-      1,
-      1,
-      231,
-      124
-    ],
-    "template": [
-      "BackButGe.png",
-      "BackButGe2.png"
-    ],
-    "green_mask": true,
-    "doc": "其他页面，返回按钮"
-  },
-  "Redemption_HomePage2": {
+  "Redemption_Menu": {
     "recognition": "OCR",
     "action": "Click",
     "next": [
-      "Redemption_MoreBook_Evil",
-      "Redemption_HomePageSwipe"
+      "Redemption_Menu_Cor",
+      "Redemption_Menu"
     ],
-    "focus": "PM.主页面",
+    "focus": "GO.快速卡带-菜单模式",
     "roi": [
-      98,
-      656,
-      66,
-      32
+      542,
+      535,
+      149,
+      42
     ],
     "expected": [
-      "抽抽乐"
-    ],
-    "target": [
-      1111,
-      650,
-      0,
-      0
-    ],
-    "doc": "识别左下抽抽乐-主页-点击选择章节"
+      "玩法游戏卡"
+    ]
   },
-  "Redemption_HomePageSwipe": {
-    "recognition": "OCR",
-    "action": "Swipe",
+  "Redemption_Menu_Cor": {
+    "recognition": "ColorMatch",
     "next": [
-      "Redemption_MoreBook_Evil",
-      "Redemption_HomePageSwipe"
+      "Redemption_ToPack"
     ],
-    "pre_delay": 1000,
-    "focus": "PM.卡带界面垂直复位(一次性)",
+    "focus": "GO.菜单模式-色核通过",
+    "roi": "Redemption_Menu",
+    "count": 200,
+    "lower": [
+      203,
+      203,
+      202
+    ],
+    "upper": [
+      255,
+      255,
+      255
+    ]
+  },
+  "Redemption_ToPack": {
+    "recognition": "TemplateMatch",
+    "action": "Click",
+    "next": [
+      "[JumpBack]Global_WaitingForLoading",
+      "Redemption_Mapck",
+      "Redemption_Evil_Settlement",
+      "Redemption_ToPack"
+    ],
+    "post_delay": 4000,
     "roi": [
-      99,
-      78,
-      212,
-      630
+      28,
+      585,
+      1214,
+      97
     ],
-    "expected": [
-      "角色游戏卡"
+    "template": [
+      "Cartridges_EvilCas.png"
     ],
-    "begin": [
-      70,
-      640,
+    "green_mask": true,
+    "target_offset": [
+      -35,
+      25,
       0,
       0
-    ],
-    "end": [
-      70,
-      270,
-      0,
-      0
-    ],
-    "duration": 500
+    ]
   },
   "Redemption_MoreBook_Evil": {
     "recognition": "OCR",
     "action": "Click",
     "next": [
       "Redemption_Mapck",
-      "Redemption_Mapck1",
       "Redemption_Evil_Settlement",
       "Redemption_MoreBook_Evil"
     ],
@@ -174,7 +103,6 @@
     "action": "Click",
     "next": [
       "Redemption_Mapck",
-      "Redemption_Mapck1",
       "Redemption_Evil_Settlement"
     ],
     "roi": [
@@ -188,51 +116,37 @@
     ]
   },
   "Redemption_Mapck": {
-    "recognition": "TemplateMatch",
+    "recognition": "Or",
+    "any_of": [
+      {
+        "recognition": "TemplateMatch",
+        "roi": [
+          1122,
+          646,
+          40,
+          38
+        ],
+        "template": [
+          "pin.png"
+        ]
+      },
+      {
+        "recognition": "TemplateMatch",
+        "roi": [
+          1047,
+          516,
+          107,
+          110
+        ],
+        "template": [
+          "Run.png"
+        ],
+        "green_mask": true
+      }
+    ],
+    "focus": "RM.已复位到箱庭",
     "next": [
       "Redemption_Evil_Move"
-    ],
-    "post_delay": 2000,
-    "focus": "G=0.页面预期内，普通启动。M.箱庭地图run已确认",
-    "roi": [
-      1047,
-      516,
-      107,
-      110
-    ],
-    "template": [
-      "Run.png"
-    ],
-    "green_mask": true,
-    "target": [
-      1186,
-      46,
-      0,
-      0
-    ],
-    "doc": "找到run-点击返回主页"
-  },
-  "Redemption_Mapck1": {
-    "recognition": "TemplateMatch",
-    "next": [
-      "Redemption_Evil_Move"
-    ],
-    "post_delay": 2000,
-    "focus": "G=0.页面预期内，普通启动。BM.箱庭地图pin已确认",
-    "roi": [
-      1108,
-      637,
-      65,
-      57
-    ],
-    "template": [
-      "pin.png"
-    ],
-    "target": [
-      1186,
-      46,
-      0,
-      0
     ]
   },
   "Redemption_Evil_Move": {
@@ -330,12 +244,11 @@
       "Redemption_Evil_Redemption_QuickBatt"
     ],
     "roi": [
-      231,
-      110,
-      5,
-      5
+      225,
+      109,
+      38,
+      35
     ],
-    "method": 4,
     "lower": [
       255,
       255,
@@ -345,7 +258,8 @@
       255,
       255,
       255
-    ]
+    ],
+    "count": 20
   },
   "Redemption_Evil_Redemption_SelLv-1": {
     "recognition": "TemplateMatch",
@@ -366,7 +280,8 @@
       -95,
       0,
       0
-    ]
+    ],
+    "max_hit": 30
   },
   "Redemption_Evil_Redemption_QuickBatt": {
     "recognition": "OCR",
@@ -408,7 +323,7 @@
     ],
     "count": 150,
     "action": "Click",
-    "post_delay": 1000,
+    "post_delay": 2000,
     "max_hit": 3,
     "focus": "REM.免费AP未勾选",
     "next": [
@@ -569,8 +484,7 @@
     "recognition": "TemplateMatch",
     "action": "Click",
     "next": [
-      "Redemption_BackPVEPage",
-      "Redemption_Evil_Redemption_PageBackHub"
+      "Global_ToHomePage"
     ],
     "post_delay": 2500,
     "focus": "G=1.页面非预期，点击返回按钮",

@@ -93,6 +93,7 @@
     "action": "Click",
     "next": [
       "PVP_PullUp_QuickCart_PVP",
+      "[JumpBack]Global_WaitingForLoading",
       "PVP_HUB_Sandplay"
     ],
     "post_delay": 3000,
@@ -346,6 +347,7 @@
     ],
     "recognition": "ColorMatch",
     "action": "Click",
+    "post_delay": 2000,
     "focus": "PM.PVP.免费AP未勾选！",
     "roi": [
       888,

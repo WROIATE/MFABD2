@@ -135,6 +135,7 @@
             "entry": "Daily_HomePage",
             "option": [
                 "公会奖励",
+                "餐馆领装饰币",
                 "餐馆自动升级",
                 "广场每日祈求"
             ],
@@ -740,6 +741,23 @@
                                 20,
                                 18
                             ]
+                        }
+                    }
+                }
+            ]
+        },
+        "餐馆领装饰币": {
+            "type": "select",
+            "description": "餐馆内等待片刻,NPC头上会有气泡,点击可领取装饰币若干,每日上限20枚。",
+            "cases": [
+                {
+                    "name": "Yes"
+                },
+                {
+                    "name": "No",
+                    "pipeline_override": {
+                        "Daily_Busin_DecorCoin_Hub": {
+                            "enabled": false
                         }
                     }
                 }

@@ -196,7 +196,8 @@
     "recognition": "OCR",
     "action": "Click",
     "next": [
-      "Event_NormalBattleMAX",
+      "Event_FreeAP_Verdict_Ispass",
+      "Event_FreeAP_Verdict_NOpass",
       "Event_NoHaveAP"
     ],
     "post_delay": 1000,
@@ -211,6 +212,60 @@
       "快速战斗"
     ],
     "doc": "识别并点击子菜单快速战斗"
+  },
+  "Event_FreeAP_Verdict_Ispass": {
+    "recognition": "ColorMatch",
+    "upper": [
+      182,
+      142,
+      52
+    ],
+    "lower": [
+      162,
+      122,
+      32
+    ],
+    "count": 50,
+    "roi": [
+      857,
+      211,
+      9,
+      10
+    ],
+    "focus": "EM.免费AP已选中",
+    "next": [
+      "Event_NormalBattleMAX"
+    ]
+  },
+  "Event_FreeAP_Verdict_NOpass": {
+    "recognition": "ColorMatch",
+    "upper": [
+      40,
+      45,
+      50
+    ],
+    "lower": [
+      20,
+      25,
+      30
+    ],
+    "count": 50,
+    "roi": [
+      872,
+      210,
+      10,
+      11
+    ],
+    "focus": "EM.免费AP未选中",
+    "action": "Click",
+    "post_delay": 2000,
+    "next": [
+      "Event_FreeAP_Verdict_Ispass",
+      "Event_NormalBattleIsOver",
+      "Event_Event_Main_Return",
+      "[JumpBack]Global_BackPageHub_Once"
+    ],
+    "max_hit": 3
   },
   "Event_NoHaveAP": {
     "recognition": "OCR",
@@ -274,7 +329,8 @@
       0,
       0
     ],
-    "doc": "快速战斗MAX"
+    "doc": "快速战斗MAX",
+    "max_hit": 5
   },
   "Event_NormalBattleMAX_cor": {
     "recognition": "ColorMatch",

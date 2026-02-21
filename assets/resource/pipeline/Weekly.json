@@ -448,10 +448,38 @@
     ],
     "expected": [
       "抽抽乐"
-    ]
+    ],
+    "focus": "WVM..主页面"
   },
   "Weekly_VisitCabin_GoIn": {
-    "recognition": "OCR",
+    "recognition": "Or",
+    "any_of": [
+      {
+        "recognition": "TemplateMatch",
+        "roi": [
+          16,
+          84,
+          455,
+          275
+        ],
+        "template": [
+          "MainHomeRIceGE.png"
+        ],
+        "green_mask": true
+      },
+      {
+        "recognition": "OCR",
+        "roi": [
+          16,
+          84,
+          455,
+          275
+        ],
+        "expected": [
+          "我的小屋"
+        ]
+      }
+    ],
     "action": "Click",
     "next": [
       "Weekly_VisitCabin_TabChg",
@@ -459,20 +487,11 @@
     ],
     "post_delay": 8000,
     "focus": "WVM.点击我的小屋",
-    "roi": [
-      16,
-      84,
-      455,
-      275
-    ],
-    "expected": [
-      "我的小屋"
-    ],
     "target_offset": [
       5,
-      -45,
-      0,
-      0
+      -5,
+      1,
+      1
     ]
   },
   "Weekly_VisitCabin_TabChg": {
