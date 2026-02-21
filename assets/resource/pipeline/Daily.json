@@ -457,7 +457,8 @@
     "on_error": [
       "Daily_Busin_Quick_BackPVEPage_Str",
       "Global_BackToPve2#"
-    ]
+    ],
+    "max_hit": 1
   },
   "Daily_Busin_DecorCoin_IsFull_Binary": {
     "recognition": "Custom",
@@ -580,7 +581,9 @@
       13
     ],
     "next": [
-      "Daily_Busin_DecorCoin_PickUp"
+      "Daily_Busin_DecorCoin_PickUp",
+      "Daily_Busin_DecorCoin_PickUp2",
+      "Daily_Busin_DecorCoin_PickUp3"
     ],
     "timeout": 30000,
     "on_error": [
@@ -602,7 +605,9 @@
     ],
     "timeout": 30000,
     "on_error": [
-      "Daily_Busin_Quick_BackPVEPage_Str"
+      "Daily_Busin_Quick_BackPVEPage_Str",
+      "Daily_Busin_DecorCoin_PickUp2",
+      "Daily_Busin_DecorCoin_PickUp3"
     ],
     "focus": "点击'员工',移动画面",
     "max_hit": 3
