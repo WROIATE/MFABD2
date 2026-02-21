@@ -2909,9 +2909,10 @@
         "post_delay": 5000,
         "next": [
             "[JumpBack]Global_WaitingForLoading",
-            "Collect_OperationsMain_Sandplay",
-            "Collect_Pack_Event_1"
-        ]
+            "Collect_Pack_Event_1",
+            "Collect_TeleporCircle_OnFoot_GoinNviMap"
+        ],
+        "doc": "特殊地图特殊处理.此地图没有传送阵"
     },
     "Collect_Pack_Event_2": {
         "recognition": "And",

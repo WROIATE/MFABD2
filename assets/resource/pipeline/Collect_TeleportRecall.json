@@ -345,7 +345,34 @@
         "focus": "CTOB.徒步前往传送阵"
     },
     "Collect_TeleporCircle_OnFoot_GoinNviMap": {
-        "recognition": "DirectHit",
+        "recognition": "Or",
+        "any_of": [
+            {
+                "recognition": "TemplateMatch",
+                "roi": [
+                    1122,
+                    646,
+                    40,
+                    38
+                ],
+                "template": [
+                    "pin.png"
+                ]
+            },
+            {
+                "recognition": "TemplateMatch",
+                "roi": [
+                    1047,
+                    516,
+                    107,
+                    110
+                ],
+                "template": [
+                    "Run.png"
+                ],
+                "green_mask": true
+            }
+        ],
         "action": "Click",
         "target": [
             148,
@@ -395,7 +422,23 @@
             64
         ],
         "focus": "CTB.特殊地图-夏日骑士",
-        "doc": "夏日骑士,没有传送门,但有两张可以吸的地图。考虑做一个特殊Nav？",
+        "doc": "夏日骑士,没有传送门,但有两张可以吸的地图。考虑做一个特殊Nav？| 如果检测已经打过,崩掉这层节点链",
+        "next": [
+            "Collect_NviMap_Event_1"
+        ],
+        "timeout": 5000,
+        "on_error": [
+            "Global_QuickCart_MenuReset",
+            "[JumpBack]Global_ToSandBox"
+        ]
+    },
+    "Collect_NviMap_Event_1": {
+        "action": "Custom",
+        "custom_action": "CheckCoolDown",
+        "custom_action_param": {
+            "card_name": "Event_1_夏日骑士",
+            "cycle_type": "g_weekly"
+        },
         "next": [
             "Collect_NviMap_SpeciaEveMap1#_MiniMap",
             "Collect_NviMap_SpeciaEveMap1#_Sandplay",
@@ -663,6 +706,17 @@
         "custom_action": "RestoreNode",
         "custom_action_param": {
             "node": "Collect_Skill_TapReset"
+        },
+        "next": [
+            "Collect_NviMap_SpeciaEveMap1#_MarkComplete"
+        ]
+    },
+    "Collect_NviMap_SpeciaEveMap1#_MarkComplete": {
+        "action": "Custom",
+        "custom_action": "MarkComplete",
+        "custom_action_param": {
+            "card_name": "Event_1_夏日骑士",
+            "cycle_type": "g_weekly"
         }
     },
     "Collect_TeleporCircle_OnFoot_StateResolGroup_Step1_Lift": {
