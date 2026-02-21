@@ -651,6 +651,13 @@
             "Collect_NviMap_SpeciaEveMap1#_ResetPatch"
         ]
     },
+    "Collect_NviMap_SpeciaEveMap1#_CallSkill2#": {
+        "doc": "未来用新的anchor替换",
+        "max_hit": 1,
+        "next": [
+            "Collect_NviMap_Specia_SkillModCall"
+        ]
+    },
     "Collect_NviMap_SpeciaEveMap1#_ResetPatch": {
         "action": "Custom",
         "custom_action": "RestoreNode",
