@@ -449,7 +449,9 @@
     "focus": "装饰币拾取模块",
     "next": [
       "Daily_Busin_DecorCoin_IsFull_Binary",
-      "Daily_Busin_DecorCoin_PickUp"
+      "Daily_Busin_DecorCoin_PickUp",
+      "Daily_Busin_DecorCoin_PickUp2",
+      "Daily_Busin_DecorCoin_PickUp3"
     ],
     "timeout": 90000,
     "on_error": [
@@ -495,19 +497,79 @@
   "Daily_Busin_DecorCoin_PickUp": {
     "recognition": "TemplateMatch",
     "template": "UI_BusinCoin.png",
+    "roi": [
+      353,
+      98,
+      911,
+      449
+    ],
     "green_mask": true,
     "action": "Click",
     "focus": "拾取装饰币",
     "post_delay": 1500,
     "next": [
       "Daily_Busin_DecorCoin_IsFull_Binary",
-      "Daily_Busin_DecorCoin_PickUp"
+      "Daily_Busin_DecorCoin_PickUp",
+      "Daily_Busin_DecorCoin_PickUp2",
+      "Daily_Busin_DecorCoin_PickUp3"
     ],
     "timeout": 25000,
     "on_error": [
       "Daily_Busin_DecorCoin_Move_1",
       "Daily_Busin_DecorCoin_Move_2"
     ]
+  },
+  "Daily_Busin_DecorCoin_PickUp2": {
+    "recognition": "TemplateMatch",
+    "template": "UI_BusinCoin.png",
+    "roi": [
+      273,
+      509,
+      683,
+      200
+    ],
+    "green_mask": true,
+    "action": "Click",
+    "focus": "拾取装饰币",
+    "post_delay": 1500,
+    "next": [
+      "Daily_Busin_DecorCoin_IsFull_Binary",
+      "Daily_Busin_DecorCoin_PickUp",
+      "Daily_Busin_DecorCoin_PickUp2",
+      "Daily_Busin_DecorCoin_PickUp3"
+    ],
+    "timeout": 25000,
+    "on_error": [
+      "Daily_Busin_DecorCoin_Move_1",
+      "Daily_Busin_DecorCoin_Move_2"
+    ],
+    "doc": "不能复核roi的产物,以后删掉"
+  },
+  "Daily_Busin_DecorCoin_PickUp3": {
+    "recognition": "TemplateMatch",
+    "template": "UI_BusinCoin.png",
+    "roi": [
+      88,
+      360,
+      266,
+      230
+    ],
+    "green_mask": true,
+    "action": "Click",
+    "focus": "拾取装饰币",
+    "post_delay": 1500,
+    "next": [
+      "Daily_Busin_DecorCoin_IsFull_Binary",
+      "Daily_Busin_DecorCoin_PickUp",
+      "Daily_Busin_DecorCoin_PickUp2",
+      "Daily_Busin_DecorCoin_PickUp3"
+    ],
+    "timeout": 25000,
+    "on_error": [
+      "Daily_Busin_DecorCoin_Move_1",
+      "Daily_Busin_DecorCoin_Move_2"
+    ],
+    "doc": "不能复核roi的产物,以后删掉"
   },
   "Daily_Busin_DecorCoin_Move_1": {
     "action": "Click",
