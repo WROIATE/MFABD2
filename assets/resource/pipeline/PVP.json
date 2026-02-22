@@ -758,6 +758,7 @@
       0
     ],
     "next": [
+      "[JumpBack]Global_WaitingForLoading",
       "PVP_FinBackMapPage"
     ],
     "post_delay": 5000,
