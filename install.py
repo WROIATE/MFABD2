@@ -173,8 +173,8 @@ def install_chores():
         script_src_dir = working_dir / "scripts" / "release"
         
         # 1. 处理 AKeySetup (需注入版本号)
-        src_script = script_src_dir / "AKeySetup_一键全依赖修复_mac.command"
-        dst_script = install_path / "AKeySetup_一键全依赖修复_mac.command"
+        src_script = script_src_dir / "Mac启动方案2-系统环境联网配置_mac.command"
+        dst_script = install_path / "2_备案-系统环境联网配置_mac.command"
 
         if src_script.exists():
             print(f"📦 [Mac] 处理安装脚本，注入 MaaVersion: {maa_ver}")
@@ -203,8 +203,8 @@ def install_chores():
             print(f"⚠️ 未找到 Mac 脚本源文件: {src_script}")
 
         # 2. [修改] 处理修复工具 (Fix Permission) - 路径也改到了 scripts/release
-        fix_tool_src = script_src_dir / "fix_mac.command"
-        fix_tool_dst = install_path / "修复损坏与权限(Fix Permission).command"
+        fix_tool_src = script_src_dir / "Mac启动方案1-内置环境修复赋权_mac.command"
+        fix_tool_dst = install_path / "1_Mac用户请先双击运行此环境修复.command"
         
         if fix_tool_src.exists():
             print(f"🚑 注入 Mac 修复工具...")
