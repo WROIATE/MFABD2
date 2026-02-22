@@ -199,13 +199,13 @@
         "recognition": "Custom",
         "custom_recognition": "CheckCoolDown",
         "custom_recognition_param": {
-            "card_name": "EquipUp",
+            "card_name": "EquipUpSet",
             "cycle_type": "g_daily"
         },
         "action": "Custom",
         "custom_action": "MarkComplete",
         "custom_action_param": {
-            "card_name": "EquipUp",
+            "card_name": "EquipUpSet",
             "cycle_type": "g_daily"
         },
         "focus": "SMSP.检测装备强化选项",
@@ -229,13 +229,13 @@
         "recognition": "Custom",
         "custom_recognition": "CheckCoolDown",
         "custom_recognition_param": {
-            "card_name": "EquipDec",
+            "card_name": "EquipDecSet",
             "cycle_type": "g_daily"
         },
         "action": "Custom",
         "custom_action": "MarkComplete",
         "custom_action_param": {
-            "card_name": "EquipDec",
+            "card_name": "EquipDecSet",
             "cycle_type": "g_daily"
         },
         "focus": "SMSP.检测装备分解选项",
