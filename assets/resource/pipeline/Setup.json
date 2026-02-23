@@ -215,7 +215,8 @@
             "[JumpBack]Setup_EquipUp_CheckBox_L2",
             "[JumpBack]Setup_EquipUp_CheckBox_L3",
             "[JumpBack]Setup_EquipUp_CheckBox_L4"
-        ]
+        ],
+        "timeout": 2000
     },
     "Setup_Entry7": {
         "enabled": true,
@@ -246,7 +247,8 @@
             "[JumpBack]Setup_EquipDec_CheckBox_L2",
             "[JumpBack]Setup_EquipDec_CheckBox_L3",
             "[JumpBack]Setup_EquipDec_CheckBox_L4"
-        ]
+        ],
+        "timeout": 2000
     },
     "Setup_SkillScan_Now": {
         "focus": "Set.技能放置检查开始",
