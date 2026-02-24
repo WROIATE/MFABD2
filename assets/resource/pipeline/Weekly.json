@@ -5,7 +5,8 @@
       "[JumpBack]Weekly_VisitCabin_Hub",
       "[JumpBack]Weekly_LastNight_Hub",
       "[JumpBack]Weekly_Flishing_Hub"
-    ]
+    ],
+    "timeout": 1
   },
   "Weekly_LastNight_Hub": {
     "enabled": true,
@@ -218,6 +219,7 @@
     "recognition": "OCR",
     "action": "Click",
     "next": [
+      "[JumpBack]Global_WaitingForLoading",
       "Weekly_LastNight_Move",
       "Weekly_MoreBook_LastNight"
     ],
@@ -283,6 +285,7 @@
     "recognition": "OCR",
     "action": "Click",
     "next": [
+      "[JumpBack]Global_WaitingForLoading",
       "Weekly_LastNight_InBattle",
       "Weekly_LastNight_GoBattle"
     ],
@@ -325,6 +328,7 @@
     "recognition": "OCR",
     "action": "Click",
     "next": [
+      "[JumpBack]Global_WaitingForLoading",
       "Weekly_LastNight_MaybeNew",
       "Weekly_LastNight_MenuPageEnd",
       "Weekly_LastNight_Pin",

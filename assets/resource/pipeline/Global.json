@@ -238,6 +238,7 @@
         "recognition": "TemplateMatch",
         "action": "Click",
         "next": [
+            "[JumpBack]Global_WaitingForLoading",
             "Global_ToSandBox_Enter",
             "Global_ToSandBox_Reset"
         ],

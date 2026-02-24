@@ -365,7 +365,7 @@
       "Daily_Busin_NoGift",
       "Daily_Busin_Nothing_Binary"
     ],
-    "post_delay": 8000,
+    "post_delay": 1000,
     "roi": [
       699,
       170,
@@ -470,6 +470,7 @@
     },
     "focus": "装饰币已拾取满",
     "next": [
+      "[JumpBack]Daily_Busin_GiftGet",
       "Daily_Busin_Quick_BackPVEPage_Str",
       "Global_BackToPve2#"
     ]
