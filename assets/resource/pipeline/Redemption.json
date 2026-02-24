@@ -1,9 +1,9 @@
 {
   "Redemption_HomePage": {
     "next": [
+      "Redemption_Menu",
       "[JumpBack]Global_QuickCart_MenuReset",
-      "[JumpBack]Global_ToSandBox",
-      "Redemption_Menu"
+      "[JumpBack]Global_ToSandBox"
     ]
   },
   "Redemption_Menu": {
@@ -64,7 +64,7 @@
     ],
     "green_mask": true,
     "target_offset": [
-      -35,
+      -30,
       25,
       0,
       0
