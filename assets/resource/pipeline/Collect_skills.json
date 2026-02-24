@@ -324,41 +324,15 @@
         "focus": "CSB.'吸取'技能已无法使用(OCR耗尽已在Collect_Skill3_2_Depleted判定)"
     },
     "Collect_Skill3_2_Depleted": {
-        "recognition": "And",
-        "all_of": [
-            {
-                "recognition": "OCR",
-                "roi": [
-                    942,
-                    564,
-                    54,
-                    34
-                ],
-                "expected": [
-                    "(\\d+)\\s*[/:：|\\-~]?\\s*\\1(?!\\d)"
-                ]
-            },
-            {
-                "recognition": "ColorMatch",
-                "roi": [
-                    954,
-                    555,
-                    7,
-                    12
-                ],
-                "method": 40,
-                "lower": [
-                    0,
-                    0,
-                    145
-                ],
-                "upper": [
-                    149,
-                    5,
-                    151
-                ],
-                "count": 50
-            }
+        "recognition": "OCR",
+        "roi": [
+            942,
+            564,
+            54,
+            34
+        ],
+        "expected": [
+            "(\\d+)\\s*[/:：|\\-~]?\\s*\\1(?!\\d)"
         ],
         "action": "StopTask",
         "focus": "CSB.技能'吸取'施放次数已满,结束流程.",

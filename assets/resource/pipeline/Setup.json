@@ -199,13 +199,13 @@
         "recognition": "Custom",
         "custom_recognition": "CheckCoolDown",
         "custom_recognition_param": {
-            "card_name": "EquipUp",
+            "card_name": "EquipUpSet",
             "cycle_type": "g_daily"
         },
         "action": "Custom",
         "custom_action": "MarkComplete",
         "custom_action_param": {
-            "card_name": "EquipUp",
+            "card_name": "EquipUpSet",
             "cycle_type": "g_daily"
         },
         "focus": "SMSP.检测装备强化选项",
@@ -215,7 +215,8 @@
             "[JumpBack]Setup_EquipUp_CheckBox_L2",
             "[JumpBack]Setup_EquipUp_CheckBox_L3",
             "[JumpBack]Setup_EquipUp_CheckBox_L4"
-        ]
+        ],
+        "timeout": 2000
     },
     "Setup_Entry7": {
         "enabled": true,
@@ -229,13 +230,13 @@
         "recognition": "Custom",
         "custom_recognition": "CheckCoolDown",
         "custom_recognition_param": {
-            "card_name": "EquipDec",
+            "card_name": "EquipDecSet",
             "cycle_type": "g_daily"
         },
         "action": "Custom",
         "custom_action": "MarkComplete",
         "custom_action_param": {
-            "card_name": "EquipDec",
+            "card_name": "EquipDecSet",
             "cycle_type": "g_daily"
         },
         "focus": "SMSP.检测装备分解选项",
@@ -246,7 +247,8 @@
             "[JumpBack]Setup_EquipDec_CheckBox_L2",
             "[JumpBack]Setup_EquipDec_CheckBox_L3",
             "[JumpBack]Setup_EquipDec_CheckBox_L4"
-        ]
+        ],
+        "timeout": 2000
     },
     "Setup_SkillScan_Now": {
         "focus": "Set.技能放置检查开始",

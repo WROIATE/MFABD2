@@ -240,6 +240,7 @@
         "recognition": "TemplateMatch",
         "action": "Click",
         "next": [
+            "[JumpBack]Global_WaitingForLoading",
             "Global_ToSandBox_Enter",
             "Global_ToSandBox_Reset"
         ],
@@ -293,7 +294,8 @@
     "Global_BackToPve2#": {
         "next": [
             "Global_BackToPve2#_ToCardMenu",
-            "[JumpBack]Global_OnceHomeButton"
+            "[JumpBack]Global_OnceHomeButton",
+            "[JumpBack]Global_WaitingForLoading"
         ],
         "focus": "G.复位卡带开始"
     },
@@ -444,9 +446,9 @@
         "post_delay": 2000,
         "focus": "GO.快速卡带-复位到QC1",
         "roi": [
-            294,
+            246,
             562,
-            343,
+            391,
             158
         ],
         "template": [
@@ -586,6 +588,7 @@
                 "template": "UI_loading_black.png"
             }
         ],
-        "post_delay": 5000
+        "post_delay": 5000,
+        "doc": "循环等待转场页面"
     }
 }
