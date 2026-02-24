@@ -281,14 +281,14 @@
       ]
     ],
     "next": [
-      "Daily_Busin_InBusin"
+      "Daily_Busin_Enter"
     ]
   },
   "Daily_GetBusinRewardBack": {
     "action": "Click",
     "next": [
       "Daily_Busin_In_img",
-      "Daily_Busin_In",
+      "Daily_Busin_MainMenu",
       "[JumpBack]Daily_ClickOnce"
     ],
     "on_error": [],
@@ -309,7 +309,7 @@
     "recognition": "TemplateMatch",
     "action": "Click",
     "next": [
-      "Daily_Busin_InBusin",
+      "Daily_Busin_Enter",
       "Daily_Busin_In_img"
     ],
     "post_delay": 1000,
@@ -325,14 +325,14 @@
     ],
     "doc": "流程：进入餐馆。领取每日常客水晶。"
   },
-  "Daily_Busin_In": {
+  "Daily_Busin_MainMenu": {
     "recognition": "OCR",
     "action": "Click",
     "post_delay": 400,
     "post_wait_freezes": 800,
     "next": [
-      "Daily_Busin_InBusin",
-      "Daily_Busin_In"
+      "Daily_Busin_Enter",
+      "Daily_Busin_MainMenu"
     ],
     "focus": "GOM.餐馆常客属性石ocr",
     "roi": [
@@ -352,18 +352,13 @@
     ],
     "doc": "流程：进入餐馆。领取每日常客水晶。"
   },
-  "Daily_Busin_InBusin": {
+  "Daily_Busin_Enter": {
     "recognition": "OCR",
     "action": "Click",
     "next": [
-      "[JumpBack]Global_WaitingForLoading",
-      "[JumpBack]Daily_Busin_GiftGet",
-      "[JumpBack]Daily_Busin_StageUp",
-      "[JumpBack]Daily_Busin_LevelUp",
-      "Daily_Busin_InBusin",
-      "Daily_Busin_DecorCoin_Hub",
-      "Daily_Busin_NoGift",
-      "Daily_Busin_Nothing_Binary"
+      "Daily_Busin_Entered",
+      "Daily_Busin_Enter",
+      "[JumpBack]Global_WaitingForLoading"
     ],
     "post_delay": 1000,
     "roi": [
@@ -376,6 +371,30 @@
       "立刻前往"
     ],
     "doc": "餐馆结算页，进入餐馆"
+  },
+  "Daily_Busin_Entered": {
+    "recognition": "OCR",
+    "roi": [
+      87,
+      20,
+      146,
+      50
+    ],
+    "expected": [
+      "格鲁菲餐厅"
+    ],
+    "next": [
+      "[JumpBack]Global_WaitingForLoading",
+      "[JumpBack]Daily_Busin_GiftGet",
+      "[JumpBack]Daily_Busin_StageUp",
+      "[JumpBack]Daily_Busin_LevelUp",
+      "Daily_Busin_Enter",
+      "Daily_Busin_DecorCoin_Hub",
+      "Daily_Busin_NoGift",
+      "Daily_Busin_Nothing_Binary"
+    ],
+    "focus": "GBM.餐馆进入确认",
+    "doc": "已进入餐馆,再执行各种识别就不会出错了."
   },
   "Daily_Busin_GiftGet": {
     "recognition": "TemplateMatch",
