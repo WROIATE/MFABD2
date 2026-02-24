@@ -362,9 +362,7 @@
                             ],
                             "target": [
                                 800,
-                                390,
-                                0,
-                                0
+                                390
                             ]
                         }
                     }
@@ -420,9 +418,7 @@
                         "Battle_CollectMapHangXian1": {
                             "target": [
                                 341,
-                                558,
-                                0,
-                                0
+                                558
                             ],
                             "focus": "BM.航线-首选-金币"
                         }
@@ -434,9 +430,7 @@
                         "Battle_CollectMapHangXian1": {
                             "target": [
                                 510,
-                                531,
-                                0,
-                                0
+                                531
                             ],
                             "focus": "BM.航线-首选-经验"
                         }
@@ -454,9 +448,7 @@
                         "Battle_FastBattleMAXTouchHangxian": {
                             "target": [
                                 800,
-                                390,
-                                0,
-                                0
+                                390
                             ]
                         }
                     }
@@ -467,9 +459,7 @@
                         "Battle_FastBattleMAXTouchShouLie": {
                             "target": [
                                 800,
-                                390,
-                                0,
-                                0
+                                390
                             ]
                         },
                         "Battle_CollectMap": {
@@ -516,9 +506,7 @@
                         "Battle_FastBattleTouch_StoneSelect": {
                             "target": [
                                 230,
-                                120,
-                                0,
-                                0
+                                120
                             ]
                         }
                     }
@@ -529,9 +517,7 @@
                         "Battle_FastBattleTouch_StoneSelect": {
                             "target": [
                                 230,
-                                175,
-                                0,
-                                0
+                                175
                             ]
                         }
                     }
@@ -542,9 +528,7 @@
                         "Battle_FastBattleTouch_StoneSelect": {
                             "target": [
                                 230,
-                                230,
-                                0,
-                                0
+                                230
                             ]
                         }
                     }
@@ -555,9 +539,7 @@
                         "Battle_FastBattleTouch_StoneSelect": {
                             "target": [
                                 230,
-                                290,
-                                0,
-                                0
+                                290
                             ]
                         }
                     }
@@ -568,9 +550,7 @@
                         "Battle_FastBattleTouch_StoneSelect": {
                             "target": [
                                 230,
-                                350,
-                                0,
-                                0
+                                350
                             ]
                         }
                     }
@@ -677,9 +657,7 @@
                             "focus": "EM.装备精炼.<C10",
                             "target": [
                                 720,
-                                320,
-                                0,
-                                0
+                                320
                             ],
                             "recognition": "DirectHit"
                         },

@@ -93,9 +93,7 @@
     ],
     "target": [
       305,
-      120,
-      0,
-      0
+      120
     ],
     "doc": "工会签到"
   },
@@ -116,9 +114,7 @@
     ],
     "target": [
       60,
-      360,
-      0,
-      0
+      360
     ],
     "doc": "工会返回主页"
   },
@@ -141,9 +137,7 @@
     "timeout": 5000,
     "target": [
       120,
-      35,
-      0,
-      0
+      35
     ],
     "doc": "工会返回主页"
   },
@@ -287,14 +281,14 @@
       ]
     ],
     "next": [
-      "Daily_Busin_InBusin"
+      "Daily_Busin_Enter"
     ]
   },
   "Daily_GetBusinRewardBack": {
     "action": "Click",
     "next": [
       "Daily_Busin_In_img",
-      "Daily_Busin_In",
+      "Daily_Busin_MainMenu",
       "[JumpBack]Daily_ClickOnce"
     ],
     "on_error": [],
@@ -307,9 +301,7 @@
     ],
     "target": [
       45,
-      563,
-      0,
-      0
+      563
     ],
     "doc": "点击领取全部返回"
   },
@@ -317,7 +309,7 @@
     "recognition": "TemplateMatch",
     "action": "Click",
     "next": [
-      "Daily_Busin_InBusin",
+      "Daily_Busin_Enter",
       "Daily_Busin_In_img"
     ],
     "post_delay": 1000,
@@ -333,14 +325,14 @@
     ],
     "doc": "流程：进入餐馆。领取每日常客水晶。"
   },
-  "Daily_Busin_In": {
+  "Daily_Busin_MainMenu": {
     "recognition": "OCR",
     "action": "Click",
     "post_delay": 400,
     "post_wait_freezes": 800,
     "next": [
-      "Daily_Busin_InBusin",
-      "Daily_Busin_In"
+      "Daily_Busin_Enter",
+      "Daily_Busin_MainMenu"
     ],
     "focus": "GOM.餐馆常客属性石ocr",
     "roi": [
@@ -360,18 +352,13 @@
     ],
     "doc": "流程：进入餐馆。领取每日常客水晶。"
   },
-  "Daily_Busin_InBusin": {
+  "Daily_Busin_Enter": {
     "recognition": "OCR",
     "action": "Click",
     "next": [
-      "[JumpBack]Global_WaitingForLoading",
-      "[JumpBack]Daily_Busin_GiftGet",
-      "[JumpBack]Daily_Busin_StageUp",
-      "[JumpBack]Daily_Busin_LevelUp",
-      "Daily_Busin_InBusin",
-      "Daily_Busin_DecorCoin_Hub",
-      "Daily_Busin_NoGift",
-      "Daily_Busin_Nothing_Binary"
+      "Daily_Busin_Entered",
+      "Daily_Busin_Enter",
+      "[JumpBack]Global_WaitingForLoading"
     ],
     "post_delay": 1000,
     "roi": [
@@ -384,6 +371,30 @@
       "立刻前往"
     ],
     "doc": "餐馆结算页，进入餐馆"
+  },
+  "Daily_Busin_Entered": {
+    "recognition": "OCR",
+    "roi": [
+      87,
+      20,
+      146,
+      50
+    ],
+    "expected": [
+      "格鲁菲餐厅"
+    ],
+    "next": [
+      "[JumpBack]Global_WaitingForLoading",
+      "[JumpBack]Daily_Busin_GiftGet",
+      "[JumpBack]Daily_Busin_StageUp",
+      "[JumpBack]Daily_Busin_LevelUp",
+      "Daily_Busin_Enter",
+      "Daily_Busin_DecorCoin_Hub",
+      "Daily_Busin_NoGift",
+      "Daily_Busin_Nothing_Binary"
+    ],
+    "focus": "GBM.餐馆进入确认",
+    "doc": "已进入餐馆,再执行各种识别就不会出错了."
   },
   "Daily_Busin_GiftGet": {
     "recognition": "TemplateMatch",
@@ -748,9 +759,7 @@
     "focus": "GB.餐馆结算结束~中继调用",
     "target": [
       60,
-      360,
-      0,
-      0
+      360
     ]
   },
   "Daily_Square_Hub": {

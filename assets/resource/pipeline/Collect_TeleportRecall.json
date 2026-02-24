@@ -37,9 +37,7 @@
         "action": "Click",
         "target": [
             1203,
-            664,
-            0,
-            0
+            664
         ],
         "focus": "CFB.切换技能Tab3",
         "doc": "检查tab3,并切换,为传送阵可用状态做准备"
@@ -66,9 +64,7 @@
         "action": "Click",
         "target": [
             1203,
-            664,
-            0,
-            0
+            664
         ],
         "doc": "检查tab3,并切换,为传送阵可用状态做准备",
         "next": [
@@ -256,9 +252,7 @@
         "action": "Click",
         "target": [
             1080,
-            665,
-            0,
-            0
+            665
         ],
         "post_delay": 5000,
         "doc": "点击Pin1快捷技能栏恢复正常",
@@ -1037,9 +1031,7 @@
         "action": "Click",
         "target": [
             1088,
-            444,
-            0,
-            0
+            444
         ],
         "next": [
             "Collect_TeleporCircle_OnFoot_Skirmish",
@@ -1107,9 +1099,7 @@
         "action": "Click",
         "target": [
             1088,
-            444,
-            0,
-            0
+            444
         ]
     },
     "Collect_TeleporCircle_OnFoot_Skirmish": {
