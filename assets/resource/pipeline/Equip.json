@@ -394,6 +394,21 @@
     ],
     "doc": "点击对号"
   },
+  "Equip_Processing": {
+    "recognition": "OCR",
+    "roi": [
+      512,
+      353,
+      146,
+      168
+    ],
+    "expected": [
+      "进行中"
+    ],
+    "post_delay": 5000,
+    "focus": "EB.作业装备较多,等待中...",
+    "doc": "等待作业装备 */* "
+  },
   "Equip_EquipUpSelect_Err": {
     "recognition": "OCR",
     "roi": [
@@ -413,7 +428,8 @@
     "action": "Click",
     "next": [
       "Equip_EquipUpResult",
-      "Equip_EquipUpSelect2"
+      "Equip_EquipUpSelect2",
+      "[JumpBack]Equip_Processing"
     ],
     "post_delay": 3000,
     "roi": [
@@ -431,7 +447,6 @@
     "recognition": "OCR",
     "action": "Click",
     "next": [
-      "[JumpBack]Equip_Awaiting",
       "Equip_EquipDec",
       "Equip_EquipUpResult"
     ],
@@ -565,7 +580,8 @@
     "action": "Click",
     "next": [
       "Equip_EquipDecResult",
-      "Equip_EquipDecSelect2"
+      "Equip_EquipDecSelect2",
+      "[JumpBack]Equip_Processing"
     ],
     "post_delay": 3000,
     "roi": [
@@ -1279,21 +1295,5 @@
       129
     ],
     "doc": "技能页3，色核识别.next遍历是防止放置其他技能;次节点每轮next判定"
-  },
-  "Equip_Awaiting": {
-    "doc": "如果残留过多N装备,强化时间极长超时,做一个循环等待 | 有分解中? | /5.1后删除next",
-    "recognition": "OCR",
-    "roi": [
-      530,
-      212,
-      199,
-      245
-    ],
-    "expected": [
-      "强化中",
-      "进行中"
-    ],
-    "post_delay": 10000,
-    "focus": "EB.操作件数过多,等待中"
   }
 }
