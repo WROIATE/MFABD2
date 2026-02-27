@@ -381,7 +381,7 @@
       50
     ],
     "expected": [
-      "格鲁菲餐厅"
+      "^(?=.*[格鲁菲])(?=.*[餐厅]).{3,6}$"
     ],
     "next": [
       "[JumpBack]Global_WaitingForLoading",

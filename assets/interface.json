@@ -13,8 +13,8 @@
             "win32": {
                 "class_regex": "UnityWndClass",
                 "screencap": "FramePool",
-                "mouse": "PostMessageWithCursorPos",
-                "keyboard": "PostMessageWithCursorPos"
+                "mouse": "PostMessageWithWindowPos",
+                "keyboard": "PostMessageWithWindowPos"
             },
             "permission_required": true,
             "display_short_side": 720
