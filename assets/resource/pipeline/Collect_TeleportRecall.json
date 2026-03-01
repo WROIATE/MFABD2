@@ -711,7 +711,10 @@
         "custom_action_param": {
             "card_name": "Event_1_夏日骑士",
             "cycle_type": "g_weekly"
-        }
+        },
+        "next": [
+            "Global_QuickCart_MenuReset"
+        ]
     },
     "Collect_TeleporCircle_OnFoot_StateResolGroup_Step1_Lift": {
         "doc": "两层级的导航地图箭头状态识别,来判断最左/中间/最右 ;+地图安全/危险来辅助操作 | Step2_Right下面为判定为最右",
