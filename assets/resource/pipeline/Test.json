@@ -598,5 +598,49 @@
       "[JumpBack]Level_4_Start",
       "[JumpBack]Level_5_Start"
     ]
+  },
+  "Arbitrage_Sell_ReadList_OCR": {
+    "recognition": "OCR",
+    "roi": [
+      475,
+      209,
+      592,
+      344
+    ],
+    "expected": "",
+    "doc": "这是一个被动节点，只为了给 Python 提供全区域的 OCR 数据池。ROI大致框住右侧四个商品即可"
+  },
+  "Arbitrage_Test_Selling_Action": {
+    "action": "Custom",
+    "custom_action": "ArbitrageSellAnalyze",
+    "custom_action_param": {},
+    "doc": "测试入口：呼叫 Python 进行逻辑解析"
+  },
+  "测试runtask": {},
+  "test_active_runtask_entry": {
+    "action": "Custom",
+    "custom_action": "YourCustomRunTask",
+    "custom_action_param": {
+      "target_task": "test_delay_step_1"
+    },
+    "pre_delay": 2000
+  },
+  "test_delay_step_1": {
+    "action": "DoNothing",
+    "post_delay": 3000,
+    "next": [
+      "test_delay_step_2"
+    ]
+  },
+  "test_delay_step_2": {
+    "action": "DoNothing",
+    "post_delay": 3000,
+    "next": [
+      "test_delay_step_3"
+    ]
+  },
+  "test_delay_step_3": {
+    "action": "DoNothing",
+    "post_delay": 3000
   }
 }

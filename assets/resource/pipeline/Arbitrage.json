@@ -2,7 +2,10 @@
     "Arbitrage_Start": {
         "doc": "总流程启动器。现在设定3个子开关，购买、制作、出售，按次序JB。其中出售部分‘Arbitrage_Buy’多置一个空节点节点引导到单独文件",
         "next": [
-            "[JumpBack]Arbitrage_Buy"
+            "Arbitrage_Merchant_Ico",
+            "Arbitrage_Merchant_Menu",
+            "Arbitrage_HomePageOldCardMenu_Goin",
+            "[JumpBack]Global_ToHomePage",
         ]
     },
     "Arbitrage_Buy": {
@@ -398,8 +401,37 @@
         ],
         "next": [
             "[Anchor]PractiseBargaining_Per",
-            "Arbitrage_Select_QC1"
+            "Arbitrage_Action_Hub"
         ]
+    },
+    "Arbitrage_Action_Hub": {
+        "next": [
+            "[JumpBack]Arbitrage_BuyItem",
+            "[JumpBack]Arbitrage_SellItem",
+            "[JumpBack]Arbitrage_Merchant_Close_Ck",
+            "[JumpBack]Global_BackPageHub_Once",
+            "Global_ToSandBox"
+        ],
+        "timeout": 3000,
+        "doc": "商店内动作路由"
+    },
+    "Arbitrage_BuyItem": {
+        "focus": "Arb.M.购入模块启动",
+        "next": [
+            "Arbitrage_Select_QC1"
+        ],
+        "enabled": true,
+        "max_hit": 1,
+        "doc": "商店内购买"
+    },
+    "Arbitrage_SellItem": {
+        "focus": "Arb.M.出售模块启动",
+        "next": [
+            "Arbitrage_Sell_Type_Ocr"
+        ],
+        "enabled": true,
+        "max_hit": 1,
+        "doc": "商店内出售"
     },
     "Arbitrage_Select_QC1": {
         "recognition": "OCR",
@@ -1084,10 +1116,16 @@
         "count": 100,
         "next": [
             "[JumpBack]Chapter18Shop",
-            "[JumpBack]Arbitrage_Merchant_Close_Ck",
-            "[JumpBack]Global_BackPageHub_Once",
-            "Global_ToSandBox"
+            "Arbitrage_Select_End"
         ]
+    },
+    "Arbitrage_Select_End": {
+        "focus": "Arb.B.购买模块结束",
+        "next": [
+            "Arbitrage_PackList_ResetEnter",
+            "[JumpBack]Arbitrage_PackList_ResetSwip"
+        ],
+        "timeout": 1005
     },
     "Arbitrage_Select_Swip": {
         "recognition": "OCR",
@@ -1101,23 +1139,34 @@
             51,
             149
         ],
-        "action": "Swipe",
-        "begin": [
-            285,
-            660,
-            1,
-            1
-        ],
-        "end": [
-            285,
-            135,
-            1,
-            1
-        ],
-        "duration": 600,
-        "end_hold": 1000,
+        "action": "Custom",
+        "custom_action": "SmartSwipe",
+        "custom_action_param": {
+            "proxy_node": "Custom_Proxy_Swipe",
+            "action": "Swipe",
+            "detect_roi": [
+                195,
+                104,
+                52,
+                120
+            ],
+            "begin": [
+                285,
+                660
+            ],
+            "end": [
+                285,
+                135
+            ],
+            "duration": 600,
+            "end_hold": 1000,
+            "settle_delay": 500,
+            "retry_times": 2,
+            "threshold": 3.0
+        },
         "post_wait_freezes": 1000,
-        "focus": "滑动商店卡带表"
+        "focus": "滑动商店卡带表",
+        "doc": "商店卡带列表滑动"
     },
     "Arbitrage_Merchant_BuyMsg": {
         "action": "Click",
@@ -1202,6 +1251,486 @@
         ],
         "expected": [
             "关闭商店"
+        ]
+    },
+    "二期": {},
+    "Arbitrage_Sell_Type_Ocr": {
+        "recognition": "OCR",
+        "roi": [
+            66,
+            159,
+            140,
+            123
+        ],
+        "expected": [
+            "出售"
+        ],
+        "action": "Click",
+        "post_delay": 2000,
+        "next": [
+            "Arbitrage_Sell_Type_Clr",
+            "Arbitrage_Sell_Type_Ocr"
+        ],
+        "doc": "类型确认为-出售"
+    },
+    "Arbitrage_Sell_Type_Clr": {
+        "recognition": "ColorMatch",
+        "roi": [
+            118,
+            173,
+            36,
+            59
+        ],
+        "method": 40,
+        "lower": [
+            0,
+            0,
+            188
+        ],
+        "upper": [
+            30,
+            2,
+            255
+        ],
+        "count": 30,
+        "next": [
+            "Arbitrage_Sell_PriceList"
+        ],
+        "timeout": 5000,
+        "on_error": [],
+        "doc": "验证类型-出售"
+    },
+    "Arbitrage_Sell_PriceList": {
+        "recognition": "OCR",
+        "roi": [
+            863,
+            595,
+            153,
+            125
+        ],
+        "expected": [
+            "价目表"
+        ],
+        "action": "Click",
+        "post_delay": 2000,
+        "next": [
+            "Arbitrage_Sell_PriceList_Enter",
+            "Arbitrage_Sell_PriceList"
+        ],
+        "doc": "点击价目表按钮"
+    },
+    "Arbitrage_Sell_PriceList_Enter": {
+        "recognition": "OCR",
+        "roi": [
+            165,
+            77,
+            196,
+            145
+        ],
+        "expected": [
+            "价目表"
+        ],
+        "doc": "确认价目表子菜单",
+        "next": [
+            "[JumpBack]Arbitrage_Sell_PriceList_FirstCalibration",
+            "Arbitrage_ShopSell_Active"
+        ]
+    },
+    "Arbitrage_Sell_PriceList_FirstCalibration": {
+        "next": [
+            "Arbitrage_Swip_Calibration_Hub"
+        ],
+        "doc": "初次打开价目表,将4行价格纵向对齐",
+        "max_hit": 1
+    },
+    "Arbitrage_ShopSell_Active": {
+        "action": "Custom",
+        "custom_action": "ArbitrageSellController",
+        "attach": {
+            "default": "烤蜂蜜苹果,蜂蜜黄油杏仁,三角美乃滋饭团,鱼子酱蛋包饭,炸三文鱼便当,桑格利亚酒",
+            "Drops": "巧克力鸡尾酒,火烤鱼板棒,鱼子酱蛋包饭,炸三文鱼便当,卢戈山参烤串,煤炭饼干,闪闪铁板虾,透明沙拉,地狱火紫菜包饭"
+        },
+        "focus": "出售模块启动",
+        "doc": "由此开始出售模块,拉起Py"
+    },
+    "Arbitrage_Swip_PriceList": {
+        "action": "Swipe",
+        "begin": [
+            653,
+            511
+        ],
+        "end": [
+            653,
+            150
+        ],
+        "duration": 700,
+        "end_hold": 500,
+        "doc": "【非孤立节点】由Agent调用,价目表下滑Runtask入口",
+        "next": [
+            "Arbitrage_Swip_Calibration_Hub"
+        ]
+    },
+    "Arbitrage_Swip_Calibration_Hub": {
+        "next": [
+            "[JumpBack]Arbitrage_Swip_Calibration_Down",
+            "[JumpBack]Arbitrage_Swip_Calibration_Up",
+            "[JumpBack]Arbitrage_Swip_Calibration_Up_FineTuning"
+        ],
+        "timeout": 1,
+        "doc": "滑动后微调,使价目表完整显示,设定多种情况不同力度调整,反复运作后能准确控制位置"
+    },
+    "Arbitrage_Swip_Calibration_Down": {
+        "recognition": "ColorMatch",
+        "method": 40,
+        "upper": [
+            120,
+            62,
+            75
+        ],
+        "lower": [
+            102,
+            30,
+            59
+        ],
+        "roi": [
+            416,
+            213,
+            10,
+            4
+        ],
+        "action": "Swipe",
+        "begin": [
+            635,
+            218
+        ],
+        "end": [
+            635,
+            228
+        ],
+        "end_hold": 250,
+        "post_delay": 800,
+        "doc": "区域识别到物品框,应向下滑动,宁可多识别一次"
+    },
+    "Arbitrage_Swip_Calibration_Up": {
+        "recognition": "ColorMatch",
+        "method": 40,
+        "upper": [
+            110,
+            29,
+            78
+        ],
+        "lower": [
+            103,
+            23,
+            75
+        ],
+        "roi": [
+            416,
+            211,
+            7,
+            7
+        ],
+        "action": "Swipe",
+        "end": [
+            635,
+            218
+        ],
+        "begin": [
+            635,
+            224
+        ],
+        "end_hold": 250,
+        "post_delay": 800,
+        "doc": "区域识别到分割线,应向上滑动,下滑过头。同时力度为6,配合下滑10使得可以反复来微调"
+    },
+    "Arbitrage_Swip_Calibration_Up_FineTuning": {
+        "recognition": "ColorMatch",
+        "method": 40,
+        "upper": [
+            109,
+            76,
+            55
+        ],
+        "lower": [
+            106,
+            65,
+            50
+        ],
+        "roi": [
+            419,
+            221,
+            26,
+            3
+        ],
+        "action": "Swipe",
+        "end": [
+            635,
+            218
+        ],
+        "begin": [
+            635,
+            222
+        ],
+        "end_hold": 250,
+        "post_delay": 800,
+        "doc": "高精度识别,调整小上划,让下方文字"
+    },
+    "出售环节": {},
+    "Arbitrage_Sell_HUB": {
+        "doc": "可复用出售环节",
+        "next": [
+            "Arbitrage_Sell_Button_Ocr"
+        ]
+    },
+    "Arbitrage_Sell_Button_Ocr": {
+        "recognition": "OCR",
+        "roi": [
+            66,
+            159,
+            140,
+            123
+        ],
+        "expected": [
+            "出售"
+        ],
+        "action": "Click",
+        "post_delay": 2000,
+        "next": [
+            "Arbitrage_Sell_Button_Clr",
+            "Arbitrage_Sell_Button_Ocr"
+        ],
+        "doc": "类型确认为-出售"
+    },
+    "Arbitrage_Sell_Button_Clr": {
+        "recognition": "ColorMatch",
+        "roi": [
+            118,
+            173,
+            36,
+            59
+        ],
+        "method": 40,
+        "lower": [
+            0,
+            0,
+            188
+        ],
+        "upper": [
+            30,
+            2,
+            255
+        ],
+        "count": 30,
+        "next": [
+            "Arbitrage_Sell_PackShopSwich",
+            "[JumpBack]Arbitrage_Select_Swip"
+        ],
+        "timeout": 5000,
+        "on_error": [],
+        "doc": "寻找匹配卡带,如果匹配不到超时跳出。匹配失败的回调，使用节点还是高级fouse字段？"
+    },
+    "Arbitrage_Sell_PackShopSwich": {
+        "recognition": "OCR",
+        "roi": [
+            236,
+            90,
+            142,
+            594
+        ],
+        "expected": [
+            "目标卡带"
+        ],
+        "replace": [
+            [
+                " ",
+                ""
+            ]
+        ],
+        "action": "Click",
+        "post_delay": 2000,
+        "next": [
+            "Arbitrage_Sell_PackShopSwich_Clr",
+            "Arbitrage_Sell_PackShopSwich"
+        ],
+        "doc": "需要[custom]传入正确的名称.出售卡带选择,空格删去匹配cus源,保留默认"
+    },
+    "Arbitrage_Sell_PackShopSwich_Clr": {
+        "recognition": "ColorMatch",
+        "roi": "Arbitrage_Sell_PackShopSwich",
+        "roi_offset": [
+            0,
+            5,
+            0,
+            20
+        ],
+        "lower": [
+            218,
+            218,
+            218
+        ],
+        "upper": [
+            255,
+            255,
+            255
+        ],
+        "count": 100,
+        "next": [
+            "Arbitrage_Sell_Item_ListTraverse",
+            "[JumpBack]Arbitrage_ItemList_Swip"
+        ],
+        "doc": "卡带是否选中色核"
+    },
+    "Arbitrage_ItemList_Swip": {
+        "recognition": "OCR",
+        "expected": [
+            "购买",
+            "出售"
+        ],
+        "roi": [
+            110,
+            92,
+            51,
+            149
+        ],
+        "action": "Custom",
+        "custom_action": "SmartSwipe",
+        "custom_action_param": {
+            "proxy_node": "Custom_Proxy_Swipe",
+            "action": "Swipe",
+            "detect_roi": [
+                404,
+                102,
+                63,
+                161
+            ],
+            "begin": [
+                894,
+                580
+            ],
+            "end": [
+                894,
+                40
+            ],
+            "duration": 800,
+            "end_hold": 800,
+            "settle_delay": 500,
+            "retry_times": 2,
+            "threshold": 3.0
+        },
+        "post_wait_freezes": 1000,
+        "focus": "滑动商店卡带表",
+        "doc": "商店卡带列表滑动"
+    },
+    "Arbitrage_Sell_Item_ListTraverse": {
+        "recognition": "OCR",
+        "roi": [
+            392,
+            94,
+            733,
+            536
+        ],
+        "expected": [
+            "目标物品"
+        ],
+        "action": "Click",
+        "post_delay": 2000,
+        "next": [
+            "Arbitrage_Sell_Item_SellMenu",
+            "Arbitrage_Sell_Item_ListTraverse"
+        ],
+        "doc": "需要[custom]传入特征词.点击目标出售物品"
+    },
+    "Arbitrage_Sell_Item_SellMenu": {
+        "recognition": "Or",
+        "any_of": [
+            {
+                "recognition": "OCR",
+                "roi": [
+                    810,
+                    450,
+                    222,
+                    102
+                ],
+                "expected": [
+                    "出售"
+                ]
+            },
+            {
+                "recognition": "OCR",
+                "roi": [
+                    264,
+                    445,
+                    398,
+                    111
+                ],
+                "expected": [
+                    "MIX",
+                    "MAX"
+                ]
+            }
+        ],
+        "next": [
+            "Arbitrage_Sell_Item_Number"
+        ],
+        "doc": "确认出售子菜单已弹出"
+    },
+    "Arbitrage_Sell_Item_Number": {
+        "action": "Click",
+        "target": [
+            318,
+            502
+        ],
+        "next": [
+            "Arbitrage_Sell_Item_Selling"
+        ],
+        "doc": "决定出售个数,未添加验证控制。Intface控制，默认Mix，操作后覆盖成Max"
+    },
+    "Arbitrage_Sell_Item_Selling": {
+        "recognition": "OCR",
+        "roi": [
+            810,
+            450,
+            222,
+            102
+        ],
+        "expected": [
+            "出售"
+        ],
+        "action": "Click",
+        "post_delay": 2000,
+        "timeout": 4000,
+        "next": [
+            "Arbitrage_Sell_Item_Selling",
+            "Arbitrage_PackList_ResetEnter",
+            "[JumpBack]Arbitrage_PackList_ResetSwip"
+        ]
+    },
+    "Arbitrage_PackList_ResetSwip": {
+        "action": "Swipe",
+        "end": [
+            285,
+            660
+        ],
+        "begin": [
+            285,
+            135
+        ],
+        "duration": 300,
+        "end_hold": 500,
+        "post_wait_freezes": 1000,
+        "focus": "复位商店卡带表",
+        "doc": "商店卡带列表滑动"
+    },
+    "Arbitrage_PackList_ResetEnter": {
+        "recognition": "OCR",
+        "roi": [
+            236,
+            90,
+            142,
+            72
+        ],
+        "expected": [
+            "血骑士"
         ]
     }
 }
