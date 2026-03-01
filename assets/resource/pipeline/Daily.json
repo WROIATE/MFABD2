@@ -38,6 +38,7 @@
     "recognition": "OCR",
     "action": "Click",
     "next": [
+      "[JumpBack]Daily_Union_Intnet_Err",
       "Daily_UnionGUI",
       "Daily_EnterUnion"
     ],
@@ -58,6 +59,7 @@
     "recognition": "TemplateMatch",
     "action": "Click",
     "next": [
+      "[JumpBack]Daily_Union_Intnet_Err",
       "Daily_UnionGUI",
       "Daily_EnterUnion_img"
     ],
@@ -79,6 +81,7 @@
   "Daily_UnionGUI": {
     "recognition": "OCR",
     "next": [
+      "[JumpBack]Daily_Union_Intnet_Err",
       "Daily_UnionBack"
     ],
     "post_delay": 3000,
@@ -96,6 +99,21 @@
       120
     ],
     "doc": "工会签到"
+  },
+  "Daily_Union_Intnet_Err": {
+    "recognition": "OCR",
+    "roi": [
+      548,
+      277,
+      201,
+      195
+    ],
+    "expected": [
+      "确认"
+    ],
+    "doc": "公会页面连接错误",
+    "action": "Click",
+    "post_delay": 1000
   },
   "Daily_UnionBack": {
     "action": "Click",
