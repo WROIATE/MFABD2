@@ -8,16 +8,7 @@
             "[JumpBack]Global_ToHomePage"
         ]
     },
-    "Arbitrage_Buy": {
-        "next": [
-            "Arbitrage_Merchant_Ico",
-            "[JumpBack]Arbitrage_HomePageOldCardMenu_Goin",
-            "[JumpBack]Global_ToHomePage"
-        ],
-        "focus": "ABM.商店套利-购买环节 启动",
-        "enabled": true,
-        "max_hit": 1
-    },
+    "#1总控与进图寻路": {},
     "Arbitrage_HomePageOldCardMenu_Goin": {
         "recognition": "OCR",
         "action": "Click",
@@ -253,20 +244,7 @@
         "post_delay": 5000,
         "focus": "行路中..."
     },
-    "Arbitrage_Merchant_Ico_EndRec": {
-        "recognition": "TemplateMatch",
-        "template": [
-            "Merchant_IcoGE.png"
-        ],
-        "roi": [
-            838,
-            534,
-            71,
-            69
-        ],
-        "green_mask": true,
-        "focus": "商店图标"
-    },
+    "#2商人交互与分支总枢纽": {},
     "Arbitrage_Merchant_Ico": {
         "recognition": "TemplateMatch",
         "template": [
@@ -414,25 +392,31 @@
         "timeout": 3000,
         "doc": "商店内动作路由"
     },
+    "Arbitrage_Merchant_Close_Ck": {
+        "action": "Click",
+        "pre_delay": 500,
+        "recognition": "OCR",
+        "roi": [
+            667,
+            402,
+            81,
+            66
+        ],
+        "expected": [
+            "关闭商店"
+        ]
+    },
+    "#3购买流程": {},
     "Arbitrage_BuyItem": {
         "focus": "Arb.M.购入模块启动",
         "next": [
-            "Arbitrage_Select_QC1"
+            "Arbitrage_Buy_Select_QC1"
         ],
         "enabled": true,
         "max_hit": 1,
         "doc": "商店内购买"
     },
-    "Arbitrage_SellItem": {
-        "focus": "Arb.M.出售模块启动",
-        "next": [
-            "Arbitrage_Sell_Type_Ocr"
-        ],
-        "enabled": true,
-        "max_hit": 1,
-        "doc": "商店内出售"
-    },
-    "Arbitrage_Select_QC1": {
+    "Arbitrage_Buy_Select_QC1": {
         "recognition": "OCR",
         "roi": [
             236,
@@ -448,12 +432,12 @@
             "time": 500
         },
         "next": [
-            "Arbitrage_Select_QC1_Clr"
+            "Arbitrage_Buy_Select_QC1_Clr"
         ]
     },
-    "Arbitrage_Select_QC1_Clr": {
+    "Arbitrage_Buy_Select_QC1_Clr": {
         "recognition": "ColorMatch",
-        "roi": "Arbitrage_Select_QC1",
+        "roi": "Arbitrage_Buy_Select_QC1",
         "lower": [
             218,
             218,
@@ -467,10 +451,10 @@
         "count": 100,
         "next": [
             "[JumpBack]Chapter1Shop",
-            "Arbitrage_Select_QC2"
+            "Arbitrage_Buy_Select_QC2"
         ]
     },
-    "Arbitrage_Select_QC2": {
+    "Arbitrage_Buy_Select_QC2": {
         "recognition": "OCR",
         "roi": [
             236,
@@ -486,12 +470,12 @@
             "time": 500
         },
         "next": [
-            "Arbitrage_Select_QC2_Clr"
+            "Arbitrage_Buy_Select_QC2_Clr"
         ]
     },
-    "Arbitrage_Select_QC2_Clr": {
+    "Arbitrage_Buy_Select_QC2_Clr": {
         "recognition": "ColorMatch",
-        "roi": "Arbitrage_Select_QC2",
+        "roi": "Arbitrage_Buy_Select_QC2",
         "lower": [
             218,
             218,
@@ -505,10 +489,10 @@
         "count": 100,
         "next": [
             "[JumpBack]Chapter2Shop",
-            "Arbitrage_Select_QC3"
+            "Arbitrage_Buy_Select_QC3"
         ]
     },
-    "Arbitrage_Select_QC3": {
+    "Arbitrage_Buy_Select_QC3": {
         "recognition": "OCR",
         "roi": [
             236,
@@ -524,12 +508,12 @@
             "time": 500
         },
         "next": [
-            "Arbitrage_Select_QC3_Clr"
+            "Arbitrage_Buy_Select_QC3_Clr"
         ]
     },
-    "Arbitrage_Select_QC3_Clr": {
+    "Arbitrage_Buy_Select_QC3_Clr": {
         "recognition": "ColorMatch",
-        "roi": "Arbitrage_Select_QC3",
+        "roi": "Arbitrage_Buy_Select_QC3",
         "lower": [
             218,
             218,
@@ -543,10 +527,10 @@
         "count": 100,
         "next": [
             "[JumpBack]Chapter3Shop",
-            "Arbitrage_Select_QC4"
+            "Arbitrage_Buy_Select_QC4"
         ]
     },
-    "Arbitrage_Select_QC4": {
+    "Arbitrage_Buy_Select_QC4": {
         "recognition": "OCR",
         "roi": [
             236,
@@ -562,12 +546,12 @@
             "time": 500
         },
         "next": [
-            "Arbitrage_Select_QC4_Clr"
+            "Arbitrage_Buy_Select_QC4_Clr"
         ]
     },
-    "Arbitrage_Select_QC4_Clr": {
+    "Arbitrage_Buy_Select_QC4_Clr": {
         "recognition": "ColorMatch",
-        "roi": "Arbitrage_Select_QC4",
+        "roi": "Arbitrage_Buy_Select_QC4",
         "lower": [
             218,
             218,
@@ -581,10 +565,10 @@
         "count": 100,
         "next": [
             "[JumpBack]Chapter4Shop",
-            "Arbitrage_Select_QC5"
+            "Arbitrage_Buy_Select_QC5"
         ]
     },
-    "Arbitrage_Select_QC5": {
+    "Arbitrage_Buy_Select_QC5": {
         "recognition": "OCR",
         "roi": [
             236,
@@ -600,12 +584,12 @@
             "time": 500
         },
         "next": [
-            "Arbitrage_Select_QC5_Clr"
+            "Arbitrage_Buy_Select_QC5_Clr"
         ]
     },
-    "Arbitrage_Select_QC5_Clr": {
+    "Arbitrage_Buy_Select_QC5_Clr": {
         "recognition": "ColorMatch",
-        "roi": "Arbitrage_Select_QC5",
+        "roi": "Arbitrage_Buy_Select_QC5",
         "lower": [
             218,
             218,
@@ -619,10 +603,10 @@
         "count": 100,
         "next": [
             "[JumpBack]Chapter5Shop",
-            "Arbitrage_Select_QC6"
+            "Arbitrage_Buy_Select_QC6"
         ]
     },
-    "Arbitrage_Select_QC6": {
+    "Arbitrage_Buy_Select_QC6": {
         "recognition": "OCR",
         "roi": [
             236,
@@ -638,12 +622,12 @@
             "time": 500
         },
         "next": [
-            "Arbitrage_Select_QC6_Clr"
+            "Arbitrage_Buy_Select_QC6_Clr"
         ]
     },
-    "Arbitrage_Select_QC6_Clr": {
+    "Arbitrage_Buy_Select_QC6_Clr": {
         "recognition": "ColorMatch",
-        "roi": "Arbitrage_Select_QC6",
+        "roi": "Arbitrage_Buy_Select_QC6",
         "lower": [
             218,
             218,
@@ -657,10 +641,10 @@
         "count": 100,
         "next": [
             "[JumpBack]Chapter6Shop",
-            "Arbitrage_Select_QC7"
+            "Arbitrage_Buy_Select_QC7"
         ]
     },
-    "Arbitrage_Select_QC7": {
+    "Arbitrage_Buy_Select_QC7": {
         "recognition": "OCR",
         "roi": [
             236,
@@ -676,12 +660,12 @@
             "time": 500
         },
         "next": [
-            "Arbitrage_Select_QC7_Clr"
+            "Arbitrage_Buy_Select_QC7_Clr"
         ]
     },
-    "Arbitrage_Select_QC7_Clr": {
+    "Arbitrage_Buy_Select_QC7_Clr": {
         "recognition": "ColorMatch",
-        "roi": "Arbitrage_Select_QC7",
+        "roi": "Arbitrage_Buy_Select_QC7",
         "lower": [
             218,
             218,
@@ -695,10 +679,10 @@
         "count": 100,
         "next": [
             "[JumpBack]Chapter7Shop",
-            "Arbitrage_Select_QC8"
+            "Arbitrage_Buy_Select_QC8"
         ]
     },
-    "Arbitrage_Select_QC8": {
+    "Arbitrage_Buy_Select_QC8": {
         "recognition": "OCR",
         "roi": [
             236,
@@ -714,12 +698,12 @@
             "time": 500
         },
         "next": [
-            "Arbitrage_Select_QC8_Clr"
+            "Arbitrage_Buy_Select_QC8_Clr"
         ]
     },
-    "Arbitrage_Select_QC8_Clr": {
+    "Arbitrage_Buy_Select_QC8_Clr": {
         "recognition": "ColorMatch",
-        "roi": "Arbitrage_Select_QC8",
+        "roi": "Arbitrage_Buy_Select_QC8",
         "lower": [
             218,
             218,
@@ -733,11 +717,11 @@
         "count": 100,
         "next": [
             "[JumpBack]Chapter8Shop",
-            "Arbitrage_Select_QC9",
+            "Arbitrage_Buy_Select_QC9",
             "[JumpBack]Arbitrage_Select_Swip"
         ]
     },
-    "Arbitrage_Select_QC9": {
+    "Arbitrage_Buy_Select_QC9": {
         "recognition": "OCR",
         "roi": [
             236,
@@ -753,12 +737,12 @@
             "time": 500
         },
         "next": [
-            "Arbitrage_Select_QC9_Clr"
+            "Arbitrage_Buy_Select_QC9_Clr"
         ]
     },
-    "Arbitrage_Select_QC9_Clr": {
+    "Arbitrage_Buy_Select_QC9_Clr": {
         "recognition": "ColorMatch",
-        "roi": "Arbitrage_Select_QC9",
+        "roi": "Arbitrage_Buy_Select_QC9",
         "lower": [
             218,
             218,
@@ -771,10 +755,10 @@
         ],
         "count": 100,
         "next": [
-            "Arbitrage_Select_QC10"
+            "Arbitrage_Buy_Select_QC10"
         ]
     },
-    "Arbitrage_Select_QC10": {
+    "Arbitrage_Buy_Select_QC10": {
         "recognition": "OCR",
         "roi": [
             236,
@@ -790,12 +774,12 @@
             "time": 500
         },
         "next": [
-            "Arbitrage_Select_QC10_Clr"
+            "Arbitrage_Buy_Select_QC10_Clr"
         ]
     },
-    "Arbitrage_Select_QC10_Clr": {
+    "Arbitrage_Buy_Select_QC10_Clr": {
         "recognition": "ColorMatch",
-        "roi": "Arbitrage_Select_QC10",
+        "roi": "Arbitrage_Buy_Select_QC10",
         "lower": [
             218,
             218,
@@ -809,10 +793,10 @@
         "count": 100,
         "next": [
             "[JumpBack]Chapter10Shop",
-            "Arbitrage_Select_QC11"
+            "Arbitrage_Buy_Select_QC11"
         ]
     },
-    "Arbitrage_Select_QC11": {
+    "Arbitrage_Buy_Select_QC11": {
         "recognition": "OCR",
         "roi": [
             236,
@@ -828,12 +812,12 @@
             "time": 500
         },
         "next": [
-            "Arbitrage_Select_QC11_Clr"
+            "Arbitrage_Buy_Select_QC11_Clr"
         ]
     },
-    "Arbitrage_Select_QC11_Clr": {
+    "Arbitrage_Buy_Select_QC11_Clr": {
         "recognition": "ColorMatch",
-        "roi": "Arbitrage_Select_QC11",
+        "roi": "Arbitrage_Buy_Select_QC11",
         "lower": [
             218,
             218,
@@ -847,10 +831,10 @@
         "count": 100,
         "next": [
             "[JumpBack]Chapter11Shop",
-            "Arbitrage_Select_QC12"
+            "Arbitrage_Buy_Select_QC12"
         ]
     },
-    "Arbitrage_Select_QC12": {
+    "Arbitrage_Buy_Select_QC12": {
         "recognition": "OCR",
         "roi": [
             236,
@@ -866,12 +850,12 @@
             "time": 500
         },
         "next": [
-            "Arbitrage_Select_QC12_Clr"
+            "Arbitrage_Buy_Select_QC12_Clr"
         ]
     },
-    "Arbitrage_Select_QC12_Clr": {
+    "Arbitrage_Buy_Select_QC12_Clr": {
         "recognition": "ColorMatch",
-        "roi": "Arbitrage_Select_QC12",
+        "roi": "Arbitrage_Buy_Select_QC12",
         "lower": [
             218,
             218,
@@ -885,10 +869,10 @@
         "count": 100,
         "next": [
             "[JumpBack]Chapter12Shop",
-            "Arbitrage_Select_QC13"
+            "Arbitrage_Buy_Select_QC13"
         ]
     },
-    "Arbitrage_Select_QC13": {
+    "Arbitrage_Buy_Select_QC13": {
         "recognition": "OCR",
         "roi": [
             236,
@@ -904,12 +888,12 @@
             "time": 500
         },
         "next": [
-            "Arbitrage_Select_QC13_Clr"
+            "Arbitrage_Buy_Select_QC13_Clr"
         ]
     },
-    "Arbitrage_Select_QC13_Clr": {
+    "Arbitrage_Buy_Select_QC13_Clr": {
         "recognition": "ColorMatch",
-        "roi": "Arbitrage_Select_QC13",
+        "roi": "Arbitrage_Buy_Select_QC13",
         "lower": [
             218,
             218,
@@ -923,10 +907,10 @@
         "count": 100,
         "next": [
             "[JumpBack]Chapter13Shop",
-            "Arbitrage_Select_QC14"
+            "Arbitrage_Buy_Select_QC14"
         ]
     },
-    "Arbitrage_Select_QC14": {
+    "Arbitrage_Buy_Select_QC14": {
         "recognition": "OCR",
         "roi": [
             236,
@@ -942,12 +926,12 @@
             "time": 500
         },
         "next": [
-            "Arbitrage_Select_QC14_Clr"
+            "Arbitrage_Buy_Select_QC14_Clr"
         ]
     },
-    "Arbitrage_Select_QC14_Clr": {
+    "Arbitrage_Buy_Select_QC14_Clr": {
         "recognition": "ColorMatch",
-        "roi": "Arbitrage_Select_QC14",
+        "roi": "Arbitrage_Buy_Select_QC14",
         "lower": [
             218,
             218,
@@ -961,10 +945,10 @@
         "count": 100,
         "next": [
             "[JumpBack]Chapter14Shop",
-            "Arbitrage_Select_QC15"
+            "Arbitrage_Buy_Select_QC15"
         ]
     },
-    "Arbitrage_Select_QC15": {
+    "Arbitrage_Buy_Select_QC15": {
         "recognition": "OCR",
         "roi": [
             236,
@@ -980,12 +964,12 @@
             "time": 500
         },
         "next": [
-            "Arbitrage_Select_QC15_Clr"
+            "Arbitrage_Buy_Select_QC15_Clr"
         ]
     },
-    "Arbitrage_Select_QC15_Clr": {
+    "Arbitrage_Buy_Select_QC15_Clr": {
         "recognition": "ColorMatch",
-        "roi": "Arbitrage_Select_QC15",
+        "roi": "Arbitrage_Buy_Select_QC15",
         "lower": [
             218,
             218,
@@ -999,11 +983,11 @@
         "count": 100,
         "next": [
             "[JumpBack]Chapter15Shop",
-            "Arbitrage_Select_QC16",
+            "Arbitrage_Buy_Select_QC16",
             "[JumpBack]Arbitrage_Select_Swip"
         ]
     },
-    "Arbitrage_Select_QC16": {
+    "Arbitrage_Buy_Select_QC16": {
         "recognition": "OCR",
         "roi": [
             236,
@@ -1019,12 +1003,12 @@
             "time": 500
         },
         "next": [
-            "Arbitrage_Select_QC16_Clr"
+            "Arbitrage_Buy_Select_QC16_Clr"
         ]
     },
-    "Arbitrage_Select_QC16_Clr": {
+    "Arbitrage_Buy_Select_QC16_Clr": {
         "recognition": "ColorMatch",
-        "roi": "Arbitrage_Select_QC16",
+        "roi": "Arbitrage_Buy_Select_QC16",
         "lower": [
             218,
             218,
@@ -1038,11 +1022,11 @@
         "count": 100,
         "next": [
             "[JumpBack]Chapter16Shop",
-            "Arbitrage_Select_QC17",
+            "Arbitrage_Buy_Select_QC17",
             "[JumpBack]Arbitrage_Select_Swip"
         ]
     },
-    "Arbitrage_Select_QC17": {
+    "Arbitrage_Buy_Select_QC17": {
         "recognition": "OCR",
         "roi": [
             236,
@@ -1058,12 +1042,12 @@
             "time": 500
         },
         "next": [
-            "Arbitrage_Select_QC17_Clr"
+            "Arbitrage_Buy_Select_QC17_Clr"
         ]
     },
-    "Arbitrage_Select_QC17_Clr": {
+    "Arbitrage_Buy_Select_QC17_Clr": {
         "recognition": "ColorMatch",
-        "roi": "Arbitrage_Select_QC17",
+        "roi": "Arbitrage_Buy_Select_QC17",
         "lower": [
             218,
             218,
@@ -1077,10 +1061,10 @@
         "count": 100,
         "next": [
             "[JumpBack]Chapter17Shop",
-            "Arbitrage_Select_QC18"
+            "Arbitrage_Buy_Select_QC18"
         ]
     },
-    "Arbitrage_Select_QC18": {
+    "Arbitrage_Buy_Select_QC18": {
         "recognition": "OCR",
         "roi": [
             236,
@@ -1096,12 +1080,12 @@
             "time": 500
         },
         "next": [
-            "Arbitrage_Select_QC18_Clr"
+            "Arbitrage_Buy_Select_QC18_Clr"
         ]
     },
-    "Arbitrage_Select_QC18_Clr": {
+    "Arbitrage_Buy_Select_QC18_Clr": {
         "recognition": "ColorMatch",
-        "roi": "Arbitrage_Select_QC18",
+        "roi": "Arbitrage_Buy_Select_QC18",
         "lower": [
             218,
             218,
@@ -1115,10 +1099,10 @@
         "count": 100,
         "next": [
             "[JumpBack]Chapter18Shop",
-            "Arbitrage_Select_End"
+            "Arbitrage_Buy_Select_End"
         ]
     },
-    "Arbitrage_Select_End": {
+    "Arbitrage_Buy_Select_End": {
         "focus": "Arb.B.购买模块结束",
         "next": [
             "Arbitrage_PackList_ResetEnter",
@@ -1238,21 +1222,16 @@
         ],
         "inverse": true
     },
-    "Arbitrage_Merchant_Close_Ck": {
-        "action": "Click",
-        "pre_delay": 500,
-        "recognition": "OCR",
-        "roi": [
-            667,
-            402,
-            81,
-            66
+    "#4出售侦察与调度": {},
+    "Arbitrage_SellItem": {
+        "focus": "Arb.M.出售模块启动",
+        "next": [
+            "Arbitrage_Sell_Type_Ocr"
         ],
-        "expected": [
-            "关闭商店"
-        ]
+        "enabled": true,
+        "max_hit": 1,
+        "doc": "商店内出售"
     },
-    "二期": {},
     "Arbitrage_Sell_Type_Ocr": {
         "recognition": "OCR",
         "roi": [
@@ -1474,7 +1453,7 @@
         "post_delay": 800,
         "doc": "高精度识别,调整小上划,让下方文字"
     },
-    "出售环节": {},
+    "5#复用出售动作链(必须调用才能正常运行)": {},
     "Arbitrage_Sell_HUB": {
         "doc": "可复用出售环节",
         "next": [
