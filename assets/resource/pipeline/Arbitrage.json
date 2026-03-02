@@ -715,10 +715,14 @@
             255
         ],
         "count": 100,
+        "anchor": {
+            "PackSwip_Str": "Arbitrage_Buy_Select_QC8_Clr",
+            "PackSwip_End": "Arbitrage_Buy_Select_QC9"
+        },
         "next": [
             "[JumpBack]Chapter8Shop",
             "Arbitrage_Buy_Select_QC9",
-            "[JumpBack]Arbitrage_Select_Swip"
+            "Arbitrage_Select_Swip"
         ]
     },
     "Arbitrage_Buy_Select_QC9": {
@@ -981,10 +985,14 @@
             255
         ],
         "count": 100,
+        "anchor": {
+            "PackSwip_Str": "Arbitrage_Buy_Select_QC15_Clr",
+            "PackSwip_End": "Arbitrage_Buy_Select_QC16"
+        },
         "next": [
             "[JumpBack]Chapter15Shop",
             "Arbitrage_Buy_Select_QC16",
-            "[JumpBack]Arbitrage_Select_Swip"
+            "Arbitrage_Select_Swip"
         ]
     },
     "Arbitrage_Buy_Select_QC16": {
@@ -1020,10 +1028,14 @@
             255
         ],
         "count": 100,
+        "anchor": {
+            "PackSwip_Str": "Arbitrage_Buy_Select_QC16_Clr",
+            "PackSwip_End": "Arbitrage_Buy_Select_QC17"
+        },
         "next": [
             "[JumpBack]Chapter16Shop",
             "Arbitrage_Buy_Select_QC17",
-            "[JumpBack]Arbitrage_Select_Swip"
+            "Arbitrage_Select_Swip"
         ]
     },
     "Arbitrage_Buy_Select_QC17": {
@@ -1148,8 +1160,13 @@
             "threshold": 3.0
         },
         "post_wait_freezes": 1000,
+        "next": [
+            "[Anchor]PackSwip_End",
+            "[Anchor]PackSwip_Str"
+        ],
+        "timeout": 2000,
         "focus": "滑动商店卡带表",
-        "doc": "商店卡带列表滑动"
+        "doc": "商店卡带列表滑动.使用特殊的anchor来实现同层级类JumpBack复用,因为smartswip的跳出是节点链级,Jb会+1级导致失效、循环"
     },
     "Arbitrage_Merchant_BuyMsg": {
         "action": "Click",
@@ -1499,13 +1516,17 @@
             255
         ],
         "count": 30,
+        "anchor": {
+            "PackSwip_Str": "Arbitrage_Sell_Button_Clr",
+            "PackSwip_End": "Arbitrage_Sell_PackShopSwich"
+        },
         "next": [
             "Arbitrage_Sell_PackShopSwich",
-            "[JumpBack]Arbitrage_Select_Swip"
+            "Arbitrage_Select_Swip"
         ],
         "timeout": 5000,
         "on_error": [],
-        "doc": "寻找匹配卡带,如果匹配不到超时跳出。匹配失败的回调，使用节点还是高级fouse字段？"
+        "doc": "寻找匹配卡带,如果匹配不到超时跳出。"
     },
     "Arbitrage_Sell_PackShopSwich": {
         "recognition": "OCR",

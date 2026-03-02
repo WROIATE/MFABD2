@@ -642,5 +642,34 @@
   "test_delay_step_3": {
     "action": "DoNothing",
     "post_delay": 3000
-  }
+  },
+  "test_anchor1": {
+    "recognition": "OCR",
+    "roi": [
+      98,
+      656,
+      66,
+      32
+    ],
+    "expected": [
+      "抽抽乐"
+    ],
+    "action": "Click",
+    "target": [
+      120,
+      35
+    ],
+    "post_delay": 4000,
+    "anchor": "test",
+    "next": [
+      "test_anchor2"
+    ]
+  },
+  "test_anchor2": {
+    "next": [
+      "[Anchor]test",
+      "test_anchor2"
+    ]
+  },
+  "test_anchor3": {}
 }
