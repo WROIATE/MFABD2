@@ -227,6 +227,12 @@
       91,
       29
     ],
+    "target_offset": [
+      0,
+      -5,
+      1,
+      1
+    ],
     "expected": [
       "经营管理"
     ],
@@ -256,22 +262,44 @@
     "doc": "识别点击餐馆图像"
   },
   "Daily_GetBusinReward": {
-    "recognition": "OCR",
+    "recognition": "And",
+    "all_of": [
+      {
+        "sub_name": "ButtonOCR",
+        "recognition": "OCR",
+        "roi": [
+          657,
+          463,
+          176,
+          126
+        ],
+        "expected": [
+          "获得"
+        ]
+      },
+      {
+        "recognition": "ColorMatch",
+        "roi": "ButtonOCR",
+        "method": 40,
+        "upper": [
+          21,
+          16,
+          226
+        ],
+        "lower": [
+          19,
+          12,
+          218
+        ],
+        "count": 50
+      }
+    ],
     "action": "Click",
     "next": [
       "Daily_GetBusinReward",
       "Daily_GetBusinRewardBack"
     ],
     "post_delay": 2000,
-    "roi": [
-      657,
-      463,
-      176,
-      126
-    ],
-    "expected": [
-      "获得"
-    ],
     "doc": "点击结算"
   },
   "Daily_GetBusinHaveNotReward": {
@@ -305,6 +333,7 @@
   "Daily_GetBusinRewardBack": {
     "action": "Click",
     "next": [
+      "Daily_Busin_Enter",
       "Daily_Busin_In_img",
       "Daily_Busin_MainMenu",
       "[JumpBack]Daily_ClickOnce"
@@ -318,8 +347,8 @@
       40
     ],
     "target": [
-      45,
-      563
+      1,
+      1
     ],
     "doc": "点击领取全部返回"
   },
@@ -776,9 +805,10 @@
     "action": "Click",
     "focus": "GB.餐馆结算结束~中继调用",
     "target": [
-      60,
-      360
-    ]
+      1,
+      1
+    ],
+    "post_delay": 1000
   },
   "Daily_Square_Hub": {
     "next": [
