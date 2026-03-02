@@ -747,7 +747,7 @@
             ]
         },
         "餐馆领装饰币": {
-            "type": "select",
+            "type": "switch",
             "description": "餐馆内等待片刻,NPC头上会有气泡,点击可领取装饰币若干,每日上限20枚。",
             "cases": [
                 {
@@ -826,7 +826,7 @@
             ]
         },
         "肉鸽塔快速战斗": {
-            "type": "select",
+            "type": "switch",
             "cases": [
                 {
                     "name": "No",
