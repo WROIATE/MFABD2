@@ -163,16 +163,16 @@
       8
     ],
     "lower": [
-      242,
-      244,
-      248
+      241,
+      243,
+      247
     ],
     "upper": [
-      254,
-      254,
+      255,
+      255,
       255
     ],
-    "count": 10,
+    "count": 6,
     "next": [
       "GachaADV_AREA1#_Post",
       "[JumpBack]GachaADV_Location1",
@@ -343,7 +343,11 @@
       10
     ],
     "post_delay": 500,
+    "anchor": {
+      "GachaADV_NextPool": "GachaADV_Location2_Pre"
+    },
     "next": [
+      "GachaADV_Special_SaveGuaranteed",
       "GachaADV_Location1_Ck",
       "GachaADV_Special_ReservedRights_1",
       "GachaADV_Location1",
@@ -465,7 +469,11 @@
       10
     ],
     "post_delay": 500,
+    "anchor": {
+      "GachaADV_NextPool": "GachaADV_Location3_Pre"
+    },
     "next": [
+      "GachaADV_Special_SaveGuaranteed",
       "GachaADV_Location2_Ck",
       "GachaADV_Special_ReservedRights_2",
       "GachaADV_Location2",
@@ -583,7 +591,11 @@
       10
     ],
     "post_delay": 500,
+    "anchor": {
+      "GachaADV_NextPool": "GachaADV_Location4_Pre"
+    },
     "next": [
+      "GachaADV_Special_SaveGuaranteed",
       "GachaADV_Location3_Ck",
       "GachaADV_Special_ReservedRights_3",
       "GachaADV_Location3",
@@ -698,7 +710,11 @@
       10
     ],
     "post_delay": 500,
+    "anchor": {
+      "GachaADV_NextPool": "GachaADV_Location5_Pre"
+    },
     "next": [
+      "GachaADV_Special_SaveGuaranteed",
       "GachaADV_Location4_Ck",
       "GachaADV_Special_ReservedRights_4",
       "GachaADV_Location4",
@@ -810,7 +826,11 @@
       10
     ],
     "post_delay": 500,
+    "anchor": {
+      "GachaADV_NextPool": "GachaADV_LocationEnd_Pre"
+    },
     "next": [
+      "GachaADV_Special_SaveGuaranteed",
       "GachaADV_Location5_Ck",
       "GachaADV_Special_ReservedRights_5",
       "GachaADV_Location5",
@@ -1151,6 +1171,42 @@
       "GachaADV_LocationEnd_Pre"
     ],
     "doc": "中断发现点数超过200但用户决定保留的情况"
+  },
+  "GachaADV_Special_SaveGuaranteed": {
+    "recognition": "OCR",
+    "roi": [
+      761,
+      403,
+      86,
+      39
+    ],
+    "expected": [
+      "99/100",
+      "99"
+    ],
+    "replace": [
+      [
+        "I",
+        "/"
+      ],
+      [
+        "o",
+        "0"
+      ],
+      [
+        "g",
+        "9"
+      ],
+      [
+        " ",
+        ""
+      ]
+    ],
+    "next": [
+      "[Anchor]GachaADV_NextPool"
+    ],
+    "enabled": false,
+    "focus": "GAM.5星保底保底保留触发"
   },
   "GachaADV_Slip": {
     "recognition": "OCR",

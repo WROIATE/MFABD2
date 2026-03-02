@@ -952,6 +952,27 @@
                                 "GachaADV_Start"
                             ]
                         }
+                    },
+                    "option": [
+                        "5星必出保留"
+                    ]
+                }
+            ]
+        },
+        "5星必出保留": {
+            "description": "卡池100次必中5星机会保留,留给未来卡池。<br>注意,必中5星≠必中Up5星。",
+            "type": "switch",
+            "cases": [
+                {
+                    "name": "No",
+                    "pipeline_override": {}
+                },
+                {
+                    "name": "Yes",
+                    "pipeline_override": {
+                        "GachaADV_Special_SaveGuaranteed": {
+                            "enabled": true
+                        }
                     }
                 }
             ]
