@@ -1455,7 +1455,7 @@
                     "name": "监视最高价待售物品",
                     "pipeline_type": "string",
                     "default": "",
-                    "verify": "",
+                    "verify": "^[\\w\\u4e00-\\u9fa5,，\\s]*$",
                     "pattern_msg": "请输入物品名称,多个之间用','隔开"
                 }
             ],

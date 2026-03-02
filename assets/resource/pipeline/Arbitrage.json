@@ -5,7 +5,7 @@
             "Arbitrage_Merchant_Ico",
             "Arbitrage_Merchant_Menu",
             "Arbitrage_HomePageOldCardMenu_Goin",
-            "[JumpBack]Global_ToHomePage",
+            "[JumpBack]Global_ToHomePage"
         ]
     },
     "Arbitrage_Buy": {
@@ -49,14 +49,13 @@
         ],
         "post_delay": 1000,
         "roi": [
-            99,
-            78,
-            212,
-            630
+            165,
+            0,
+            227,
+            80
         ],
         "expected": [
-            "角色游戏卡",
-            "玩法游戏卡带"
+            "游戏卡珍藏集"
         ],
         "begin": [
             70,
@@ -144,7 +143,7 @@
     "Arbitrage_OperationsMain_Sandplay": {
         "recognition": "TemplateMatch",
         "next": [
-            "Arbitrage_Merchant_Ico_EndRec",
+            "Arbitrage_Merchant_Ico",
             "Arbitrage_Sandplay_SeeMerchant",
             "[JumpBack]Collect_FindTeleporCircle0.9",
             "[JumpBack]Collect_FindTeleporCircle",
@@ -236,7 +235,7 @@
         "post_delay": 1000,
         "next": [
             "[JumpBack]Arbitrage_NviGuide_Onfoot_Loop",
-            "Arbitrage_Merchant_Ico_EndRec",
+            "Arbitrage_Merchant_Ico",
             "Arbitrage_NviGuide_CKMsgBox_Ocr"
         ]
     },
