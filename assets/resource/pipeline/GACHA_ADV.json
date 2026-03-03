@@ -1206,7 +1206,7 @@
       "[Anchor]GachaADV_NextPool"
     ],
     "enabled": false,
-    "focus": "GAM.5星保底保底保留触发"
+    "focus": "GAM.必中5星保留功能触发，无视并跳过此池免费抽"
   },
   "GachaADV_Slip": {
     "recognition": "OCR",
