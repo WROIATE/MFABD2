@@ -219,7 +219,8 @@
       "Daily_BusinReward"
     ],
     "on_error": [],
-    "post_delay": 1000,
+    "post_delay": 500,
+    "post_wait_freezes": 1000,
     "focus": "GOM.餐馆结算(COR)-主界面",
     "roi": [
       85,
@@ -247,7 +248,8 @@
       "Daily_BusinReward_img"
     ],
     "on_error": [],
-    "post_delay": 1000,
+    "post_delay": 500,
+    "post_wait_freezes": 1000,
     "focus": "GOM.餐馆结算(IMG)-主界面",
     "roi": [
       87,
