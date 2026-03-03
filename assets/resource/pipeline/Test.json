@@ -598,5 +598,41 @@
       "[JumpBack]Level_4_Start",
       "[JumpBack]Level_5_Start"
     ]
+  },
+  "test_Max&custom_HUB": {
+    "next": [
+      "[JumpBack]test_Max&custom_1",
+      "[JumpBack]test_Max&custom_2"
+    ]
+  },
+  "test_Max&custom_1": {
+    "recognition": "TemplateMatch",
+    "template": [
+      "Cook_app.png"
+    ],
+    "action": "Custom",
+    "custom_action": "PatchByRegex",
+    "custom_action_param": {
+      "pattern": "^test_Max&custom_2$",
+      "patch": {
+        "roi": "$box"
+      },
+      "origin": {
+        "roi": [
+          0,
+          0,
+          0,
+          0
+        ]
+      }
+    },
+    "max_hit": 1
+  },
+  "test_Max&custom_2": {
+    "recognition": "TemplateMatch",
+    "template": [
+      "cook_hone.png"
+    ],
+    "max_hit": 1
   }
 }
