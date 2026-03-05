@@ -181,10 +181,11 @@
         {
             "name": "[开发中]商店套利",
             "entry": "Arbitrage_Start",
-            "description": "**商店套利：**流传‘跑商’中的‘商’，我定义为商店套利。<br>未来完整流程包括：购买高利润料理食材、购买高利润其他食材、料理制作、料理择价出售、高利润材料择价出售",
+            "description": "**商店套利：**流传‘跑商’中的‘商’，我定义为商店套利。<br>**已完成：**购买高利润料理食材、购买高利润其他食材、料理制作(仅原料取自商店且可长期获利菜品)、料理择价出售<br>未来计划：完善购买覆盖、其他料理变现、高利润材料择价出售",
             "option": [
                 "利润商品-低价进货",
-                "利润商品-最高价抛售"
+                "利润商品-最高价抛售",
+                "利润料理-制作"
             ]
         },
         {
@@ -1369,6 +1370,109 @@
                 }
             }
         },
+        "利润料理-制作": {
+            "type": "switch",
+            "description": "对利润料理制作。",
+            "cases": [
+                {
+                    "name": "Yes",
+                    "pipeline_override": {},
+                    "option": [
+                        "料理制作周期（每次|每周）",
+                        "5星料理开关"
+                    ]
+                },
+                {
+                    "name": "No",
+                    "pipeline_override": {
+                        "Arbitrage_Cooking": {
+                            "enabled": false
+                        }
+                    }
+                }
+            ]
+        },
+        "料理制作周期（每次|每周）": {
+            "type": "switch",
+            "description": "每周：完成一次后存档，下周再次运行，其他时间会跳过节省时间。",
+            "cases": [
+                {
+                    "name": "Yes",
+                    "pipeline_override": {
+                        "Arbitrage_Cooking_Weekly": {
+                            "enabled": true
+                        },
+                        "Arbitrage_Cooking": {
+                            "enabled": false
+                        }
+                    }
+                },
+                {
+                    "name": "No",
+                    "pipeline_override": {
+                        "Arbitrage_Cooking": {
+                            "enabled": true
+                        },
+                        "Arbitrage_Cooking_Weekly": {
+                            "enabled": false
+                        }
+                    }
+                }
+            ]
+        },
+        "5星料理开关": {
+            "type": "checkbox",
+            "description": "高亮为启用，用于想保留特殊掉落食材",
+            "default_case": [
+                "卢戈山参烤串",
+                "煤炭饼干",
+                "闪闪铁板虾",
+                "透明沙拉",
+                "地狱火紫菜包饭"
+            ],
+            "cases": [
+                {
+                    "name": "卢戈山参烤串",
+                    "pipeline_override": {
+                        "Arbitrage_Cooking_B6": {
+                            "enabled": true
+                        }
+                    }
+                },
+                {
+                    "name": "煤炭饼干",
+                    "pipeline_override": {
+                        "Arbitrage_Cooking_B7": {
+                            "enabled": true
+                        }
+                    }
+                },
+                {
+                    "name": "闪闪铁板虾",
+                    "pipeline_override": {
+                        "Arbitrage_Cooking_B8": {
+                            "enabled": true
+                        }
+                    }
+                },
+                {
+                    "name": "透明沙拉",
+                    "pipeline_override": {
+                        "Arbitrage_Cooking_B9": {
+                            "enabled": true
+                        }
+                    }
+                },
+                {
+                    "name": "地狱火紫菜包饭",
+                    "pipeline_override": {
+                        "Arbitrage_Cooking_B10": {
+                            "enabled": true
+                        }
+                    }
+                }
+            ]
+        },
         "利润商品-低价进货": {
             "type": "switch",
             "description": "逐卡带扫货有利的低价原料",
@@ -1476,7 +1580,7 @@
     },
     "interface_version": 2,
     "name": "MFABD2",
-    "title": "MFABD2 | 棕色尘埃2自动化助手(sunyink/MFABD2)v0.0.20 | 游戏版本：20260212 ( Mart War )",
+    "title": "MFABD2 | 棕色尘埃2自动化助手(sunyink/MFABD2)v0.0.20 | 游戏版本：20260212 ( Magical & Lyrical )",
     "github": "https://github.com/sunyink/MFABD2",
     "mirrorchyan_rid": "MFABD2",
     "mirrorchyan_multiplatform": true,

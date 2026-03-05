@@ -384,6 +384,8 @@
     "Arbitrage_Action_Hub": {
         "next": [
             "[JumpBack]Arbitrage_BuyItem",
+            "[JumpBack]Arbitrage_Cooking_Weekly",
+            "[JumpBack]Arbitrage_Cooking",
             "[JumpBack]Arbitrage_SellItem",
             "[JumpBack]Arbitrage_Merchant_Close_Ck",
             "[JumpBack]Global_BackPageHub_Once",
@@ -1731,5 +1733,771 @@
         "expected": [
             "血骑士"
         ]
+    },
+    "6#料理制作": {},
+    "Arbitrage_Cooking_Weekly": {
+        "recognition": "Custom",
+        "custom_recognition": "CheckCoolDown",
+        "custom_recognition_param": {
+            "card_name": "Arbitrage_Cooking",
+            "cycle_type": "g_weekly"
+        },
+        "action": "Custom",
+        "custom_action": "MarkComplete",
+        "custom_action_param": {
+            "card_name": "Arbitrage_Cooking",
+            "cycle_type": "g_weekly",
+            "focus": "Arb.M.料理制作模块启动"
+        },
+        "next": [
+            "Arbitrage_Cooking_MenuPatch"
+        ],
+        "enabled": false,
+        "max_hit": 1,
+        "doc": "料理制作开始"
+    },
+    "Arbitrage_Cooking": {
+        "focus": "Arb.M.料理制作模块启动",
+        "next": [
+            "Arbitrage_Cooking_MenuPatch"
+        ],
+        "enabled": true,
+        "max_hit": 1,
+        "doc": "料理制作开始"
+    },
+    "Arbitrage_Cooking_MenuPatch": {
+        "action": "Custom",
+        "custom_action": "PatchByRegex",
+        "custom_action_param": {
+            "rules": [
+                {
+                    "pattern": [
+                        "^Setup_SetSkill_tab3_Ck$"
+                    ],
+                    "patch": {
+                        "next": [
+                            "[JumpBack]Setup_SetSkill_tab3_ReLift",
+                            "Arbitrage_Cooking_SetupToSkill",
+                            "[JumpBack]Setup_SetSkill_3-1_Swip"
+                        ]
+                    },
+                    "origin": {
+                        "next": [
+                            "[JumpBack]Setup_SetSkill_tab3_ReLift",
+                            "Setup_SetSkill_tab3_Reset5"
+                        ]
+                    }
+                }
+            ]
+        },
+        "next": [
+            "Setup_SetSkill_Per",
+            "Arbitrage_Cooking_SetupToSkill"
+        ],
+        "doc": "借用setup管路,从技能菜单进入烹饪菜单"
+    },
+    "Arbitrage_Cooking_SetupToSkill": {
+        "recognition": "OCR",
+        "expected": [
+            "料理"
+        ],
+        "roi": [
+            110,
+            580,
+            1053,
+            33
+        ],
+        "action": "Click",
+        "post_delay": 1000,
+        "next": [
+            "Arbitrage_Cooking_MenuEnter"
+        ],
+        "doc": "技能菜单出口"
+    },
+    "Arbitrage_Cooking_MenuEnter": {
+        "recognition": "OCR",
+        "roi": [
+            221,
+            7,
+            96,
+            65
+        ],
+        "expected": [
+            "料理"
+        ],
+        "focus": "Arb.料理界面-确认",
+        "next": [
+            "[JumpBack]Arbitrage_Cooking_Page2",
+            "[JumpBack]Arbitrage_Cooking_Page1"
+        ],
+        "timeout": 1,
+        "doc": "确认进了料理菜单。料理项目页逆序排序。兼做页间HUB节点"
+    },
+    "Arbitrage_Cooking_Page2": {
+        "anchor": {
+            "Cooking": "Arbitrage_Cooking_Swip_Page2"
+        },
+        "next": [
+            "Arbitrage_Cooking_Swip_Page2"
+        ],
+        "max_hit": 1,
+        "doc": "先进行第二页，因为高级料理利多，优先。"
+    },
+    "Arbitrage_Cooking_Swip_Page2": {
+        "action": "Swipe",
+        "begin": [
+            887,
+            669
+        ],
+        "end": [
+            892,
+            46
+        ],
+        "end_hold": 500,
+        "post_delay": 1500,
+        "next": [
+            "Arbitrage_Cooking_B8",
+            "Arbitrage_Cooking_B9",
+            "Arbitrage_Cooking_B10"
+        ],
+        "timeout": 2000,
+        "focus": "Arb.料理页面2",
+        "doc": "滑动到指定页面。兼做页内HUB节点"
+    },
+    "Arbitrage_Cooking_B8": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "sub_name": "Templateroi",
+                "recognition": "TemplateMatch",
+                "roi": [
+                    592,
+                    103,
+                    596,
+                    598
+                ],
+                "template": [
+                    "Shop/cook_Sparkling Griddle Shrimp.png"
+                ]
+            },
+            {
+                "recognition": "ColorMatch",
+                "roi": "Templateroi",
+                "method": 40,
+                "lower": [
+                    16,
+                    46,
+                    142
+                ],
+                "upper": [
+                    20,
+                    68,
+                    168
+                ]
+            }
+        ],
+        "action": "Click",
+        "post_delay": 1000,
+        "max_hit": 1,
+        "next": [
+            "Arbitrage_Cooking_SubMenu"
+        ],
+        "enabled": false,
+        "focus": "Arb.料理制作:[5级]闪闪铁板虾",
+        "doc": "菜品选择器,进入料理子菜单"
+    },
+    "Arbitrage_Cooking_B9": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "sub_name": "Templateroi",
+                "recognition": "TemplateMatch",
+                "roi": [
+                    592,
+                    103,
+                    596,
+                    598
+                ],
+                "template": [
+                    "Shop/cook_Transparent Salad.png"
+                ]
+            },
+            {
+                "recognition": "ColorMatch",
+                "roi": "Templateroi",
+                "method": 40,
+                "lower": [
+                    16,
+                    46,
+                    142
+                ],
+                "upper": [
+                    20,
+                    68,
+                    168
+                ]
+            }
+        ],
+        "action": "Click",
+        "post_delay": 1000,
+        "max_hit": 1,
+        "next": [
+            "Arbitrage_Cooking_SubMenu"
+        ],
+        "enabled": false,
+        "focus": "Arb.料理制作:[5级]透明沙拉",
+        "doc": "菜品选择器,进入料理子菜单"
+    },
+    "Arbitrage_Cooking_B10": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "sub_name": "Templateroi",
+                "recognition": "TemplateMatch",
+                "roi": [
+                    592,
+                    103,
+                    596,
+                    598
+                ],
+                "template": [
+                    "Shop/cook_Hellfire Gimbap.png"
+                ]
+            },
+            {
+                "recognition": "ColorMatch",
+                "roi": "Templateroi",
+                "method": 40,
+                "lower": [
+                    16,
+                    46,
+                    142
+                ],
+                "upper": [
+                    20,
+                    68,
+                    168
+                ]
+            }
+        ],
+        "action": "Click",
+        "post_delay": 1000,
+        "max_hit": 1,
+        "next": [
+            "Arbitrage_Cooking_SubMenu"
+        ],
+        "enabled": false,
+        "focus": "Arb.料理制作:[5级]地狱火紫菜包饭",
+        "doc": "菜品选择器,进入料理子菜单"
+    },
+    "Arbitrage_Cooking_Page1": {
+        "anchor": {
+            "Cooking": "Arbitrage_Cooking_Hub",
+            "Cookint_Menu_Reset": "Arbitrage_Cooking_Hub"
+        },
+        "next": [
+            "Arbitrage_Cooking_Menu_Reset",
+            "Arbitrage_Cooking_Hub"
+        ],
+        "max_hit": 1,
+        "doc": "先进行第二页，因为高级料理利多，优先。【实际：】利用发送锚点，从页复位直接进入页1的HUB节点，next中HUB只是为了方便理解，实际不会触发。"
+    },
+    "Arbitrage_Cooking_Hub": {
+        "next": [
+            "Arbitrage_Cooking_B6",
+            "Arbitrage_Cooking_B7",
+            "Arbitrage_Cooking_A2",
+            "Arbitrage_Cooking_A3",
+            "Arbitrage_Cooking_A4",
+            "Arbitrage_Cooking_A5",
+            "Arbitrage_Cooking_A6",
+            "Arbitrage_Cooking_A1"
+        ],
+        "timeout": 2000,
+        "doc": "第一页料理,路由节点,菜品按等级/价值倒序"
+    },
+    "Arbitrage_Cooking_B6": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "sub_name": "Templateroi",
+                "recognition": "TemplateMatch",
+                "roi": [
+                    592,
+                    103,
+                    596,
+                    598
+                ],
+                "template": [
+                    "Shop/cook_Lugas Ginseng Skewer.png"
+                ]
+            },
+            {
+                "recognition": "ColorMatch",
+                "roi": "Templateroi",
+                "method": 40,
+                "lower": [
+                    16,
+                    46,
+                    142
+                ],
+                "upper": [
+                    20,
+                    68,
+                    168
+                ]
+            }
+        ],
+        "enabled": false,
+        "action": "Click",
+        "post_delay": 1000,
+        "max_hit": 1,
+        "next": [
+            "Arbitrage_Cooking_SubMenu"
+        ],
+        "focus": "Arb.料理制作:[5级]卢戈山参烤串",
+        "doc": "菜品选择器,进入料理子菜单"
+    },
+    "Arbitrage_Cooking_B7": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "sub_name": "Templateroi",
+                "recognition": "TemplateMatch",
+                "roi": [
+                    592,
+                    103,
+                    596,
+                    598
+                ],
+                "template": [
+                    "Shop/cook_Coal Cookies.png"
+                ]
+            },
+            {
+                "recognition": "ColorMatch",
+                "roi": "Templateroi",
+                "method": 40,
+                "lower": [
+                    16,
+                    46,
+                    142
+                ],
+                "upper": [
+                    20,
+                    68,
+                    168
+                ]
+            }
+        ],
+        "action": "Click",
+        "post_delay": 1000,
+        "max_hit": 1,
+        "next": [
+            "Arbitrage_Cooking_SubMenu"
+        ],
+        "enabled": false,
+        "focus": "Arb.料理制作:[5级]煤炭饼干",
+        "doc": "菜品选择器,进入料理子菜单"
+    },
+    "Arbitrage_Cooking_A2": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "sub_name": "Templateroi",
+                "recognition": "TemplateMatch",
+                "roi": [
+                    592,
+                    103,
+                    596,
+                    598
+                ],
+                "template": [
+                    "Shop/cook_Honey Butter Almonds.png"
+                ]
+            },
+            {
+                "recognition": "ColorMatch",
+                "roi": "Templateroi",
+                "method": 40,
+                "lower": [
+                    16,
+                    46,
+                    142
+                ],
+                "upper": [
+                    20,
+                    68,
+                    168
+                ]
+            }
+        ],
+        "action": "Click",
+        "post_delay": 1000,
+        "max_hit": 1,
+        "next": [
+            "Arbitrage_Cooking_SubMenu"
+        ],
+        "focus": "Arb.料理制作:[3级]蜂蜜黄油杏仁",
+        "doc": "菜品选择器,进入料理子菜单"
+    },
+    "Arbitrage_Cooking_A3": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "sub_name": "Templateroi",
+                "recognition": "TemplateMatch",
+                "roi": [
+                    592,
+                    103,
+                    596,
+                    598
+                ],
+                "template": [
+                    "Shop/cook_Mayo Triangle Rice Ball.png"
+                ]
+            },
+            {
+                "recognition": "ColorMatch",
+                "roi": "Templateroi",
+                "method": 40,
+                "lower": [
+                    16,
+                    46,
+                    142
+                ],
+                "upper": [
+                    20,
+                    68,
+                    168
+                ]
+            }
+        ],
+        "action": "Click",
+        "post_delay": 1000,
+        "max_hit": 1,
+        "next": [
+            "Arbitrage_Cooking_SubMenu"
+        ],
+        "focus": "Arb.料理制作:[3级]三角美乃滋饭团",
+        "doc": "菜品选择器,进入料理子菜单"
+    },
+    "Arbitrage_Cooking_A4": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "sub_name": "Templateroi",
+                "recognition": "TemplateMatch",
+                "roi": [
+                    592,
+                    103,
+                    596,
+                    598
+                ],
+                "template": [
+                    "Shop/cook_Caviar Omurice.png"
+                ]
+            },
+            {
+                "recognition": "ColorMatch",
+                "roi": "Templateroi",
+                "method": 40,
+                "lower": [
+                    16,
+                    46,
+                    142
+                ],
+                "upper": [
+                    20,
+                    68,
+                    168
+                ]
+            }
+        ],
+        "action": "Click",
+        "post_delay": 1000,
+        "max_hit": 1,
+        "next": [
+            "Arbitrage_Cooking_SubMenu"
+        ],
+        "focus": "Arb.料理制作:[3级]鱼子酱蛋包饭",
+        "doc": "菜品选择器,进入料理子菜单"
+    },
+    "Arbitrage_Cooking_A5": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "sub_name": "Templateroi",
+                "recognition": "TemplateMatch",
+                "roi": [
+                    592,
+                    103,
+                    596,
+                    598
+                ],
+                "template": [
+                    "Shop/cook_Fried Salmon Bento.png"
+                ]
+            },
+            {
+                "recognition": "ColorMatch",
+                "roi": "Templateroi",
+                "method": 40,
+                "lower": [
+                    16,
+                    46,
+                    142
+                ],
+                "upper": [
+                    20,
+                    68,
+                    168
+                ]
+            }
+        ],
+        "action": "Click",
+        "post_delay": 1000,
+        "max_hit": 1,
+        "next": [
+            "Arbitrage_Cooking_SubMenu"
+        ],
+        "focus": "Arb.料理制作:[2级]炸三文鱼便当",
+        "doc": "菜品选择器,进入料理子菜单"
+    },
+    "Arbitrage_Cooking_A6": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "sub_name": "Templateroi",
+                "recognition": "TemplateMatch",
+                "roi": [
+                    592,
+                    103,
+                    596,
+                    598
+                ],
+                "template": [
+                    "Shop/cook_Sangria.png"
+                ]
+            },
+            {
+                "recognition": "ColorMatch",
+                "roi": "Templateroi",
+                "method": 40,
+                "lower": [
+                    16,
+                    46,
+                    142
+                ],
+                "upper": [
+                    20,
+                    68,
+                    168
+                ]
+            }
+        ],
+        "action": "Click",
+        "post_delay": 1000,
+        "max_hit": 1,
+        "next": [
+            "Arbitrage_Cooking_SubMenu"
+        ],
+        "focus": "Arb.料理制作:[2级]桑格利亚酒",
+        "doc": "菜品选择器,进入料理子菜单"
+    },
+    "Arbitrage_Cooking_A1": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "sub_name": "Templateroi",
+                "recognition": "TemplateMatch",
+                "roi": [
+                    592,
+                    103,
+                    596,
+                    598
+                ],
+                "template": [
+                    "Shop/cook_Honey Baked Apple.png"
+                ]
+            },
+            {
+                "recognition": "ColorMatch",
+                "roi": "Templateroi",
+                "method": 40,
+                "lower": [
+                    16,
+                    46,
+                    142
+                ],
+                "upper": [
+                    20,
+                    68,
+                    168
+                ]
+            }
+        ],
+        "action": "Click",
+        "post_delay": 1000,
+        "max_hit": 1,
+        "next": [
+            "Arbitrage_Cooking_SubMenu"
+        ],
+        "focus": "Arb.料理制作:[1级]烤蜂蜜苹果",
+        "doc": "菜品选择器,进入料理子菜单"
+    },
+    "Arbitrage_Cooking_Menu_Reset": {
+        "action": "Click",
+        "target": [
+            606,
+            118,
+            271,
+            267
+        ],
+        "doc": "使用Anchor复用.将菜单复位。通过随机点一个菜品后返回，利用系统机制复位最顶。",
+        "next": [
+            "Arbitrage_Cooking_Menu_Reset_SubIn",
+            "Arbitrage_Cooking_Menu_Reset"
+        ],
+        "post_delay": 1500,
+        "max_hit": 50
+    },
+    "Arbitrage_Cooking_Menu_Reset_SubIn": {
+        "recognition": "TemplateMatch",
+        "roi": [
+            701,
+            587,
+            144,
+            131
+        ],
+        "template": [
+            "UI_cooking_submenu.png"
+        ],
+        "green_mask": true,
+        "next": [
+            "Arbitrage_Cooking_Menu_Reset_SubOut",
+            "[JumpBack]Global_BackPageHub_Once"
+        ],
+        "post_delay": 3000
+    },
+    "Arbitrage_Cooking_Menu_Reset_SubOut": {
+        "recognition": "OCR",
+        "roi": [
+            566,
+            46,
+            116,
+            56
+        ],
+        "expected": [
+            "所需材料$"
+        ],
+        "focus": "Arb.返回料理菜单\n\n页内复位完成",
+        "next": [
+            "[Anchor]Cookint_Menu_Reset"
+        ]
+    },
+    "Arbitrage_Cooking_SubMenu": {
+        "recognition": "TemplateMatch",
+        "roi": [
+            701,
+            587,
+            144,
+            131
+        ],
+        "template": [
+            "UI_cooking_submenu.png"
+        ],
+        "green_mask": true,
+        "focus": "Arb.料理子菜单-确认",
+        "next": [
+            "Arbitrage_Cooking_NubMenu_Max"
+        ],
+        "doc": "可复用料理流程开始.使用按钮团确定子菜单"
+    },
+    "Arbitrage_Cooking_NubMenu_Max": {
+        "doc": "数量预留,测试阶段上保险不改",
+        "next": [
+            "Arbitrage_Cooking_NubMenu_Doing"
+        ]
+    },
+    "Arbitrage_Cooking_NubMenu_Doing": {
+        "recognition": "ColorMatch",
+        "roi": [
+            830,
+            560,
+            204,
+            152
+        ],
+        "method": 40,
+        "lower": [
+            19,
+            11,
+            205
+        ],
+        "upper": [
+            26,
+            16,
+            224
+        ],
+        "action": "Click",
+        "next": [
+            "Arbitrage_Cooking_Doing_Starus"
+        ]
+    },
+    "Arbitrage_Cooking_Doing_Starus": {
+        "recognition": "TemplateMatch",
+        "roi": [
+            701,
+            587,
+            144,
+            131
+        ],
+        "template": [
+            "UI_cooking_submenu.png"
+        ],
+        "green_mask": true,
+        "inverse": true,
+        "post_delay": 3000,
+        "focus": "Arb.料理制作动画中...",
+        "next": [
+            "Arbitrage_Cooking_Doing_ReBack",
+            "Arbitrage_Cooking_Doing_Starus"
+        ],
+        "doc": "按钮之前存在,现在不存在,是在动画"
+    },
+    "Arbitrage_Cooking_Doing_ReBack": {
+        "recognition": "TemplateMatch",
+        "roi": [
+            701,
+            587,
+            144,
+            131
+        ],
+        "template": [
+            "UI_cooking_submenu.png"
+        ],
+        "green_mask": true,
+        "doc": "按钮之前不存在,现在存在,动画结束",
+        "next": [
+            "Arbitrage_Cooking_Menu_ReBack",
+            "[JumpBack]Global_BackPageHub_Once"
+        ]
+    },
+    "Arbitrage_Cooking_Menu_ReBack": {
+        "recognition": "OCR",
+        "roi": [
+            566,
+            46,
+            116,
+            56
+        ],
+        "expected": [
+            "所需材料$"
+        ],
+        "focus": "Arb.返回料理菜单",
+        "next": [
+            "[Anchor]Cooking"
+        ],
+        "doc": "确认返回料理菜单,回到选择流"
     }
 }
