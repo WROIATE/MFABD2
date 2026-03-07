@@ -687,9 +687,10 @@ class PatchByRegex(CustomAction):
                     for node_name, original_config in ALL_NODES_CACHE.items():
                         # 每次都基于原配置，把已有的极简补丁“临时合并”上来，模拟出完整的当前状态
                         base_config = copy.deepcopy(original_config)
-                    if node_name in override_dict:
-                        deep_merge(base_config, override_dict[node_name])
                         
+                        if node_name in override_dict:
+                            deep_merge(base_config, override_dict[node_name])
+                            
                         if regex.search(node_name):
                             # ------------------------------------------------------
                             # [逻辑警告] 影子账本登记：先到先得原则
