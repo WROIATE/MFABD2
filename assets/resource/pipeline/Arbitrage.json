@@ -412,9 +412,9 @@
         "recognition": "ColorMatch",
         "roi": "Arbitrage_Select_QC1",
         "lower": [
-            218,
-            218,
-            218
+            216,
+            216,
+            216
         ],
         "upper": [
             255,
@@ -450,9 +450,9 @@
         "recognition": "ColorMatch",
         "roi": "Arbitrage_Select_QC2",
         "lower": [
-            218,
-            218,
-            218
+            216,
+            216,
+            216
         ],
         "upper": [
             255,
@@ -488,9 +488,9 @@
         "recognition": "ColorMatch",
         "roi": "Arbitrage_Select_QC3",
         "lower": [
-            218,
-            218,
-            218
+            216,
+            216,
+            216
         ],
         "upper": [
             255,
@@ -526,9 +526,9 @@
         "recognition": "ColorMatch",
         "roi": "Arbitrage_Select_QC4",
         "lower": [
-            218,
-            218,
-            218
+            216,
+            216,
+            216
         ],
         "upper": [
             255,
@@ -564,9 +564,9 @@
         "recognition": "ColorMatch",
         "roi": "Arbitrage_Select_QC5",
         "lower": [
-            218,
-            218,
-            218
+            216,
+            216,
+            216
         ],
         "upper": [
             255,
@@ -602,9 +602,9 @@
         "recognition": "ColorMatch",
         "roi": "Arbitrage_Select_QC6",
         "lower": [
-            218,
-            218,
-            218
+            216,
+            216,
+            216
         ],
         "upper": [
             255,
@@ -640,9 +640,9 @@
         "recognition": "ColorMatch",
         "roi": "Arbitrage_Select_QC7",
         "lower": [
-            218,
-            218,
-            218
+            216,
+            216,
+            216
         ],
         "upper": [
             255,
@@ -678,9 +678,9 @@
         "recognition": "ColorMatch",
         "roi": "Arbitrage_Select_QC8",
         "lower": [
-            218,
-            218,
-            218
+            216,
+            216,
+            216
         ],
         "upper": [
             255,
@@ -717,9 +717,9 @@
         "recognition": "ColorMatch",
         "roi": "Arbitrage_Select_QC9",
         "lower": [
-            218,
-            218,
-            218
+            216,
+            216,
+            216
         ],
         "upper": [
             255,
@@ -754,9 +754,9 @@
         "recognition": "ColorMatch",
         "roi": "Arbitrage_Select_QC10",
         "lower": [
-            218,
-            218,
-            218
+            216,
+            216,
+            216
         ],
         "upper": [
             255,
@@ -792,9 +792,9 @@
         "recognition": "ColorMatch",
         "roi": "Arbitrage_Select_QC11",
         "lower": [
-            218,
-            218,
-            218
+            216,
+            216,
+            216
         ],
         "upper": [
             255,
@@ -830,9 +830,9 @@
         "recognition": "ColorMatch",
         "roi": "Arbitrage_Select_QC12",
         "lower": [
-            218,
-            218,
-            218
+            216,
+            216,
+            216
         ],
         "upper": [
             255,
@@ -868,9 +868,9 @@
         "recognition": "ColorMatch",
         "roi": "Arbitrage_Select_QC13",
         "lower": [
-            218,
-            218,
-            218
+            216,
+            216,
+            216
         ],
         "upper": [
             255,
@@ -906,9 +906,9 @@
         "recognition": "ColorMatch",
         "roi": "Arbitrage_Select_QC14",
         "lower": [
-            218,
-            218,
-            218
+            216,
+            216,
+            216
         ],
         "upper": [
             255,
@@ -944,9 +944,9 @@
         "recognition": "ColorMatch",
         "roi": "Arbitrage_Select_QC15",
         "lower": [
-            218,
-            218,
-            218
+            216,
+            216,
+            216
         ],
         "upper": [
             255,
@@ -983,9 +983,9 @@
         "recognition": "ColorMatch",
         "roi": "Arbitrage_Select_QC16",
         "lower": [
-            218,
-            218,
-            218
+            216,
+            216,
+            216
         ],
         "upper": [
             255,
@@ -1022,9 +1022,9 @@
         "recognition": "ColorMatch",
         "roi": "Arbitrage_Select_QC17",
         "lower": [
-            218,
-            218,
-            218
+            216,
+            216,
+            216
         ],
         "upper": [
             255,
@@ -1060,9 +1060,9 @@
         "recognition": "ColorMatch",
         "roi": "Arbitrage_Select_QC18",
         "lower": [
-            218,
-            218,
-            218
+            216,
+            216,
+            216
         ],
         "upper": [
             255,
