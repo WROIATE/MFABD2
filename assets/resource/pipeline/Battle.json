@@ -46,6 +46,7 @@
     ],
     "action": "Click",
     "post_delay": 1000,
+    "max_hit": 20,
     "doc": "小地图位置调整",
     "focus": "CB.[WRN]小地图盘位置非Mini-调整"
   },

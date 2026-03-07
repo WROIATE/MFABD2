@@ -404,11 +404,12 @@
       168
     ],
     "expected": [
-      "进行中"
+      "进行中",
+      "\\d+/\\d+"
     ],
     "post_delay": 5000,
     "focus": "EB.作业装备较多,等待中...",
-    "doc": "等待作业装备 */* "
+    "doc": "等待作业装备 */* .匹配数字的*/*"
   },
   "Equip_EquipUpSelect_Err": {
     "recognition": "OCR",

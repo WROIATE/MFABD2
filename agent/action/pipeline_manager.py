@@ -19,7 +19,10 @@ from recognition.counter import TAG_STORE
 # 本脚本集成了“旁作用 (Side Effect)”机制：
 #   所有 Custom Action 均支持传入 "reset_tags" 数组，在执行动作的同时顺手重置计数器。
 # ==============================================================================
-
+# ------------------------------------------------------------------------------
+#
+#  # 警告:当前版本的origin影子账本机制，使用先到先得方法，写入即锁定。故，当多层替换时，新的origin会不生效。未来可能增加可控合并、替换、保留等行为分化。
+#
 # ------------------------------------------------------------------------------
 # 1. PatchNode (单点打补丁 + 自动注册备份 + 旁作用重置)
 # ------------------------------------------------------------------------------
@@ -37,8 +40,7 @@ from recognition.counter import TAG_STORE
 # ------------------------------------------------------------------------------
 # "action": "Custom",
 # "custom_action": "PatchBatch",
-# "custom_action_param": {
-#     "caller": "My_Start_Node",                              // [选填] 声明发起者
+# "custom_action_param": {                             
 #     "patches": {                                            // [必填] 补丁字典 {目标节点: 参数字典}
 #         "Battle_Node": { "next": ["Boss_Win"], "timeout": 30000 },
 #         "Swipe_Common": { "duration": 500 }
@@ -648,6 +650,9 @@ class PatchByRegex(CustomAction):
         # --- 内部辅助函数：动态替换 $self 占位符 ---
         def replace_placeholders(data, node_name, caller): 
             if isinstance(data, str):
+                # 拦截定时炸弹：如果字符串里有 $caller 但没传 caller 参数，直接报错
+                if "$caller" in data and not caller:
+                    raise ValueError(f"配置错误: 节点 [{node_name}] 的动作使用了 $caller，但未提供 caller 参数！")
                 # 先替换 $self
                 res = data.replace("$self", node_name)
                 # 再替换 $caller
@@ -680,8 +685,10 @@ class PatchByRegex(CustomAction):
                 for pat in patterns:
                     regex = re.compile(pat)
                     for node_name, original_config in ALL_NODES_CACHE.items():
-                        # 获取当前节点的最新状态（可能是原始配置，也可能是被前一条规则修改过的配置）
-                        base_config = override_dict.get(node_name, original_config)
+                        # 每次都基于原配置，把已有的极简补丁“临时合并”上来，模拟出完整的当前状态
+                        base_config = copy.deepcopy(original_config)
+                    if node_name in override_dict:
+                        deep_merge(base_config, override_dict[node_name])
                         
                         if regex.search(node_name):
                             # ------------------------------------------------------

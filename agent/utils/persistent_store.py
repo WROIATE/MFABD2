@@ -107,7 +107,7 @@ class PersistentStore:
         
         # 0：如果主文件不存在，但备份文件存在，先尝试恢复备份
         if not cls.FILE_PATH.exists() and cls.BACKUP_PATH.exists():
-             logger.info(f"[Py] 👀 未找到主存档，但发现备份文件，正在恢复...")
+             
              try:
                  shutil.copy2(cls.BACKUP_PATH, cls.FILE_PATH)
                  logger.info("[Py] ✅ 已从备份自动生成主存档！")
@@ -140,12 +140,17 @@ class PersistentStore:
     def _try_load_file(cls, path: Path) -> dict | None:
         """底层读取逻辑"""
         if not path.exists():
-            return {} 
+            return None  # ✅ 修改点1：不存在应视为失败，交给外层处理
         try:
             with open(path, "r", encoding="utf-8") as f:
-                return json.load(f)
+                data = json.load(f)
+            # ✅ 修改点2：严格校验必须是字典结构
+            if not isinstance(data, dict):
+                logger.error(f"[Py] ❌ 存档内容不是有效的字典结构: {path}")
+                return None
+            return data
         except Exception:
-            return None 
+            return None
 
     @classmethod
     def save(cls, data: dict):
