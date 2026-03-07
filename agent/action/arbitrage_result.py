@@ -23,9 +23,13 @@ class ArbitrageSellController(CustomAction):
             # 遍历 attach 中的所有 key (default, Drops, 以及 UI 传进来的 SellName)
             for key, val_str in node_obj.attach.items():
                 if isinstance(val_str, str) and val_str.strip():
-                    # 按照逗号、分号、中文逗号切分，并去除首尾空格
-                    items = [x.strip() for x in re.split(r'[，,;|]+', val_str) if x.strip()]
-                    whitelist_set.update(items)
+                    # 按照逗号、分号、中文逗号切分
+                    raw_items = [x.strip() for x in re.split(r'[，,;|]+', val_str) if x.strip()]
+                    for item in raw_items:
+                        # 使用和 OCR 底层一模一样的清洗规则，保证 100% 绝对匹配
+                        cleaned_item = re.sub(r'[^\w\u4e00-\u9fa5]', '', item)
+                        if cleaned_item:
+                            whitelist_set.add(cleaned_item)
                     
         if not whitelist_set:
             mfaalog.warning("[Arbitrage] ⚠️ 未读取到任何待售物品白名单，流程结束。")
@@ -69,10 +73,6 @@ class ArbitrageSellController(CustomAction):
                 if name in whitelist_set:
                     # 查重防抖 (防止翻页重叠导致同个物品被记录两次)
                     if not any(t["name"] == name for t in targets_to_sell):
-                        # 处理卡带空格问题，转为正则
-                        match = re.match(r'([^\d]+)(\d+)', cart)
-                        cart_regex = f"{match.group(1)}\\s*{match.group(2)}" if match else cart
-                        
                         targets_to_sell.append({
                             "name": name, 
                             "cartridge_raw": cart
@@ -145,6 +145,10 @@ class ArbitrageSellController(CustomAction):
         COL_CART_MIN = 960
 
         screenshot = context.tasker.controller.post_screencap().wait().get()
+        # 新增的防御逻辑：如果截图失败，记录警告并安全退出当前解析
+        if screenshot is None:
+            print("[Arbitrage] ❌ 严重错误: 底层截图获取失败 (返回 None)！跳过当前页解析。")
+            return []
         reco_result = context.run_recognition("Arbitrage_Sell_ReadList_OCR", screenshot)
         
         if not reco_result or not reco_result.hit or not reco_result.all_results:
@@ -152,9 +156,17 @@ class ArbitrageSellController(CustomAction):
             
         all_texts = []
         for match in reco_result.all_results:
-            x, y, w, h = match.box
+            # 消除编辑器告警 + 防御性编程：确保当前结果确实包含所需属性
+            box = getattr(match, 'box', None)
+            text = getattr(match, 'text', None)
+            
+            # 如果没有这两个属性，直接跳过
+            if box is None or text is None:
+                continue
+
+            x, y, w, h = box
             all_texts.append({
-                "box": match.box, "text": match.text,
+                "box": box, "text": text,
                 "cx": x + w / 2, "cy": y + h / 2, "bottom_y": y + h
             })
         
