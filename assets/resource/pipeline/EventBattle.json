@@ -190,16 +190,35 @@
     ],
     "doc": "判定，处于一般/挑战 战斗页面"
   },
-  "Event_FastNormalBattle": {
-    "recognition": "OCR",
+  "Event_Battle_BattleStatus_Enable": {
+    "recognition": "ColorMatch",
+    "roi": "Event_FastNormalBattle",
+    "roi_offset": [
+      -5,
+      -2,
+      10,
+      4
+    ],
+    "lower": [
+      222,
+      218,
+      208
+    ],
+    "upper": [
+      222,
+      220,
+      211
+    ],
     "action": "Click",
+    "post_delay": 1000,
     "next": [
       "Event_FreeAP_Verdict_Ispass",
       "Event_FreeAP_Verdict_NOpass",
       "Event_NoHaveAP"
-    ],
-    "post_delay": 1000,
-    "focus": "EM.活动.快速战斗",
+    ]
+  },
+  "Event_FastNormalBattle": {
+    "recognition": "OCR",
     "roi": [
       143,
       519,
@@ -208,6 +227,15 @@
     ],
     "expected": [
       "快速战斗"
+    ],
+    "next": [
+      "Event_Battle_BattleStatus_Enable"
+    ],
+    "focus": "EM.活动.快速战斗",
+    "timeout": 4000,
+    "on_error": [
+      "Event_Event_Main_Return",
+      "[JumpBack]Global_BackPageHub_Once"
     ],
     "doc": "识别并点击子菜单快速战斗"
   },
