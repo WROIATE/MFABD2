@@ -141,7 +141,7 @@ def install_deps(venv_python: Path, project_root: Path, venv_path: Path):
         subprocess.check_call([
             str(venv_python), "-m", "pip", "install",
             "-i", "https://pypi.tuna.tsinghua.edu.cn/simple",
-            FALLBACK_MAAFW_SPEC
+            f"{FALLBACK_MAAFW_SPEC}"
         ])
     
     # --- 4. 全部安装成功后，写入新缓存 ---
