@@ -13,8 +13,8 @@
             "win32": {
                 "class_regex": "UnityWndClass",
                 "screencap": "FramePool",
-                "mouse": "PostMessageWithCursorPos",
-                "keyboard": "PostMessageWithCursorPos"
+                "mouse": "PostMessageWithWindowPos",
+                "keyboard": "PostMessageWithWindowPos"
             },
             "permission_required": true,
             "display_short_side": 720
@@ -44,7 +44,7 @@
             "name": "[全局]启动游戏",
             "entry": "StartGame_Start",
             "default_check": true,
-            "description": "<b>最新版探测&下载渠道:</b><br>[![正式版](https://img.shields.io/github/v/release/sunyink/MFABD2?label=仓库源·正式版&color=green&logo=github)](https://github.com/sunyink/MFABD2/releases/latest)<br>[![公测版](https://img.shields.io/github/v/tag/sunyink/MFABD2?include_prereleases&filter=%2Abeta%2A&label=仓库源·公测版&color=blue&logo=github)](https://github.com/sunyink/MFABD2/releases?q=beta)<br>[![Mirror酱](https://img.shields.io/badge/Mirror%E9%85%B1-镜像源·高速下载-%239af3f6?logo=countingworkspro&logoColor=4f46e5)](https://mirrorchyan.com/zh/projects?rid=MFABD2)<br><span style=\"color:Crimson;font-size:10px\">框架有PC端控制器(720P窗口化)，但资源来不及适配仅供探索。</span><br><b>启动游戏</b>：<br>自动启动游戏，包含更新、支付失败等一些异常框点击，领取`主界面`奖励、`宠物派遣`。<br><b><span style=\"color:Crimson;font-size:16px\">注意：网络环境需提前解决。</span></b><br>【<b>首次运行前，务必至少查看</b>`使用帮助`<b>卡片！</b>】",
+            "description": "<b>最新版探测&下载渠道:</b><br>[![正式版](https://img.shields.io/github/v/release/sunyink/MFABD2?label=仓库源·正式版&color=green&logo=github)](https://github.com/sunyink/MFABD2/releases/latest)<br>[![公测版](https://img.shields.io/github/v/tag/sunyink/MFABD2?include_prereleases&filter=%2Abeta%2A&label=仓库源·公测版&color=blue&logo=github)](https://github.com/sunyink/MFABD2/releases?q=beta)<br>[![Mirror酱](https://img.shields.io/badge/Mirror%E9%85%B1-镜像源·高速下载-%239af3f6?logo=countingworkspro&logoColor=4f46e5)](https://mirrorchyan.com/zh/projects?rid=MFABD2)<br><span style=\"color:Crimson;font-size:10px\">框架有PC端控制器(720P窗口化)，但资源来不及适配仅供探索。</span><b>启动游戏</b>：<br>自动启动游戏，包含更新、支付失败等一些异常框点击，领取`主界面`奖励、`宠物派遣`。<br><b><span style=\"color:Crimson;font-size:16px\">注意：网络环境需提前解决。</span></b><br>【<b>首次运行前，务必至少查看</b>`使用帮助`<b>卡片！</b>】<br><span style=\"color:Crimson;\">存档系统：</span>用于记录刷取完成时间戳，供判断避免重复运行。</span><br>存档文件名:`agent_save_data.json`。<br>存档路径：<br>全局模式:`用户应用数据(Appdata)/MFABD2`下；便携模式:`软件根目录`。<br>通过在根目录创建空白的`agent_save_data.json`即可启用便携模式。",
             "option": [
                 "前置助手"
             ]
@@ -74,10 +74,10 @@
             "name": "[执行]装备制作&炼制日常",
             "entry": "Equip_HomePage",
             "default_check": true,
-            "description": "**装备制作：**依次进行 `N稀有短剑打造`、将其`强化`、将其`分解`、`精炼`。<br> 如果有相关装备非正常锁定，可能会失败。 **尤其初次运行**流程运行无需事先锁定装备。<br> `精炼`只会以SR or UR 稀有度装备为对象进行<br>若将`仅精炼...`和`自定义标志排序`同时配置，能“合成”出——低精炼等级强化队列：排列优先装备1号超出`仅精炼`条件会被筛选掉、下一次开始精炼优先装备2号。**自定义标志规则参见子项说明**。 ",
+            "description": "**装备制作：**依次进行 `N稀有短剑打造`、将其`强化`、将其`分解`、`精炼`。<br> 如果有相关装备非正常锁定，可能会失败。 **尤其初次运行**流程运行无需事先锁定装备。<br> `精炼`只会以SR 或 UR 稀有度装备为对象进行<br>若将`仅精炼...`和`自定义标志排序`同时配置，能“合成”出——低精炼等级强化队列：排列优先装备1号超出`仅精炼`条件会被筛选掉、下一次开始精炼优先装备2号。**自定义标志规则参见子项说明**。 ",
             "option": [
                 "精炼装备阶级",
-                "仅精炼<17 or <10",
+                "仅精炼<17 或 <10",
                 "精炼按自定义标志排序",
                 "精炼类别倾向-专武|制作",
                 "精炼类别倾向应用-按需|强制"
@@ -88,10 +88,10 @@
             "entry": "Gacha_HomePage",
             "default_check": true,
             "option": [
-                "抽卡v2版开关-按需|强制",
+                "高级抽卡-按需|强制",
                 "付费钻-总开关"
             ],
-            "description": "<b>白嫖抽卡：</b>每日免费一次的<span style=\"background-color:Silver; color:Black; border-radius:3px; padding:0 3px;\">角色</span>、<span style=\"background-color:Silver; color:Black; border-radius:3px; padding:0 3px;\">专属装备</span>抽取。<br><br>当抽取免费抽时，可顺便用90付费钻，对指定卡池每日优惠一抽，需要定卡池名。<br><br><span style=\"color:Crimson;font-size:14px\"><b>付费钻是危险功能</b><br>务必仔细确认，平时常闭。脚本协议不承担其使用责任！<br>打开此<span style=\"background-color:Silver; color:Black; border-radius:3px; padding:0 3px;\">总开关</span>，则是你知晓并自行承担相关风险的意思表示！</span><br><br><img src=\"resource/image/GUI/CHAGA_Doc.png\" width=\"150\" />"
+            "description": "<b>白嫖抽卡：</b>每日免费一次的<span style=\"background-color:Silver; color:Black; border-radius:3px; padding:0 3px;\">角色</span>、<span style=\"background-color:Silver; color:Black; border-radius:3px; padding:0 3px;\">专属装备</span>抽取。<br><br>当抽取免费抽时，可顺便用90付费钻，对指定卡池每日优惠一抽，需要指定卡池名。<br><br><span style=\"color:Crimson;font-size:14px\"><b>付费钻是危险功能</b><br>务必仔细确认，平时常闭。脚本协议不承担其使用责任！<br>打开此<span style=\"background-color:Silver; color:Black; border-radius:3px; padding:0 3px;\">总开关</span>，则是你知晓并自行承担相关风险的意思表示！</span><br><br><img src=\"resource/image/GUI/CHAGA_Doc.png\" width=\"150\" />"
         },
         {
             "name": "[执行]竞技场",
@@ -100,7 +100,7 @@
             "option": [
                 "竞技场战斗倍数"
             ],
-            "description": "**竞技场：**进入竞技场卡带，打完每日免费鸡尾酒。<br>**战斗倍数：**Max 或 Min <br>**关于计分：**排位分按每一场胜负计算无关倍率、奖牌则会x倍率。<br>如：Max为10倍，每天打4场x10倍鸡尾酒，计4场排位分，4x10倍奖牌。"
+            "description": "**竞技场：**进入竞技场卡带，打完每日免费鸡尾酒。<br>**战斗倍数：**Max 或 Min <br>**关于计分：**排位分按每场胜负计算，与倍率无关。奖牌则会x倍率。<br>如：Max为10倍，每天打4场x10倍鸡尾酒，计4场排位分，4x10倍奖牌。"
         },
         {
             "name": "[执行]赛季活动快速战斗",
@@ -127,7 +127,7 @@
                 "末日之书",
                 "周常钓鱼"
             ],
-            "description": "**每周独立周常：**每周奖励4项：依次访问`街机页面`、`我的小屋`随机点赞4次、打1轮`末日之书`、钓鱼1条。<br><br>正常运作可以拿完全部`每周任务`奖励。<br><br>周触发器已实装，周期内不会重复打了。 "
+            "description": "**每周独立周常：**每周奖励4项：依次访问`街机页面`、`我的小屋`随机点赞4次、打1轮`末日之书`、`钓鱼`1条。<br><br>正常运作可以拿完全部`每周任务`奖励。<br><br>周触发器已实装，周期内不会重复打了。 "
         },
         {
             "name": "[领取]日常任务",
@@ -172,7 +172,7 @@
             "name": "[执行]地图采集[完整]",
             "entry": "Collect_StartGame_HomePage",
             "default_check": true,
-            "description": "**地图采集**：进入卡带，对有传送阵地图进行`探查`、`吸取`、`召集`。<span style=\"color: Crimson;\"><b></b></span><br>**注意:**应当先将传送阵激活，并探明周围箱庭迷雾，使得区域地图上能完整显示明亮的传送阵图标。<br><span style=\"color: Crimson;\"><b>已适配周常卡带CD：</b></span><br>将在软件根目录生成名为`agent_save_data.json`的存档文件，用于记录周期标记与运行时间标记，<b>只打刷新CD内没刷过的关卡</b>。<br>刷取顺序，先按照卡带框从左到右，再按照`故事`、`角色`、`活动`大类顺序。<br>存档文件可以`手动迁移`到新的MFA构建物中保留进度。",
+            "description": "**地图采集**：进入卡带，对有传送阵地图进行`探查`、`吸取`、`召集`。<span style=\"color: Crimson;\"><b></b></span><br>**注意:**应当先将传送阵激活，并探明周围箱庭迷雾，使得区域地图上能完整显示明亮的传送阵图标。<br><span style=\"color: Crimson;\"><b>已适配周常卡带CD：</b></span><br>将在生成名为`agent_save_data.json`的存档文件，用于记录周期标记与运行时间标记。<b>只打刷新CD内没刷过的关卡</b>。<br>刷取顺序，先按照卡带框从左到右，再按照`故事`、`角色`、`活动`大类顺序。<br>存档文件可以`手动迁移`到新的MFA构建物中保留进度。",
             "option": [
                 "采集卡带屏蔽",
                 "第三图采集额外等待"
@@ -190,7 +190,7 @@
                 "钓鱼地点",
                 "目标次数"
             ],
-            "description": "从大多数界面开始自动钓鱼，钓起目标条数的鱼结束流程。<br>目前对普通鱼类有可观的成成功率,非常适合练级 <br> Powered by XiaoXKKK"
+            "description": "从大多数界面开始自动钓鱼，钓起目标条数的鱼结束流程。<br>目前对普通鱼类有可观的成功率,非常适合练级 <br> Powered by XiaoXKKK"
         },
         {
             "name": "[全局]结束游戏",
@@ -362,9 +362,7 @@
                             ],
                             "target": [
                                 800,
-                                390,
-                                0,
-                                0
+                                390
                             ]
                         }
                     }
@@ -420,9 +418,7 @@
                         "Battle_CollectMapHangXian1": {
                             "target": [
                                 341,
-                                558,
-                                0,
-                                0
+                                558
                             ],
                             "focus": "BM.航线-首选-金币"
                         }
@@ -434,9 +430,7 @@
                         "Battle_CollectMapHangXian1": {
                             "target": [
                                 510,
-                                531,
-                                0,
-                                0
+                                531
                             ],
                             "focus": "BM.航线-首选-经验"
                         }
@@ -454,9 +448,7 @@
                         "Battle_FastBattleMAXTouchHangxian": {
                             "target": [
                                 800,
-                                390,
-                                0,
-                                0
+                                390
                             ]
                         }
                     }
@@ -467,9 +459,7 @@
                         "Battle_FastBattleMAXTouchShouLie": {
                             "target": [
                                 800,
-                                390,
-                                0,
-                                0
+                                390
                             ]
                         },
                         "Battle_CollectMap": {
@@ -516,9 +506,7 @@
                         "Battle_FastBattleTouch_StoneSelect": {
                             "target": [
                                 230,
-                                120,
-                                0,
-                                0
+                                120
                             ]
                         }
                     }
@@ -529,9 +517,7 @@
                         "Battle_FastBattleTouch_StoneSelect": {
                             "target": [
                                 230,
-                                175,
-                                0,
-                                0
+                                175
                             ]
                         }
                     }
@@ -542,9 +528,7 @@
                         "Battle_FastBattleTouch_StoneSelect": {
                             "target": [
                                 230,
-                                230,
-                                0,
-                                0
+                                230
                             ]
                         }
                     }
@@ -555,9 +539,7 @@
                         "Battle_FastBattleTouch_StoneSelect": {
                             "target": [
                                 230,
-                                290,
-                                0,
-                                0
+                                290
                             ]
                         }
                     }
@@ -568,9 +550,7 @@
                         "Battle_FastBattleTouch_StoneSelect": {
                             "target": [
                                 230,
-                                350,
-                                0,
-                                0
+                                350
                             ]
                         }
                     }
@@ -604,7 +584,7 @@
         },
         "精炼类别倾向-专武|制作": {
             "description": "开关球位置表示状态。左(专武)、右(制作)。<br>潜在期望，如果要选择装备分类，你期望强化哪种？",
-            "type": "select",
+            "type": "switch",
             "cases": [
                 {
                     "name": "No",
@@ -631,7 +611,7 @@
         },
         "精炼类别倾向应用-按需|强制": {
             "description": "开关球位置表示状态。左(按需)、右(强制)。<br>按需:仅当发现精炼装备为魔兽装备时应用<br>强制:正常装备精炼筛选时直接应用",
-            "type": "select",
+            "type": "switch",
             "cases": [
                 {
                     "name": "No",
@@ -649,7 +629,7 @@
                 }
             ]
         },
-        "仅精炼<17 or <10": {
+        "仅精炼<17 或 <10": {
             "cases": [
                 {
                     "name": "关闭",
@@ -677,9 +657,7 @@
                             "focus": "EM.装备精炼.<C10",
                             "target": [
                                 720,
-                                320,
-                                0,
-                                0
+                                320
                             ],
                             "recognition": "DirectHit"
                         },
@@ -790,7 +768,7 @@
             ]
         },
         "魔兽补刀": {
-            "description": "1.‘补刀’：如果某级魔兽讨伐失利，次日可继承残血再快速战斗一次。<br>2.补刀失败只拿参与奖，不影响讨伐进度；次日循环拿奖励。<br>3.补刀成功，则需要手动打一次下一级魔兽，失利了再来补刀。",
+            "description": "1.‘补刀’：若魔兽讨伐未被击败，次日可继承残血状态快速战斗一次。<br>2.补刀失败只拿参与奖，不影响讨伐进度；次日循环拿奖励。<br>3.补刀成功，则需要手动打一次下一级魔兽，失利了再来补刀。",
             "type": "switch",
             "cases": [
                 {
@@ -935,7 +913,7 @@
             ]
         },
         "付费钻-总开关": {
-            "description": "【危险功能】<br>启用：每日90钻1抽。<br>必须配合后高级页，指定卡池名才会实际抽取。<br>检查：无念想时<b>不应意外打开</b>。",
+            "description": "【危险功能】<br>启用：每日90钻1抽。<br>必须配合后高级页，指定卡池名才会实际抽取。<br>检查：若无特定抽卡计划，请保持<b>关闭</b>状态。",
             "type": "switch",
             "cases": [
                 {
@@ -958,8 +936,8 @@
                 }
             ]
         },
-        "抽卡v2版开关-按需|强制": {
-            "description": "一套更严谨的抽卡流程。<br>可应对抽抽乐点数达到200，但想保留机会不立即兑换的情况。<br>按需：默认流程检测到问题，则启用v2版抽卡<br>强制：从一开始就调用V2版抽卡。",
+        "高级抽卡-按需|强制": {
+            "description": "一套更严谨的抽卡流程。<br>可应对抽抽乐点数达到200，但希望保留点数、暂不兑换的情况。<br>按需：默认流程检测到问题，则启用。<br>强制：从一开始就调用高级抽卡。",
             "type": "switch",
             "cases": [
                 {
@@ -974,12 +952,33 @@
                                 "GachaADV_Start"
                             ]
                         }
+                    },
+                    "option": [
+                        "5星必出保留"
+                    ]
+                }
+            ]
+        },
+        "5星必出保留": {
+            "description": "卡池100次必中5星机会保留。跳过此池免费抽,留给未来卡池。<br>注意,必中5星≠必中Up5星。",
+            "type": "switch",
+            "cases": [
+                {
+                    "name": "No",
+                    "pipeline_override": {}
+                },
+                {
+                    "name": "Yes",
+                    "pipeline_override": {
+                        "GachaADV_Special_SaveGuaranteed": {
+                            "enabled": true
+                        }
                     }
                 }
             ]
         },
         "进入前先领取邮件": {
-            "description": "常闭。<br>开启：按版本需要，版本活动抽奖需要代币、代币预先被发放到邮件内时。<br>   eg.登陆送代币到邮箱,用此代币抽奖.",
+            "description": "常闭。<br>开启：按版本需要，版本活动抽奖需要代币、代币预先被发放到邮件内时。<br>   eg.登录送代币到邮箱,用此代币抽奖.",
             "type": "switch",
             "cases": [
                 {
@@ -1286,42 +1285,42 @@
                     "pipeline_type": "string",
                     "default": "xxx",
                     "verify": ".*\\S.*",
-                    "pattern_msg": "莫留空,想关一行就乱填让它匹配不上"
+                    "pattern_msg": "请勿留空,想关一行就乱填让它匹配不上"
                 },
                 {
                     "name": "目标池2",
                     "pipeline_type": "string",
                     "default": "xxx",
                     "verify": ".*\\S.*",
-                    "pattern_msg": "莫留空,想关一行就乱填让它匹配不上"
+                    "pattern_msg": "请勿留空,想关一行就乱填让它匹配不上"
                 },
                 {
                     "name": "目标池3",
                     "pipeline_type": "string",
                     "default": "xxx",
                     "verify": ".*\\S.*",
-                    "pattern_msg": "莫留空,想关一行就乱填让它匹配不上"
+                    "pattern_msg": "请勿留空,想关一行就乱填让它匹配不上"
                 },
                 {
                     "name": "目标池4",
                     "pipeline_type": "string",
                     "default": "xxx",
                     "verify": ".*\\S.*",
-                    "pattern_msg": "莫留空,想关一行就乱填让它匹配不上"
+                    "pattern_msg": "请勿留空,想关一行就乱填让它匹配不上"
                 },
                 {
                     "name": "目标池5",
                     "pipeline_type": "string",
                     "default": "xxx",
                     "verify": ".*\\S.*",
-                    "pattern_msg": "莫留空,想关一行就乱填让它匹配不上"
+                    "pattern_msg": "请勿留空,想关一行就乱填让它匹配不上"
                 },
                 {
                     "name": "目标池6",
                     "pipeline_type": "string",
                     "default": "xxx",
                     "verify": ".*\\S.*",
-                    "pattern_msg": "莫留空,想关一行就乱填让它匹配不上"
+                    "pattern_msg": "请勿留空,想关一行就乱填让它匹配不上"
                 }
             ],
             "pipeline_override": {
