@@ -1996,7 +1996,7 @@
     "Arbitrage_Cooking_Page1": {
         "anchor": {
             "Cooking": "Arbitrage_Cooking_Hub",
-            "Cookint_Menu_Reset": "Arbitrage_Cooking_Hub"
+            "Cooking_Menu_Reset": "Arbitrage_Cooking_Hub"
         },
         "next": [
             "Arbitrage_Cooking_Menu_Reset",
@@ -2399,7 +2399,7 @@
         ],
         "focus": "Arb.返回料理菜单\n\n页内复位完成",
         "next": [
-            "[Anchor]Cookint_Menu_Reset"
+            "[Anchor]Cooking_Menu_Reset"
         ]
     },
     "Arbitrage_Cooking_SubMenu": {
