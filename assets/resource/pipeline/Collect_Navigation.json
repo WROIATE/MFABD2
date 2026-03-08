@@ -980,10 +980,6 @@
     ],
     "post_delay": 5000,
     "focus": "CM.N.箱庭地图内找到传送阵-物件",
-    "roi": [
-      0,
-      0
-    ],
     "template": [
       "TpCircle2.png",
       "TpCircle0.9.png",
