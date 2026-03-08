@@ -268,6 +268,7 @@
       "Equip_ToEquipGui"
     ],
     "post_delay": 1500,
+    "post_wait_freezes": 1000,
     "focus": "EM.前往武器库存",
     "roi": [
       1019,
@@ -403,11 +404,12 @@
       168
     ],
     "expected": [
-      "进行中"
+      "进行中",
+      "\\d+/\\d+"
     ],
     "post_delay": 5000,
     "focus": "EB.作业装备较多,等待中...",
-    "doc": "等待作业装备 */* "
+    "doc": "等待作业装备 */* .匹配数字的*/*"
   },
   "Equip_EquipUpSelect_Err": {
     "recognition": "OCR",
@@ -472,10 +474,10 @@
     "post_delay": 1000,
     "focus": "EM.装备分解",
     "roi": [
-      1059,
-      644,
-      96,
-      34
+      1017,
+      599,
+      174,
+      121
     ],
     "expected": [
       "键分解"

@@ -13,7 +13,8 @@
         ],
         "template": [
             "pin.png"
-        ]
+        ],
+        "doc": "传送阵寻回模块.技能&步行."
     },
     "Collect_Tab3_Switch": {
         "recognition": "ColorMatch",
@@ -248,14 +249,7 @@
         ]
     },
     "Collect_ForceTeleporCircle_Succeed": {
-        "recognition": "DirectHit",
-        "action": "Click",
-        "target": [
-            1080,
-            665
-        ],
-        "post_delay": 5000,
-        "doc": "点击Pin1快捷技能栏恢复正常",
+        "doc": "传送阵,通过技能传送出口,完成,",
         "focus": "CTB.通过传送阵归位结束"
     },
     "Collect_ForceTeleporCircle_No": {
@@ -711,7 +705,10 @@
         "custom_action_param": {
             "card_name": "Event_1_夏日骑士",
             "cycle_type": "g_weekly"
-        }
+        },
+        "next": [
+            "Global_QuickCart_MenuReset"
+        ]
     },
     "Collect_TeleporCircle_OnFoot_StateResolGroup_Step1_Lift": {
         "doc": "两层级的导航地图箭头状态识别,来判断最左/中间/最右 ;+地图安全/危险来辅助操作 | Step2_Right下面为判定为最右",
@@ -987,8 +984,12 @@
             173
         ],
         "action": "Click",
+        "post_delay": 2000,
         "next": [
-            "Collect_OnFoot_Skill3_4"
+            "Collect_ForceTelepor_FindTeleporCircle",
+            "Collect_OnFoot_Skill3_4",
+            "Collect_TeleporCircle_OnFoot_Skirmish",
+            "[JumpBack]Collect_TeleporCircle_OnFoot_LoopFoot"
         ],
         "focus": "CTOB.传送阵目标确认"
     },
@@ -1034,10 +1035,7 @@
             444
         ],
         "next": [
-            "Collect_TeleporCircle_OnFoot_Skirmish",
-            "Collect_ForceTelepor_IsEffect",
-            "Collect_ForceTelepor_FindTeleporCircle",
-            "[JumpBack]Collect_TeleporCircle_OnFoot_LoopFoot"
+            "Collect_ForceTelepor_IsEffect"
         ],
         "doc": "跑路过程中不断尝试能否使用传送阵提前结束过程,可以设置IF开关启停"
     },
@@ -1207,8 +1205,7 @@
     },
     "Collect_ForceTelepor_FindTeleporCircle": {
         "recognition": "TemplateMatch",
-        "action": "Click",
-        "focus": "CTOB.到达传送阵-按钮标",
+        "focus": "CTOB.到达传送阵-按钮标,End",
         "roi": [
             828,
             519,
@@ -1220,6 +1217,6 @@
         ],
         "threshold": 0.9,
         "green_mask": true,
-        "doc": "步行到终点"
+        "doc": "发现传送按钮标,（步行到终点）模块出口"
     }
 }

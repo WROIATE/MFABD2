@@ -187,7 +187,8 @@ class SmartSwipe(CustomAction):
         try:
             # 确保两张图尺寸一致，防报错
             if img1.shape != img2.shape:
-                return 255.0
+                utils.mfaalog.warning(f"[Py] ⚠️ 图像尺寸不匹配: {img1.shape} vs {img2.shape}，强行视为画面静止以防死循环")
+                return 0.0  # 如果图像大小不一致，返回报错，并且返回‘完全一致’欺骗,跳出滑动。数学上撒谎，但业务上安全。
                 
             # 1. 确保是浮点数，防止 uint8 减法溢出 (2 - 5 变成 253)
             # img1 是 (H, W, 3) 的 BGR 数组
