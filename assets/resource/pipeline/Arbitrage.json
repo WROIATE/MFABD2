@@ -1750,13 +1750,7 @@
             "card_name": "Arbitrage_Cooking",
             "cycle_type": "g_weekly"
         },
-        "action": "Custom",
-        "custom_action": "MarkComplete",
-        "custom_action_param": {
-            "card_name": "Arbitrage_Cooking",
-            "cycle_type": "g_weekly",
-            "focus": "Arb.M.料理制作模块启动"
-        },
+        "focus": "Arb.M.料理制作模块启动",
         "next": [
             "Arbitrage_Cooking_MenuPatch"
         ],
@@ -2023,6 +2017,9 @@
             "Arbitrage_Cooking_A1"
         ],
         "timeout": 2000,
+        "on_error": [
+            "Arbitrage_Cooking_ERREND"
+        ],
         "doc": "第一页料理,路由节点,菜品按等级/价值倒序"
     },
     "Arbitrage_Cooking_B6": {
@@ -2510,10 +2507,20 @@
         "expected": [
             "所需材料$"
         ],
-        "focus": "Arb.返回料理菜单",
+        "focus": "Arb.料理菜单已返回",
         "next": [
             "[Anchor]Cooking"
         ],
         "doc": "确认返回料理菜单,回到选择流"
+    },
+    "Arbitrage_Cooking_ERREND": {
+        "action": "Custom",
+        "custom_action": "MarkComplete",
+        "custom_action_param": {
+            "card_name": "Arbitrage_Cooking",
+            "cycle_type": "g_weekly"
+        },
+        "focus": "Arb.料理模块跳出",
+        "doc": "料理最后运行的第一页HUB跳出,补个lib打标"
     }
 }
