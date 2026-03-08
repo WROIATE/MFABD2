@@ -182,19 +182,23 @@ def get_beta_preview_content(compare_base: str, current_tag: str) -> str:
     if not merges:
         return ""
         
-    # 获取 Main 分支已发布的功能黑名单
-    # 如果是公测版/内测版/CI版 -> 过滤基准是 "main" (隐藏已正式发布的功能)
-    # 如果是正式版     -> 过滤基准是 compare_base (隐藏上个版本以前的功能)
     # 修改点：加入 -alpha 判断
     is_beta_or_ci = '-beta' in current_tag or '-ci' in current_tag or '-alpha' in current_tag
     
-    if is_beta_or_ci:
+    # 获取当前分支名称
+    current_branch = os.environ.get('GITHUB_REF_NAME', 'main')
+    
+    # 解决自我过滤悖论。
+    # 如果是公测/开发版，并且「不在主分支」上，才拿 main 当过滤基准
+    if is_beta_or_ci and current_branch not in ['main', 'master']:
         filter_ref = "main"
     else:
-        # 再次检查 compare_base 是否存在，不存在也回退
+        # 只要在 main 上，或者打正式版，过滤掉上个版本之前的就行了
         filter_ref = compare_base if ensure_reference_exists(compare_base) else "HEAD"
         
     print(f"Beta预览过滤基准: {filter_ref}")
+    
+    #补回丢失的变量！
     released_branches = get_released_branches_from_main(ref=filter_ref)
     
     active_features = {} # {branch_name: description}
@@ -203,10 +207,9 @@ def get_beta_preview_content(compare_base: str, current_tag: str) -> str:
     IGNORE_PREFIXES = ['main', 'master', 'develop', 'release']
 
     for commit in merges:
-        # 【新增】时间过滤逻辑
-        # 如果该合并发生的时间 早于 正式版发布时间，说明它是“陈年旧账”，直接跳过
+        # 🛡️ 【保留你的保险】：拦截远古合并记录，防止错乱分支引发的刷屏灾难！
         if base_ts > 0 and commit['timestamp'] < base_ts:
-            # print(f"跳过旧合并: {commit['subject']} (早于基准)")
+            # print(f"跳过远古合并: {commit['subject']}")
             continue
         
         branch, desc = parse_merge_subject(commit['subject'])
@@ -229,7 +232,7 @@ def get_beta_preview_content(compare_base: str, current_tag: str) -> str:
         
     lines = []
     
-    # 修改点：只要是 beta/ci/alpha 都使用这套文案，不做动态替换
+    # 只要是 beta/ci/alpha 都使用这套文案，不做动态替换
     if is_beta_or_ci:
         # 🧪 公测版/开发版文案
         lines.append("### 🧬 正在测试的功能 (Beta Preview)")
