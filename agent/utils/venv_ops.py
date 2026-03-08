@@ -13,7 +13,7 @@ from . import mfaalog  # 日志工具
 # MAAFW的py库版本需要手动指定,与C++库版号一致。
 DEV_MAAFW_VERSION = "5.7.1" 
 # 精确安装失败时的回退范围。更新上方版本时，请务必同步更新此处！
-FALLBACK_MAAFW_SPEC = "maafw>=5.7,<5.8"
+FALLBACK_MAAFW_SPEC = ">=5.7,<5.8"
 VENV_NAME = ".venv"
 PREFERRED_PYTHON_VERSION = "3.10"
 # =========================================================
@@ -141,7 +141,7 @@ def install_deps(venv_python: Path, project_root: Path, venv_path: Path):
         subprocess.check_call([
             str(venv_python), "-m", "pip", "install",
             "-i", "https://pypi.tuna.tsinghua.edu.cn/simple",
-            f"{FALLBACK_MAAFW_SPEC}"
+            f"maafw=={DEV_MAAFW_VERSION}"
         ])
     
     # --- 4. 全部安装成功后，写入新缓存 ---
