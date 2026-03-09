@@ -93,10 +93,10 @@
       {
         "recognition": "OCR",
         "roi": [
-          802,
-          16,
-          109,
-          47
+          765,
+          5,
+          170,
+          70
         ],
         "expected": [
           "活动服装"
@@ -515,22 +515,42 @@
     "recognition": "OCR",
     "action": "Click",
     "next": [
+      "Even_MamonoFollowUp_MamonoEnter",
+      "Even_MamonoFollowUp_InMamono",
+      "[JumpBack]Global_WaitingForLoading"
+    ],
+    "post_delay": 1000,
+    "post_wait_freezes": 3000,
+    "roi": [
+      99,
+      433,
+      1126,
+      293
+    ],
+    "expected": [
+      "魔兽追踪者"
+    ]
+  },
+  "Even_MamonoFollowUp_MamonoEnter": {
+    "recognition": "OCR",
+    "roi": [
+      219,
+      25,
+      68,
+      32
+    ],
+    "only_rec": true,
+    "expected": [
+      "魔兽"
+    ],
+    "next": [
       "Even_MamonoFollowUp_QuickBattle_color",
       "Even_MamonoFollowUp_lvck",
       "Even_MamonoFollowUp_InMamono",
       "[JumpBack]Even_MamonoFollowUp_lvdown"
     ],
-    "post_delay": 5000,
-    "post_wait_freezes": 3000,
-    "roi": [
-      452,
-      379,
-      797,
-      331
-    ],
-    "expected": [
-      "魔兽追踪者"
-    ]
+    "focus": "EM.魔兽界面确认打开",
+    "doc": "魔兽界面核实已打开"
   },
   "Even_MamonoFollowUp_lvck": {
     "recognition": "OCR",
