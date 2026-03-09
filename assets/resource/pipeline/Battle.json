@@ -73,7 +73,8 @@
     "recognition": "OCR",
     "action": "Click",
     "next": [
-      "Battle_CollectMapShouLie"
+      "Battle_CollectMapShouLie",
+      "[JumpBack]Battle_CollectMap_SwipLeft"
     ],
     "pre_wait_freezes": 1500,
     "focus": "BM.快速狩猎地图,默认位置",
@@ -90,7 +91,54 @@
       140,
       120
     ],
+    "on_error": [
+      "[JumpBack]Battle_CollectMap_ErrReset"
+    ],
     "doc": "A.进入扫荡地图，依次执行支线"
+  },
+  "Battle_CollectMap_ErrReset": {
+    "recognition": "OCR",
+    "roi": [
+      93,
+      126,
+      96,
+      54
+    ],
+    "expected": [
+      "狩猎场"
+    ],
+    "action": "Click",
+    "target_offset": [
+      0,
+      -3,
+      0,
+      0
+    ],
+    "focus": "BM.Err位置处理,复位",
+    "doc": "ERR触发,复位到默认狩猎场,再重新位移,有最大限制",
+    "max_hit": 5,
+    "post_delay": 1500,
+    "next": [
+      "Battle_CollectMap_ErrReset_Clr",
+      "Battle_CollectMap_ErrReset"
+    ],
+    "timeout": 5000
+  },
+  "Battle_CollectMap_ErrReset_Clr": {
+    "recognition": "ColorMatch",
+    "roi": "Battle_CollectMap_ErrReset",
+    "method": 40,
+    "lower": [
+      0,
+      0,
+      180
+    ],
+    "upper": [
+      90,
+      3,
+      255
+    ],
+    "count": 10
   },
   "Battle_CollectMapShouLie": {
     "recognition": "OCR",
@@ -127,6 +175,7 @@
     ]
   },
   "Battle_FastBattleMAXTouchShouLie": {
+    "anchor": "Battle_ErrReset",
     "recognition": "OCR",
     "action": "Click",
     "next": [
@@ -146,6 +195,9 @@
     "target": [
       470,
       390
+    ],
+    "on_error": [
+      "[JumpBack]Battle_CollectMap_ErrReset"
     ],
     "doc": "B-1.狩猎场次数选择，点击MAX"
   },
@@ -319,7 +371,8 @@
   "Battle_CollectMapHangXianDoubleCk2No_ToCentral_CK": {
     "next": [
       "Battle_NoAP_Rice",
-      "Battle_CollectMapShouLieR2"
+      "Battle_CollectMapShouLieR2",
+      "[JumpBack]Battle_CollectMap_SwipLeft"
     ],
     "roi": [
       549,
@@ -721,7 +774,8 @@
     "target": [
       140,
       120
-    ]
+    ],
+    "doc": "无判定复位,带校验"
   },
   "Battle_CollectMapInitialize_Out_Ty1": {
     "recognition": "OCR",
@@ -1052,7 +1106,9 @@
       ]
     ],
     "duration": 200,
-    "end_hold": 1000
+    "end_hold": 1000,
+    "enabled": false,
+    "doc": "移动大地图-史贝伦大陆西北"
   },
   "Battle_MapLocReset_once": {
     "action": "Click",

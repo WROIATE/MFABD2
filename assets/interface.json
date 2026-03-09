@@ -262,18 +262,8 @@
                 {
                     "name": "矿石-章节7",
                     "pipeline_override": {
-                        "Battle_CollectMap": {
-                            "next": [
-                                "Battle_CollectMapShouLie",
-                                "[JumpBack]Battle_CollectMap_SwipLeft"
-                            ]
-                        },
-                        "Battle_CollectMapHangXianDoubleCk2No_ToCentral_CK": {
-                            "next": [
-                                "Battle_NoAP_Rice",
-                                "Battle_CollectMapShouLieR2",
-                                "[JumpBack]Battle_CollectMap_SwipLeft"
-                            ]
+                        "Battle_CollectMap_SwipLeft": {
+                            "enabled": true
                         },
                         "Battle_CollectMapShouLie": {
                             "expected": [
