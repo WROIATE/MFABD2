@@ -51,7 +51,7 @@
         },
         {
             "name": "[执行]快速狩猎扫荡",
-            "entry": "Battle_StartGame_HomePage",
+            "entry": "QuickHunt_Start",
             "default_check": true,
             "option": [
                 "冒险航线",
@@ -223,16 +223,8 @@
             "description": "决定2件事:<br>1、切卡入口是箱庭快速卡带按钮，还是主页面卡带老菜单。<br>2、快速卡带的类型顺序 or 固定卡带的刷取内容",
             "cases": []
         },
-        "快速卡带-剧情卡带-刷取张数": {
-            "description": "【仅适用于‘快速’方案】左起第1张开始，刷几个剧情游戏卡带？<br>最大值 = $‘吸取’技能总次数 ÷3 - $角色卡带计划刷取张数 。超选都是浪费时间！",
-            "cases": []
-        },
-        "快速卡带-角色卡带-刷取张数": {
-            "description": "【仅适用于‘快速’方案】左起第1张开始，刷几个角色游戏卡带？<br>最大值 = $‘吸取’技能总次数 ÷3 - $剧情卡带计划刷取张数 【且不能超过当前版本最大角色卡带数！】。超选都是浪费时间！",
-            "cases": []
-        },
         "狩猎场": {
-            "description": "是否要打狩猎场",
+            "description": "是否要打狩猎场\n\n选\"不打\"且\"优先双倍\"不符合,会按缺略打狩猎场",
             "type": "switch",
             "cases": [
                 {
@@ -243,15 +235,10 @@
                 },
                 {
                     "name": "No",
-                    "description": "选“不打”会,会使得启用“优先双倍”被“强制双倍”替代,这是为了避免bug",
                     "pipeline_override": {
-                        "Battle_CollectMap": {
-                            "next": [
-                                "Battle_CollectMapHangXian1",
-                                "Battle_CollectMap"
-                            ]
-                        },
-                        "Battle_CollectMapHangXianDoubleCk1No": {}
+                        "QuickHunt_HuntingGrounds": {
+                            "enabled": false
+                        }
                     }
                 }
             ]
@@ -262,27 +249,10 @@
                 {
                     "name": "矿石-章节7",
                     "pipeline_override": {
-                        "Battle_CollectMap_SwipLeft": {
+                        "QuickHunt_CollectMap_SwipLeft": {
                             "enabled": true
                         },
-                        "Battle_CollectMapShouLie": {
-                            "expected": [
-                                "蜥蜴人祭坛"
-                            ],
-                            "roi": [
-                                305,
-                                367,
-                                121,
-                                59
-                            ],
-                            "target_offset": [
-                                5,
-                                -3,
-                                0,
-                                0
-                            ]
-                        },
-                        "Battle_CollectMapShouLieR2": {
+                        "QuickHunt_CollectMapHuntingGrounds": {
                             "expected": [
                                 "蜥蜴人祭坛"
                             ],
@@ -304,18 +274,7 @@
                 {
                     "name": "木材-章节9",
                     "pipeline_override": {
-                        "Battle_CollectMapShouLie": {
-                            "expected": [
-                                "守山人休息处"
-                            ],
-                            "roi": [
-                                998,
-                                76,
-                                165,
-                                95
-                            ]
-                        },
-                        "Battle_CollectMapShouLieR2": {
+                        "QuickHunt_CollectMapHuntingGrounds": {
                             "expected": [
                                 "守山人休息处"
                             ],
@@ -350,15 +309,8 @@
                     "name": "No",
                     "description": "不打:不打航线图，全刷狩猎场。",
                     "pipeline_override": {
-                        "Battle_FastBattleMAXTouchShouLie": {
-                            "next": [
-                                "Battle_CollectMapDongXue",
-                                "[JumpBack]Battle_FastBattleStart"
-                            ],
-                            "target": [
-                                800,
-                                390
-                            ]
+                        "QuickHunt_AdventureRoute": {
+                            "enabled": false
                         }
                     }
                 }
@@ -371,10 +323,10 @@
                     "name": "优先双倍",
                     "description": "优先:先考虑资源倾向，再考虑双倍则打航线，否则全打狩猎场。",
                     "pipeline_override": {
-                        "Battle_CollectMapHangXianDoubleCk1No": {
+                        "QuickHunt_CollectMapAdventureRouteDoubleCk1No": {
                             "next": [
-                                "Battle_CollectMapHangXianDoubleCk2No_ToCentral",
-                                "[JumpBack]Battle_CollectMapInitialize"
+                                "QuickHunt_CollectMapAdventureRouteDoubleCk2No_ToCentral",
+                                "[JumpBack]QuickHunt_CollectMap_Initialize"
                             ]
                         }
                     }
@@ -388,16 +340,14 @@
                     "name": "忽视双倍",
                     "description": "忽视:不检查是否双倍，直接按照资源倾向打。",
                     "pipeline_override": {
-                        "Battle_CollectMapHangXian1": {
-                            "next": [
-                                "Battle_CollectMapHangXianDoubleCk1"
-                            ]
-                        },
-                        "Battle_CollectMapHangXianDoubleCk1": {
+                        "QuickHunt_CollectMapAdventureRouteDoubleCk1": {
                             "template": [
                                 "Exp.png",
                                 "Gold.png"
                             ]
+                        },
+                        "QuickHunt_CollectMapAdventureRouteDoubleCk1No": {
+                            "enabled": false
                         }
                     }
                 }
@@ -410,7 +360,7 @@
                 {
                     "name": "优先金币",
                     "pipeline_override": {
-                        "Battle_CollectMapHangXian1": {
+                        "QuickHunt_CollectMapAdventureRoute1": {
                             "target": [
                                 341,
                                 558
@@ -422,7 +372,7 @@
                 {
                     "name": "优先经验",
                     "pipeline_override": {
-                        "Battle_CollectMapHangXian1": {
+                        "QuickHunt_CollectMapAdventureRoute1": {
                             "target": [
                                 510,
                                 531
@@ -440,7 +390,7 @@
                 {
                     "name": "狩猎场x1 / 双倍图MAX",
                     "pipeline_override": {
-                        "Battle_FastBattleMAXTouchHangxian": {
+                        "QuickHunt_FastBattleMAXTouchAdventureRoute": {
                             "target": [
                                 800,
                                 390
@@ -451,22 +401,18 @@
                 {
                     "name": "狩猎场MAX / 双倍图最多x1",
                     "pipeline_override": {
-                        "Battle_FastBattleMAXTouchShouLie": {
+                        "QuickHunt_FastBattleMAXTouchHuntingGrounds": {
                             "target": [
                                 800,
                                 390
                             ]
                         },
-                        "Battle_CollectMap": {
+                        "QuickHunt_Hub": {
                             "next": [
-                                "Battle_CollectMapHangXian1",
-                                "Battle_CollectMap"
-                            ]
-                        },
-                        "Battle_FastBattleMAXTouchHangxian": {
-                            "next": [
-                                "Battle_CollectMapHangXianDoubleCk2No_ToCentral_CK",
-                                "[JumpBack]Battle_FastBattleStart"
+                                "[JumpBack]QuickHunt_OpenGui",
+                                "[JumpBack]QuickHunt_AdventureRoute",
+                                "[JumpBack]QuickHunt_HuntingGrounds",
+                                "[JumpBack]QuickHunt_CrystalCave"
                             ]
                         }
                     }
@@ -479,26 +425,29 @@
                 {
                     "name": "补短",
                     "pipeline_override": {
-                        "Battle_FastBattleTouch_StoneSelect_Smart": {
+                        "QuickHunt_FastBattleTouch_StoneSelect_Smart": {
                             "enabled": true
+                        },
+                        "QuickHunt_FastBattleTouch_StoneSelect": {
+                            "enabled": false
                         }
                     }
                 },
                 {
                     "name": "均衡",
                     "pipeline_override": {
-                        "Battle_FastBattleTouch_StoneSelect": {
-                            "next": [
-                                "Battle_TurnCharact_Start",
-                                "[JumpBack]Battle_QuickBattleButton"
-                            ]
+                        "QuickHunt_TurnCharact_Start": {
+                            "enabled": true
+                        },
+                        "QuickHunt_FastBattleMAXTouchCrystalCave": {
+                            "enabled": false
                         }
                     }
                 },
                 {
                     "name": "火",
                     "pipeline_override": {
-                        "Battle_FastBattleTouch_StoneSelect": {
+                        "QuickHunt_FastBattleTouch_StoneSelect": {
                             "target": [
                                 230,
                                 120
@@ -509,7 +458,7 @@
                 {
                     "name": "水",
                     "pipeline_override": {
-                        "Battle_FastBattleTouch_StoneSelect": {
+                        "QuickHunt_FastBattleTouch_StoneSelect": {
                             "target": [
                                 230,
                                 175
@@ -520,7 +469,7 @@
                 {
                     "name": "风",
                     "pipeline_override": {
-                        "Battle_FastBattleTouch_StoneSelect": {
+                        "QuickHunt_FastBattleTouch_StoneSelect": {
                             "target": [
                                 230,
                                 230
@@ -531,7 +480,7 @@
                 {
                     "name": "光",
                     "pipeline_override": {
-                        "Battle_FastBattleTouch_StoneSelect": {
+                        "QuickHunt_FastBattleTouch_StoneSelect": {
                             "target": [
                                 230,
                                 290
@@ -542,7 +491,7 @@
                 {
                     "name": "暗",
                     "pipeline_override": {
-                        "Battle_FastBattleTouch_StoneSelect": {
+                        "QuickHunt_FastBattleTouch_StoneSelect": {
                             "target": [
                                 230,
                                 350
