@@ -257,16 +257,10 @@
                                 "蜥蜴人祭坛"
                             ],
                             "roi": [
-                                305,
-                                367,
-                                121,
-                                59
-                            ],
-                            "target_offset": [
-                                5,
-                                -3,
-                                0,
-                                0
+                                298,
+                                369,
+                                134,
+                                88
                             ]
                         }
                     }
@@ -274,21 +268,24 @@
                 {
                     "name": "木材-章节9",
                     "pipeline_override": {
+                        "QuickHunt_CollectMap_SwipNoth": {
+                            "enabled": true
+                        },
                         "QuickHunt_CollectMapHuntingGrounds": {
                             "expected": [
                                 "守山人休息处"
                             ],
                             "roi": [
-                                998,
-                                76,
-                                165,
-                                95
+                                448,
+                                409,
+                                167,
+                                74
                             ]
                         }
                     }
                 },
                 {
-                    "name": "低练度-章节2",
+                    "name": "低练度-章节1",
                     "pipeline_override": {}
                 }
             ]
@@ -362,8 +359,8 @@
                     "pipeline_override": {
                         "QuickHunt_CollectMapAdventureRoute1": {
                             "target": [
-                                341,
-                                558
+                                138,
+                                200
                             ],
                             "focus": "BM.航线-首选-金币"
                         }
@@ -374,8 +371,8 @@
                     "pipeline_override": {
                         "QuickHunt_CollectMapAdventureRoute1": {
                             "target": [
-                                510,
-                                531
+                                138,
+                                280
                             ],
                             "focus": "BM.航线-首选-经验"
                         }
@@ -1563,7 +1560,7 @@
     },
     "interface_version": 2,
     "name": "MFABD2",
-    "title": "MFABD2 | 棕色尘埃2自动化助手(sunyink/MFABD2)v0.0.20 | 游戏版本：20260212 ( Magical & Lyrical )",
+    "title": "MFABD2 | 棕色尘埃2自动化助手(sunyink/MFABD2)v0.0.20 | 游戏版本：20260312 ( Psyche Artist )",
     "github": "https://github.com/sunyink/MFABD2",
     "mirrorchyan_rid": "MFABD2",
     "mirrorchyan_multiplatform": true,

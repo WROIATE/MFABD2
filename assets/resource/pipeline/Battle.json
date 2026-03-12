@@ -122,7 +122,8 @@
   "QuickHunt_CollectMap": {
     "next": [
       "QuickHunt_CollectMapHuntingGrounds",
-      "[JumpBack]QuickHunt_CollectMap_SwipLeft"
+      "[JumpBack]QuickHunt_CollectMap_SwipLeft",
+      "[JumpBack]QuickHunt_CollectMap_SwipNoth"
     ],
     "focus": "BM.快速狩猎-狩猎场开始",
     "on_error": [
@@ -184,13 +185,19 @@
     "timeout": 5000,
     "pre_wait_freezes": 500,
     "roi": [
-      549,
-      338,
-      171,
-      87
+      847,
+      156,
+      80,
+      23
     ],
     "expected": [
       "野猪洞穴"
+    ],
+    "target_offset": [
+      0,
+      -5,
+      0,
+      0
     ],
     "doc": "A-1.选择狩猎场。"
   },
@@ -275,7 +282,7 @@
   },
   "QuickHunt_CollectMapAdventureRouteDoubleCk1": {
     "recognition": "TemplateMatch",
-    "action": "Click",
+    // "action": "Click",
     "next": [
       "QuickHunt_NoAP_Rice",
       "QuickHunt_FastBattleMAXTouchAdventureRoute",
@@ -293,10 +300,10 @@
       "DoubleGold.png"
     ],
     "threshold": 0.8,
-    "target": [
-      1060,
-      650
-    ]
+    // "target": [
+    //   1060,
+    //   650
+    // ]
   },
   "QuickHunt_CollectMapAdventureRouteDoubleCk1No": {
     "recognition": "TemplateMatch",
@@ -489,7 +496,7 @@
   },
   "QuickHunt_CollectMapAdventureRouteDoubleCk2": {
     "recognition": "TemplateMatch",
-    "action": "Click",
+    // "action": "Click",
     "next": [
       "QuickHunt_NoAP_Rice",
       "QuickHunt_FastBattleMAXTouchAdventureRoute",
@@ -507,10 +514,10 @@
       "DoubleGold.png"
     ],
     "threshold": 0.8,
-    "target": [
-      1060,
-      650
-    ]
+    // "target": [
+    //   1060,
+    //   650
+    // ]
   },
   "QuickHunt_CollectMapAdventureRouteDoubleCk2No": {
     "recognition": "TemplateMatch",
@@ -536,11 +543,10 @@
       "QuickHunt_CollectMapAdventureRouteDoubleCk2No_ToCentral_CK",
       "QuickHunt_CollectMapAdventureRouteDoubleCk2No_ToCentral"
     ],
-    "post_delay": 1000,
     "focus": "BM.快速狩猎-狩猎地图返回默认位置",
     "target": [
-      140,
-      120
+      139,
+      197
     ],
     "doc": "目的是不用中断、在主流程里把地图复位，配个其他中断使用。T1"
   },
@@ -550,14 +556,15 @@
       "QuickHunt_AdventureRouteReBackHuntingGrounds_Pipeline"
     ],
     "roi": [
-      549,
-      338,
-      171,
-      87
+      538,
+      372,
+      107,
+      30
     ],
     "expected": [
-      "野猪洞穴"
+      "哥布林遗迹"
     ],
+    "only_rec": true,
     "recognition": "OCR",
     "focus": "BM.快速狩猎-狩猎地图返回默认位置ck",
     "doc": "目的是不用中断、在主流程里把地图复位，配个其他中断使用。T2，默认接狩猎R2"
@@ -781,7 +788,7 @@
     "recognition": "OCR",
     "action": "Click",
     "next": [
-      "QuickHunt_BackHomePage",
+      "QuickHunt_CrystalCave_End",
       "[JumpBack]QuickHunt_FastBattleStart"
     ],
     "roi": [
@@ -797,7 +804,7 @@
       800,
       390
     ],
-    "doc": "B-2.冒险航线次数选择，点击MAX"
+    "doc": "3.圣石洞穴次数选择，点击MAX"
   },
   "QuickHunt_NoAP_Torch": {
     "doc": "付费火把用尽情况",
@@ -927,17 +934,17 @@
       "QuickHunt_CollectMap_Initialize"
     ],
     "post_delay": 800,
-    "focus": "BB.快速狩猎-结算-狩猎地图默认位置",
+    "focus": "BB.狩猎-复位模块开始-哥布林遗迹",
     "target": [
-      140,
-      120
+      139,
+      197
     ],
     "timeout": 3000,
     "doc": "无判定复位,然后校验,要求极快"
   },
   "QuickHunt_CollectMap_Initialize_Out_Ty1": {
     "recognition": "ColorMatch",
-    "focus": "BB.地图复位默认位置-在1级界面中-复核通过",
+    "focus": "BB.狩猎-复位模块\n\n #在1级界面中-复核通过",
     "roi": [
       199,
       45,
@@ -961,9 +968,13 @@
       "QuickHunt_CollectMap_Initialize_Out_BedReset",
       "[JumpBack]QuickHunt_MapLocReset_once"
     ],
+    "on_error": [
+      "QuickHunt_CollectMap_Initialize_Out_UnknowErr"
+    ],
     "doc": "1级界面确认,无2级浮窗的灰度现象"
   },
   "QuickHunt_CollectMap_Initialize_Out_BedReset": {
+    "enabled": false,
     "recognition": "OCR",
     "focus": "BB.[ERROR]复位异常,野猪洞穴应在正中,请打通此狩猎场.]",
     "roi": [
@@ -975,86 +986,81 @@
     "expected": [
       "废弃矿山"
     ],
-    "doc": "中央OCR 复位错误"
+    "doc": "复位错误:待补充新的复位失败条件,节点还是有意义的"
+  },
+  "QuickHunt_CollectMap_Initialize_Out_UnknowErr": {
+    "focus": "BB.狩猎-复位模块出口\n\n 失败,未知错误."
   },
   "QuickHunt_CollectMap_Initialize_Out_Ty2": {
     "recognition": "OCR",
-    "focus": "BB.地图复位默认位置-位置正确-复位成功",
+    "focus": "BB.狩猎-复位模块出口\n\n 复位位置正确-成功",
     "roi": [
-      553,
-      345,
-      150,
-      82
+      538,
+      372,
+      107,
+      30
     ],
     "expected": [
-      "野猪洞穴"
+      "哥布林遗迹"
     ],
+    "only_rec": true,
     "next": [
       "[Anchor]BattleMap_Reset"
     ],
     "doc": "中央OCR 复位正确"
   },
   "QuickHunt_MapLocReset_once": {
+    "recognition": "ColorMatch",
+    "roi": [
+      136,
+      192,
+      8,
+      6
+    ],
+    "method": 40,
+    "count": 20,
+    "connected": true,
+    "lower": [
+      0,
+      0,
+      160
+    ],
+    "upper": [
+      90,
+      5,
+      178
+    ],
     "action": "Click",
     "target": [
-      140,
-      120
+      139,
+      197
     ],
     "post_delay": 800,
-    "focus": "BB.单次复位(无判定)"
+    "focus": "BB.单次复位(色核-点击失败)"
   },
   "QuickHunt_CollectMap_InitializeE": {
-    "action": "Click",
     "next": [
       "QuickHunt_CollectMap_Initialize"
     ],
-    "post_delay": 3000,
-    "focus": "BB.快速狩猎-异常(点击地图默认位置按钮)",
-    "target": [
-      140,
-      120
-    ]
+    "focus": "BB.快速狩猎-异常(进入地图复位模块)"
   },
-  "QuickHunt_BackHomePage": {
+  "QuickHunt_CrystalCave_End": {
     "recognition": "OCR",
-    "action": "Click",
     "next": [
-      "QuickHunt_FinBackMapPage",
-      "QuickHunt_BackHomePage"
+      "Global_ToSandBox"
     ],
-    "post_delay": 2000,
     "focus": "BM.流程可以结束",
     "roi": [
-      400,
-      144,
-      545,
-      350
+      538,
+      372,
+      107,
+      30
     ],
     "expected": [
-      "野猪洞穴"
+      "哥布林遗迹"
     ],
-    "target": [
-      135,
-      37
-    ],
+    "only_rec": true,
     "doc": "返回本子地图"
-  },
-  "QuickHunt_FinBackMapPage": {
-    "recognition": "TemplateMatch",
-    "action": "StopTask",
-    "next": [],
-    "focus": "BM.流程结束成功",
-    "roi": [
-      1047,
-      516,
-      107,
-      110
-    ],
-    "template": [
-      "Run.png"
-    ],
-    "green_mask": true,
-    "doc": "识别右下run-章节主页"
   },
   "QuickHunt_TurnCharact_Start": {
     "next": [
@@ -1106,8 +1112,7 @@
   "QuickHunt_TurnCharact_NoAP": {
     "recognition": "ColorMatch",
     "next": [
-      "QuickHunt_TurnCharact_CollectMapInitializeE",
-      "[JumpBack]QuickHunt_CollectMap_Initialize"
+      "Global_ToSandBox"
     ],
     "roi": [
       649,
@@ -1124,7 +1129,8 @@
       255,
       139,
       133
-    ]
+    ],
+    "focus": "BTBM.AP-异常"
   },
   "QuickHunt_TurnCharact_TurnDuo": {
     "recognition": "OCR",
@@ -1222,18 +1228,6 @@
       0
     ]
   },
-  "QuickHunt_TurnCharact_CollectMapInitializeE": {
-    "action": "Click",
-    "next": [
-      "QuickHunt_BackHomePage"
-    ],
-    "post_delay": 3000,
-    "focus": "BTBM.AP-异常（点击地图默认位置按钮）",
-    "target": [
-      140,
-      120
-    ]
-  },
   "QuickHunt_TurnCharact_End": {
     "recognition": "TemplateMatch",
     "next": [
@@ -1255,33 +1249,56 @@
   "QuickHunt_CollectMap_SwipLeft": {
     "recognition": "OCR",
     "roi": [
-      549,
-      338,
-      171,
-      87
+      538,
+      372,
+      107,
+      30
     ],
     "expected": [
-      "野猪洞穴"
+      "哥布林遗迹"
     ],
+    "only_rec": true,
     "action": "Swipe",
-    "post_delay": 3000,
+    "post_delay": 2000,
     "focus": "BM.史贝伦大陆西北",
     "begin": [
-      270,
-      144
+      556,
+      32
     ],
     "end": [
-      [
-        570,
-        144
-      ],
-      [
-        570,
-        450
-      ]
+      624,
+      580
     ],
-    "duration": 200,
-    "end_hold": 1000,
+    "duration": 800,
+    "end_hold": 600,
+    "enabled": false,
+    "doc": "移动大地图-史贝伦大陆西北"
+  },
+  "QuickHunt_CollectMap_SwipNoth": {
+    "recognition": "OCR",
+    "roi": [
+      538,
+      372,
+      107,
+      30
+    ],
+    "expected": [
+      "哥布林遗迹"
+    ],
+    "only_rec": true,
+    "action": "Swipe",
+    "post_delay": 2000,
+    "focus": "BM.史贝伦大陆东北",
+    "begin": [
+      974,
+      26
+    ],
+    "end": [
+      161,
+      570
+    ],
+    "duration": 800,
+    "end_hold": 600,
     "enabled": false,
     "doc": "移动大地图-史贝伦大陆西北"
   }
