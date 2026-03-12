@@ -121,6 +121,7 @@
   },
   "QuickHunt_CollectMap": {
     "next": [
+      "QuickHunt_NoRiceAP_Skip",
       "QuickHunt_CollectMapHuntingGrounds",
       "[JumpBack]QuickHunt_CollectMap_SwipLeft",
       "[JumpBack]QuickHunt_CollectMap_SwipNoth"
@@ -638,21 +639,22 @@
     ]
   },
   "QuickHunt_CollectMapCrystalCaveCK": {
-    "recognition": "TemplateMatch",
+    "recognition": "OCR",
     "next": [
       "QuickHunt_NoTorchesAP_Skip",
       "QuickHunt_FastBattleTouch_StoneSelect_Smart",
       "QuickHunt_FastBattleTouch_StoneSelect"
     ],
     "roi": [
-      426,
-      622,
-      70,
-      60
+      595,
+      372,
+      86,
+      28
     ],
-    "template": [
-      "CharactFirepng.png"
-    ]
+    "expected": [
+      "[水光风火暗]之洞穴"
+    ],
+    "only_rec": false
   },
   "QuickHunt_NoTorchesAP_Skip": {
     "focus": "BM.免费火把耗尽，跳过打圣石洞穴",
