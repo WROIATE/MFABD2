@@ -282,7 +282,6 @@
   },
   "QuickHunt_CollectMapAdventureRouteDoubleCk1": {
     "recognition": "TemplateMatch",
-    // "action": "Click",
     "next": [
       "QuickHunt_NoAP_Rice",
       "QuickHunt_FastBattleMAXTouchAdventureRoute",
@@ -299,11 +298,7 @@
       "DoubleExp.png",
       "DoubleGold.png"
     ],
-    "threshold": 0.8,
-    // "target": [
-    //   1060,
-    //   650
-    // ]
+    "threshold": 0.8
   },
   "QuickHunt_CollectMapAdventureRouteDoubleCk1No": {
     "recognition": "TemplateMatch",
@@ -496,7 +491,6 @@
   },
   "QuickHunt_CollectMapAdventureRouteDoubleCk2": {
     "recognition": "TemplateMatch",
-    // "action": "Click",
     "next": [
       "QuickHunt_NoAP_Rice",
       "QuickHunt_FastBattleMAXTouchAdventureRoute",
@@ -513,11 +507,7 @@
       "DoubleExp.png",
       "DoubleGold.png"
     ],
-    "threshold": 0.8,
-    // "target": [
-    //   1060,
-    //   650
-    // ]
+    "threshold": 0.8
   },
   "QuickHunt_CollectMapAdventureRouteDoubleCk2No": {
     "recognition": "TemplateMatch",
@@ -1300,6 +1290,6 @@
     "duration": 800,
     "end_hold": 600,
     "enabled": false,
-    "doc": "移动大地图-史贝伦大陆西北"
+    "doc": "移动大地图-史贝伦大陆东北"
   }
 }

@@ -1,6 +1,6 @@
 {
     "post_wait_freezes": {
-        "roi": [
+        "target": [
             617,
             258,
             46,
