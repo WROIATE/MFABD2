@@ -312,6 +312,8 @@ jobs:
             mfa_arch: "x64"
             numpy_req: "numpy<2"
             is_android: false
+            standalone_url: "https://github.com/indygreg/python-build-standalone/releases/download/20240107/cpython-3.10.13+20240107-x86_64-apple-darwin-install_only.tar.gz"
+            standalone_sha256: "47da6831e269ad6af603f59bbd4767636c5749bd70a24363c9cf003c32c8ecfc"
 
           # -------------------------------------------------------------------
           # 🍎 macOS (ARM64)
@@ -323,6 +325,8 @@ jobs:
             mfa_arch: "arm64"
             numpy_req: "numpy<2"
             is_android: false
+            standalone_url: "https://github.com/indygreg/python-build-standalone/releases/download/20240107/cpython-3.10.13+20240107-aarch64-apple-darwin-install_only.tar.gz"
+            standalone_sha256: "4d19a0509c274f360a5c250d71a2af7263ebaf898ecdb71427f3532cbc6b2cf7"
 
           # -------------------------------------------------------------------
           # 🐧 Linux (x64)
@@ -479,6 +483,54 @@ jobs:
             "${{ matrix.numpy_req }}" \
             -r requirements_no_numpy.txt \
             maafw==$MAA_VERSION
+
+      # ----------------------------------------------------------------
+      # [新增] macOS 专属：Portable Python 打包
+      # ----------------------------------------------------------------
+      - name: Setup Portable Python (macOS)
+        if: matrix.os == 'macos'
+        shell: bash
+        run: |
+          echo "⬇️ Downloading Portable Python for macOS..."
+          # 失败重试和SHA校验
+          curl -fL --retry 3 --retry-delay 2 -o python_mac.tar.gz "${{ matrix.standalone_url }}"
+          echo "${{ matrix.standalone_sha256 }}  python_mac.tar.gz" | shasum -a 256 -c -
+          
+          # 解压 (standalone 包结构通常是 python/install/...)
+          mkdir -p temp_python
+          tar -xzf python_mac.tar.gz -C temp_python
+
+          # 💡 调试输出一下目录结构，防止以后包结构又变
+          echo "📂 预计解压后的目录结构如下："
+          ls -la temp_python/python/
+          
+          # 移动到 install/python
+          mkdir -p install/python
+          cp -r temp_python/python/* install/python/
+          rm -rf temp_python python_mac.tar.gz
+
+          # 设置权限 (非常重要)
+          chmod +x install/python/bin/python3
+          
+          echo "📦 Installing Dependencies (macOS)..."
+          PY_EXEC="install/python/bin/python3"
+          
+          # 剔除 numpy
+          "$PY_EXEC" -c "
+          import re
+          with open('requirements.txt', 'r') as f_in, open('requirements_no_numpy.txt', 'w') as f_out:
+              for line in f_in:
+                  if not re.match(r'^\s*numpy\s*([<>=!~;]|$)', line, re.IGNORECASE):
+                      f_out.write(line)
+          "
+          
+          # 安装依赖到便携版环境
+          "$PY_EXEC" -m pip install --upgrade pip
+          "$PY_EXEC" -m pip install "${{ matrix.numpy_req }}" -r requirements_no_numpy.txt maafw==$MAA_VERSION
+          
+          # 清理缓存
+          "$PY_EXEC" -m pip cache purge
+          find install/python -name "__pycache__" -type d -exec rm -rf {} +     
 
       # ----------------------------------------------------------------
       # 🏗️ 构建与组装
