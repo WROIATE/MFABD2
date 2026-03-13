@@ -61,9 +61,7 @@
     "post_delay": 800,
     "target": [
       229,
-      88,
-      0,
-      0
+      88
     ],
     "doc": "自动寻路菜单"
   },
@@ -140,7 +138,7 @@
     "expected": [
       "移动魔法阵"
     ],
-    "doc": "找到图钉，进入区域地图"
+    "doc": "判断是否为区域地图界面"
   },
   "Collect_TargetMap1-1": {
     "recognition": "TemplateMatch",
@@ -190,6 +188,8 @@
       "罗戴夫镇",
       "科库托斯圣域",
       "学校1楼",
+      "恶梦之城1",
+      "恶梦之城I",
       "安全"
     ],
     "replace": [
@@ -254,6 +254,7 @@
       "儿童房",
       "官邸地",
       "学校2楼",
+      "恶梦之城2",
       "战斗I",
       "战斗 I",
       "战斗\\s*[1IⅠ!！](?!I)(?!Ⅰ)(?!！)(?!!)",
@@ -323,6 +324,7 @@
       "童话镇旅馆",
       "第一记忆空间",
       "学校3楼",
+      "雷瓦汀据点",
       "战斗II",
       "战斗Ⅱ",
       "战斗 II",
@@ -387,7 +389,7 @@
       "妖怪镇",
       "学校地下"
     ],
-    "doc": "详细地图确定位置3"
+    "doc": "详细地图额外位置4。白名单制,每一张图名称都要手动指定."
   },
   "Collect_TargetMap1_Special_PerRight": {
     "doc": "[维护点C05]复位到箱庭1图时需要特殊跳过的图,用来跳过图1非目标图,(EP18)需要持续维护!",
@@ -501,9 +503,7 @@
     ],
     "target": [
       120,
-      35,
-      0,
-      0
+      35
     ],
     "doc": "维护点C02开端"
   },
@@ -526,9 +526,7 @@
     ],
     "target": [
       120,
-      35,
-      0,
-      0
+      35
     ],
     "doc": "维护点C02末端.快速卡带pipeline_override了此处next，去了C_QuickCart_TargetMapEnd,因为是中断内next，故必须结束退回上一个流程，单独end"
   },
@@ -565,9 +563,7 @@
     ],
     "target": [
       120,
-      35,
-      0,
-      0
+      35
     ],
     "doc": "维护点C06.切图状态机如果OCR识别出错,可能导致脚本停留在图1,但实际已执行到图2,最后过量切图到旅店后面,会循环卡住。定性为状态机思维框架底层bug，难修危害大。此节点作为额外守护，放入next中。直接结束卡带内流程，最多断臂卡带内剩下资源，但不会全部卡死。"
   },
@@ -715,9 +711,7 @@
     "action": "Click",
     "target": [
       1271,
-      628,
-      0,
-      0
+      628
     ],
     "post_delay": 4000,
     "doc": "EP6主城默认位置异常,需要点右下角传送阵物件"
@@ -737,9 +731,7 @@
     "action": "Click",
     "target": [
       950,
-      458,
-      0,
-      0
+      458
     ],
     "post_delay": 2000
   },
@@ -790,7 +782,8 @@
     "next": [
       "[Anchor]Arbitrage5",
       "Collect_Skill_Start",
-      "Collect_ClickTelepor_TargetClass_PurpleProcess"
+      "Collect_ClickTelepor_TargetClass_PurpleProcess",
+      "[JumpBack]Global_WaitingForLoading"
     ],
     "post_delay": 5000,
     "focus": "CM.N.选择次选传送阵",
@@ -820,7 +813,8 @@
     "next": [
       "[Anchor]Arbitrage5",
       "Collect_Skill_Start",
-      "Collect_ClickTelepor_TargetClass_White"
+      "Collect_ClickTelepor_TargetClass_White",
+      "[JumpBack]Global_WaitingForLoading"
     ],
     "post_delay": 5000,
     "focus": "CM.N.区域地图.tp1.选择首选传送阵图标",
@@ -847,7 +841,8 @@
     "recognition": "TemplateMatch",
     "next": [
       "Collect_Skill_Start",
-      "Collect_ClickTelepor_TargetClass_White"
+      "Collect_ClickTelepor_TargetClass_White",
+      "[JumpBack]Global_WaitingForLoading"
     ],
     "post_delay": 5000,
     "focus": "CM.N.区域地图.tp1.找到传送阵图标",
@@ -897,9 +892,7 @@
     "post_wait_freezes": 1500,
     "target": [
       120,
-      35,
-      0,
-      0
+      35
     ],
     "doc": "详细地图确定位置"
   },
@@ -987,12 +980,6 @@
     ],
     "post_delay": 5000,
     "focus": "CM.N.箱庭地图内找到传送阵-物件",
-    "roi": [
-      0,
-      0,
-      0,
-      0
-    ],
     "template": [
       "TpCircle2.png",
       "TpCircle0.9.png",
@@ -1105,7 +1092,28 @@
     "green_mask": true,
     "doc": "其他页面，返回按钮"
   },
+  "Collect_OnlyOnce_SkillUsed": {
+    "focus": "CB.单次吸取已完成",
+    "next": [
+      "Collect_OnlyOnce_SkillUsed_Active"
+    ],
+    "max_hit": 1
+  },
+  "Collect_OnlyOnce_SkillUsed_Active": {
+    "action": "Custom",
+    "custom_action": "PatchNode",
+    "custom_action_param": {
+      "node": "Collect_PackEnd_Ck_OnlyOnce",
+      "patch": {
+        "enabled": true
+      },
+      "origin": {
+        "enabled": false
+      }
+    }
+  },
   "Collect_PackEnd_Ck_OnlyOnce": {
+    "enabled": false,
     "action": "StopTask",
     "focus": "CM.N.仅进行1张卡带策略-强制结束流程"
   }

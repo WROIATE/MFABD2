@@ -162,12 +162,13 @@ def install_resource():
         jsonc.dump(interface, f, ensure_ascii=False, indent=4)
 
 def install_chores():
+    # 1. 基础文件复制 (保持不变)
     shutil.copy2(working_dir / "README.md", install_path)
     shutil.copy2(working_dir / "LICENSE", install_path)
     shutil.copy2(working_dir / "LICENSE-APACHE", install_path)
     shutil.copy2(working_dir / "LICENSE-MIT", install_path)
     
-    # 处理 Mac 引导脚本：注入真实版本号
+    # 2. Mac 专属脚本处理
     if "mac" in target_os or "osx" in target_os:
         # [修改] 修正路径：从 scripts/release 获取，且更名了
         script_src_dir = working_dir / "scripts" / "release"
@@ -177,8 +178,9 @@ def install_chores():
         dst_script = install_path / "2_备案-系统环境联网配置_mac.command"
 
         if src_script.exists():
-            print(f"📦 [Mac] 处理安装脚本，注入 MaaVersion: {maa_ver}")
+            print(f"📦 发现脚本文件: {src_script}")
             try:
+                # 读取内容
                 with open(src_script, 'r', encoding='utf-8') as f:
                     content = f.read()
 

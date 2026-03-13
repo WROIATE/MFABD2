@@ -646,6 +646,24 @@ jobs:
           python3 -c "
           import shutil
           from pathlib import Path
+          root = Path('install')
+          # 1. 寻找源 plugins 目录 (在 python 包里)
+          src_plugins = next(root.rglob('**/site-packages/maa/bin/plugins'), None)
+
+          # 2. 寻找目标 native 目录 (在 runtimes 里)
+          # 假设 install/runtimes 下只有一个平台文件夹，或者我们只关心 native 层级
+          target_native = next(root.rglob('runtimes/*/native'), None)
+
+          # 3. 如果两者都存在，执行移动
+          if src_plugins and target_native and src_plugins.exists():
+              dest_plugins = target_native / 'plugins'
+              if not dest_plugins.exists():
+                  print(f'Moving plugins from {src_plugins} to {dest_plugins}')
+                  shutil.move(str(src_plugins), str(dest_plugins))
+              else:
+                  print(f'Target plugins dir already exists: {dest_plugins}')
+
+          # 4. 安全删除所有冗余的 bin 目录
           # 删除 install/python/.../maa/bin，因为 runtimes 里已经有了
           for p in Path('install').rglob('**/site-packages/maa/bin'):
               if p.is_dir(): 
@@ -830,8 +848,8 @@ jobs:
         uses: Y2Nk4/qmsg-action@master
         with:
           # qq: ${{ needs.meta.outputs.version_type == 'ci' && secrets.QMSG_QQ_DEV || secrets.QMSG_QQ_PUB }}
-          # groups: ${{ needs.meta.outputs.version_type == 'ci' && secrets.QMSG_GROUPS_DEV || secrets.QMSG_GROUPS_PUB }}
-          groups: ${{ secrets.QMSG_NOTIFY_GROUPS }}
+          groups: ${{ needs.meta.outputs.version_type == 'ci' && secrets.QMSG_GROUPS_DEV || secrets.QMSG_GROUPS_PUB }}
+          # groups: ${{ secrets.QMSG_NOTIFY_GROUPS }}
           key: ${{ secrets.QMSG_KEY }}
           message: |
             🏗️ [${{ github.repository }}] 构建完成

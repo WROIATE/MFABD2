@@ -1,0 +1,13 @@
+{
+    "post_wait_freezes": {
+        "target": [
+            617,
+            258,
+            46,
+            44
+        ],
+        "rate_limit": 500,
+        "time": 500,
+        "timeout": 20000
+    }
+}

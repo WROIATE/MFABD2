@@ -33,7 +33,7 @@
         "recognition": "TemplateMatch",
         "action": "Click",
         "post_delay": 2000,
-        "focus": "GO.页面非预期，点击返回按钮",
+        "focus": "GO.点击返回按钮",
         "roi": [
             1,
             1,
@@ -153,9 +153,7 @@
         "action": "Click",
         "target": [
             1186,
-            46,
-            0,
-            0
+            46
         ],
         "post_delay": 3000,
         "next": [
@@ -240,6 +238,7 @@
         "recognition": "TemplateMatch",
         "action": "Click",
         "next": [
+            "[JumpBack]Global_WaitingForLoading",
             "Global_ToSandBox_Enter",
             "Global_ToSandBox_Reset"
         ],
@@ -293,7 +292,8 @@
     "Global_BackToPve2#": {
         "next": [
             "Global_BackToPve2#_ToCardMenu",
-            "[JumpBack]Global_OnceHomeButton"
+            "[JumpBack]Global_OnceHomeButton",
+            "[JumpBack]Global_WaitingForLoading"
         ],
         "focus": "G.复位卡带开始"
     },
@@ -315,9 +315,7 @@
         ],
         "target": [
             1111,
-            650,
-            0,
-            0
+            650
         ],
         "doc": "识别左下抽抽乐-主页-点击选择章节"
     },
@@ -352,15 +350,11 @@
         ],
         "begin": [
             30,
-            300,
-            0,
-            0
+            300
         ],
         "end": [
             30,
-            700,
-            0,
-            0
+            700
         ],
         "doc": "识别活动游戏卡-上划"
     },
@@ -381,15 +375,11 @@
         ],
         "begin": [
             150,
-            215,
-            0,
-            0
+            215
         ],
         "end": [
             1264,
-            215,
-            0,
-            0
+            215
         ],
         "doc": "识别活动游戏卡-上划"
     },
@@ -444,9 +434,9 @@
         "post_delay": 2000,
         "focus": "GO.快速卡带-复位到QC1",
         "roi": [
-            294,
+            246,
             562,
-            343,
+            391,
             158
         ],
         "template": [
@@ -539,9 +529,7 @@
         ],
         "target": [
             1186,
-            46,
-            0,
-            0
+            46
         ],
         "doc": "找到图钉-点击返回主页"
     },
@@ -586,6 +574,7 @@
                 "template": "UI_loading_black.png"
             }
         ],
-        "post_delay": 5000
+        "post_delay": 5000,
+        "doc": "循环等待转场页面"
     }
 }

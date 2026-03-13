@@ -5,7 +5,8 @@
       "[JumpBack]Weekly_VisitCabin_Hub",
       "[JumpBack]Weekly_LastNight_Hub",
       "[JumpBack]Weekly_Flishing_Hub"
-    ]
+    ],
+    "timeout": 1
   },
   "Weekly_LastNight_Hub": {
     "enabled": true,
@@ -166,9 +167,7 @@
     ],
     "target": [
       1111,
-      650,
-      0,
-      0
+      650
     ],
     "doc": "识别左下抽抽乐-主页-点击选择章节"
   },
@@ -192,15 +191,11 @@
     ],
     "begin": [
       70,
-      640,
-      0,
-      0
+      640
     ],
     "end": [
       70,
-      270,
-      0,
-      0
+      270
     ],
     "duration": 500
   },
@@ -224,6 +219,7 @@
     "recognition": "OCR",
     "action": "Click",
     "next": [
+      "[JumpBack]Global_WaitingForLoading",
       "Weekly_LastNight_Move",
       "Weekly_MoreBook_LastNight"
     ],
@@ -265,9 +261,7 @@
     ],
     "target": [
       765,
-      316,
-      0,
-      0
+      316
     ],
     "duration": 5000
   },
@@ -291,6 +285,7 @@
     "recognition": "OCR",
     "action": "Click",
     "next": [
+      "[JumpBack]Global_WaitingForLoading",
       "Weekly_LastNight_InBattle",
       "Weekly_LastNight_GoBattle"
     ],
@@ -326,15 +321,14 @@
     ],
     "target": [
       1017,
-      40,
-      0,
-      0
+      40
     ]
   },
   "Weekly_LastNight_LeavButt": {
     "recognition": "OCR",
     "action": "Click",
     "next": [
+      "[JumpBack]Global_WaitingForLoading",
       "Weekly_LastNight_MaybeNew",
       "Weekly_LastNight_MenuPageEnd",
       "Weekly_LastNight_Pin",
@@ -405,9 +399,7 @@
     ],
     "target": [
       120,
-      35,
-      0,
-      0
+      35
     ]
   },
   "Weekly_LastNight_End": {
@@ -448,29 +440,49 @@
     ],
     "expected": [
       "抽抽乐"
-    ]
+    ],
+    "focus": "WVM..主页面"
   },
   "Weekly_VisitCabin_GoIn": {
-    "recognition": "OCR",
+    "recognition": "Or",
+    "any_of": [
+      {
+        "recognition": "TemplateMatch",
+        "roi": [
+          16,
+          84,
+          455,
+          275
+        ],
+        "template": [
+          "MainHomeRIceGE.png"
+        ],
+        "green_mask": true
+      },
+      {
+        "recognition": "OCR",
+        "roi": [
+          16,
+          84,
+          455,
+          275
+        ],
+        "expected": [
+          "我的小屋"
+        ]
+      }
+    ],
     "action": "Click",
     "next": [
       "Weekly_VisitCabin_TabChg",
-      "Weekly_VisitCabin_GoIn"
+      "Weekly_VisitCabin_GoIn",
+      "[JumpBack]Global_WaitingForLoading"
     ],
-    "post_delay": 8000,
+    "post_delay": 1000,
     "focus": "WVM.点击我的小屋",
-    "roi": [
-      16,
-      84,
-      455,
-      275
-    ],
-    "expected": [
-      "我的小屋"
-    ],
     "target_offset": [
-      5,
-      -45,
+      0,
+      -5,
       0,
       0
     ]
@@ -495,9 +507,7 @@
     ],
     "target": [
       136,
-      200,
-      0,
-      0
+      200
     ]
   },
   "Weekly_VisitCabin_ModChg": {
@@ -520,9 +530,7 @@
     ],
     "target": [
       212,
-      175,
-      0,
-      0
+      175
     ]
   },
   "Weekly_VisitCabin_Like1": {
@@ -543,9 +551,7 @@
     ],
     "target": [
       1144,
-      94,
-      0,
-      0
+      94
     ]
   },
   "Weekly_VisitCabin_Like1Chg": {
@@ -565,9 +571,7 @@
     ],
     "target": [
       850,
-      658,
-      0,
-      0
+      658
     ]
   },
   "Weekly_VisitCabin_Like2": {
@@ -588,9 +592,7 @@
     ],
     "target": [
       1144,
-      94,
-      0,
-      0
+      94
     ]
   },
   "Weekly_VisitCabin_Like2Chg": {
@@ -610,9 +612,7 @@
     ],
     "target": [
       850,
-      658,
-      0,
-      0
+      658
     ]
   },
   "Weekly_VisitCabin_Like3": {
@@ -633,9 +633,7 @@
     ],
     "target": [
       1144,
-      94,
-      0,
-      0
+      94
     ]
   },
   "Weekly_VisitCabin_Like3Chg": {
@@ -655,9 +653,7 @@
     ],
     "target": [
       850,
-      658,
-      0,
-      0
+      658
     ]
   },
   "Weekly_VisitCabin_Like4": {
@@ -678,9 +674,7 @@
     ],
     "target": [
       1144,
-      94,
-      0,
-      0
+      94
     ]
   },
   "Weekly_VisitCabin_End": {
