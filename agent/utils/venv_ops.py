@@ -136,7 +136,7 @@ def install_deps(venv_python: Path, project_root: Path, venv_path: Path):
             "-i", "https://pypi.tuna.tsinghua.edu.cn/simple",
             f"maafw=={DEV_MAAFW_VERSION}"
         ])
-    except Exception as e:
+    except subprocess.CalledProcessError as e:
         mfaalog.warning(f"指定版本 {DEV_MAAFW_VERSION} 安装失败: {e}，将使用备用范围 ({FALLBACK_MAAFW_SPEC}) 尝试重新安装...")
         subprocess.check_call([ # nosec
             str(venv_python), "-m", "pip", "install",
