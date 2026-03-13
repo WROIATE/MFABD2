@@ -193,7 +193,8 @@ def install_chores():
                 
                 # 尝试赋予执行权限
                 try: os.chmod(dst_script, 0o755)
-                except: pass
+                except OSError as e:
+                    print(f"⚠️ 无法为脚本设置执行权限 {dst_script}: {e}")
                 
                 print(f"✅ 版本号注入完成: {maa_ver}")
 
@@ -212,7 +213,8 @@ def install_chores():
             print(f"🚑 注入 Mac 修复工具...")
             shutil.copy2(fix_tool_src, fix_tool_dst)
             try: os.chmod(fix_tool_dst, 0o755)
-            except: pass
+            except OSError as e:
+                print(f"⚠️ 无法为修复工具设置执行权限 {fix_tool_dst}: {e}")
         else:
             print(f"⚠️ 未找到修复工具: {fix_tool_src}")
 
@@ -238,7 +240,7 @@ def install_agent(target_os):
         if "agent" not in interface:
             interface["agent"] = {}
 
-         # ==================== [核心路径配置] ====================
+        # ==================== [核心路径配置] ====================
         
         # 1. Windows: 嵌入式 Python
         if any(target_os.startswith(p) for p in ["win", "windows"]):

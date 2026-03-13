@@ -313,6 +313,7 @@ jobs:
             numpy_req: "numpy<2"
             is_android: false
             standalone_url: "https://github.com/indygreg/python-build-standalone/releases/download/20240107/cpython-3.10.13+20240107-x86_64-apple-darwin-install_only.tar.gz"
+            standalone_sha256: "47da6831e269ad6af603f59bbd4767636c5749bd70a24363c9cf003c32c8ecfc"
 
           # -------------------------------------------------------------------
           # 🍎 macOS (ARM64)
@@ -325,6 +326,7 @@ jobs:
             numpy_req: "numpy<2"
             is_android: false
             standalone_url: "https://github.com/indygreg/python-build-standalone/releases/download/20240107/cpython-3.10.13+20240107-aarch64-apple-darwin-install_only.tar.gz"
+            standalone_sha256: "4d19a0509c274f360a5c250d71a2af7263ebaf898ecdb71427f3532cbc6b2cf7"
 
           # -------------------------------------------------------------------
           # 🐧 Linux (x64)
@@ -490,7 +492,9 @@ jobs:
         shell: bash
         run: |
           echo "⬇️ Downloading Portable Python for macOS..."
-          curl -L -o python_mac.tar.gz "${{ matrix.standalone_url }}"
+          # 失败重试和SHA校验
+          curl -fL --retry 3 --retry-delay 2 -o python_mac.tar.gz "${{ matrix.standalone_url }}"
+          echo "${{ matrix.standalone_sha256 }}  python_mac.tar.gz" | shasum -a 256 -c -
           
           # 解压 (standalone 包结构通常是 python/install/...)
           mkdir -p temp_python
@@ -512,7 +516,7 @@ jobs:
           PY_EXEC="install/python/bin/python3"
           
           # 剔除 numpy
-          python3 -c "
+          "$PY_EXEC" -c "
           import re
           with open('requirements.txt', 'r') as f_in, open('requirements_no_numpy.txt', 'w') as f_out:
               for line in f_in:
