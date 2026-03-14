@@ -58,7 +58,7 @@
                 "狩猎场",
                 "圣石洞穴属性"
             ],
-            "description": "<b>快速狩猎扫荡</b>：旧称`地图扫荡`。消耗每日免费的米饭、火把刷取资源。<br><br> <span style=\"color:Crimson;font-size:16px\">注意：请在狩猎场`1.野猪洞穴`已打完的基础上，确保目标狩猎场已通关</span>"
+            "description": "<b>快速狩猎扫荡</b>：旧称`地图扫荡`。消耗每日免费的米饭、火把刷取资源。<br><br> <span style=\"color:Crimson;font-size:16px\">注意：请在冒险航线`哥布林遗迹`已打完的基础上，确保目标狩猎场已通关</span>"
         },
         {
             "name": "[执行]地图采集[单章]",
@@ -1075,7 +1075,17 @@
             "cases": [
                 {
                     "name": "Yes",
-                    "pipeline_override": {}
+                    "pipeline_override": {
+                        "Daily_Busin_NoGift": {
+                            "next": []
+                        },
+                        "Daily_Busin_Nothing_Binary": {
+                            "next": []
+                        },
+                        "Daily_Busin_DecorCoin_IsFull_Binary": {
+                            "next": []
+                        }
+                    }
                 },
                 {
                     "name": "No",

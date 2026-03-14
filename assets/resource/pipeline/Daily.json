@@ -4,7 +4,8 @@
       "[JumpBack]Daily_Union_Hub",
       "[JumpBack]Daily_VisitCabin_Hub",
       "[JumpBack]Daily_Busin_Hub",
-      "[JumpBack]Daily_Square_Hub"
+      "[JumpBack]Daily_Square_Hub",
+      "Global_Hub_End"
     ],
     "timeout": 2000
   },
@@ -204,202 +205,136 @@
       }
     ],
     "next": [
-      "Daily_BusinReward_img",
-      "Daily_BusinReward"
+      "Daily_Busin_Claim"
     ],
     "focus": "GOM.餐馆日结组件",
-    "doc": "识别左下抽抽乐"
+    "doc": "左下抽抽乐高亮存在"
   },
-  "Daily_BusinReward": {
-    "recognition": "OCR",
-    "action": "Click",
-    "next": [
-      "Daily_GetBusinHaveNotReward",
-      "Daily_GetBusinReward",
-      "Daily_BusinReward"
+  "Daily_Busin_Claim": {
+    "recognition": "Or",
+    "any_of": [
+      {
+        "recognition": "OCR",
+        "roi": [
+          85,
+          228,
+          91,
+          29
+        ],
+        "target_offset": [
+          0,
+          -5,
+          1,
+          1
+        ],
+        "expected": [
+          "经营管理"
+        ]
+      },
+      {
+        "recognition": "TemplateMatch",
+        "roi": [
+          87,
+          174,
+          98,
+          81
+        ],
+        "template": [
+          "MainBotmBusinGE.png",
+          "MainBotmBusin_F_GE.png"
+        ]
+      }
     ],
-    "on_error": [],
+    "action": "Click",
     "post_delay": 500,
     "post_wait_freezes": 1000,
-    "focus": "GOM.餐馆结算(COR)-主界面",
-    "roi": [
-      85,
-      228,
-      91,
-      29
+    "next": [
+      "Daily_Busin_SubMenu",
+      "Daily_Busin_Claim"
     ],
-    "target_offset": [
-      0,
-      -5,
-      1,
-      1
+    "focus": "GOM.餐馆结算(COR)-主界面",
+    "doc": "识别点击餐馆",
+    "max_hit": 10
+  },
+  "Daily_Busin_SubMenu": {
+    "recognition": "OCR",
+    "roi": [
+      394,
+      161,
+      493,
+      199
     ],
     "expected": [
-      "经营管理"
+      "餐馆营业额",
+      "立刻前往",
+      "累计奖励"
     ],
-    "doc": "识别点击餐馆"
-  },
-  "Daily_BusinReward_img": {
-    "recognition": "TemplateMatch",
-    "action": "Click",
     "next": [
-      "Daily_GetBusinHaveNotReward",
-      "Daily_GetBusinReward",
-      "Daily_BusinReward_img"
+      "[JumpBack]Daily_GetBusin_SubMenu_Claim",
+      "[JumpBack]Daily_GetBusinRewardBack",
+      "Daily_Busin_Enter"
     ],
+    "focus": "DM.经营子菜单",
     "on_error": [],
-    "post_delay": 500,
-    "post_wait_freezes": 1000,
-    "focus": "GOM.餐馆结算(IMG)-主界面",
-    "roi": [
-      87,
-      174,
-      98,
-      81
-    ],
-    "template": [
-      "MainBotmBusinGE.png",
-      "MainBotmBusin_F_GE.png"
-    ],
-    "doc": "识别点击餐馆图像"
+    "doc": "确认餐馆子菜单已弹出"
   },
-  "Daily_GetBusinReward": {
+  "Daily_GetBusin_SubMenu_Claim": {
     "recognition": "And",
     "all_of": [
       {
         "sub_name": "ButtonOCR",
         "recognition": "OCR",
         "roi": [
-          657,
-          463,
-          176,
-          126
+          640,
+          156,
+          251,
+          416
         ],
         "expected": [
-          "获得"
+          "获得",
+          "结算",
+          "回收"
         ]
       },
       {
         "recognition": "ColorMatch",
         "roi": "ButtonOCR",
         "method": 40,
-        "upper": [
-          21,
-          16,
-          226
-        ],
         "lower": [
-          19,
-          12,
-          218
+          17,
+          10,
+          210
         ],
-        "count": 50
+        "upper": [
+          23,
+          18,
+          232
+        ],
+        "count": 10
       }
     ],
     "action": "Click",
-    "next": [
-      "Daily_GetBusinReward",
-      "Daily_GetBusinRewardBack"
-    ],
     "post_delay": 2000,
-    "doc": "点击结算"
-  },
-  "Daily_GetBusinHaveNotReward": {
-    "recognition": "ColorMatch",
-    "roi": [
-      551,
-      478,
-      163,
-      126
-    ],
-    "method": 4,
-    "count": 1000,
-    "lower": [
-      [
-        82,
-        82,
-        81
-      ]
-    ],
-    "upper": [
-      [
-        86,
-        86,
-        83
-      ]
-    ],
-    "next": [
-      "Daily_Busin_Enter"
-    ]
+    "doc": "在子菜单中ocr领取,结合色核依次点击-获取,与结算分离"
   },
   "Daily_GetBusinRewardBack": {
-    "action": "Click",
-    "next": [
-      "Daily_Busin_Enter",
-      "Daily_Busin_In_img",
-      "Daily_Busin_MainMenu",
-      "[JumpBack]Daily_ClickOnce"
-    ],
-    "on_error": [],
-    "post_delay": 3000,
+    "recognition": "OCR",
     "roi": [
-      534,
-      622,
-      219,
-      40
+      559,
+      630,
+      151,
+      35
     ],
+    "only_rec": true,
+    "expected": [
+      "^(?=.*[点击画面])(?=.*[即可])(?=.*[返回]).{4,12}$"
+    ],
+    "action": "Click",
     "target": [
       1,
       1
     ],
     "doc": "点击领取全部返回"
-  },
-  "Daily_Busin_In_img": {
-    "recognition": "TemplateMatch",
-    "action": "Click",
-    "next": [
-      "Daily_Busin_Enter",
-      "Daily_Busin_In_img"
-    ],
-    "post_delay": 1000,
-    "focus": "GOM.餐馆常客属性石img",
-    "roi": [
-      85,
-      228,
-      98,
-      34
-    ],
-    "template": [
-      "MainBotmBusinGE.png"
-    ],
-    "doc": "流程：进入餐馆。领取每日常客水晶。"
-  },
-  "Daily_Busin_MainMenu": {
-    "recognition": "OCR",
-    "action": "Click",
-    "post_delay": 400,
-    "post_wait_freezes": 800,
-    "next": [
-      "Daily_Busin_Enter",
-      "Daily_Busin_MainMenu"
-    ],
-    "focus": "GOM.餐馆常客属性石ocr",
-    "roi": [
-      73,
-      179,
-      105,
-      84
-    ],
-    "target_offset": [
-      0,
-      -10,
-      0,
-      0
-    ],
-    "expected": [
-      "经营管理"
-    ],
-    "doc": "流程：进入餐馆。领取每日常客水晶。"
   },
   "Daily_Busin_Enter": {
     "recognition": "OCR",
@@ -550,7 +485,7 @@
       30
     ],
     "expected": [
-      "(\\d+)\\s*[/:：|\\-~]?\\s*\\1(?!\\d)"
+      "(\\d+)\\s*[/:：|\\-~7]?\\s*\\1(?!\\d)"
     ],
     "doc": "【假孤立，不要删除】"
   },
@@ -613,6 +548,7 @@
       13
     ],
     "next": [
+      "Daily_Busin_DecorCoin_IsFull_Binary",
       "Daily_Busin_DecorCoin_PickUp"
     ],
     "timeout": 30000,
@@ -631,6 +567,7 @@
       14
     ],
     "next": [
+      "Daily_Busin_DecorCoin_IsFull_Binary",
       "Daily_Busin_DecorCoin_PickUp"
     ],
     "timeout": 30000,
@@ -770,17 +707,9 @@
     "green_mask": true,
     "doc": "目前roi位置为餐馆"
   },
-  "Daily_ClickOnce": {
-    "action": "Click",
-    "focus": "GB.餐馆结算结束~中继调用",
-    "target": [
-      1,
-      1
-    ],
-    "post_delay": 1000
-  },
   "Daily_Square_Hub": {
     "next": [
+      "Daily_Square_Str",
       "Daily_Square_Hub_Post",
       "[JumpBack]Global_ToSandBox"
     ],
@@ -803,24 +732,42 @@
     ]
   },
   "Daily_Square_Str": {
-    "recognition": "TemplateMatch",
+    "recognition": "Or",
+    "any_of": [
+      {
+        "recognition": "TemplateMatch",
+        "roi": [
+          294,
+          562,
+          343,
+          158
+        ],
+        "template": [
+          "BusinQuickIcoGE.png"
+        ],
+        "green_mask": true
+      },
+      {
+        "recognition": "TemplateMatch",
+        "roi": [
+          74,
+          81,
+          285,
+          197
+        ],
+        "template": [
+          "BusinQuickIcoGE.png"
+        ],
+        "green_mask": true
+      }
+    ],
     "action": "Click",
     "next": [
       "Daily_Square_Menu",
       "Daily_Square_Str"
     ],
     "post_delay": 2000,
-    "focus": "RM.快速卡带",
-    "roi": [
-      294,
-      562,
-      343,
-      158
-    ],
-    "template": [
-      "BusinQuickIcoGE.png"
-    ],
-    "green_mask": true
+    "focus": "RM.快速卡带"
   },
   "Daily_Square_Menu": {
     "recognition": "OCR",
