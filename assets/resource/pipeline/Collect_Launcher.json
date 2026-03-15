@@ -153,25 +153,64 @@
         ]
     },
     "Collect_FeatureSwitch_StoryPack": {
+        "anchor": {
+            "SmartSwipOut": ""
+        },
         "next": [
+            "Collect_StoryPack_SetSimpleSkip",
             "Collect_QuickCart_SelectType_StoryPack"
         ],
         "enabled": true,
         "max_hit": 1
     },
     "Collect_FeatureSwitch_CharacterPack": {
+        "anchor": {
+            "SmartSwipOut": ""
+        },
         "next": [
+            "Collect_CharacterPack_SetSimpleSkip",
             "Collect_QuickCart_SelectType_CharacterPack"
         ],
         "enabled": true,
         "max_hit": 1
     },
     "Collect_FeatureSwitch_EvenPack": {
+        "anchor": {
+            "SmartSwipOut": ""
+        },
         "next": [
+            "Collect_EventPack_SetSimpleSkip",
             "Collect_QuickCart_SelectType_EventPack"
         ],
         "enabled": true,
         "max_hit": 1
+    },
+    "Collect_StoryPack_SetSimpleSkip": {
+        "anchor": {
+            "SmartSwipOut": "Collect_LocatePack_SimpleSkip_Story"
+        },
+        "next": [
+            "Collect_QuickCart_SelectType_StoryPack"
+        ],
+        "enabled": false
+    },
+    "Collect_CharacterPack_SetSimpleSkip": {
+        "anchor": {
+            "SmartSwipOut": "Collect_LocatePack_SimpleSkip_Character"
+        },
+        "next": [
+            "Collect_QuickCart_SelectType_CharacterPack"
+        ],
+        "enabled": false
+    },
+    "Collect_EventPack_SetSimpleSkip": {
+        "anchor": {
+            "SmartSwipOut": "Collect_LocatePack_SimpleSkip_Event"
+        },
+        "next": [
+            "Collect_QuickCart_SelectType_EventPack"
+        ],
+        "enabled": false
     },
     "Collect_QuickCart_SelectType_StoryPack": {
         "recognition": "OCR",
@@ -1533,6 +1572,9 @@
         },
         "next": [
             "Collect_LocatePackFrame_Smart_Swip_UpdateTag"
+        ],
+        "on_error": [
+            "[Anchor]SmartSwipOut"
         ]
     },
     "Collect_LocatePackFrame_Smart_Swip_UpdateTag": {
@@ -1552,6 +1594,33 @@
         "next": [
             "Collect_PackProbe_IsPresent"
         ]
+    },
+    "Collect_LocatePack_SimpleSkip_Story": {
+        "action": "Custom",
+        "custom_action": "MarkComplete",
+        "custom_action_param": {
+            "card_name": "Pack_Story_SimpleDone",
+            "cycle_type": "g_weekly"
+        },
+        "focus": "Py.剧情卡简单全完成标记"
+    },
+    "Collect_LocatePack_SimpleSkip_Character": {
+        "action": "Custom",
+        "custom_action": "MarkComplete",
+        "custom_action_param": {
+            "card_name": "Pack_Character_SimpleDone",
+            "cycle_type": "g_weekly"
+        },
+        "focus": "Py.剧情卡简单全完成标记"
+    },
+    "Collect_LocatePack_SimpleSkip_Event": {
+        "action": "Custom",
+        "custom_action": "MarkComplete",
+        "custom_action_param": {
+            "card_name": "Pack_Event_SimpleDone",
+            "cycle_type": "g_weekly"
+        },
+        "focus": "Py.剧情卡简单全完成标记"
     },
     "Collect_PackLocation_PassFieldsAndHub": {
         "recognition": "Custom",
