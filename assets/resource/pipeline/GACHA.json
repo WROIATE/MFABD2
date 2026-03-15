@@ -1,106 +1,9 @@
 {
   "Gacha_HomePage": {
     "next": [
-      "Gacha_HomePageHub2",
-      "Gacha_HomePageHub",
-      "Gacha_HomePageHub1"
+      "Gacha_EnterGacha",
+      "[JumpBack]Global_ToHomePage"
     ]
-  },
-  "Gacha_HomePageHub": {
-    "recognition": "TemplateMatch",
-    "action": "Click",
-    "next": [
-      "Gacha_EnterGacha",
-      "Gacha_HomePageHub1",
-      "Gacha_HomePageHub"
-    ],
-    "post_delay": 2000,
-    "focus": "G=0.页面预期内，普通启动。M.箱庭地图run已确认",
-    "roi": [
-      1047,
-      516,
-      107,
-      110
-    ],
-    "template": [
-      "Run.png"
-    ],
-    "green_mask": true,
-    "target": [
-      1180,
-      45
-    ],
-    "doc": "找到图钉-点击返回主页"
-  },
-  "Gacha_HomePageHub1": {
-    "recognition": "TemplateMatch",
-    "action": "Click",
-    "next": [
-      "Gacha_EnterGacha",
-      "Gacha_HomePageHub1",
-      "Gacha_HomePageHub"
-    ],
-    "post_delay": 2000,
-    "focus": "G=0.页面预期内，普通启动。M.箱庭地图pin已确认",
-    "roi": [
-      1108,
-      637,
-      65,
-      57
-    ],
-    "template": [
-      "pin.png"
-    ],
-    "target": [
-      1180,
-      45
-    ]
-  },
-  "Gacha_HomePageHub2": {
-    "recognition": "TemplateMatch",
-    "action": "Click",
-    "next": [
-      "Gacha_HomePageHub",
-      "Gacha_HomePageHub1",
-      "Gacha_HomePageHub2"
-    ],
-    "post_delay": 2000,
-    "focus": "G=1.页面非预期，点击返回按钮",
-    "roi": [
-      1,
-      1,
-      231,
-      124
-    ],
-    "template": [
-      "BackButGe.png",
-      "BackButGe2.png"
-    ],
-    "green_mask": true,
-    "doc": "其他页面，返回按钮"
-  },
-  "Gacha_BackHomePage": {
-    "recognition": "TemplateMatch",
-    "action": "Click",
-    "next": [
-      "Gacha_EnterGacha",
-      "Gacha_BackHomePage"
-    ],
-    "post_delay": 1000,
-    "roi": [
-      1122,
-      646,
-      40,
-      38
-    ],
-    "template": [
-      "pin.png"
-    ],
-    "target": [
-      1186,
-      46
-    ],
-    "doc": "找到图钉-点击返回主页"
   },
   "Gacha_EnterGacha": {
     "recognition": "OCR",
@@ -254,19 +157,37 @@
     "doc": "点击,存在免费抽的卡池,每日首次进入卡池pv动画开始 | GachaADV_Start 临时插入救急"
   },
   "Gacha_FindFreeGacha_GotoADV": {
-    "focus": "GM.[WRN]卡池内存在特殊红点-调用抽卡V2",
-    "recognition": "TemplateMatch",
-    "template": [
-      "GACHA_Special.ReservedRights_Red_GE.png"
+    "recognition": "Or",
+    "any_of": [
+      {
+        "recognition": "OCR",
+        "roi": [
+          857,
+          461,
+          53,
+          26
+        ],
+        "only_rec": true,
+        "expected": [
+          "^([2-9]\\d{2}|[1-9]\\d{3,})$"
+        ]
+      },
+      {
+        "recognition": "TemplateMatch",
+        "template": [
+          "GACHA_Special.ReservedRights_Red_GE.png"
+        ],
+        "green_mask": true,
+        "roi": [
+          721,
+          210,
+          462,
+          297
+        ],
+        "threshold": 0.7
+      }
     ],
-    "green_mask": true,
-    "roi": [
-      721,
-      210,
-      462,
-      297
-    ],
-    "threshold": 0.7,
+    "focus": "GM.[WRN]卡池内存在可兑换Up角色情况-调用抽卡V2",
     "next": [
       "GachaADV_Start"
     ]
