@@ -1587,6 +1587,7 @@
             "Collect_Pack_Story_17",
             "Collect_Pack_Story_18",
             "Collect_Pack_Story_19",
+            "Collect_Pack_Story_20",
             "Collect_Pack_Character_1",
             "Collect_Pack_Character_2",
             "Collect_Pack_Character_3",
@@ -2496,6 +2497,53 @@
             "[JumpBack]Global_WaitingForLoading",
             "Collect_OperationsMain_Sandplay",
             "Collect_Pack_Story_19"
+        ]
+    },
+    "Collect_Pack_Story_20": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "recognition": "TemplateMatch",
+                "template": [
+                    "Cartridges/Q_sp20.png"
+                ],
+                "roi": "Collect_PackLocation_PassFieldsAndHub"
+            },
+            {
+                "recognition": "Custom",
+                "custom_recognition": "CheckCoolDown",
+                "custom_recognition_param": {
+                    "card_name": "Story_20_堕入深渊",
+                    "cycle_type": "g_weekly"
+                }
+            }
+        ],
+        "box_index": 0,
+        "action": "Custom",
+        "custom_action": "PatchAndClick",
+        "custom_action_param": {
+            "node": "Collect_PackEnd_Ck",
+            "patch": {
+                "action": "Custom",
+                "custom_action": "MarkComplete",
+                "custom_action_param": {
+                    "card_name": "Story_20_堕入深渊",
+                    "cycle_type": "g_weekly"
+                }
+            },
+            "target_offset": [
+                -5,
+                -3,
+                0,
+                0
+            ]
+        },
+        "timeout": 1,
+        "post_delay": 5000,
+        "next": [
+            "[JumpBack]Global_WaitingForLoading",
+            "Collect_OperationsMain_Sandplay",
+            "Collect_Pack_Story_20"
         ]
     },
     "Collect_Pack_Character_1": {
