@@ -1239,9 +1239,6 @@
   },
   "Equip_FinBackMapPage": {
     "recognition": "TemplateMatch",
-    "next": [
-      "Equip_Skill_Tap1"
-    ],
     "roi": [
       1122,
       646,
@@ -1251,51 +1248,7 @@
     "template": [
       "pin.png"
     ],
+    "focus": "EM.装备制造结束",
     "doc": "识别右下图钉-章节主页"
-  },
-  "Equip_Skill_Tap1": {
-    "action": "Click",
-    "next": [
-      "Equip_Skill_Tap1_clr",
-      "Equip_Skill_Tap1"
-    ],
-    "post_delay": 800,
-    "roi": [
-      1049,
-      632,
-      58,
-      59
-    ],
-    "template": [
-      "pin.png"
-    ],
-    "target": [
-      1083,
-      664
-    ],
-    "doc": "第1页技能点击,复位"
-  },
-  "Equip_Skill_Tap1_clr": {
-    "recognition": "ColorMatch",
-    "next": [],
-    "focus": "ESB.复位技能页-色核通过",
-    "roi": [
-      1061,
-      645,
-      41,
-      43
-    ],
-    "count": 200,
-    "lower": [
-      192,
-      141,
-      23
-    ],
-    "upper": [
-      223,
-      194,
-      129
-    ],
-    "doc": "技能页3，色核识别.next遍历是防止放置其他技能;次节点每轮next判定"
   }
 }
