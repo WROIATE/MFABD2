@@ -100,7 +100,7 @@
             "option": [
                 "竞技场战斗倍数"
             ],
-            "description": "**竞技场：**进入竞技场卡带，打完每日免费鸡尾酒。<br>**战斗倍数：**Max 或 Min <br>**关于计分：**排位分按每场胜负计算，与倍率无关。奖牌则会x倍率。<br>如：Max为10倍，每天打4场x10倍鸡尾酒，计4场排位分，4x10倍奖牌。"
+            "description": "**竞技场：**进入竞技场卡带，打完每日免费鸡尾酒。<br>如果残余AP不够，会退回到1倍打完。<br>**倍数、计分、奖牌的关系：**排位分按每场胜负计算，与倍率无关。奖牌则会x倍率。<br>如：10倍，每天打4场x10倍鸡尾酒，计4场排位分，4x10倍奖牌。"
         },
         {
             "name": "[执行]赛季活动快速战斗",
@@ -641,13 +641,15 @@
             "type": "select",
             "cases": [
                 {
-                    "name": "Max",
+                    "name": "40倍",
                     "pipeline_override": {
-                        "PVP_Multiplier_Adjust_Set": {}
+                        "PVP_Multiplier_Adjust_Set_Add": {
+                            "enabled": false
+                        }
                     }
                 },
                 {
-                    "name": "Min",
+                    "name": "1倍",
                     "pipeline_override": {
                         "PVP_Multiplier_Verify": {
                             "expected": [
@@ -656,10 +658,87 @@
                         },
                         "PVP_Multiplier_Adjust_Set": {
                             "target": [
-                                458,
-                                355,
+                                453,
+                                351,
                                 20,
                                 18
+                            ]
+                        },
+                        "PVP_Multiplier_Adjust_Set_Enter": {
+                            "expected": [
+                                "^1$"
+                            ]
+                        },
+                        "PVP_Multiplier_Adjust_Set_Add": {
+                            "enabled": false
+                        }
+                    }
+                },
+                {
+                    "name": "5倍",
+                    "pipeline_override": {
+                        "PVP_Multiplier_Verify": {
+                            "expected": [
+                                "^5$"
+                            ]
+                        },
+                        "PVP_Multiplier_Adjust_Set": {
+                            "target": [
+                                453,
+                                351,
+                                20,
+                                18
+                            ]
+                        },
+                        "PVP_Multiplier_Adjust_Set_Enter": {
+                            "expected": [
+                                "^5$"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "10倍",
+                    "pipeline_override": {
+                        "PVP_Multiplier_Verify": {
+                            "expected": [
+                                "^10$"
+                            ]
+                        },
+                        "PVP_Multiplier_Adjust_Set": {
+                            "target": [
+                                453,
+                                351,
+                                20,
+                                18
+                            ]
+                        },
+                        "PVP_Multiplier_Adjust_Set_Enter": {
+                            "expected": [
+                                "^10$"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "20倍",
+                    "pipeline_override": {
+                        "PVP_Multiplier_Verify": {
+                            "expected": [
+                                "^20$"
+                            ]
+                        },
+                        "PVP_Multiplier_Adjust_Set": {
+                            "target": [
+                                453,
+                                351,
+                                20,
+                                18
+                            ]
+                        },
+                        "PVP_Multiplier_Adjust_Set_Enter": {
+                            "expected": [
+                                "^20$"
                             ]
                         }
                     }
