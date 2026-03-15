@@ -232,6 +232,10 @@
             "Global_ToSandBox_Reset",
             "[JumpBack]Global_WaitingForLoading"
         ],
+        "timeout": 10000,
+        "on_error": [
+            "Global_BackToQC1"
+        ],
         "doc": "[通用复位]复位到主界面模块,开始,中继调用"
     },
     "Global_ToSandBox_Reset": {
@@ -433,12 +437,6 @@
         ],
         "post_delay": 2000,
         "focus": "GO.快速卡带-复位到QC1",
-        "roi": [
-            246,
-            562,
-            391,
-            158
-        ],
         "template": [
             "BusinQuickIcoGE.png"
         ],
