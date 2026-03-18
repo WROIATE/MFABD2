@@ -6,5 +6,15 @@
         "doc": "不要使用,不要删除。这是验证滑动custom的预留节点。",
         "action": "Swipe",
         "post_delay": 1000
+    },
+    "Env_AccountSave_Switch": {
+        "action": "Custom",
+        "custom_action": "SwitchAccountCheckpoint",
+        "custom_action_param": {
+            "account_id": "0"
+        },
+        "focus": "Env.存档检查器",
+        "max_hit": 1,
+        "doc": "一个存储存档名称/呼叫检查动作的,可复用节点. | 默认节点为0,此时生成不带额外名称的存档文件.| max_hit,利用流程级变量只运行一次,流程结束会销毁"
     }
 }

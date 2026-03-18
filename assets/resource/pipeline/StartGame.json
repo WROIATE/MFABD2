@@ -1,5 +1,20 @@
 {
   "StartGame_Start": {
+    "next": [
+      "[JumpBack]Env_AccountSave_Switch",
+      "StartGame_Check_App_Alive"
+    ]
+  },
+  "StartGame_Check_App_Alive": {
+    "action": "Shell",
+    "cmd": "pidof com.neowizgames.game.browndust2",
+    "next": [],
+    "on_error": [
+      "StartGame_RunApp"
+    ],
+    "doc": "步骤2(物理探针)：查进程。如果活着走 next 尝试抢救 UI；如果死了触发 on_error 去走你写好的冷启动"
+  },
+  "StartGame_RunApp": {
     "action": "StartApp",
     "next": [
       "[JumpBack]StartGame_LinkError",
