@@ -316,9 +316,9 @@
     ],
     "green_mask": true,
     "roi": [
-      186,
+      315,
       130,
-      176,
+      47,
       42
     ],
     "action": "Click",
@@ -441,9 +441,9 @@
     ],
     "green_mask": true,
     "roi": [
-      186,
+      315,
       175,
-      176,
+      47,
       80
     ],
     "action": "Click",
@@ -564,9 +564,9 @@
     ],
     "green_mask": true,
     "roi": [
-      186,
+      315,
       256,
-      176,
+      47,
       82
     ],
     "action": "Click",
@@ -683,9 +683,9 @@
     ],
     "green_mask": true,
     "roi": [
-      186,
+      315,
       337,
-      176,
+      47,
       82
     ],
     "action": "Click",
@@ -799,9 +799,9 @@
     ],
     "green_mask": true,
     "roi": [
-      186,
+      315,
       419,
-      176,
+      47,
       82
     ],
     "action": "Click",

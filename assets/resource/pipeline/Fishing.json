@@ -318,7 +318,8 @@
         },
         "doc": "进入地图选择界面",
         "next": [
-            "Fishing_MapNavigate"
+            "Fishing_MapNavigate",
+            "Fishing_InMap"
         ],
         "post_delay": 2000,
         "recognition": {
@@ -395,6 +396,7 @@
             "type": "Click"
         },
         "next": [
+            "[JumpBack]Global_WaitingForLoading",
             "Fishing_Start"
         ],
         "post_delay": 10000,
@@ -415,9 +417,10 @@
     },
     "Fishing_Start": {
         "next": [
-            "Custom_Fishing_Task"
+            "Custom_Fishing_Task",
+            "Fishing_SetSail"
         ],
-        "post_wait_freezes": 100
+        "post_wait_freezes": 800
     },
     "Move_Forward": {
         "action": {
