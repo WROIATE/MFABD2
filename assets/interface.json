@@ -436,9 +436,6 @@
                     "pipeline_override": {
                         "QuickHunt_TurnCharact_Start": {
                             "enabled": true
-                        },
-                        "QuickHunt_FastBattleMAXTouchCrystalCave": {
-                            "enabled": false
                         }
                     }
                 },
