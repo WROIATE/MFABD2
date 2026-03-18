@@ -654,7 +654,8 @@
     "expected": [
       "[水光风火暗]之洞穴"
     ],
-    "only_rec": false
+    "only_rec": false,
+    "doc": "【圣石模式分流,前侧】区分‘smart(补短)’ 与 ‘正常、均衡’，通过HUB开关控制是否切入smart"
   },
   "QuickHunt_NoTorchesAP_Skip": {
     "focus": "BM.免费火把耗尽，跳过打圣石洞穴",
@@ -675,7 +676,8 @@
     "next": [
       "[JumpBack]QuickHunt_ListExpand",
       "QuickHunt_FastBattleTouch_StoneSelect_SmartSelect"
-    ]
+    ],
+    "doc": "smart补短开关。| 注意后面MAXTouch不要disable"
   },
   "QuickHunt_ListExpand": {
     "recognition": "TemplateMatch",
@@ -774,7 +776,7 @@
       230,
       120
     ],
-    "doc": "寻找火之洞穴，点击属性图_火"
+    "doc": "【圣石模式分流,后侧】|区分：正常、均衡 | 行为:寻找火之洞穴，点击属性图_火.| smart(补短)在前一个节点分流,先点击火再依次均衡是正确的,不要前移均衡的判定! | 注意,通过HUB开关控制是否切入均衡模式。模式正常走MAXTouch，故hub要在max前，且max不能false，因为hub出口是maxtouch。"
   },
   "QuickHunt_FastBattleMAXTouchCrystalCave": {
     "recognition": "OCR",
@@ -828,7 +830,8 @@
       "快速狩猎"
     ],
     "post_wait_freezes": 500,
-    "doc": "寻找快速狩猎，点击(更新识别色彩?)"
+    "max_hit": 50,
+    "doc": "寻找快速狩猎，点击(更新识别色彩?) | 设定最大值,在后续不打和死循环之间,两害区其轻."
   },
   "QuickHunt_FastBattleStart": {
     "recognition": "OCR",
@@ -1060,7 +1063,8 @@
       "[JumpBack]QuickHunt_TurnCharact_QuickBattleButton"
     ],
     "focus": "BTM.洞穴均衡打取圣石开始",
-    "enabled": false
+    "enabled": false,
+    "doc": "均衡打圣石,无判定开关节点插入,开启则进入均衡模式."
   },
   "QuickHunt_TurnCharact_QuickBattleButton": {
     "recognition": "OCR",

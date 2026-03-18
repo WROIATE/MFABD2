@@ -1579,7 +1579,7 @@
         "count": 100,
         "next": [
             "Arbitrage_Sell_Item_ListTraverse",
-            "[JumpBack]Arbitrage_ItemList_Swip"
+            "Arbitrage_ItemList_Swip"
         ],
         "doc": "卡带是否选中色核"
     },
@@ -1621,6 +1621,13 @@
             "threshold": 3.0
         },
         "post_wait_freezes": 1000,
+        "next": [
+            "Arbitrage_ItemList_Swip"
+        ],
+        "timeout": 1,
+        "on_error": [
+            "Arbitrage_Sell_Item_ListTraverse"
+        ],
         "focus": "滑动商店卡带表",
         "doc": "商店卡带列表滑动"
     },
