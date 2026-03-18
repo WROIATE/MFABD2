@@ -35,9 +35,11 @@
         "doc": "进入卡带界面"
     },
     "Arbitrage_HomePageOldCardMenu_Ck&Top": {
+        "anchor": "Oldpack_swip",
         "recognition": "OCR",
         "action": "Swipe",
         "next": [
+            "Arbitrage_HomePageOldCardMenu_CheakReset",
             "Arbitrage_HomePageOldCardMenu_ResetLift"
         ],
         "post_delay": 1000,
@@ -65,7 +67,7 @@
         "recognition": "OCR",
         "action": "Swipe",
         "next": [
-            "Arbitrage_HomePageOldCardMenu_CheakReset"
+            "[Anchor]Oldpack_swip"
         ],
         "post_delay": 1000,
         "post_wait_freezes": 800,
@@ -87,7 +89,8 @@
             200
         ],
         "duration": 500,
-        "doc": "卡带界面复位拖动2，最左"
+        "doc": "卡带界面复位拖动2，最左",
+        "max_hit": 30
     },
     "Arbitrage_HomePageOldCardMenu_CheakReset": {
         "recognition": "TemplateMatch",
