@@ -1,6 +1,7 @@
 {
     "Setup_Str": {
         "next": [
+            "[JumpBack]Env_AccountSave_Switch",
             "[JumpBack]Setup_Main_Switch",
             "[JumpBack]Setup_Equip_Switch",
             "[JumpBack]Setup_SetSkill_Switch"
