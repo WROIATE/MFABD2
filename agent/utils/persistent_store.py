@@ -77,11 +77,14 @@ class PersistentStore:
         # 获取项目根目录
         base_dir = Path(__file__).resolve().parent.parent.parent
         
-        # 2. 检查绿色模式触发条件 (根目录下存在存档或备份文件)
-        portable_file = base_dir / cls.FILE_NAME
-        portable_bak = base_dir / cls.BAK_NAME
+        # 2. 检查绿色模式触发条件 (根目录下存在任意存档或备份文件)
+        # 💡 [修复] 只要根目录下有任何 agent_save_data 开头的 json，就统一认定为绿色便携模式
+        has_portable_archive = (
+            any(base_dir.glob("agent_save_data*.json"))
+            or any(base_dir.glob("agent_save_data*.json.bak"))
+        )
         
-        if portable_file.exists() or portable_bak.exists():
+        if has_portable_archive:
             cls._set_portable_mode(base_dir)
         else:
             # 3. 尝试进入全局模式 (并进行权限测试)
