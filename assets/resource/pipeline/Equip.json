@@ -1,7 +1,6 @@
 {
   "Equip_HomePage": {
     "next": [
-      "[JumpBack]Env_AccountSave_Switch",
       "Equip_HomePageHub",
       "Equip_HomePageHub1",
       "Equip_HomePageHub2"
