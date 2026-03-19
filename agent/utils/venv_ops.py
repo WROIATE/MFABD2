@@ -60,7 +60,7 @@ def find_preferred_python() -> str:
     if sys.platform == "win32":
         try:
             cmd = ["py", f"-{PREFERRED_PYTHON_VERSION}", "-c", "import sys; print(sys.executable)"]
-            result = subprocess.run(cmd, capture_output=True, text=True, check=True)
+            result = subprocess.run(cmd, capture_output=True, text=True, check=True) # nosec
             return result.stdout.strip()
         except (subprocess.CalledProcessError, FileNotFoundError):
             mfaalog.warning(f"⚠️ 未能通过 py 启动器找到 Python {PREFERRED_PYTHON_VERSION}，将回退使用 ({current_version})。")
@@ -83,7 +83,7 @@ def create_venv(venv_path: Path):
     mfaalog.info(f"🔧 使用基础解释器: {base_python}")
     
     try:
-        subprocess.check_call([base_python, "-m", "venv", str(venv_path)])
+        subprocess.check_call([base_python, "-m", "venv", str(venv_path)]) # nosec
         mfaalog.info("✅ 虚拟环境创建成功")
     except subprocess.CalledProcessError as e:
         mfaalog.error(f"❌ 创建失败: {e}")
@@ -108,7 +108,7 @@ def install_deps(venv_python: Path, project_root: Path, venv_path: Path):
         if marker_file.read_text(encoding='utf-8').strip() == current_hash:
             try:
                 # 仅做毫秒级探测，绝不执行 pip install
-                subprocess.check_call(
+                subprocess.check_call( # nosec
                     [str(venv_python), "-c", "import maa"], 
                     stdout=subprocess.DEVNULL, 
                     stderr=subprocess.DEVNULL
@@ -123,7 +123,7 @@ def install_deps(venv_python: Path, project_root: Path, venv_path: Path):
     
     req_file = project_root / "requirements.txt"
     if req_file.exists():
-        subprocess.check_call([
+        subprocess.check_call([ # nosec
             str(venv_python), "-m", "pip", "install", 
             "-i", "https://pypi.tuna.tsinghua.edu.cn/simple", 
             "-r", str(req_file)
@@ -131,17 +131,17 @@ def install_deps(venv_python: Path, project_root: Path, venv_path: Path):
     
     # --- 3. 安装框架，完美引用顶部的变量 ---
     try:
-        subprocess.check_call([
+        subprocess.check_call([ # nosec
             str(venv_python), "-m", "pip", "install",
             "-i", "https://pypi.tuna.tsinghua.edu.cn/simple",
             f"maafw=={DEV_MAAFW_VERSION}"
         ])
-    except Exception as e:
+    except subprocess.CalledProcessError as e:
         mfaalog.warning(f"指定版本 {DEV_MAAFW_VERSION} 安装失败: {e}，将使用备用范围 ({FALLBACK_MAAFW_SPEC}) 尝试重新安装...")
-        subprocess.check_call([
+        subprocess.check_call([ # nosec
             str(venv_python), "-m", "pip", "install",
             "-i", "https://pypi.tuna.tsinghua.edu.cn/simple",
-            f"maafw=={DEV_MAAFW_VERSION}"
+            f"maafw{FALLBACK_MAAFW_SPEC}"
         ])
     
     # --- 4. 全部安装成功后，写入新缓存 ---

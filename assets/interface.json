@@ -41,12 +41,13 @@
     ],
     "task": [
         {
-            "name": "[全局]启动游戏",
+            "name": "[全局]启动脚本(置顶)",
             "entry": "StartGame_Start",
             "default_check": true,
-            "description": "<b>最新版探测&下载渠道:</b><br>[![正式版](https://img.shields.io/github/v/release/sunyink/MFABD2?label=仓库源·正式版&color=green&logo=github)](https://github.com/sunyink/MFABD2/releases/latest)<br>[![公测版](https://img.shields.io/github/v/tag/sunyink/MFABD2?include_prereleases&filter=%2Abeta%2A&label=仓库源·公测版&color=blue&logo=github)](https://github.com/sunyink/MFABD2/releases?q=beta)<br>[![Mirror酱](https://img.shields.io/badge/Mirror%E9%85%B1-镜像源·高速下载-%239af3f6?logo=countingworkspro&logoColor=4f46e5)](https://mirrorchyan.com/zh/projects?rid=MFABD2)<br><span style=\"color:Crimson;font-size:10px\">框架有PC端控制器(720P窗口化)，但资源来不及适配仅供探索。</span><br><b>启动游戏</b>：<br>自动启动游戏，包含更新、支付失败等一些异常框点击，领取`主界面`奖励、`宠物派遣`。<br><b><span style=\"color:Crimson;font-size:16px\">注意：网络环境需提前解决。</span></b><br>【<b>首次运行前，务必至少查看</b>`使用帮助`<b>卡片！</b>】",
+            "description": "<b>最新版探测&下载渠道:</b><br>[![正式版](https://img.shields.io/github/v/release/sunyink/MFABD2?label=仓库源·正式版&color=green&logo=github)](https://github.com/sunyink/MFABD2/releases/latest)<br>[![公测版](https://img.shields.io/github/v/tag/sunyink/MFABD2?include_prereleases&filter=%2Abeta%2A&label=仓库源·公测版&color=blue&logo=github)](https://github.com/sunyink/MFABD2/releases?q=beta)<br>[![Mirror酱](https://img.shields.io/badge/Mirror%E9%85%B1-镜像源·高速下载-%239af3f6?logo=countingworkspro&logoColor=4f46e5)](https://mirrorchyan.com/zh/projects?rid=MFABD2)<br><span style=\"color:Crimson;font-size:10px\">框架有PC端控制器(720P窗口化)，但资源来不及适配仅供探索。</span><br><b>启动游戏</b>：<br><span style=\"color:Crimson;font-size:14px\">必须首先运行。</span>自动判断游戏运行情况，注入全局变量。按需启动游戏，包含更新、支付失败等一些异常框点击，领取`主界面`奖励、`宠物派遣`。<br><b><span style=\"color:Crimson;font-size:16px\">注意：网络环境需提前解决。</span></b><br>【<b>首次运行前，务必至少查看</b>`使用帮助`<b>卡片！</b>】",
             "option": [
-                "前置助手"
+                "前置助手",
+                "多存档"
             ]
         },
         {
@@ -58,7 +59,7 @@
                 "狩猎场",
                 "圣石洞穴属性"
             ],
-            "description": "<b>快速狩猎扫荡</b>：旧称`地图扫荡`。消耗每日免费的米饭、火把刷取资源。<br><br> <span style=\"color:Crimson;font-size:16px\">注意：请在狩猎场`1.野猪洞穴`已打完的基础上，确保目标狩猎场已通关</span>"
+            "description": "<b>快速狩猎扫荡</b>：旧称`地图扫荡`。消耗每日免费的米饭、火把刷取资源。<br><br> <span style=\"color:Crimson;font-size:16px\">注意：请在冒险航线`哥布林遗迹`已打完的基础上，确保目标狩猎场已通关</span>"
         },
         {
             "name": "[执行]地图采集[单章]",
@@ -100,7 +101,7 @@
             "option": [
                 "竞技场战斗倍数"
             ],
-            "description": "**竞技场：**进入竞技场卡带，打完每日免费鸡尾酒。<br>**战斗倍数：**Max 或 Min <br>**关于计分：**排位分按每场胜负计算，与倍率无关。奖牌则会x倍率。<br>如：Max为10倍，每天打4场x10倍鸡尾酒，计4场排位分，4x10倍奖牌。"
+            "description": "**竞技场：**进入竞技场卡带，打完每日免费鸡尾酒。<br>如果残余AP不够，会退回到1倍打完。<br>**倍数、计分、奖牌的关系：**排位分按每场胜负计算，与倍率无关。奖牌则会x倍率。<br>如：10倍，每天打4场x10倍鸡尾酒，计4场排位分，4x10倍奖牌。"
         },
         {
             "name": "[执行]赛季活动快速战斗",
@@ -172,8 +173,9 @@
             "name": "[执行]地图采集[完整]",
             "entry": "Collect_StartGame_HomePage",
             "default_check": true,
-            "description": "**地图采集**：进入卡带，对有传送阵地图进行`探查`、`吸取`、`召集`。<span style=\"color: Crimson;\"><b></b></span><br>**注意:**应当先将传送阵激活，并探明周围箱庭迷雾，使得区域地图上能完整显示明亮的传送阵图标。<br><span style=\"color: Crimson;\"><b>已适配周常卡带CD：</b></span><br>将在生成名为`agent_save_data.json`的存档文件，用于记录周期标记与运行时间标记。<b>只打刷新CD内没刷过的关卡</b>。<br>刷取顺序，先按照卡带框从左到右，再按照`故事`、`角色`、`活动`大类顺序。<br>存档文件可以`手动迁移`到新的MFA构建物中保留进度。",
+            "description": "**地图采集**：进入卡带，对有传送阵地图进行`探查`、`吸取`、`召集`。<span style=\"color: Crimson;\"><b></b></span><br>**注意:**应当先将传送阵激活，并探明周围箱庭迷雾，使得区域地图上能完整显示明亮的传送阵图标。<br><span style=\"color: Crimson;\"><b>已适配周常卡带CD：</b></span><br>将在生成名为`agent_save_data.json`的存档文件，用于记录周期标记与运行时间标记。<b>只打刷新CD内没刷过的关卡</b>。<br>刷取顺序，先按照卡带框从左到右，再按照`故事`、`角色`、`活动`大类顺序。<br>存档文件可以`手动迁移`到新的MFA构建物中保留进度。<br><b>简单类跳过:</b>根据滑动而不是单独卡带标签判断类(比如活动卡)已刷完，刷完打标、本周跳过此类。黑名单和出错都不会被区分，稳健性有限。",
             "option": [
+                "简单类跳过",
                 "采集卡带屏蔽",
                 "第三图采集额外等待"
             ]
@@ -435,9 +437,6 @@
                     "pipeline_override": {
                         "QuickHunt_TurnCharact_Start": {
                             "enabled": true
-                        },
-                        "QuickHunt_FastBattleMAXTouchCrystalCave": {
-                            "enabled": false
                         }
                     }
                 },
@@ -640,13 +639,15 @@
             "type": "select",
             "cases": [
                 {
-                    "name": "Max",
+                    "name": "40倍",
                     "pipeline_override": {
-                        "PVP_Multiplier_Adjust_Set": {}
+                        "PVP_Multiplier_Adjust_Set_Add": {
+                            "enabled": false
+                        }
                     }
                 },
                 {
-                    "name": "Min",
+                    "name": "1倍",
                     "pipeline_override": {
                         "PVP_Multiplier_Verify": {
                             "expected": [
@@ -655,10 +656,87 @@
                         },
                         "PVP_Multiplier_Adjust_Set": {
                             "target": [
-                                458,
-                                355,
+                                453,
+                                351,
                                 20,
                                 18
+                            ]
+                        },
+                        "PVP_Multiplier_Adjust_Set_Enter": {
+                            "expected": [
+                                "^1$"
+                            ]
+                        },
+                        "PVP_Multiplier_Adjust_Set_Add": {
+                            "enabled": false
+                        }
+                    }
+                },
+                {
+                    "name": "5倍",
+                    "pipeline_override": {
+                        "PVP_Multiplier_Verify": {
+                            "expected": [
+                                "^5$"
+                            ]
+                        },
+                        "PVP_Multiplier_Adjust_Set": {
+                            "target": [
+                                453,
+                                351,
+                                20,
+                                18
+                            ]
+                        },
+                        "PVP_Multiplier_Adjust_Set_Enter": {
+                            "expected": [
+                                "^5$"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "10倍",
+                    "pipeline_override": {
+                        "PVP_Multiplier_Verify": {
+                            "expected": [
+                                "^10$"
+                            ]
+                        },
+                        "PVP_Multiplier_Adjust_Set": {
+                            "target": [
+                                453,
+                                351,
+                                20,
+                                18
+                            ]
+                        },
+                        "PVP_Multiplier_Adjust_Set_Enter": {
+                            "expected": [
+                                "^10$"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "20倍",
+                    "pipeline_override": {
+                        "PVP_Multiplier_Verify": {
+                            "expected": [
+                                "^20$"
+                            ]
+                        },
+                        "PVP_Multiplier_Adjust_Set": {
+                            "target": [
+                                453,
+                                351,
+                                20,
+                                18
+                            ]
+                        },
+                        "PVP_Multiplier_Adjust_Set_Enter": {
+                            "expected": [
+                                "^20$"
                             ]
                         }
                     }
@@ -1048,6 +1126,42 @@
                 }
             ]
         },
+        "多存档": {
+            "type": "switch",
+            "description": "多开用户可启用多存档，独立保存刷取进度。关闭时为原本的单存档模式。",
+            "cases": [
+                {
+                    "name": "No"
+                },
+                {
+                    "name": "Yes",
+                    "option": [
+                        "存档名称"
+                    ]
+                }
+            ]
+        },
+        "存档名称": {
+            "type": "input",
+            "description": "填入数字（如 1, 2, 3 或者 UID！）。脚本将自动隔离各账号存档。填 0 则使用默认存档（无后缀）。",
+            "inputs": [
+                {
+                    "name": "账号多开配置",
+                    "label": "账号多开存档名",
+                    "pattern_msg": "请输入纯数字",
+                    "pipeline_type": "string",
+                    "default": "0",
+                    "verify": "^[0-9]+$"
+                }
+            ],
+            "pipeline_override": {
+                "Env_AccountSave_Switch": {
+                    "custom_action_param": {
+                        "account_id": "{账号多开配置}"
+                    }
+                }
+            }
+        },
         "餐馆自动升级": {
             "description": "升级有一次性小动画，按期望游戏体验选择。",
             "type": "switch",
@@ -1075,7 +1189,17 @@
             "cases": [
                 {
                     "name": "Yes",
-                    "pipeline_override": {}
+                    "pipeline_override": {
+                        "Daily_Busin_NoGift": {
+                            "next": []
+                        },
+                        "Daily_Busin_Nothing_Binary": {
+                            "next": []
+                        },
+                        "Daily_Busin_DecorCoin_IsFull_Binary": {
+                            "next": []
+                        }
+                    }
                 },
                 {
                     "name": "No",
@@ -1173,6 +1297,29 @@
                     }
                 }
             }
+        },
+        "简单类跳过": {
+            "type": "switch",
+            "description": "卡带右滑动到底时，简单地认为此类型卡带已全部刷完；下次运行跳过此大类。<br>可以<b>节省时间</b>，每周重置。",
+            "cases": [
+                {
+                    "name": "No"
+                },
+                {
+                    "name": "Yes",
+                    "pipeline_override": {
+                        "Collect_StoryPack_SetSimpleSkip": {
+                            "enabled": true
+                        },
+                        "Collect_CharacterPack_SetSimpleSkip": {
+                            "enabled": true
+                        },
+                        "Collect_EventPack_SetSimpleSkip": {
+                            "enabled": true
+                        }
+                    }
+                }
+            ]
         },
         "目标次数": {
             "description": "钓到指定条数鱼后停止",

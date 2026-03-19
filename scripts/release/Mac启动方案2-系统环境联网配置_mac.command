@@ -56,7 +56,8 @@ fi
 echo "✅ 检测到 Python3，准备安装 MAA 依赖..."
 
 # 2. 定义安装包和源
-PACKAGES="maafw==$TARGET_MAA_VERSION numpy"
+PACKAGES="maafw==$TARGET_MAA_VERSION json-with-comments requests pytz loguru 'numpy<2' 'Pillow>=9.0.0'"
+## 注意硬编码的,新库
 SOURCES=(
     "PyPI Official (Global)|https://pypi.org/simple"
     "Tuna Mirror (China)|https://pypi.tuna.tsinghua.edu.cn/simple"

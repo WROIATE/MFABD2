@@ -2,6 +2,7 @@
     "Arbitrage_Start": {
         "doc": "总流程启动器。现在设定3个子开关，购买、制作、出售，按次序JB。其中出售部分‘Arbitrage_Buy’多置一个空节点节点引导到单独文件",
         "next": [
+            "[JumpBack]Env_AccountSave_Switch",
             "[JumpBack]Arbitrage_Cooking_Weekly",
             "[JumpBack]Arbitrage_Cooking",
             "Arbitrage_Merchant_Ico",
@@ -35,9 +36,11 @@
         "doc": "进入卡带界面"
     },
     "Arbitrage_HomePageOldCardMenu_Ck&Top": {
+        "anchor": "Oldpack_swip",
         "recognition": "OCR",
         "action": "Swipe",
         "next": [
+            "Arbitrage_HomePageOldCardMenu_CheakReset",
             "Arbitrage_HomePageOldCardMenu_ResetLift"
         ],
         "post_delay": 1000,
@@ -65,7 +68,7 @@
         "recognition": "OCR",
         "action": "Swipe",
         "next": [
-            "Arbitrage_HomePageOldCardMenu_CheakReset"
+            "[Anchor]Oldpack_swip"
         ],
         "post_delay": 1000,
         "post_wait_freezes": 800,
@@ -87,7 +90,8 @@
             200
         ],
         "duration": 500,
-        "doc": "卡带界面复位拖动2，最左"
+        "doc": "卡带界面复位拖动2，最左",
+        "max_hit": 30
     },
     "Arbitrage_HomePageOldCardMenu_CheakReset": {
         "recognition": "TemplateMatch",
@@ -1579,7 +1583,7 @@
         "count": 100,
         "next": [
             "Arbitrage_Sell_Item_ListTraverse",
-            "[JumpBack]Arbitrage_ItemList_Swip"
+            "Arbitrage_ItemList_Swip"
         ],
         "doc": "卡带是否选中色核"
     },
@@ -1621,6 +1625,13 @@
             "threshold": 3.0
         },
         "post_wait_freezes": 1000,
+        "next": [
+            "Arbitrage_ItemList_Swip"
+        ],
+        "timeout": 1,
+        "on_error": [
+            "Arbitrage_Sell_Item_ListTraverse"
+        ],
         "focus": "滑动商店卡带表",
         "doc": "商店卡带列表滑动"
     },
