@@ -2,7 +2,6 @@
     "Arbitrage_Start": {
         "doc": "总流程启动器。现在设定3个子开关，购买、制作、出售，按次序JB。其中出售部分‘Arbitrage_Buy’多置一个空节点节点引导到单独文件",
         "next": [
-            "[JumpBack]Env_AccountSave_Switch",
             "[JumpBack]Arbitrage_Cooking_Weekly",
             "[JumpBack]Arbitrage_Cooking",
             "Arbitrage_Merchant_Ico",
