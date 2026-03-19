@@ -1,5 +1,24 @@
 {
   "StartGame_Start": {
+    "next": [
+      "[JumpBack]Env_AccountSave_Switch",
+      "StartGame_Check_App_Alive"
+    ]
+  },
+  "StartGame_Check_App_Alive": {
+    "action": "Shell",
+    "cmd": "pidof com.neowizgames.game.browndust2",
+    "next": [],
+    "on_error": [
+      "StartGame_RunApp"
+    ],
+    "focus": {
+      "Node.Action.Succeeded": "[color:green]程式已启动[/color]",
+      "Node.Action.Failed": "[color:red]程式未启动[/color]\n\n→程式启动模块"
+    },
+    "doc": "步骤(shell探针)：查进程。如果活着> next ,>查不到经常on_error尝试抢救"
+  },
+  "StartGame_RunApp": {
     "action": "StartApp",
     "next": [
       "[JumpBack]StartGame_LinkError",

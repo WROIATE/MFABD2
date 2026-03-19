@@ -393,6 +393,7 @@
         "next": [
             "Collect_TeleporCircle_OnFoot_TPIco",
             "Collect_TeleporCircle_OnFoot_NviMap_SpecialOut1#",
+            "Collect_TeleporCircle_OnFoot_NviMap_SpecialOut3#",
             "Collect_TeleporCircle_OnFoot_StateResolGroup_Step1_Lift",
             "Collect_TeleporCircle_OnFoot_StateResolGroup_Step1_Right"
         ]
@@ -420,11 +421,47 @@
             "[JumpBack]Global_ToSandBox"
         ]
     },
+    "Collect_TeleporCircle_OnFoot_NviMap_SpecialOut3#": {
+        "recognition": "OCR",
+        "expected": [
+            "海岸沙滩",
+            "海岸椰林"
+        ],
+        "roi": [
+            175,
+            10,
+            286,
+            64
+        ],
+        "focus": "CTB.特殊地图-海滨天使",
+        "doc": "海滨天使,没有传送门,但有两张可以吸的地图。考虑做一个特殊Nav？| 如果检测已经打过,崩掉这层节点链",
+        "next": [
+            "Collect_NviMap_Event_3"
+        ],
+        "timeout": 5000,
+        "on_error": [
+            "Global_QuickCart_MenuReset",
+            "[JumpBack]Global_ToSandBox"
+        ]
+    },
     "Collect_NviMap_Event_1": {
         "action": "Custom",
         "custom_action": "CheckCoolDown",
         "custom_action_param": {
             "card_name": "Event_1_夏日骑士",
+            "cycle_type": "g_weekly"
+        },
+        "next": [
+            "Collect_NviMap_SpeciaEveMap1#_MiniMap",
+            "Collect_NviMap_SpeciaEveMap1#_Sandplay",
+            "[JumpBack]Global_ToSandBox"
+        ]
+    },
+    "Collect_NviMap_Event_3": {
+        "action": "Custom",
+        "custom_action": "CheckCoolDown",
+        "custom_action_param": {
+            "card_name": "Event_3_海滨天使",
             "cycle_type": "g_weekly"
         },
         "next": [
@@ -458,6 +495,30 @@
                     489,
                     75,
                     67
+                ]
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": [
+                    "MapUI_HomeBtum.png"
+                ],
+                "roi": [
+                    244,
+                    198,
+                    76,
+                    80
+                ]
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": [
+                    "MapUI_BattButm.png"
+                ],
+                "roi": [
+                    531,
+                    446,
+                    98,
+                    91
                 ]
             }
         ],
@@ -597,6 +658,42 @@
                     "UI_BattButm_GE.png"
                 ],
                 "green_mask": true
+            },
+            {
+                "recognition": "TemplateMatch",
+                "roi": [
+                    385,
+                    66,
+                    489,
+                    265
+                ],
+                "template": [
+                    "UI_HomeButm_E3.png"
+                ]
+            },
+            {
+                "recognition": "TemplateMatch",
+                "roi": [
+                    696,
+                    446,
+                    168,
+                    128
+                ],
+                "template": [
+                    "UI_BattButm_E3.png"
+                ]
+            },
+            {
+                "recognition": "TemplateMatch",
+                "roi": [
+                    654,
+                    484,
+                    117,
+                    116
+                ],
+                "template": [
+                    "UI_BattButm_E3.png"
+                ]
             }
         ],
         "action": "Click",
