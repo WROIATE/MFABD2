@@ -93,7 +93,7 @@ class CheckTag(CustomRecognition):
             if current_val < max_val:
                 # 【修复】detail 必须是字典
                 # 我们把状态信息放进 'msg' 字段，同时也打印到日志
-                print(f"🟢 [检查通过] {status_msg}")
+                logger.debug(f"🟢 [检查通过] {status_msg}")
                 
                 return CustomRecognition.AnalyzeResult(
                     box=[0,0,0,0], 
@@ -101,7 +101,7 @@ class CheckTag(CustomRecognition):
                 )
             else:
                 # 拦截
-                print(f"🔴 [检查拦截] {status_msg} 已达上限")
+                logger.debug(f"🔴 [检查拦截] {status_msg} 已达上限")
                 return None
         except Exception as e:
             logger.error(f"CheckTag 异常: {e}")
@@ -125,7 +125,7 @@ class UpdateTag(CustomAction):
                 TAG_STORE[tag] = new_val
                 
                 # 【回调】打印清晰的变动日志
-                print(f"📊 [数值变更] {tag}: {old_val} -> {new_val} (变动: {value:+d})")
+                logger.debug(f"📊 [数值变更] {tag}: {old_val} -> {new_val} (变动: {value:+d})")
                 return True
             return False
         except Exception as e:

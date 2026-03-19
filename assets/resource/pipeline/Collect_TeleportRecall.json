@@ -461,7 +461,7 @@
         "action": "Custom",
         "custom_action": "CheckCoolDown",
         "custom_action_param": {
-            "card_name": "Event_1_夏日骑士",
+            "card_name": "Event_3_海滨天使",
             "cycle_type": "g_weekly"
         },
         "next": [

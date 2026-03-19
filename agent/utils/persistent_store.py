@@ -22,7 +22,8 @@ class PersistentStore:
     # 状态与路径变量
     _initialized = False
     _mode = None
-    _current_account_id = "0"  # 默认 0 号存档
+    _current_account_id = "0"  # 默认 0 号存档，接收到的原始 ID
+    _sanitized_account_id = "0" # 清洗后的安全 ID，与实际文件名对应
     
     # 动态生成的文件名和路径
     FILE_NAME = "agent_save_data.json"
@@ -45,7 +46,7 @@ class PersistentStore:
 
         # 如果发现传入的账号 ID 与当前不同，触发重置机制
         if safe_id != cls._current_account_id:
-            logger.info(f"[Py] 🔄 存档系统检测到账号切换: [{cls._current_account_id}] -> [{safe_id}]")
+            logger.info(f"[Py] 🔄 存档系统检测到账号切换指令: 原账号=[{cls._current_account_id}] -> 新请求=[{safe_id}]")
             cls._current_account_id = safe_id
             cls._initialized = False  # 关键：强制下次重新挂载路径
             cls._init_paths()         # 立即重新初始化并挂载
@@ -56,24 +57,34 @@ class PersistentStore:
         if cls._initialized:
             return
 
-        # 1. 根据当前 _current_account_id 动态生成文件名
+        # 1. 根据当前 _current_account_id 动态生成文件名和净化 ID
         if cls._current_account_id == "0":
+            cls._sanitized_account_id = "0"
             cls.FILE_NAME = "agent_save_data.json"
             cls.BAK_NAME = "agent_save_data.json.bak"
         else:
-            # 双重保险：虽然前端 UI 有正则，后端也过滤一下系统不支持的路径字符
-            clean_id = re.sub(r'[\\/*?:"<>|]', "_", cls._current_account_id)
+            # 双重保险：后端过滤系统不支持的路径字符
+            original_id = cls._current_account_id
+            clean_id = re.sub(r'[\\/*?:"<>|]', "_", original_id)
+            cls._sanitized_account_id = clean_id
             cls.FILE_NAME = f"agent_save_data_{clean_id}.json"
             cls.BAK_NAME = f"agent_save_data_{clean_id}.json.bak"
             
-        # 获取项目根目录 (根据你的设定，退回3层)
+            # 记录原始 ID 与实际文件名之间的映射，方便排查问题
+            if original_id != clean_id:
+                logger.info(f"[Py] ⚠️ 账号 ID 已清洗: 原始='{original_id}', 清洗后='{clean_id}', 映射文件={cls.FILE_NAME}")
+
+        # 获取项目根目录
         base_dir = Path(__file__).resolve().parent.parent.parent
         
-        # 2. 检查绿色模式触发条件 (根目录下存在存档或备份文件)
-        portable_file = base_dir / cls.FILE_NAME
-        portable_bak = base_dir / cls.BAK_NAME
+        # 2. 检查绿色模式触发条件 (根目录下存在任意存档或备份文件)
+        # 💡 [修复] 只要根目录下有任何 agent_save_data 开头的 json，就统一认定为绿色便携模式
+        has_portable_archive = (
+            any(base_dir.glob("agent_save_data*.json"))
+            or any(base_dir.glob("agent_save_data*.json.bak"))
+        )
         
-        if portable_file.exists() or portable_bak.exists():
+        if has_portable_archive:
             cls._set_portable_mode(base_dir)
         else:
             # 3. 尝试进入全局模式 (并进行权限测试)
@@ -83,9 +94,9 @@ class PersistentStore:
                 
         cls._initialized = True
         
-        # 状态汇报
+        # 状态汇报 (使用清洗后的 _sanitized_account_id)
         mode_str = "系统全局模式" if cls._mode == 'global' else "绿色便携模式"
-        logger.info(f"[Py] 💾 存档挂载完成 | 账号ID: {cls._current_account_id} | 模式: {mode_str}")
+        logger.info(f"[Py] 💾 存档挂载完成 | 账号ID: {cls._sanitized_account_id} | 模式: {mode_str}")
         logger.info(f"[Py] 📂 存档路径: {cls.FILE_PATH}")
 
     @classmethod
@@ -133,9 +144,9 @@ class PersistentStore:
         assert cls.FILE_PATH is not None
         assert cls.BACKUP_PATH is not None
         
-        # 💡【新增逻辑】纯新账号：主文件和备份都不存在，直接静默初始化，不报“损坏”
+        # 💡纯新账号：主文件和备份都不存在，直接静默初始化
         if not cls.FILE_PATH.exists() and not cls.BACKUP_PATH.exists():
-            logger.info(f"[Py] 🌱 账号 [{cls._current_account_id}] 为全新存档，正在初始化...")
+            logger.info(f"[Py] 🌱 账号 [{cls._sanitized_account_id}] 为全新存档，正在初始化...")
             empty_data = {}
             cls._save_file(cls.FILE_PATH, empty_data)
             return empty_data
@@ -143,7 +154,7 @@ class PersistentStore:
         if not cls.FILE_PATH.exists() and cls.BACKUP_PATH.exists():
              try:
                  shutil.copy2(cls.BACKUP_PATH, cls.FILE_PATH)
-                 logger.info(f"[Py] ✅ 账号 {cls._current_account_id} 已从备份自动生成主存档！")
+                 logger.info(f"[Py] ✅ 账号 {cls._sanitized_account_id} 已从备份自动生成主存档！")
              except Exception as e:
                  logger.error(f"[Py] ❌ 恢复备份失败: {e}")
 
@@ -161,7 +172,7 @@ class PersistentStore:
                 cls._save_file(cls.FILE_PATH, data)
                 return data
 
-        logger.error(f"[Py] ❌ 账号 {cls._current_account_id} 存档彻底损坏且无有效备份，重置为空。")
+        logger.error(f"[Py] ❌ 账号 {cls._sanitized_account_id} 存档彻底损坏且无有效备份，重置为空。")
         empty_data = {}
         cls._save_file(cls.FILE_PATH, empty_data)
         return empty_data
