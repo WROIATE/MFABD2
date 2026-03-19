@@ -435,8 +435,37 @@
     "on_error": [
       "PVP_AutoBattleStart"
     ],
-    "timeout": 10000,
+    "timeout": 5000,
     "doc": "点击MAX Mini"
+  },
+  "PVP_AutoBattleMAX_BackUp": {
+    "recognition": "OCR",
+    "action": "Click",
+    "next": [
+      "PVP_AutoBattleMAX_CK",
+      "PVP_AutoBattleMAX"
+    ],
+    "post_delay": 1000,
+    "roi": [
+      826,
+      421,
+      70,
+      34
+    ],
+    "expected": [
+      "MAX"
+    ],
+    "target": [
+      865,
+      435
+    ],
+    "max_hit": 5,
+    "on_error": [
+      "PVP_AutoBattleStart"
+    ],
+    "timeout": 5000,
+    "enabled": false,
+    "doc": "给Ap残留不足以打完当前倍数用的"
   },
   "PVP_AutoBattleMAX_CK": {
     "next": [
@@ -510,16 +539,63 @@
       353
     ],
     "next": [
+      "PVP_Multiplier_Adjust_Set_Enter",
+      "[JumpBack]PVP_Multiplier_Adjust_Set_Add"
+    ],
+    "timeout": 10000,
+    "on_error": [
+      "PVP_Multiplier_Adjust_Set_Err_Retry"
+    ],
+    "post_delay": 500,
+    "doc": "默认max倍"
+  },
+  "PVP_Multiplier_Adjust_Set_Add": {
+    "action": "Click",
+    "target": [
+      686,
+      346,
+      27,
+      19
+    ],
+    "post_delay": 1500,
+    "max_hit": 10,
+    "doc": "改倍率,先intface改最小,这里enable,硬编码点击加5,直到后面ocr达标"
+  },
+  "PVP_Multiplier_Adjust_Set_Err_Retry": {
+    "focus": "PB.调整倍数异常,重试",
+    "next": [
+      "PVP_Multiplier_Adjust_Set"
+    ],
+    "max_hit": 3
+  },
+  "PVP_Multiplier_Adjust_Set_Enter": {
+    "recognition": "OCR",
+    "roi": [
+      596,
+      372,
+      105,
+      50
+    ],
+    "expected": [
+      "40"
+    ],
+    "replace": [
+      [
+        "倍",
+        ""
+      ]
+    ],
+    "next": [
       "PVP_Multiplier_Adjust_Enter",
       "PVP_Multiplier_Adjust_Set"
     ],
-    "post_delay": 500,
-    "doc": "默认10倍"
+    "doc": "判定倍数改对了,然后再确定"
   },
   "PVP_Multiplier_Adjust_Enter": {
     "next": [
       "PVP_Multiplier_Adjust_Enter",
-      "PVP_AutoBattleMAX"
+      "PVP_AutoBattleMAX",
+      "PVP_AutoBattleMAX_BackUp"
     ],
     "recognition": "OCR",
     "expected": "确认",
@@ -536,8 +612,11 @@
     "recognition": "OCR",
     "action": "Click",
     "next": [
-      "PVP_AutoBattle2",
-      "PVP_AutoBattleStart"
+      "PVP_BattleResult",
+      "PVP_AutoBattleStart",
+      "PVP_AutoBattle_APShortage",
+      "[JumpBack]PVP_AutoBattle_Battling",
+      "[JumpBack]PVP_BattleWaitingLoad"
     ],
     "post_delay": 10000,
     "timeout": 30000,
@@ -553,13 +632,9 @@
     ],
     "doc": "点击战斗开始 | 考虑动画时间以及防止网络卡顿"
   },
-  "PVP_AutoBattle2": {
+  "PVP_AutoBattle_Battling": {
     "recognition": "OCR",
-    "next": [
-      "PVP_AutoBattle2",
-      "PVP_BattleResult"
-    ],
-    "post_delay": 3000,
+    "post_delay": 5000,
     "focus": "PM.PVP.PVP战斗进行中...",
     "roi": [
       50,
@@ -591,10 +666,34 @@
       "反复战斗结果"
     ],
     "target": [
-      825,
-      172
+      1,
+      1
     ],
     "doc": "反复战斗结果"
+  },
+  "PVP_BattleWaitingLoad": {
+    "recognition": "OCR",
+    "roi": [
+      1040,
+      36,
+      62,
+      21
+    ],
+    "expected": [
+      "40"
+    ],
+    "replace": [
+      [
+        "o",
+        "0"
+      ],
+      [
+        "O",
+        "0"
+      ]
+    ],
+    "post_delay": 5000,
+    "doc": "匹配PVP对手画面,等待..."
   },
   "PVP_BattleLeave": {
     "recognition": "OCR",
@@ -653,6 +752,134 @@
     ],
     "post_wait_freezes": 500,
     "doc": "升降级点击确认"
+  },
+  "PVP_AutoBattle_APShortage": {
+    "recognition": "OCR",
+    "roi": [
+      540,
+      225,
+      191,
+      42
+    ],
+    "expected": [
+      "不足"
+    ],
+    "only_rec": true,
+    "focus": "PM.PVP-AP不足以执行计划",
+    "next": [
+      "PVP_AutoBattle_APShortage_Depleted",
+      "PVP_AutoBattle_APShortage_Remaining"
+    ],
+    "doc": "出现Ap不足应对一套,入口"
+  },
+  "PVP_AutoBattle_APShortage_Depleted": {
+    "recognition": "OCR",
+    "roi": [
+      1040,
+      36,
+      62,
+      21
+    ],
+    "expected": [
+      "^[0]\\D+\\d+$"
+    ],
+    "replace": [
+      [
+        "o",
+        "0"
+      ],
+      [
+        "O",
+        "0"
+      ]
+    ],
+    "action": "Click",
+    "target": [
+      1,
+      1
+    ],
+    "next": [
+      "Global_BackToQC1"
+    ],
+    "doc": "此时AP为零,结束"
+  },
+  "PVP_AutoBattle_APShortage_Remaining": {
+    "recognition": "OCR",
+    "roi": [
+      1040,
+      36,
+      62,
+      21
+    ],
+    "expected": [
+      "^[1-9]\\d*\\D+\\d+$"
+    ],
+    "replace": [
+      [
+        "o",
+        "0"
+      ],
+      [
+        "O",
+        "0"
+      ]
+    ],
+    "action": "Click",
+    "target": [
+      1,
+      1
+    ],
+    "next": [
+      "PVP_AutoBattle_APShortage_Remaining_Return"
+    ],
+    "timeout": 1,
+    "on_error": [
+      "Global_BackToQC1"
+    ],
+    "doc": "还有残余AP但是不够刷满目标倍数,改到1刷完"
+  },
+  "PVP_AutoBattle_APShortage_Remaining_Return": {
+    "action": "Custom",
+    "custom_action": "PatchBatch",
+    "custom_action_param": {
+      "patches": {
+        "PVP_Multiplier_Verify": {
+          "expected": [
+            "^1$"
+          ]
+        },
+        "PVP_Multiplier_Adjust_Set": {
+          "target": [
+            453,
+            351,
+            20,
+            18
+          ]
+        },
+        "PVP_Multiplier_Adjust_Set_Enter": {
+          "expected": [
+            "^1$"
+          ]
+        },
+        "PVP_Multiplier_Adjust_Set_Add": {
+          "enabled": false
+        },
+        "PVP_Multiplier_Adjust_Enter": {
+          "timeout": 3000,
+          "on_error": [
+            "PVP_AutoBattleStart"
+          ]
+        },
+        "PVP_AutoBattleMAX_BackUp": {
+          "enabled": true
+        }
+      }
+    },
+    "next": [
+      "PVP_TaskStart"
+    ],
+    "max_hit": 1,
+    "doc": "patch成1倍重开,只执行一次,有很多转向改动,后期维护注意"
   },
   "PVP_BackPVEPage": {
     "recognition": "TemplateMatch",

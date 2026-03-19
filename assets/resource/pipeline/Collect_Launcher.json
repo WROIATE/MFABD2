@@ -88,6 +88,7 @@
         ],
         "doc": "拉起成功,进入箱庭",
         "next": [
+            "[JumpBack]Env_AccountSave_Switch",
             "Collect_QuickCart_Menu",
             "[JumpBack]Global_QuickCart_MenuReset"
         ]
@@ -153,25 +154,64 @@
         ]
     },
     "Collect_FeatureSwitch_StoryPack": {
+        "anchor": {
+            "SmartSwipOut": ""
+        },
         "next": [
+            "Collect_StoryPack_SetSimpleSkip",
             "Collect_QuickCart_SelectType_StoryPack"
         ],
         "enabled": true,
         "max_hit": 1
     },
     "Collect_FeatureSwitch_CharacterPack": {
+        "anchor": {
+            "SmartSwipOut": ""
+        },
         "next": [
+            "Collect_CharacterPack_SetSimpleSkip",
             "Collect_QuickCart_SelectType_CharacterPack"
         ],
         "enabled": true,
         "max_hit": 1
     },
     "Collect_FeatureSwitch_EvenPack": {
+        "anchor": {
+            "SmartSwipOut": ""
+        },
         "next": [
+            "Collect_EventPack_SetSimpleSkip",
             "Collect_QuickCart_SelectType_EventPack"
         ],
         "enabled": true,
         "max_hit": 1
+    },
+    "Collect_StoryPack_SetSimpleSkip": {
+        "anchor": {
+            "SmartSwipOut": "Collect_LocatePack_SimpleSkip_Story"
+        },
+        "next": [
+            "Collect_QuickCart_SelectType_StoryPack"
+        ],
+        "enabled": false
+    },
+    "Collect_CharacterPack_SetSimpleSkip": {
+        "anchor": {
+            "SmartSwipOut": "Collect_LocatePack_SimpleSkip_Character"
+        },
+        "next": [
+            "Collect_QuickCart_SelectType_CharacterPack"
+        ],
+        "enabled": false
+    },
+    "Collect_EventPack_SetSimpleSkip": {
+        "anchor": {
+            "SmartSwipOut": "Collect_LocatePack_SimpleSkip_Event"
+        },
+        "next": [
+            "Collect_QuickCart_SelectType_EventPack"
+        ],
+        "enabled": false
     },
     "Collect_QuickCart_SelectType_StoryPack": {
         "recognition": "OCR",
@@ -249,9 +289,12 @@
             255
         ],
         "action": "Custom",
-        "custom_action": "RestoreNode",
+        "custom_action": "RestoreBatch",
         "custom_action_param": {
-            "node": "Collect_LocatePackFrame_Smart_Swip"
+            "nodes": [
+                "Collect_LocatePackFrame_Smart_Swip",
+                "Collect_Loc_OutToSwip_Hub_Egress"
+            ]
         },
         "doc": "当前节点链层数标记：2。初次调取卡带菜单完毕，开始初次点击卡带.先复位再to1,to1没判定的!不可直接IsPresent,防止用户行为干扰"
     },
@@ -272,9 +315,12 @@
             165
         ],
         "action": "Custom",
-        "custom_action": "RestoreNode",
+        "custom_action": "RestoreBatch",
         "custom_action_param": {
-            "node": "Collect_LocatePackFrame_Smart_Swip"
+            "nodes": [
+                "Collect_LocatePackFrame_Smart_Swip",
+                "Collect_Loc_OutToSwip_Hub_Egress"
+            ]
         },
         "count": 300,
         "focus": "CM.L.角色-卡带调取完毕"
@@ -296,9 +342,12 @@
             165
         ],
         "action": "Custom",
-        "custom_action": "RestoreNode",
+        "custom_action": "RestoreBatch",
         "custom_action_param": {
-            "node": "Collect_LocatePackFrame_Smart_Swip"
+            "nodes": [
+                "Collect_LocatePackFrame_Smart_Swip",
+                "Collect_Loc_OutToSwip_Hub_Egress"
+            ]
         },
         "count": 500,
         "focus": "CM.L.活动-卡带调取完毕"
@@ -1524,6 +1573,9 @@
         },
         "next": [
             "Collect_LocatePackFrame_Smart_Swip_UpdateTag"
+        ],
+        "on_error": [
+            "[Anchor]SmartSwipOut"
         ]
     },
     "Collect_LocatePackFrame_Smart_Swip_UpdateTag": {
@@ -1543,6 +1595,33 @@
         "next": [
             "Collect_PackProbe_IsPresent"
         ]
+    },
+    "Collect_LocatePack_SimpleSkip_Story": {
+        "action": "Custom",
+        "custom_action": "MarkComplete",
+        "custom_action_param": {
+            "card_name": "Pack_Story_SimpleDone",
+            "cycle_type": "g_weekly"
+        },
+        "focus": "Py.剧情卡简单全完成标记"
+    },
+    "Collect_LocatePack_SimpleSkip_Character": {
+        "action": "Custom",
+        "custom_action": "MarkComplete",
+        "custom_action_param": {
+            "card_name": "Pack_Character_SimpleDone",
+            "cycle_type": "g_weekly"
+        },
+        "focus": "Py.剧情卡简单全完成标记"
+    },
+    "Collect_LocatePack_SimpleSkip_Event": {
+        "action": "Custom",
+        "custom_action": "MarkComplete",
+        "custom_action_param": {
+            "card_name": "Pack_Event_SimpleDone",
+            "cycle_type": "g_weekly"
+        },
+        "focus": "Py.剧情卡简单全完成标记"
     },
     "Collect_PackLocation_PassFieldsAndHub": {
         "recognition": "Custom",
@@ -1578,6 +1657,7 @@
             "Collect_Pack_Story_17",
             "Collect_Pack_Story_18",
             "Collect_Pack_Story_19",
+            "Collect_Pack_Story_20",
             "Collect_Pack_Character_1",
             "Collect_Pack_Character_2",
             "Collect_Pack_Character_3",
@@ -2487,6 +2567,53 @@
             "[JumpBack]Global_WaitingForLoading",
             "Collect_OperationsMain_Sandplay",
             "Collect_Pack_Story_19"
+        ]
+    },
+    "Collect_Pack_Story_20": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "recognition": "TemplateMatch",
+                "template": [
+                    "Cartridges/Q_sp20.png"
+                ],
+                "roi": "Collect_PackLocation_PassFieldsAndHub"
+            },
+            {
+                "recognition": "Custom",
+                "custom_recognition": "CheckCoolDown",
+                "custom_recognition_param": {
+                    "card_name": "Story_20_堕入深渊",
+                    "cycle_type": "g_weekly"
+                }
+            }
+        ],
+        "box_index": 0,
+        "action": "Custom",
+        "custom_action": "PatchAndClick",
+        "custom_action_param": {
+            "node": "Collect_PackEnd_Ck",
+            "patch": {
+                "action": "Custom",
+                "custom_action": "MarkComplete",
+                "custom_action_param": {
+                    "card_name": "Story_20_堕入深渊",
+                    "cycle_type": "g_weekly"
+                }
+            },
+            "target_offset": [
+                -5,
+                -3,
+                0,
+                0
+            ]
+        },
+        "timeout": 1,
+        "post_delay": 5000,
+        "next": [
+            "[JumpBack]Global_WaitingForLoading",
+            "Collect_OperationsMain_Sandplay",
+            "Collect_Pack_Story_20"
         ]
     },
     "Collect_Pack_Character_1": {
