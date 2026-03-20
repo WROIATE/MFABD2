@@ -2609,6 +2609,7 @@
         },
         "timeout": 1,
         "post_delay": 5000,
+        "enabled": false,
         "next": [
             "[JumpBack]Global_WaitingForLoading",
             "Collect_OperationsMain_Sandplay",
