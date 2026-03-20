@@ -574,6 +574,7 @@
       "tanhaoGE.png"
     ],
     "green_mask": true,
+    "max_hit": 5,
     "doc": "宠物派遣。此时已因其他步骤充分延时，时机更合适。"
   },
   "StartGame_End": {
