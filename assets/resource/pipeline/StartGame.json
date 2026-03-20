@@ -348,11 +348,11 @@
       "[JumpBack]StartGame_NewChar",
       "[JumpBack]StartGame_SeasonSet",
       "[JumpBack]PVP_PerOperationsMain_Error",
-      "[JumpBack]StartGame_BackMapPage",
       "[JumpBack]StartGame_AtPack_FantasiaSquare",
       "[JumpBack]StartGame_AtPack_GoldenColosseum",
       "[JumpBack]Global_WaitingForLoading",
-      "StartGame_SandPlayPage"
+      "StartGame_SandPlayPage",
+      "[JumpBack]StartGame_BackMapPage"
     ],
     "pre_delay": 5000,
     "post_delay": 10000,
@@ -374,7 +374,7 @@
       100
     ],
     "doc": "点击进入",
-    "timeout": 120000
+    "timeout": 30000
   },
   "StartGame_NewChar": {
     "recognition": "OCR",
@@ -456,6 +456,7 @@
   },
   "StartGame_BackMapPage": {
     "action": "Click",
+    "repeat": 10,
     "post_delay": 5000,
     "focus": "SM.弹窗消除-无对象",
     "target": [
@@ -463,7 +464,7 @@
       460
     ],
     "doc": "包里解决启动弹窗。注意新魔兽，新卡池、正常",
-    "max_hit": 10
+    "max_hit": 1
   },
   "StartGame_MainMsgBox_Remove": {
     "recognition": "OCR",
@@ -573,6 +574,7 @@
       "tanhaoGE.png"
     ],
     "green_mask": true,
+    "max_hit": 5,
     "doc": "宠物派遣。此时已因其他步骤充分延时，时机更合适。"
   },
   "StartGame_End": {
@@ -694,7 +696,7 @@
       55
     ],
     "expected": [
-      "阵型"
+      "阵形"
     ],
     "focus": "[WRN]SM.意料外卡带-黄金竞技场",
     "doc": "在黄金角斗场启动游戏",
