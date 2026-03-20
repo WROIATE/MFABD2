@@ -1,7 +1,6 @@
 {
   "Weekly_Start": {
     "next": [
-      "[JumpBack]Env_AccountSave_Switch",
       "[JumpBack]Weekly_Arcade_Hub",
       "[JumpBack]Weekly_VisitCabin_Hub",
       "[JumpBack]Weekly_LastNight_Hub",

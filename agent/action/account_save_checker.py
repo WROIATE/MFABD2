@@ -21,7 +21,7 @@ class SwitchAccountCheckpointAction(CustomAction):
         无论成功与否，始终返回 True，以确保不阻断 Pipeline 主流程。
         """
         try:
-            # 1. 解析参数 (兼容字符串和字典形式)
+            # 1. 解析参数
             if hasattr(argv, 'custom_action_param'):
                 param_str = getattr(argv, 'custom_action_param', '{}')
                 params = json.loads(param_str) if isinstance(param_str, str) else param_str
@@ -30,16 +30,18 @@ class SwitchAccountCheckpointAction(CustomAction):
             else:
                 params = {}
             
-            # 2. 提取账号 ID (如果没有传，默认为 "0")
-            account_id = params.get("account_id", "0")
+            # 2. 【核心修复】只有参数存在时才提取，否则跳过
+            if "account_id" in params:
+                account_id = params["account_id"]
+                # 调用底层切换逻辑，它会作为类变量保存在进程中
+                PersistentStore.switch_account(account_id)
+            else:
+                # 跨任务参数丢失时，走这里。我们不做任何操作，
+                # 依靠 PersistentStore 进程中常驻的 _current_account_id 继续运行
+                pass
             
-            # 3. 调用我们写好的底层切换逻辑
-            PersistentStore.switch_account(account_id)
-            
-            # 4. 静默放行
             return True
             
         except Exception as e:
             utils.mfaalog.error(f"[Py] ❌ 账号切换检查点执行异常: {e}")
-            # 即使发生异常也返回 True，让流程降级继续运行
             return True
