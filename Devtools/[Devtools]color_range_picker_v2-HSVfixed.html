@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8">
+  <title>多格式色彩范围提取工具</title>
+  <script type="text/javascript" src="https://gc.kis.v2.scr.kaspersky-labs.com/FD126C42-EBFA-4E12-B309-BB3FDD723AC1/main.js?attr=7zVFCnJdYTPjwPemot87xaPkQyk5vEDqzWI0H_8Tnp_Wsv853I4OFeoHaJMfjqcsvtB1IMO-ER1cEZ5WMHY02PJeTjf3iBTdYXXy8klM9f8gwayocN7WRWEMY9qhGRwtTQI9Zld8ZXBZioAS5LCHHvwIdHDdTiyk324Y2djI-nMn0FnINE31VgaIpFjKWpm0lZSAG36NnO74ccbR_BZmohcIuOQIVgW9XNfVNCit_wt4Hu5Gpq1FlSOBpjLKdU14GhLEYOBHFjbcFCtqlS4zL-EEX0EHj2bFPZqH2BKsV2jyfcsUDhTqbMxxSl0kmyrOSZ8jEcD_yKa8mT9Dl-e-rw" charset="UTF-8"></script><link rel="stylesheet" crossorigin="anonymous" href="https://gc.kis.v2.scr.kaspersky-labs.com/E3E8934C-235A-4B0E-825A-35A08381A191/abn/main.css?attr=aHR0cHM6Ly9jb250cmlidXRpb24udXNlcmNvbnRlbnQuZ29vZ2xlLmNvbS9kb3dubG9hZD9jPUNneGlZWEprWDNOMGIzSmhaMlVTVEJJSmRHVnRjRjlrWVhSaEdqOEtNREJtTXpkaU9XTmtPVGc1T0RFek1tTXdNREEyTkRsa01USmlPV0kzT0dNMk1EWTJZemN4WVdWaU5USmtOamd3TkJJTEVnY1FzUHVsd01ZYUdBRSZmaWxlbmFtZT1jb2xvcl9yYW5nZV9waWNrZXJfZml4ZWQuaHRtbCZvcGk9MTAzMTM1MDUw"/><style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 15px;
+      background-color: #f0f0f0;
+      max-width: 800px;
+      margin: auto;
+    }
+    #drop-area {
+      border: 3px dashed #888;
+      padding: 20px;
+      background: white;
+      text-align: center;
+      font-size: 16px;
+      cursor: pointer;
+      margin-bottom: 15px;
+    }
+    .result-box {
+      background: #fff;
+      border: 1px solid #ccc;
+      padding: 10px 15px;
+      margin-bottom: 12px;
+      border-radius: 5px;
+      font-size: 14px;
+    }
+    .copy-group {
+      display: inline-block;
+      margin-left: 10px;
+    }
+    button {
+      margin-right: 5px;
+      padding: 5px 10px;
+      font-size: 13px;
+      cursor: pointer;
+    }
+    h3 {
+      margin-top: 5px;
+      margin-bottom: 5px;
+    }
+
+    .intro-section {
+      background: #eef;
+      border-radius: 5px;
+      padding: 10px 15px;
+      margin-bottom: 12px;
+    }
+
+    .intro-header {
+      cursor: pointer;
+      padding: 5px 10px;
+      background: #d9edf7;
+      border-radius: 4px;
+      display: inline-block;
+      font-weight: bold;
+    }
+
+    .intro-header::before {
+      content: "▶";
+      display: inline-block;
+      margin-right: 8px;
+      font-size: 12px;
+      transition: transform 0.2s;
+    }
+
+    .intro-header.open::before {
+      content: "▼";
+    }
+
+    .intro-content {
+      display: none;
+      margin-top: 8px;
+      line-height: 1.5;
+    }
+
+    .intro-content.show {
+      display: block;
+    }
+
+    #copy-toast {
+      position: fixed;
+      top: 20px;
+      right: -300px;
+      background: #d4edda;
+      color: #155724;
+      padding: 10px 20px;
+      border-radius: 5px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+      transition: right 0.4s ease-in-out;
+      z-index: 1000;
+      max-width: 300px;
+      word-break: break-all;
+    }
+  </style>
+</head>
+<body>
+
+<h2 style="margin-top: 0; margin-bottom: 10px;">多格式色彩范围提取工具</h2>
+
+<!-- 工具说明折叠区 -->
+<div class="intro-section">
+  <div class="intro-header" onclick="toggleIntro(this)">工具说明</div>
+  <div class="intro-content">
+    本工具用于分析 PNG 图片中非透明区域的颜色范围，自动计算 RGB、HSV、GRAY 三种格式下的颜色下限（lower）和上限（upper）值。<br>适合用于图像处理（如 OpenCV）中快速提取目标颜色范围，便于构建颜色过滤器。
+  </div>
+</div>
+
+<!-- 使用方法折叠区 -->
+<div class="intro-section">
+  <div class="intro-header" onclick="toggleIntro(this)">使用方法</div>
+  <div class="intro-content">
+    <ol style="padding-left: 20px; margin: 0;">
+      <li>准备好 PNG 图片（建议在 PS 中删除无关区域或设为透明）</li>
+      <li>点击或拖拽图片到虚线区域</li>
+      <li>页面会自动计算并显示 RGB、HSV、GRAY 三种格式的颜色范围</li>
+      <li>每组数据有两个复制按钮，分别复制 <code>0,0,0</code> 或 <code>[0,0,0]</code> 格式，便于粘贴到代码或配置文件中</li>
+    </ol>
+  </div>
+</div>
+
+<div id="drop-area">点击或拖拽 PNG 图片到这里</div>
+
+<div id="results-container"></div>
+
+<canvas id="canvas" style="display:none;"></canvas>
+
+<!-- 复制成功提示框 -->
+<div id="copy-toast"></div>
+
+<script>
+  function toggleIntro(el) {
+    const content = el.nextElementSibling;
+    const isOpen = el.classList.toggle('open');
+    content.classList.toggle('show', isOpen);
+  }
+
+  const dropArea = document.getElementById('drop-area');
+  const canvas = document.getElementById('canvas');
+  const ctx = canvas.getContext('2d');
+  const resultsContainer = document.getElementById('results-container');
+  const toast = document.getElementById('copy-toast');
+
+  function showToast(text) {
+    toast.textContent = `✅ 已复制：${text}`;
+    toast.style.right = '20px';
+    setTimeout(() => {
+      toast.style.right = '-300px';
+    }, 2000);
+  }
+
+  dropArea.addEventListener('click', () => {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = 'image/png';
+    input.onchange = () => {
+      const file = input.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          const img = new Image();
+          img.onload = () => {
+            analyzeAndShowResults(img);
+          };
+          img.src = e.target.result;
+        };
+        reader.readAsDataURL(file);
+      }
+    };
+    input.click();
+  });
+
+  dropArea.addEventListener('dragover', e => {
+    e.preventDefault();
+    dropArea.style.borderColor = 'green';
+  });
+
+  dropArea.addEventListener('dragleave', () => {
+    dropArea.style.borderColor = '#888';
+  });
+
+  dropArea.addEventListener('drop', e => {
+    e.preventDefault();
+    dropArea.style.borderColor = '#888';
+    const file = e.dataTransfer.files[0];
+    if (file && file.type === 'image/png') {
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        const img = new Image();
+        img.onload = () => {
+          analyzeAndShowResults(img);
+        };
+        img.src = e.target.result;
+      };
+      reader.readAsDataURL(file);
+    } else {
+      alert('请上传 PNG 格式的图片');
+    }
+  });
+
+  function analyzeAndShowResults(img) {
+    canvas.width = img.width;
+    canvas.height = img.height;
+    ctx.drawImage(img, 0, 0);
+
+    const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+    const data = imageData.data;
+
+    let rMin = 255, rMax = 0;
+    let gMin = 255, gMax = 0;
+    let bMin = 255, bMax = 0;
+    
+    let hMin = 180, hMax = 0;
+    let sMin = 255, sMax = 0;
+    let vMin = 255, vMax = 0;
+
+    let grayMin = 255, grayMax = 0;
+
+    let hasPixels = false;
+
+    for (let i = 0; i < data.length; i += 4) {
+      const r = data[i];
+      const g = data[i + 1];
+      const b = data[i + 2];
+      const a = data[i + 3];
+
+      if (a < 255) continue;; // Skip transparent pixels
+      
+      hasPixels = true;
+
+      // RGB
+      rMin = Math.min(rMin, r);
+      rMax = Math.max(rMax, r);
+      gMin = Math.min(gMin, g);
+      gMax = Math.max(gMax, g);
+      bMin = Math.min(bMin, b);
+      bMax = Math.max(bMax, b);
+
+      // HSV
+      const hsv = rgbToHsv(r, g, b);
+      hMin = Math.min(hMin, hsv.h);
+      hMax = Math.max(hMax, hsv.h);
+      sMin = Math.min(sMin, hsv.s);
+      sMax = Math.max(sMax, hsv.s);
+      vMin = Math.min(vMin, hsv.v);
+      vMax = Math.max(vMax, hsv.v);
+
+      // GRAY
+      const gray = Math.round(0.299 * r + 0.587 * g + 0.114 * b);
+      grayMin = Math.min(grayMin, gray);
+      grayMax = Math.max(grayMax, gray);
+    }
+
+    resultsContainer.innerHTML = '';
+    
+    if (!hasPixels) {
+        resultsContainer.innerHTML = '<div class="result-box"><h3>错误</h3>未检测到非透明像素。</div>';
+        return;
+    }
+
+    // RGB
+    const rgbLower = [rMin, gMin, bMin];
+    const rgbUpper = [rMax, gMax, bMax];
+    resultsContainer.appendChild(createResultBox('RGB', rgbLower, rgbUpper));
+
+    // HSV
+    const hsvLower = [hMin, sMin, vMin];
+    const hsvUpper = [hMax, sMax, vMax];
+    resultsContainer.appendChild(createResultBox('HSV', hsvLower, hsvUpper));
+
+    // GRAY
+    resultsContainer.appendChild(createResultBox('GRAY', [grayMin], [grayMax]));
+  }
+
+  function createResultBox(title, lower, upper) {
+    const lowerStr1 = `[${lower.join(',')}]`;
+    const lowerStr2 = lower.join(',');
+    const upperStr1 = `[${upper.join(',')}]`;
+    const upperStr2 = upper.join(',');
+
+    const box = document.createElement('div');
+    box.className = 'result-box';
+
+    box.innerHTML = `
+      <h3>${title}</h3>
+      <div>
+        下限： ${lowerStr1}
+        <div class="copy-group">
+          <button onclick="copyText('${lowerStr2}', this)">复制</button>
+          <button onclick="copyText('${lowerStr1}', this)">[复制]</button>
+        </div>
+      </div>
+      <div style="margin-top: 5px;">
+        上限： ${upperStr1}
+        <div class="copy-group">
+          <button onclick="copyText('${upperStr2}', this)">复制</button>
+          <button onclick="copyText('${upperStr1}', this)">[复制]</button>
+        </div>
+      </div>
+    `;
+
+    return box;
+  }
+
+  function rgbToHsv(r, g, b) {
+    r /= 255, g /= 255, b /= 255;
+    const max = Math.max(r, g, b), min = Math.min(r, g, b);
+    let h, s, v = max;
+    const d = max - min;
+    s = max === 0 ? 0 : d / max;
+
+    if (max === min) {
+      h = 0;
+    } else {
+      switch (max) {
+        case r: h = (g - b) / d + (g < b ? 6 : 0); break;
+        case g: h = (b - r) / d + 2; break;
+        case b: h = (r - g) / d + 4; break;
+      }
+      h /= 6;
+    }
+
+    return { h: Math.round(h * 179), s: Math.round(s * 255), v: Math.round(v * 255) };
+  }
+
+  function copyText(text, btn) {
+    const textarea = document.createElement('textarea');
+    textarea.value = text;
+    document.body.appendChild(textarea);
+    textarea.select();
+    document.execCommand('copy');
+    document.body.removeChild(textarea);
+    showToast(text);
+  }
+</script>
+
+</body>
+</html>
