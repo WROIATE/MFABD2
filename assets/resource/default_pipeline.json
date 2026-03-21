@@ -1,0 +1,18 @@
+{
+    "Default": {
+        "on_error": [
+            "Global_null"
+        ]
+        // "post_wait_freezes": {
+        //     "target": [
+        //         617,
+        //         258,
+        //         46,
+        //         44
+        //     ],
+        //     "rate_limit": 100,
+        //     "time": 200,
+        //     "timeout": 20000
+        // }
+    }
+}
