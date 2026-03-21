@@ -123,7 +123,7 @@ def main():
     mfaalog.info("✅ [Agent] 存档/备份系统已就绪")
 
     # 1. 初始化 Toolkit (借鉴 B 项目)
-    # 这会读取 interface.json 并自动配置一些环境
+    # AgentServer 模式下仅 set_log_dir 生效，其余被忽略（上游已知行为）
     Toolkit.init_option(str(project_root))
 
     # 2. 获取 socket_id (由 MaaFramework 传入)
