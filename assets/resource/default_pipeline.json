@@ -1,7 +1,7 @@
 {
     "Default": {
         "on_error": [
-            "Global_null"
+            "Global_Null"
         ]
         // "post_wait_freezes": {
         //     "target": [

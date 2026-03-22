@@ -341,7 +341,8 @@
     ],
     "timeout": 8000,
     "on_error": [
-      "PVP_JustUseFree2"
+      "PVP_JustUseFree2",
+      "Global_Null_Exception"
     ],
     "recognition": "ColorMatch",
     "action": "Click",
@@ -433,7 +434,8 @@
     ],
     "max_hit": 5,
     "on_error": [
-      "PVP_AutoBattleStart"
+      "PVP_AutoBattleStart",
+      "Global_Null_Exception"
     ],
     "timeout": 5000,
     "doc": "点击MAX Mini"
@@ -461,7 +463,8 @@
     ],
     "max_hit": 5,
     "on_error": [
-      "PVP_AutoBattleStart"
+      "PVP_AutoBattleStart",
+      "Global_Null_Exception"
     ],
     "timeout": 5000,
     "enabled": false,
@@ -834,7 +837,8 @@
     ],
     "timeout": 1,
     "on_error": [
-      "Global_BackToQC1"
+      "Global_BackToQC1",
+      "Global_Null_Exception"
     ],
     "doc": "还有残余AP但是不够刷满目标倍数,改到1刷完"
   },
@@ -867,7 +871,8 @@
         "PVP_Multiplier_Adjust_Enter": {
           "timeout": 3000,
           "on_error": [
-            "PVP_AutoBattleStart"
+            "PVP_AutoBattleStart",
+            "Global_Null_Exception"
           ]
         },
         "PVP_AutoBattleMAX_BackUp": {

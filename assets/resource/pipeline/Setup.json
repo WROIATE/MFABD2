@@ -358,7 +358,8 @@
         "rate_limit": 2000,
         "on_error": [
             "Setup_Scan_Error_PreVerdict",
-            "Setup_Scan_Error_FinVerdict"
+            "Setup_Scan_Error_FinVerdict",
+            "Global_Null_Exception"
         ]
     },
     "Setup_SkillScan_Skill1_Bin": {
@@ -437,7 +438,8 @@
         "rate_limit": 2000,
         "on_error": [
             "Setup_Scan_Error_PreVerdict",
-            "Setup_Scan_Error_FinVerdict"
+            "Setup_Scan_Error_FinVerdict",
+            "Global_Null_Exception"
         ]
     },
     "Setup_SkillScan_Skill2_Bin": {
@@ -516,7 +518,8 @@
         "rate_limit": 2000,
         "on_error": [
             "Setup_Scan_Error_PreVerdict",
-            "Setup_Scan_Error_FinVerdict"
+            "Setup_Scan_Error_FinVerdict",
+            "Global_Null_Exception"
         ]
     },
     "Setup_SkillScan_Skill3_Bin": {
@@ -595,7 +598,8 @@
         "rate_limit": 2000,
         "on_error": [
             "Setup_Scan_Error_PreVerdict",
-            "Setup_Scan_Error_FinVerdict"
+            "Setup_Scan_Error_FinVerdict",
+            "Global_Null_Exception"
         ]
     },
     "Setup_SkillScan_Skill5_Bin": {
@@ -674,7 +678,8 @@
         "rate_limit": 2000,
         "on_error": [
             "Setup_Scan_Error_PreVerdict",
-            "Setup_Scan_Error_FinVerdict"
+            "Setup_Scan_Error_FinVerdict",
+            "Global_Null_Exception"
         ]
     },
     "Setup_SkillScan_Skill4_Bin": {
@@ -2498,8 +2503,7 @@
             "Setup_SetSkill_3-4_Pre",
             "[JumpBack]Setup_SetSkill_ReLift"
         ],
-        "timeout": 5000,
-        "on_error": []
+        "timeout": 5000
     },
     "Setup_SetSkill_3-4_Pre": {
         "recognition": "ColorMatch",
@@ -2603,8 +2607,7 @@
             "Setup_SetSkill_3-5_Pre",
             "[JumpBack]Setup_SetSkill_ReLift"
         ],
-        "timeout": 5000,
-        "on_error": []
+        "timeout": 5000
     },
     "Setup_SetSkill_3-5_Pre": {
         "recognition": "ColorMatch",
