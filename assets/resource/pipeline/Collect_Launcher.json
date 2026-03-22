@@ -2947,6 +2947,7 @@
         ]
     },
     "Collect_Pack_Character_8": {
+        "enabled": false,
         "recognition": "And",
         "all_of": [
             {
