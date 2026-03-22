@@ -221,12 +221,6 @@
           91,
           29
         ],
-        "target_offset": [
-          0,
-          -5,
-          1,
-          1
-        ],
         "expected": [
           "经营管理"
         ]
@@ -246,6 +240,12 @@
       }
     ],
     "action": "Click",
+    "target_offset": [
+      0,
+      -5,
+      0,
+      0
+    ],
     "post_delay": 500,
     "post_wait_freezes": 1000,
     "next": [

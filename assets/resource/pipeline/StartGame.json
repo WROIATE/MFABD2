@@ -557,9 +557,6 @@
   "StartGame_PerPetTask": {
     "recognition": "TemplateMatch",
     "action": "Click",
-    "next": [
-      "StartGame_PerPetTask"
-    ],
     "timeout": 5000,
     "post_delay": 1000,
     "focus": "SM.宠物派遣",
