@@ -400,7 +400,6 @@
             "Collect_PackProbe_IsPresent"
         ],
         "timeout": 2000,
-        "on_error": [],
         "doc": "卡带1位置存在指针"
     },
     "Collect_PackProbe_IsPresent": {
@@ -750,7 +749,8 @@
             "Collect_LocatePackFrame_Loc6",
             "Collect_LocatePackFrame_Loc7",
             "Collect_LocatePackFrame_Loc8",
-            "Collect_LocatePackFrame_Loc9"
+            "Collect_LocatePackFrame_Loc9",
+            "Global_Null_Exception"
         ]
     },
     "Collect_LocatePackFrame_Loc2": {
@@ -818,7 +818,8 @@
             "Collect_LocatePackFrame_Loc6",
             "Collect_LocatePackFrame_Loc7",
             "Collect_LocatePackFrame_Loc8",
-            "Collect_LocatePackFrame_Loc9"
+            "Collect_LocatePackFrame_Loc9",
+            "Global_Null_Exception"
         ],
         "focus": "CM.L.快速卡带盒定位-位置2"
     },
@@ -886,7 +887,8 @@
             "Collect_LocatePackFrame_Loc6",
             "Collect_LocatePackFrame_Loc7",
             "Collect_LocatePackFrame_Loc8",
-            "Collect_LocatePackFrame_Loc9"
+            "Collect_LocatePackFrame_Loc9",
+            "Global_Null_Exception"
         ],
         "focus": "CM.L.快速卡带盒定位-位置3"
     },
@@ -953,7 +955,8 @@
             "Collect_LocatePackFrame_Loc6",
             "Collect_LocatePackFrame_Loc7",
             "Collect_LocatePackFrame_Loc8",
-            "Collect_LocatePackFrame_Loc9"
+            "Collect_LocatePackFrame_Loc9",
+            "Global_Null_Exception"
         ],
         "focus": "CM.L.快速卡带盒定位-位置4"
     },
@@ -1019,7 +1022,8 @@
         "on_error": [
             "Collect_LocatePackFrame_Loc7",
             "Collect_LocatePackFrame_Loc8",
-            "Collect_LocatePackFrame_Loc9"
+            "Collect_LocatePackFrame_Loc9",
+            "Global_Null_Exception"
         ],
         "focus": "CM.L.快速卡带盒定位-位置5"
     },
@@ -1084,7 +1088,8 @@
         "timeout": 2000,
         "on_error": [
             "Collect_LocatePackFrame_Loc8",
-            "Collect_LocatePackFrame_Loc9"
+            "Collect_LocatePackFrame_Loc9",
+            "Global_Null_Exception"
         ],
         "focus": "CM.L.快速卡带盒定位-位置6"
     },
@@ -1148,7 +1153,8 @@
         ],
         "timeout": 2000,
         "on_error": [
-            "Collect_LocatePackFrame_Loc9"
+            "Collect_LocatePackFrame_Loc9",
+            "Global_Null_Exception"
         ],
         "focus": "CM.L.快速卡带盒定位-位置7"
     },
@@ -1575,7 +1581,8 @@
             "Collect_LocatePackFrame_Smart_Swip_UpdateTag"
         ],
         "on_error": [
-            "[Anchor]SmartSwipOut"
+            "[Anchor]SmartSwipOut",
+            "Global_Null"
         ]
     },
     "Collect_LocatePackFrame_Smart_Swip_UpdateTag": {

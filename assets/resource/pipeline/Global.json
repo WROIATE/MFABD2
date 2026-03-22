@@ -8,7 +8,8 @@
             "Global_BackToQC1",
             "Global_BackToPve2#",
             "Global_BackPageHub_Once",
-            "[JumpBack]Global_WaitingForLoading"
+            "[JumpBack]Global_WaitingForLoading",
+            "Global_Null_Exception"
         ],
         "doc": "依次为:回到主页面|回到箱庭|调出快速卡带菜单|回到快速卡带1|回到传统卡带2|点一次返回按钮 | 卡带读取界面循环等待"
     },
@@ -119,7 +120,15 @@
             "Global_ToHomePage_HomeButton",
             "Global_ToHomePage_Reset"
         ],
-        "doc": "[通用复位]复位到主界面模块,开始,中继调用"
+        "doc": "[通用复位]复位到主界面模块,开始,中继调用",
+        "timeout": 8000,
+        "on_error": [
+            "[JumpBack]StartGame_SeasonSet",
+            "[JumpBack]StartGame_Special",
+            "[JumpBack]StartGame_PVPSet",
+            "[JumpBack]PVP_PerOperationsMain_Error",
+            "Global_Null_Exception"
+        ]
     },
     "Global_ToHomePage_HomeButton": {
         "recognition": "Or",
@@ -234,7 +243,12 @@
         ],
         "timeout": 10000,
         "on_error": [
-            "Global_BackToQC1"
+            "Global_BackToQC1",
+            "[JumpBack]StartGame_SeasonSet",
+            "[JumpBack]StartGame_Special",
+            "[JumpBack]StartGame_PVPSet",
+            "[JumpBack]PVP_PerOperationsMain_Error",
+            "Global_Null_Exception"
         ],
         "doc": "[通用复位]复位到主界面模块,开始,中继调用"
     },

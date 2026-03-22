@@ -129,7 +129,8 @@
     ],
     "focus": "BM.快速狩猎-狩猎场开始",
     "on_error": [
-      "[JumpBack]QuickHunt_CollectMap_Initialize_ErrEntry"
+      "[JumpBack]QuickHunt_CollectMap_Initialize_ErrEntry",
+      "Global_Null_Exception"
     ],
     "doc": "狩猎起点HUB"
   },
@@ -278,7 +279,8 @@
     ],
     "timeout": 5000,
     "on_error": [
-      "QuickHunt_AdventureRouteReBackHuntingGrounds_Pipeline"
+      "QuickHunt_AdventureRouteReBackHuntingGrounds_Pipeline",
+      "Global_Null_Exception"
     ],
     "doc": "A-2.interface，默认为金币优先，已留空|色核识别逻辑，确认再1级菜单中,无浮窗"
   },
@@ -844,7 +846,8 @@
     ],
     "timeout": 8000,
     "on_error": [
-      "QuickHunt_CollectMap_InitializeE"
+      "QuickHunt_CollectMap_InitializeE",
+      "Global_Null_Exception"
     ],
     "post_wait_freezes": 800,
     "focus": "BB.快速狩猎，菜单",
@@ -857,7 +860,7 @@
     "expected": [
       "狩猎"
     ],
-    "doc": "快速狩猎界面，点击狩猎"
+    "doc": "快速狩猎界面，点击狩猎 | 优化记录:这里要等动画,3S"
   },
   "QuickHunt_NoFreeAP": {
     "recognition": "ColorMatch",
@@ -965,7 +968,8 @@
       "[JumpBack]QuickHunt_MapLocReset_once"
     ],
     "on_error": [
-      "QuickHunt_CollectMap_Initialize_Out_UnknowErr"
+      "QuickHunt_CollectMap_Initialize_Out_UnknowErr",
+      "Global_Null_Exception"
     ],
     "doc": "1级界面确认,无2级浮窗的灰度现象"
   },
@@ -1162,7 +1166,8 @@
       "QuickHunt_TurnCharact_BattleStart"
     ],
     "on_error": [
-      "QuickHunt_CollectMap_InitializeE"
+      "QuickHunt_CollectMap_InitializeE",
+      "Global_Null_Exception"
     ],
     "post_delay": 4000,
     "focus": "BTM.快速狩猎-启动！",

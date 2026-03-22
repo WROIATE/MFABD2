@@ -1300,7 +1300,6 @@
             "Arbitrage_Sell_PriceList"
         ],
         "timeout": 5000,
-        "on_error": [],
         "doc": "验证类型-出售"
     },
     "Arbitrage_Sell_PriceList": {
@@ -1533,7 +1532,6 @@
             "Arbitrage_Select_Swip"
         ],
         "timeout": 5000,
-        "on_error": [],
         "doc": "寻找匹配卡带,如果匹配不到超时跳出。"
     },
     "Arbitrage_Sell_PackShopSwich": {
@@ -1630,7 +1628,8 @@
         ],
         "timeout": 1,
         "on_error": [
-            "Arbitrage_Sell_Item_ListTraverse"
+            "Arbitrage_Sell_Item_ListTraverse",
+            "Global_Null_Exception"
         ],
         "focus": "滑动商店卡带表",
         "doc": "商店卡带列表滑动"
@@ -2029,7 +2028,8 @@
         ],
         "timeout": 2000,
         "on_error": [
-            "Arbitrage_Cooking_ERREND"
+            "Arbitrage_Cooking_ERREND",
+            "Global_Null_Exception"
         ],
         "doc": "第一页料理,路由节点,菜品按等级/价值倒序"
     },

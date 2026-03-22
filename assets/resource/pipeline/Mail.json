@@ -27,7 +27,8 @@
     ],
     "timeout": 3000,
     "on_error": [
-      "Mail_NormalEnd"
+      "Mail_NormalEnd",
+      "Global_Null_Exception"
     ],
     "doc": "识别左下抽抽乐-点击邮件"
   },
@@ -74,7 +75,8 @@
       "Mail_TabBus"
     ],
     "on_error": [
-      "Mail_ERRlEnd"
+      "Mail_ERRlEnd",
+      "Global_Null_Exception"
     ]
   },
   "Mail_GetAll": {
@@ -146,7 +148,8 @@
     "doc": "切换to月卡信箱",
     "timeout": 5000,
     "on_error": [
-      "Mail_ERRlEnd"
+      "Mail_ERRlEnd",
+      "Global_Null_Exception"
     ]
   },
   "Mail_GetBusAll": {
