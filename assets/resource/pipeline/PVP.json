@@ -651,6 +651,7 @@
     "recognition": "OCR",
     "action": "Click",
     "next": [
+      "PVP_BattleResult",
       "PVP_BattleLeave",
       "PVP_BattleFaildLeave"
     ],
@@ -700,7 +701,8 @@
     "action": "Click",
     "next": [
       "PVP_PVPMes_Back",
-      "PVP_BackPVEPage"
+      "PVP_BackPVEPage",
+      "PVP_BattleLeave"
     ],
     "post_delay": 2000,
     "focus": "PM.PVP.正常离开",
