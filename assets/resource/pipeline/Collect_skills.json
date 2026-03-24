@@ -148,7 +148,8 @@
             "Collect_Skill3_3_Nothing",
             "Collect_Skill3_3",
             "Collect_Skill_TapReset",
-            "Global_Null_Exception"
+            "Global_Null_Exception",
+            "Global_Null_Panic"
         ]
     },
     "Collect_Skill3_1_Nothing": {
@@ -448,7 +449,8 @@
         "timeout": 5000,
         "on_error": [
             "Collect_ForceTeleporCircle",
-            "Global_Null_Exception"
+            "Global_Null_Exception",
+            "Global_Null_Panic"
         ],
         "focus": "CSB.技能组复位-色核通过",
         "roi": [

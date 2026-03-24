@@ -1629,7 +1629,8 @@
         "timeout": 1,
         "on_error": [
             "Arbitrage_Sell_Item_ListTraverse",
-            "Global_Null_Exception"
+            "Global_Null_Exception",
+            "Global_Null_Panic"
         ],
         "focus": "滑动商店卡带表",
         "doc": "商店卡带列表滑动"
@@ -2029,7 +2030,8 @@
         "timeout": 2000,
         "on_error": [
             "Arbitrage_Cooking_ERREND",
-            "Global_Null_Exception"
+            "Global_Null_Exception",
+            "Global_Null_Panic"
         ],
         "doc": "第一页料理,路由节点,菜品按等级/价值倒序"
     },

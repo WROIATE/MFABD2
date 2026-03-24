@@ -750,7 +750,8 @@
             "Collect_LocatePackFrame_Loc7",
             "Collect_LocatePackFrame_Loc8",
             "Collect_LocatePackFrame_Loc9",
-            "Global_Null_Exception"
+            "Global_Null_Exception",
+            "Global_Null_Panic"
         ]
     },
     "Collect_LocatePackFrame_Loc2": {
@@ -819,7 +820,8 @@
             "Collect_LocatePackFrame_Loc7",
             "Collect_LocatePackFrame_Loc8",
             "Collect_LocatePackFrame_Loc9",
-            "Global_Null_Exception"
+            "Global_Null_Exception",
+            "Global_Null_Panic"
         ],
         "focus": "CM.L.快速卡带盒定位-位置2"
     },
@@ -888,7 +890,8 @@
             "Collect_LocatePackFrame_Loc7",
             "Collect_LocatePackFrame_Loc8",
             "Collect_LocatePackFrame_Loc9",
-            "Global_Null_Exception"
+            "Global_Null_Exception",
+            "Global_Null_Panic"
         ],
         "focus": "CM.L.快速卡带盒定位-位置3"
     },
@@ -956,7 +959,8 @@
             "Collect_LocatePackFrame_Loc7",
             "Collect_LocatePackFrame_Loc8",
             "Collect_LocatePackFrame_Loc9",
-            "Global_Null_Exception"
+            "Global_Null_Exception",
+            "Global_Null_Panic"
         ],
         "focus": "CM.L.快速卡带盒定位-位置4"
     },
@@ -1023,7 +1027,8 @@
             "Collect_LocatePackFrame_Loc7",
             "Collect_LocatePackFrame_Loc8",
             "Collect_LocatePackFrame_Loc9",
-            "Global_Null_Exception"
+            "Global_Null_Exception",
+            "Global_Null_Panic"
         ],
         "focus": "CM.L.快速卡带盒定位-位置5"
     },
@@ -1089,7 +1094,8 @@
         "on_error": [
             "Collect_LocatePackFrame_Loc8",
             "Collect_LocatePackFrame_Loc9",
-            "Global_Null_Exception"
+            "Global_Null_Exception",
+            "Global_Null_Panic"
         ],
         "focus": "CM.L.快速卡带盒定位-位置6"
     },
@@ -1154,7 +1160,8 @@
         "timeout": 2000,
         "on_error": [
             "Collect_LocatePackFrame_Loc9",
-            "Global_Null_Exception"
+            "Global_Null_Exception",
+            "Global_Null_Panic"
         ],
         "focus": "CM.L.快速卡带盒定位-位置7"
     },

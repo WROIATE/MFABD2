@@ -450,7 +450,8 @@
     "on_error": [
       "Daily_Busin_Quick_BackPVEPage_Str",
       "Global_BackToPve2#",
-      "Global_Null_Exception"
+      "Global_Null_Exception",
+      "Global_Null_Panic"
     ],
     "max_hit": 1
   },
@@ -555,7 +556,8 @@
     "timeout": 30000,
     "on_error": [
       "Daily_Busin_Quick_BackPVEPage_Str",
-      "Global_Null_Exception"
+      "Global_Null_Exception",
+      "Global_Null_Panic"
     ],
     "focus": "点击'客人',移动画面",
     "max_hit": 2
@@ -575,7 +577,8 @@
     "timeout": 30000,
     "on_error": [
       "Daily_Busin_Quick_BackPVEPage_Str",
-      "Global_Null_Exception"
+      "Global_Null_Exception",
+      "Global_Null_Panic"
     ],
     "focus": "点击'员工',移动画面",
     "max_hit": 3
@@ -856,7 +859,8 @@
     "timeout": 5000,
     "on_error": [
       "Global_BackToQC1",
-      "Global_Null_Exception"
+      "Global_Null_Exception",
+      "Global_Null_Panic"
     ]
   },
   "Daily_DailyIco_1": {

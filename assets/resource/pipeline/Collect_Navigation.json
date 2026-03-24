@@ -32,7 +32,8 @@
     "timeout": 5000,
     "on_error": [
       "[JumpBack]Collect_Tab3",
-      "Global_Null_Exception"
+      "Global_Null_Exception",
+      "Global_Null_Panic"
     ],
     "focus": "CM.N.箱庭模块启动",
     "doc": "中断：章节内主要操作开始。找到图钉，确认进入箱庭"
@@ -306,7 +307,8 @@
     "timeout": 3000,
     "on_error": [
       "Collect_MapRight_NoFind",
-      "Global_Null_Exception"
+      "Global_Null_Exception",
+      "Global_Null_Panic"
     ],
     "focus": "确认区域地图tp3",
     "post_delay": 200,
@@ -378,7 +380,8 @@
     "timeout": 3000,
     "on_error": [
       "Collect_MapRight_NoFind",
-      "Global_Null_Exception"
+      "Global_Null_Exception",
+      "Global_Null_Panic"
     ],
     "focus": "确认区域地图tp4",
     "roi": [
@@ -776,7 +779,8 @@
     "timeout": 3000,
     "on_error": [
       "Collect_ClickTelepor_TargetClass_White",
-      "Global_Null_Exception"
+      "Global_Null_Exception",
+      "Global_Null_Panic"
     ],
     "focus": "CTB.[WRN]识别首选为紫色技能传送阵,尝试规避",
     "doc": "紫色传送阵,点一次就消失了,留下一个位置异常.应该去点白色"

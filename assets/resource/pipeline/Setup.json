@@ -360,7 +360,8 @@
         "on_error": [
             "Setup_Scan_Error_PreVerdict",
             "Setup_Scan_Error_FinVerdict",
-            "Global_Null_Exception"
+            "Global_Null_Exception",
+            "Global_Null_Panic"
         ]
     },
     "Setup_SkillScan_Skill1_Bin": {
@@ -440,7 +441,8 @@
         "on_error": [
             "Setup_Scan_Error_PreVerdict",
             "Setup_Scan_Error_FinVerdict",
-            "Global_Null_Exception"
+            "Global_Null_Exception",
+            "Global_Null_Panic"
         ]
     },
     "Setup_SkillScan_Skill2_Bin": {
@@ -520,7 +522,8 @@
         "on_error": [
             "Setup_Scan_Error_PreVerdict",
             "Setup_Scan_Error_FinVerdict",
-            "Global_Null_Exception"
+            "Global_Null_Exception",
+            "Global_Null_Panic"
         ]
     },
     "Setup_SkillScan_Skill3_Bin": {
@@ -600,7 +603,8 @@
         "on_error": [
             "Setup_Scan_Error_PreVerdict",
             "Setup_Scan_Error_FinVerdict",
-            "Global_Null_Exception"
+            "Global_Null_Exception",
+            "Global_Null_Panic"
         ]
     },
     "Setup_SkillScan_Skill5_Bin": {
@@ -680,7 +684,8 @@
         "on_error": [
             "Setup_Scan_Error_PreVerdict",
             "Setup_Scan_Error_FinVerdict",
-            "Global_Null_Exception"
+            "Global_Null_Exception",
+            "Global_Null_Panic"
         ]
     },
     "Setup_SkillScan_Skill4_Bin": {
