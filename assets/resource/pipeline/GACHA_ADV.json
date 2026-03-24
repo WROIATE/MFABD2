@@ -393,7 +393,8 @@
     "timeout": 3000,
     "on_error": [
       "GachaADV_Location2_Post",
-      "Global_Null_Exception"
+      "Global_Null_Exception",
+      "Global_Null_Panic"
     ]
   },
   "GachaADV_Location1_90LotPost": {
@@ -432,7 +433,8 @@
       "GachaADV_Location5_NoPool_Tmp",
       "GachaADV_Location5",
       "GachaADV_Slip",
-      "Global_Null_Exception"
+      "Global_Null_Exception",
+      "Global_Null_Panic"
     ]
   },
   "GachaADV_Location2": {
@@ -521,7 +523,8 @@
     "timeout": 3000,
     "on_error": [
       "GachaADV_Location3_Post",
-      "Global_Null_Exception"
+      "Global_Null_Exception",
+      "Global_Null_Panic"
     ]
   },
   "GachaADV_Location2_90LotPost": {
@@ -557,7 +560,8 @@
       "GachaADV_Location5_NoPool_Tmp",
       "GachaADV_Location5",
       "GachaADV_Slip",
-      "Global_Null_Exception"
+      "Global_Null_Exception",
+      "Global_Null_Panic"
     ]
   },
   "GachaADV_Location3": {
@@ -645,7 +649,8 @@
     "timeout": 3000,
     "on_error": [
       "GachaADV_Location4_Post",
-      "Global_Null_Exception"
+      "Global_Null_Exception",
+      "Global_Null_Panic"
     ]
   },
   "GachaADV_Location3_90LotPost": {
@@ -678,7 +683,8 @@
       "GachaADV_Location5_NoPool_Tmp",
       "GachaADV_Location5",
       "GachaADV_Slip",
-      "Global_Null_Exception"
+      "Global_Null_Exception",
+      "Global_Null_Panic"
     ]
   },
   "GachaADV_Location4": {
@@ -784,7 +790,8 @@
     "timeout": 3000,
     "on_error": [
       "GachaADV_Location5_Post",
-      "Global_Null_Exception"
+      "Global_Null_Exception",
+      "Global_Null_Panic"
     ]
   },
   "GachaADV_Location5_Pre": {
@@ -796,7 +803,8 @@
     "timeout": 3000,
     "on_error": [
       "GachaADV_Slip",
-      "Global_Null_Exception"
+      "Global_Null_Exception",
+      "Global_Null_Panic"
     ]
   },
   "GachaADV_Location5": {
@@ -1165,7 +1173,8 @@
     ],
     "on_error": [
       "GachaADV_FinGacha",
-      "Global_Null_Exception"
+      "Global_Null_Exception",
+      "Global_Null_Panic"
     ],
     "focus": "GA.滑动寻找卡池",
     "roi": [
@@ -1201,7 +1210,8 @@
     ],
     "on_error": [
       "GachaADV_FinGacha",
-      "Global_Null_Exception"
+      "Global_Null_Exception",
+      "Global_Null_Panic"
     ],
     "focus": "GA.滑动寻找卡池",
     "roi": [

@@ -419,7 +419,8 @@
         "on_error": [
             "Global_QuickCart_MenuReset",
             "[JumpBack]Global_ToSandBox",
-            "Global_Null_Exception"
+            "Global_Null_Exception",
+            "Global_Null_Panic"
         ]
     },
     "Collect_TeleporCircle_OnFoot_NviMap_SpecialOut3#": {
@@ -443,7 +444,8 @@
         "on_error": [
             "Global_QuickCart_MenuReset",
             "[JumpBack]Global_ToSandBox",
-            "Global_Null_Exception"
+            "Global_Null_Exception",
+            "Global_Null_Panic"
         ]
     },
     "Collect_NviMap_Event_1": {
@@ -934,7 +936,8 @@
         "on_error": [
             "Collect_TeleporCircle_OnFoot_TPIco_Mirror",
             "[JumpBack]Collect_TeleporCircle_OnFoot__NviMapChange_Right",
-            "Global_Null_Exception"
+            "Global_Null_Exception",
+            "Global_Null_Panic"
         ]
     },
     "Collect_TeleporCircle_OnFoot_NviMap_IsBattleArea": {
@@ -977,7 +980,8 @@
         "on_error": [
             "Collect_TeleporCircle_OnFoot_TPIco",
             "[JumpBack]Collect_TeleporCircle_OnFoot__NviMapChange_Right",
-            "Global_Null_Exception"
+            "Global_Null_Exception",
+            "Global_Null_Panic"
         ]
     },
     "Collect_TeleporCircle_OnFoot_NviMapChange_Lift": {

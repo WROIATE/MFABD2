@@ -9,7 +9,8 @@
             "Global_BackToPve2#",
             "Global_BackPageHub_Once",
             "[JumpBack]Global_WaitingForLoading",
-            "Global_Null_Exception"
+            "Global_Null_Exception",
+            "Global_Null_Panic"
         ],
         "doc": "依次为:回到主页面|回到箱庭|调出快速卡带菜单|回到快速卡带1|回到传统卡带2|点一次返回按钮 | 卡带读取界面循环等待"
     },
@@ -127,7 +128,8 @@
             "[JumpBack]StartGame_Special",
             "[JumpBack]StartGame_PVPSet",
             "[JumpBack]PVP_PerOperationsMain_Error",
-            "Global_Null_Exception"
+            "Global_Null_Exception",
+            "Global_Null_Panic"
         ]
     },
     "Global_ToHomePage_HomeButton": {
@@ -248,7 +250,8 @@
             "[JumpBack]StartGame_Special",
             "[JumpBack]StartGame_PVPSet",
             "[JumpBack]PVP_PerOperationsMain_Error",
-            "Global_Null_Exception"
+            "Global_Null_Exception",
+            "Global_Null_Panic"
         ],
         "doc": "[通用复位]复位到主界面模块,开始,中继调用"
     },

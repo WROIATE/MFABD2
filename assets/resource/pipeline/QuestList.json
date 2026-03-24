@@ -50,7 +50,8 @@
     ],
     "on_error": [
       "Global_ToHomePage",
-      "Global_Null_Exception"
+      "Global_Null_Exception",
+      "Global_Null_Panic"
     ]
   },
   "RewardsDaily_GetDailyReward": {
