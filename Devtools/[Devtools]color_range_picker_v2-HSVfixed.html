@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>多格式色彩范围提取工具</title>
-  <script type="text/javascript" src="https://gc.kis.v2.scr.kaspersky-labs.com/FD126C42-EBFA-4E12-B309-BB3FDD723AC1/main.js?attr=7zVFCnJdYTPjwPemot87xaPkQyk5vEDqzWI0H_8Tnp_Wsv853I4OFeoHaJMfjqcsvtB1IMO-ER1cEZ5WMHY02PJeTjf3iBTdYXXy8klM9f8gwayocN7WRWEMY9qhGRwtTQI9Zld8ZXBZioAS5LCHHvwIdHDdTiyk324Y2djI-nMn0FnINE31VgaIpFjKWpm0lZSAG36NnO74ccbR_BZmohcIuOQIVgW9XNfVNCit_wt4Hu5Gpq1FlSOBpjLKdU14GhLEYOBHFjbcFCtqlS4zL-EEX0EHj2bFPZqH2BKsV2jyfcsUDhTqbMxxSl0kmyrOSZ8jEcD_yKa8mT9Dl-e-rw" charset="UTF-8"></script><link rel="stylesheet" crossorigin="anonymous" href="https://gc.kis.v2.scr.kaspersky-labs.com/E3E8934C-235A-4B0E-825A-35A08381A191/abn/main.css?attr=aHR0cHM6Ly9jb250cmlidXRpb24udXNlcmNvbnRlbnQuZ29vZ2xlLmNvbS9kb3dubG9hZD9jPUNneGlZWEprWDNOMGIzSmhaMlVTVEJJSmRHVnRjRjlrWVhSaEdqOEtNREJtTXpkaU9XTmtPVGc1T0RFek1tTXdNREEyTkRsa01USmlPV0kzT0dNMk1EWTJZemN4WVdWaU5USmtOamd3TkJJTEVnY1FzUHVsd01ZYUdBRSZmaWxlbmFtZT1jb2xvcl9yYW5nZV9waWNrZXJfZml4ZWQuaHRtbCZvcGk9MTAzMTM1MDUw"/><style>
+  <style>
     body {
       font-family: Arial, sans-serif;
       padding: 15px;
@@ -326,14 +326,54 @@
     return { h: Math.round(h * 179), s: Math.round(s * 255), v: Math.round(v * 255) };
   }
 
-  function copyText(text, btn) {
-    const textarea = document.createElement('textarea');
-    textarea.value = text;
-    document.body.appendChild(textarea);
-    textarea.select();
-    document.execCommand('copy');
-    document.body.removeChild(textarea);
-    showToast(text);
+  // 注意：这里加了 async，因为现代剪贴板 API 是异步的
+  async function copyText(text, btn) {
+    
+    // 方案 B：你原本的老办法（稍微优化了一下，防止页面闪烁）作为备用
+    const fallbackCopy = () => {
+      const textarea = document.createElement('textarea');
+      textarea.value = text;
+      // 将输入框移出屏幕外，防止影响页面布局
+      textarea.style.position = 'fixed';
+      textarea.style.top = '-9999px';
+      document.body.appendChild(textarea);
+      textarea.focus();
+      textarea.select();
+      
+      let success = false;
+      try {
+        success = document.execCommand('copy'); // 执行老式复制
+      } catch (err) {
+        success = false;
+      }
+      document.body.removeChild(textarea);
+      return success;
+    };
+
+    let copied = false;
+
+    // 方案 A：优先尝试现代的 Clipboard API
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      try {
+        // await 等待复制完成
+        await navigator.clipboard.writeText(text);
+        copied = true;
+      } catch (err) {
+        // 如果现代方法失败（比如没权限），自动触发备用的方案 B
+        copied = fallbackCopy();
+      }
+    } else {
+      // 如果浏览器压根不支持现代方法，直接触发方案 B
+      copied = fallbackCopy();
+    }
+
+    // 根据最终的成功状态，显示不同的提示
+    if (copied) {
+      showToast(text); // 原本的成功提示
+    } else {
+      console.error('复制到剪贴板失败:', text);
+      showToast('复制失败，请重试'); // 如果全失败了给个提示
+    }
   }
 </script>
 
