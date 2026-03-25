@@ -2,7 +2,6 @@
     "Arbitrage_Start": {
         "doc": "总流程启动器。现在设定3个子开关，购买、制作、出售，按次序JB。其中出售部分‘Arbitrage_Buy’多置一个空节点节点引导到单独文件",
         "next": [
-            "[JumpBack]Env_AccountSave_Switch",
             "[JumpBack]Arbitrage_Cooking_Weekly",
             "[JumpBack]Arbitrage_Cooking",
             "Arbitrage_Merchant_Ico",
@@ -1146,6 +1145,7 @@
         "custom_action": "SmartSwipe",
         "custom_action_param": {
             "proxy_node": "Custom_Proxy_Swipe",
+            "focus": "Arb.商店列表滑动",
             "action": "Swipe",
             "detect_roi": [
                 195,
@@ -1580,12 +1580,152 @@
         ],
         "count": 100,
         "next": [
-            "Arbitrage_Sell_Item_ListTraverse",
-            "Arbitrage_ItemList_Swip"
+            "Arbitrage_ItemList_Sorting_AllRight",
+            "Arbitrage_ItemList_Sorting_Type_Not"
         ],
         "doc": "卡带是否选中色核"
     },
+    "Arbitrage_ItemList_Sorting_AllRight": {
+        "recognition": "And",
+        "all_of": [
+            "Arbitrage_ItemList_Sorting_Type_Ent",
+            "Arbitrage_ItemList_Sorting_Reverse"
+        ],
+        "next": [
+            "Arbitrage_Sell_Item_ListTraverse",
+            "Arbitrage_ItemList_Swip"
+        ],
+        "doc": "确认排序模式完全正确=%模式与降序"
+    },
+    "Arbitrage_ItemList_Sorting_Type_Ent": {
+        "recognition": "TemplateMatch",
+        "roi": [
+            1138,
+            29,
+            40,
+            41
+        ],
+        "template": [
+            "UI_Selltype_0.png"
+        ],
+        "doc": "【非孤立节点】由And调用"
+    },
+    "Arbitrage_ItemList_Sorting_Type_Not": {
+        "action": "Click",
+        "target": [
+            1152,
+            45,
+            9,
+            5
+        ],
+        "post_delay": 800,
+        "next": [
+            "Arbitrage_ItemList_Sorting_Type_Not_Change",
+            "Arbitrage_ItemList_Sorting_Type_Not"
+        ],
+        "doc": "商店内,排序类型错误,切换(删除价格排序图像,因为除了价格图标,%图标但升序也是不对的)"
+    },
+    "Arbitrage_ItemList_Sorting_Type_Not_Change": {
+        "recognition": "OCR",
+        "roi": [
+            901,
+            92,
+            206,
+            264
+        ],
+        "expected": [
+            "溢价率"
+        ],
+        "action": "Click",
+        "post_delay": 800,
+        "focus": "选择溢价率模式",
+        "next": [
+            "Arbitrage_ItemList_Sorting_Type_Not_Enter",
+            "Arbitrage_ItemList_Sorting_Type_Not_Change"
+        ]
+    },
+    "Arbitrage_ItemList_Sorting_Type_Not_Enter": {
+        "recognition": "ColorMatch",
+        "roi": "Arbitrage_ItemList_Sorting_Type_Not_Change",
+        "method": 40,
+        "lower": [
+            18,
+            98,
+            110
+        ],
+        "upper": [
+            23,
+            230,
+            255
+        ],
+        "focus": "溢价排序-模式选中确认",
+        "next": [
+            "Arbitrage_ItemList_Sorting_Reverse"
+        ],
+        "timeout": 3000,
+        "on_error": [
+            "Arbitrage_ItemList_Sorting_Type_Not_Change"
+        ],
+        "doc": "[验证排序方式,且检查排序方向,否则再点击排序方式]检验溢价点击后是否变黄启用,next检查第一件商品是否高价"
+    },
+    "Arbitrage_ItemList_Sorting_Reverse": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "sub_name": "template",
+                "recognition": "TemplateMatch",
+                "roi": [
+                    394,
+                    96,
+                    85,
+                    89
+                ],
+                "template": [
+                    "UI_ShopItem_Up.png"
+                ]
+            },
+            {
+                "recognition": "ColorMatch",
+                "roi": "template",
+                "method": 40,
+                "lower": [
+                    18,
+                    98,
+                    110
+                ],
+                "upper": [
+                    23,
+                    230,
+                    255
+                ],
+                "connected": true,
+                "count": 10
+            }
+        ],
+        "next": [
+            "[JumpBack]Arbitrage_ItemList_Sorting_Remove",
+            "Arbitrage_Sell_Item_ListTraverse"
+        ],
+        "focus": "Arb.排序结果可以确认",
+        "doc": "确认商品列表第一个是最高价"
+    },
+    "Arbitrage_ItemList_Sorting_Remove": {
+        "recognition": "OCR",
+        "roi": [
+            901,
+            92,
+            206,
+            264
+        ],
+        "expected": "从高到低",
+        "action": "Click",
+        "target": [
+            1,
+            1
+        ]
+    },
     "Arbitrage_ItemList_Swip": {
+        "enabled": false,
         "recognition": "OCR",
         "expected": [
             "购买",
@@ -1601,6 +1741,7 @@
         "custom_action": "SmartSwipe",
         "custom_action_param": {
             "proxy_node": "Custom_Proxy_Swipe",
+            "focus": "Arb.sell.物品列表滑动",
             "action": "Swipe",
             "detect_roi": [
                 404,
@@ -1633,7 +1774,7 @@
             "Global_Null_Panic"
         ],
         "focus": "滑动商店卡带表",
-        "doc": "商店卡带列表滑动"
+        "doc": "商店卡带列表滑动(感觉做好排序的话,用不到滑动,停用、先保留"
     },
     "Arbitrage_Sell_Item_ListTraverse": {
         "recognition": "OCR",

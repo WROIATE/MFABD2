@@ -657,6 +657,7 @@
     "recognition": "OCR",
     "action": "Click",
     "next": [
+      "PVP_BattleResult",
       "PVP_BattleLeave",
       "PVP_BattleFaildLeave"
     ],
@@ -706,7 +707,8 @@
     "action": "Click",
     "next": [
       "PVP_PVPMes_Back",
-      "PVP_BackPVEPage"
+      "PVP_BackPVEPage",
+      "PVP_BattleLeave"
     ],
     "post_delay": 2000,
     "focus": "PM.PVP.正常离开",
@@ -893,9 +895,8 @@
   },
   "PVP_BackPVEPage": {
     "recognition": "TemplateMatch",
-    "action": "Click",
     "next": [
-      "PVP_BackHomePage2"
+      "Global_BackToQC1"
     ],
     "focus": "PM.开始离开PVP卡带",
     "roi": [
@@ -904,105 +905,10 @@
       40,
       38
     ],
-    "post_wait_freezes": 500,
     "template": [
       "pin.png"
-    ],
-    "target": [
-      1186,
-      46
     ],
     "doc": "找到图钉-点击返回主页"
-  },
-  "PVP_BackHomePage2": {
-    "recognition": "OCR",
-    "action": "Click",
-    "next": [
-      "PVP_PVEBookSwipe"
-    ],
-    "roi": [
-      98,
-      656,
-      66,
-      32
-    ],
-    "expected": [
-      "抽抽乐"
-    ],
-    "target": [
-      1111,
-      650
-    ],
-    "doc": "识别左下抽抽乐-主页-点击选择章节"
-  },
-  "PVP_PVEBookSwipe": {
-    "recognition": "OCR",
-    "action": "Swipe",
-    "next": [
-      "PVP_TouchPVEBook",
-      "PVP_PVEBookSwipe"
-    ],
-    "roi": [
-      118,
-      505,
-      95,
-      42
-    ],
-    "expected": [
-      "活动游戏卡"
-    ],
-    "begin": [
-      30,
-      300
-    ],
-    "end": [
-      30,
-      700
-    ],
-    "duration": 400,
-    "pre_wait_freezes": 500,
-    "doc": "识别活动游戏卡-上划"
-  },
-  "PVP_TouchPVEBook": {
-    "recognition": "TemplateMatch",
-    "action": "Click",
-    "target_offset": [
-      -20,
-      25,
-      0,
-      0
-    ],
-    "next": [
-      "[JumpBack]Global_WaitingForLoading",
-      "PVP_FinBackMapPage"
-    ],
-    "post_delay": 5000,
-    "focus": "PM.复位用卡带已找到",
-    "roi": [
-      405,
-      157,
-      78,
-      38
-    ],
-    "template": [
-      "pve2.png"
-    ],
-    "doc": "点击PVE本子2"
-  },
-  "PVP_FinBackMapPage": {
-    "recognition": "TemplateMatch",
-    "next": [],
-    "focus": "PM.PVP复位完成，结束~",
-    "roi": [
-      1122,
-      646,
-      40,
-      38
-    ],
-    "template": [
-      "pin.png"
-    ],
-    "doc": "识别右下图钉-章节主页"
   },
   "PVP_PerOperationsMain_Error": {
     "recognition": "OCR",

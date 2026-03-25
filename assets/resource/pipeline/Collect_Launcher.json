@@ -88,7 +88,6 @@
         ],
         "doc": "拉起成功,进入箱庭",
         "next": [
-            "[JumpBack]Env_AccountSave_Switch",
             "Collect_QuickCart_Menu",
             "[JumpBack]Global_QuickCart_MenuReset"
         ]
@@ -2624,6 +2623,7 @@
         },
         "timeout": 1,
         "post_delay": 5000,
+        "enabled": false,
         "next": [
             "[JumpBack]Global_WaitingForLoading",
             "Collect_OperationsMain_Sandplay",
@@ -2961,6 +2961,7 @@
         ]
     },
     "Collect_Pack_Character_8": {
+        "enabled": false,
         "recognition": "And",
         "all_of": [
             {

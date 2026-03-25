@@ -794,26 +794,29 @@ jobs:
     steps:
       - name: Extract commit info
         id: commit-info
+        env:
+          RAW_COMMIT_MESSAGE: ${{ github.event.head_commit.message }}
+          RAW_COMMIT_TIMESTAMP: ${{ github.event.head_commit.timestamp }}
         run: |
           # 调试：显示所有可用参数
           echo "=== 调试信息 ==="
           echo "GITHUB_EVENT_NAME: $GITHUB_EVENT_NAME"
-          echo "HEAD_COMMIT_MESSAGE: ${{ github.event.head_commit.message }}"
-          echo "HEAD_COMMIT_TIMESTAMP: ${{ github.event.head_commit.timestamp }}"
+          echo "HEAD_COMMIT_MESSAGE: $RAW_COMMIT_MESSAGE"
+          echo "HEAD_COMMIT_TIMESTAMP: $RAW_COMMIT_TIMESTAMP"
           echo "GITHUB_SHA: $GITHUB_SHA"
 
-          # 设置默认值
-          COMMIT_MSG="${{ github.event.head_commit.message }}"
+          # 设置默认值，直接引用环境变量
+          COMMIT_MSG="$RAW_COMMIT_MESSAGE"
           if [ -z "$COMMIT_MSG" ]; then
             COMMIT_MSG="手动触发工作流"
           fi
 
-          COMMIT_TIMESTAMP="${{ github.event.head_commit.timestamp }}"
+          COMMIT_TIMESTAMP="$RAW_COMMIT_TIMESTAMP"
           if [ -z "$COMMIT_TIMESTAMP" ]; then
             COMMIT_TIMESTAMP=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
           fi
 
-          COMMIT_SHA="${{ github.sha }}"
+          COMMIT_SHA="$GITHUB_SHA"
           if [ -z "$COMMIT_SHA" ]; then
             COMMIT_SHA="unknown"
           fi

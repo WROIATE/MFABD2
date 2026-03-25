@@ -587,6 +587,17 @@
                     119
                 ],
                 "template": "UI_loading_black.png"
+            },
+            {
+                "recognition": "OCR",
+                "roi": [
+                    1213,
+                    658,
+                    30,
+                    20
+                ],
+                "expected": "0%",
+                "only_rec": true
             }
         ],
         "post_delay": 5000,
