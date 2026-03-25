@@ -330,7 +330,9 @@
     ],
     "timeout": 5000,
     "on_error": [
-      "Redemption_Evil_Redemption_JustFree_Err"
+      "Redemption_Evil_Redemption_JustFree_Err",
+      "Global_Null_Exception",
+      "Global_Null_Panic"
     ]
   },
   "Redemption_Evil_Redemption_JustFree_Ok": {

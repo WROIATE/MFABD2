@@ -128,7 +128,9 @@
     ],
     "focus": "BM.快速狩猎-狩猎场开始",
     "on_error": [
-      "[JumpBack]QuickHunt_CollectMap_Initialize_ErrEntry"
+      "[JumpBack]QuickHunt_CollectMap_Initialize_ErrEntry",
+      "Global_Null_Exception",
+      "Global_Null_Panic"
     ],
     "doc": "狩猎起点HUB"
   },
@@ -856,7 +858,7 @@
     "expected": [
       "狩猎"
     ],
-    "doc": "快速狩猎界面，点击狩猎"
+    "doc": "快速狩猎界面，点击狩猎 | 优化记录:这里要等动画,3S"
   },
   "QuickHunt_NoFreeAP": {
     "recognition": "ColorMatch",

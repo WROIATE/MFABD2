@@ -146,7 +146,9 @@
     ],
     "on_error": [
       "Event_Event_Main_Return",
-      "[JumpBack]Global_BackPageHub_Once"
+      "[JumpBack]Global_BackPageHub_Once",
+      "Global_Null_Exception",
+      "Global_Null_Panic"
     ],
     "post_delay": 3000,
     "focus": "EM.活动.选难度",
@@ -186,7 +188,9 @@
     "timeout": 4000,
     "on_error": [
       "Event_Event_Main_Return",
-      "[JumpBack]Global_BackPageHub_Once"
+      "[JumpBack]Global_BackPageHub_Once",
+      "Global_Null_Exception",
+      "Global_Null_Panic"
     ],
     "doc": "判定，处于一般/挑战 战斗页面"
   },
@@ -235,7 +239,9 @@
     "timeout": 4000,
     "on_error": [
       "Event_Event_Main_Return",
-      "[JumpBack]Global_BackPageHub_Once"
+      "[JumpBack]Global_BackPageHub_Once",
+      "Global_Null_Exception",
+      "Global_Null_Panic"
     ],
     "doc": "识别并点击子菜单快速战斗"
   },
@@ -689,7 +695,9 @@
     ],
     "timeout": 8000,
     "on_error": [
-      "Even_MamonoFollowUp_onSubMain"
+      "Even_MamonoFollowUp_onSubMain",
+      "Global_Null_Exception",
+      "Global_Null_Panic"
     ],
     "focus": "此lv血量不为空",
     "roi": [
@@ -717,7 +725,9 @@
       "Even_MamonoFollowUp_QuickBattle_ocr"
     ],
     "on_error": [
-      "Event_LeaveEvent"
+      "Event_LeaveEvent",
+      "Global_Null_Exception",
+      "Global_Null_Panic"
     ],
     "focus": "EM.MF.快速战斗可用-色核通过",
     "roi": [
@@ -860,7 +870,9 @@
     ],
     "timeout": 5000,
     "on_error": [
-      "Global_ToHomePage"
+      "Global_ToHomePage",
+      "Global_Null_Exception",
+      "Global_Null_Panic"
     ],
     "focus": "快速完成OCR"
   },

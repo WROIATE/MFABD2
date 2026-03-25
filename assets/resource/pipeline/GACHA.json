@@ -78,7 +78,9 @@
       "Gacha_Slip"
     ],
     "on_error": [
-      "Gacha_FinGacha"
+      "Gacha_FinGacha",
+      "Global_Null_Exception",
+      "Global_Null_Panic"
     ],
     "focus": "GA.滑动寻找卡池",
     "roi": [
@@ -209,7 +211,9 @@
     ],
     "on_error": [
       "Gacha_Slip",
-      "GachaADV_Start"
+      "GachaADV_Start",
+      "Global_Null_Exception",
+      "Global_Null_Panic"
     ]
   },
   "Gacha_PvAnimeIsOver": {
@@ -222,7 +226,9 @@
     ],
     "focus": "GA.卡池动画结束(调试用)",
     "on_error": [
-      "Gacha_Slip"
+      "Gacha_Slip",
+      "Global_Null_Exception",
+      "Global_Null_Panic"
     ],
     "roi": [
       1038,
@@ -246,7 +252,9 @@
     ],
     "timeout": 8000,
     "on_error": [
-      "Gacha_Slip"
+      "Gacha_Slip",
+      "Global_Null_Exception",
+      "Global_Null_Panic"
     ],
     "roi": [
       358,
@@ -268,7 +276,9 @@
     ],
     "timeout": 8000,
     "on_error": [
-      "Gacha_Slip"
+      "Gacha_Slip",
+      "Global_Null_Exception",
+      "Global_Null_Panic"
     ],
     "roi": [
       624,
@@ -290,7 +300,9 @@
     "focus": "GB.90.**[高危-付费抽]**tp2/3-费用90已确认",
     "timeout": 8000,
     "on_error": [
-      "Gacha_Slip"
+      "Gacha_Slip",
+      "Global_Null_Exception",
+      "Global_Null_Panic"
     ],
     "roi": [
       624,
@@ -312,7 +324,9 @@
     ],
     "timeout": 8000,
     "on_error": [
-      "Gacha_Slip"
+      "Gacha_Slip",
+      "Global_Null_Exception",
+      "Global_Null_Panic"
     ],
     "post_delay": 1000,
     "roi": [
@@ -337,7 +351,9 @@
     ],
     "on_error": [
       "Gacha_Slip",
-      "Gacha_TouchFreeGacha"
+      "Gacha_TouchFreeGacha",
+      "Global_Null_Exception",
+      "Global_Null_Panic"
     ],
     "post_delay": 1000,
     "roi": [
@@ -359,7 +375,9 @@
       "Gacha_TouchFreeGacha"
     ],
     "on_error": [
-      "Gacha_Slip"
+      "Gacha_Slip",
+      "Global_Null_Exception",
+      "Global_Null_Panic"
     ],
     "post_delay": 1500,
     "focus": "GA.免费抽 (^_−)☆",

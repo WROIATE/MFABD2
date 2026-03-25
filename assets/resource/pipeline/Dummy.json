@@ -16,5 +16,33 @@
         "focus": "Env.存档检查器",
         "max_hit": 1,
         "doc": "一个存储存档名称/呼叫检查动作的,可复用节点. | 默认节点为0,此时生成不带额外名称的存档文件.| max_hit,利用流程级变量只运行一次,流程结束会销毁"
+    },
+    "Global_Null": {
+        "recognition": "DirectHit",
+        "action": "DoNothing",
+        "post_delay": 0,
+        "pre_delay": 0,
+        "doc": "【全局默认空on_error覆盖】Jumpback链路崩毁默认节点"
+    },
+    "Global_Null_Exception": {
+        "focus": "[WRN] 捕捉到 1219 引入的逻辑真空，执行静默旁路以维系环境。",
+        "recognition": "DirectHit",
+        "action": "Screencap",
+        "post_delay": 0,
+        "pre_delay": 0,
+        "max_hit": 35,
+        "doc": "【非空on_error,手动替换】Jumpback链路崩毁-但不要StopTask"
+    },
+    "Global_Null_Panic": {
+        "focus": "[color:red][WRN] 管路逻辑失控，无法恢复。\n\n→→准备重启减少损失。[/color]",
+        "recognition": "DirectHit",
+        "action": "StopApp",
+        "package": "com.neowizgames.game.browndust2",
+        "post_delay": 5000,
+        "next": [
+            "StartGame_Check_App_Alive"
+        ],
+        "max_hit": 3,
+        "doc": "【非空on_error,手动替换,紧跟Exception】如果Exception反复运行超过maxhit,认定为死循环。重启游戏后抛弃本任务，让队列其他任务继续跑"
     }
 }

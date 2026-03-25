@@ -275,7 +275,6 @@
       "Daily_Busin_Enter"
     ],
     "focus": "DM.经营子菜单",
-    "on_error": [],
     "doc": "确认餐馆子菜单已弹出"
   },
   "Daily_GetBusin_SubMenu_Claim": {
@@ -449,7 +448,9 @@
     "timeout": 90000,
     "on_error": [
       "Daily_Busin_Quick_BackPVEPage_Str",
-      "Global_BackToPve2#"
+      "Global_BackToPve2#",
+      "Global_Null_Exception",
+      "Global_Null_Panic"
     ],
     "max_hit": 1
   },
@@ -553,7 +554,9 @@
     ],
     "timeout": 30000,
     "on_error": [
-      "Daily_Busin_Quick_BackPVEPage_Str"
+      "Daily_Busin_Quick_BackPVEPage_Str",
+      "Global_Null_Exception",
+      "Global_Null_Panic"
     ],
     "focus": "点击'客人',移动画面",
     "max_hit": 2
@@ -572,7 +575,9 @@
     ],
     "timeout": 30000,
     "on_error": [
-      "Daily_Busin_Quick_BackPVEPage_Str"
+      "Daily_Busin_Quick_BackPVEPage_Str",
+      "Global_Null_Exception",
+      "Global_Null_Panic"
     ],
     "focus": "点击'员工',移动画面",
     "max_hit": 3
@@ -852,7 +857,9 @@
     ],
     "timeout": 5000,
     "on_error": [
-      "Global_BackToQC1"
+      "Global_BackToQC1",
+      "Global_Null_Exception",
+      "Global_Null_Panic"
     ]
   },
   "Daily_DailyIco_1": {
