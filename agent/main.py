@@ -130,22 +130,26 @@ def main():
     if socket_id.startswith("socket_id="):
         socket_id = socket_id.split("=", 1)[1]
 
-    if socket_id:
-        account_id = resolve_account_id(socket_id, project_root)
-        if account_id != "0":
-            PersistentStore.switch_account(account_id)
-    # =========================================================================
-
-    PersistentStore.load() 
-    mfaalog.info("✅ [Agent] 存档/备份系统已就绪")
+    try:
+        if socket_id:
+            account_id = resolve_account_id(socket_id, project_root)
+            if account_id != "0":
+                PersistentStore.switch_account(account_id)
+        
+        PersistentStore.load() 
+        mfaalog.info("✅ [Agent] 存档/备份系统已就绪")
+    except Exception as e:
+        mfaalog.error(f"⚠️ 存档解析或加载发生异常，降级使用默认存档 '0': {e}")
+        PersistentStore.switch_account("0")
+        PersistentStore.load()
 
     # 1. 初始化 Toolkit (借鉴 B 项目)
     # AgentServer 模式下仅 set_log_dir 生效，其余被忽略（上游已知行为）
     Toolkit.init_option(str(project_root))
 
     # 2. 获取 socket_id (由 MaaFramework 传入)
-    if len(sys.argv) < 2:
-        print("错误: 未收到 socket_id 参数，请勿直接运行此脚本，需由 MAA 启动。")
+    if not socket_id:
+        print("错误: 未收到有效的 socket_id 参数，请勿直接运行此脚本，需由 MAA 启动。")
         return
     
     # [调整] socket_id 已在上方提取，此处直接使用
