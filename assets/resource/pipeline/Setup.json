@@ -359,9 +359,7 @@
         "rate_limit": 2000,
         "on_error": [
             "Setup_Scan_Error_PreVerdict",
-            "Setup_Scan_Error_FinVerdict",
-            "Global_Null_Exception",
-            "Global_Null_Panic"
+            "Setup_Scan_Error_FinVerdict"
         ]
     },
     "Setup_SkillScan_Skill1_Bin": {
