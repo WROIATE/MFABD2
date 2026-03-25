@@ -59,7 +59,7 @@ def resolve_account_id(socket_id: str, project_root: Path) -> str:
 
     # ---- 单实例判定: "default" 实例不需要额外存档号 ----
     if instance_id == "default":
-        logger.info("[Resolver] 当前为默认实例 (default)，使用存档 0")
+        logger.info("[Resolver] 当前为默认实例 (default)，使用存档 0 \n\n 可能需先创建一次多实例才能启用多存档")
         return "0"
 
     # ---- 从实例配置文件中提取用户自定义存档号 ----
