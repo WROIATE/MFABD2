@@ -1,8 +1,5 @@
 {
     "Default": {
-        "on_error": [
-            "Global_null"
-        ]
         // "post_wait_freezes": {
         //     "target": [
         //         617,
