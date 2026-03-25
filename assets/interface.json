@@ -25,14 +25,14 @@
             "name": "ADB",
             "label": "安卓端",
             "path": [
-                "./resource"
+                "./resource/base"
             ]
         },
         {
             "name": "PC",
             "path": [
-                "./resource",
-                "./resource/PC"
+                "./resource/base",
+                "./resource/pc"
             ],
             "controller": [
                 "PC客户端"
