@@ -318,8 +318,8 @@
         },
         "doc": "进入地图选择界面",
         "next": [
-            "Fishing_MapNavigate",
-            "Fishing_InMap"
+            "Fishing_InMap",
+            "Fishing_MapNavigate"
         ],
         "post_delay": 2000,
         "recognition": {

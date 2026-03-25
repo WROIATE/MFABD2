@@ -26,6 +26,7 @@
       "[JumpBack]Collect_Special_EP6",
       "[JumpBack]Collect_Special_QR7-CW",
       "[JumpBack]Collect_FindPickupCat",
+      "[JumpBack]StartGame_PerPetTask",
       "[JumpBack]Collect_FindTeleporCircle0.9",
       "[JumpBack]Collect_FindTeleporCircle"
     ],
@@ -126,8 +127,8 @@
   "Collect_OperationsMain_ToAreaMap": {
     "recognition": "OCR",
     "next": [
-      "Collect_TargetMap1-1",
-      "[JumpBack]Collect_MapLift"
+      "[JumpBack]Collect_MapLift",
+      "Collect_TargetMap1-1"
     ],
     "roi": [
       183,
@@ -138,6 +139,17 @@
     "expected": [
       "移动魔法阵"
     ],
+    "post_wait_freezes": {
+      "time": 50,
+      "timeout": 10000,
+      "target": [
+        272,
+        314,
+        66,
+        58
+      ],
+      "rate_limit": 500
+    },
     "doc": "判断是否为区域地图界面"
   },
   "Collect_TargetMap1-1": {
@@ -1003,9 +1015,9 @@
     "template": [
       "TpMapLeft.png"
     ],
-    "post_delay": 800,
+    "repeat": 5,
     "green_mask": true,
-    "doc": "详细地图内左图标，目的移动到最左"
+    "doc": "详细地图内左图标，目的移动到最左,直接5连击."
   },
   "Collect_QuickCart_FastUI": {
     "recognition": "OCR",
@@ -1045,6 +1057,7 @@
       "拉勒凯旅馆",
       "罗戴夫旅馆",
       "封印指定室",
+      "禁闭室",
       "旅馆",
       "安全"
     ],
