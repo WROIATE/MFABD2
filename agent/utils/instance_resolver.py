@@ -66,6 +66,14 @@ def resolve_account_id(socket_id: str, project_root: Path) -> str:
 
     # ---- 从实例配置文件中提取用户自定义存档号 ----
     account_id = _extract_account_from_config(instance_id, project_root)
+
+    # ---- 防串档警告: 非默认实例却回退到了公共存档 ----
+    if account_id == "0":
+        logger.warning(
+            f"[Resolver] ⚠️ 实例 [{instance_id}] 未配置独立存档号，将使用默认存档。"
+            f"多实例同时运行时可能串档！请在「启动脚本」→「多存档」→「存档名称」中为此实例设置不同的编号。"
+        )
+
     logger.info(f"[Resolver] 📋 最终存档号 = {account_id} (instance={instance_id})")
     return account_id
 
