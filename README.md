@@ -162,7 +162,7 @@
 - [MaaPracticeBoilerplate](https://github.com/MaaXYZ/MaaPracticeBoilerplate) MaaFramework项目模板
 
 - [MFAWPF](https://github.com/SweetSmellFox/MFAWPF) Pipeline协议项目的通用GUI
-- [MFAAvalonia](https://github.com/SweetSmellFox/MFAAvalonia) 基于Avalonia的MAAFramework通用GUI项目
+- [MFAAvalonia](https://github.com/MaaXYZ/MFAAvalonia) 基于Avalonia的MAAFramework通用GUI项目
 - [MFATools](https://github.com/SweetSmellFox/MFATools) 开发工具
 - [maa-support-extension](https://github.com/neko-para/maa-support-extension) VSCode扩展
 - [7e5bb2a](https://github.com/sunyink/MFABD2/commit/7e5bb2abed984f6fd3cc254605f00e3b924cd982)跑商功能初始一整套完整代码，系**京墨**佬倾情提供，感谢他的付出与支持`←注1`

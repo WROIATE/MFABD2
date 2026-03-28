@@ -140,7 +140,7 @@ jobs:
       - name: Download MFAA for Detection
         uses: robinraju/release-downloader@v1
         with:
-          repository: SweetSmellFox/MFAAvalonia
+          repository: MaaXYZ/MFAAvalonia
           latest: false
           tag: ${{ steps.parse_config.outputs.mfaa_tag }}
           fileName: "MFAAvalonia-*-linux-x64*"
@@ -386,7 +386,7 @@ jobs:
         if: matrix.is_android == false
         uses: robinraju/release-downloader@v1
         with:
-          repository: SweetSmellFox/MFAAvalonia
+          repository: MaaXYZ/MFAAvalonia
           latest: false
           tag: ${{ env.MFAA_TAG }}
           # 直接使用 Matrix 里的变量，无需复杂判断
