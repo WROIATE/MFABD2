@@ -5,8 +5,9 @@
 在 Agent 启动时一次性解析当前进程归属的实例与用户存档号。
 
 探测链路 (按优先级):
-  1. 环境变量 MFA_INSTANCE_ID  → 上游 MFAAvalonia 注入 (未来)
-  2. 日志反查 socket_id        → 从 MFA 日志提取 [inst=.../instance_id]
+  1. 环境变量 MFA_INSTANCE_ID  → MFAAvalonia v2.11.3+ 注入 (首选)
+     附带 MFA_INSTANCE_NAME    → 实例显示名称 (如 "配置 2")
+  2. 日志反查 socket_id        → 从 MFA 日志提取 [inst=.../instance_id] (旧版降级)
   3. 回退默认值 "default"
 
 拿到 instance_id 后:
@@ -18,7 +19,6 @@
 import os
 import re
 import json
-import glob
 from pathlib import Path
 from datetime import datetime
 
@@ -44,12 +44,14 @@ def resolve_account_id(socket_id: str, project_root: Path) -> str:
     str
         存档号。找不到或单实例时返回 "0"。
     """
-    # ---- 第一优先: 环境变量 (预留给上游 MFAAvalonia 注入) ----
+    # ---- 第一优先: 环境变量 (MFAAvalonia v2.11.3+ 注入) ----
     instance_id = os.environ.get("MFA_INSTANCE_ID", "").strip()
     if instance_id:
-        logger.info(f"[Resolver] ✅ 从环境变量获取 instance_id = {instance_id}")
+        instance_name = os.environ.get("MFA_INSTANCE_NAME", "")
+        logger.info(f"[Resolver] ✅ 从环境变量获取 instance_id = {instance_id}"
+                    + (f" ({instance_name})" if instance_name else ""))
     else:
-        # ---- 第二优先: 日志反查 ----
+        # ---- 第二优先: 日志反查 (兼容未注入环境变量的旧版 MFAAvalonia) ----
         instance_id = _find_instance_from_log(socket_id, project_root)
         if instance_id:
             logger.info(f"[Resolver] ✅ 从日志反查获取 instance_id = {instance_id}")
@@ -59,7 +61,7 @@ def resolve_account_id(socket_id: str, project_root: Path) -> str:
 
     # ---- 单实例判定: "default" 实例不需要额外存档号 ----
     if instance_id == "default":
-        logger.info("[Resolver] 当前为默认实例 (default)，使用存档 0 \n\n 可能需先创建一次多实例才能启用多存档")
+        logger.info("[Resolver] 当前为默认实例 (default)，使用存档 0")
         return "0"
 
     # ---- 从实例配置文件中提取用户自定义存档号 ----
