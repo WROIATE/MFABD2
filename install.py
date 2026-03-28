@@ -36,55 +36,6 @@ maa_ver = len(sys.argv) > 3 and sys.argv[3] or "0.0.0"
 #         sys.exit(1)
 # ... (保留原有注释代码) ...
 
-def convert_line_endings(file_path):
-    """将文件的换行符统一转换为 Windows 格式 (CRLF)"""
-    try:
-        # 读取文件内容
-        with open(file_path, 'r', encoding='utf-8') as f:
-            content = f.read()
-        
-        # 统一转换为 CRLF
-        content = content.replace('\r\n', '\n')  # 先标准化为 LF
-        
-        # 写回文件
-        with open(file_path, 'w', encoding='utf-8', newline='\r\n') as f:
-            f.write(content)
-        return True
-    except Exception as e:
-        print(f"转换换行符失败: {file_path} - {str(e)}")
-        return False
-
-def process_markdown_files(directory):
-    """递归处理目录中的所有 Markdown 文件"""
-    success = True
-    if directory.exists():
-        print(f"处理 Markdown 文件: {directory}")
-        # 遍历目录中的所有文件
-        for root, _, files in os.walk(directory):
-            for file in files:
-                file_path = Path(root) / file
-                if file_path.suffix.lower() == '.md':  # 只处理 Markdown 文件
-                    if convert_line_endings(file_path):
-                        print(f"已转换: {file_path}")
-                    else:
-                        success = False
-    return success
-
-def process_json_files(directory):
-    """递归处理目录中的所有 JSON 文件"""
-    success = True
-    if directory.exists():
-        print(f"处理 JSON 文件: {directory}")
-        # 遍历目录中的所有文件
-        for root, _, files in os.walk(directory):
-            for file in files:
-                file_path = Path(root) / file
-                if file_path.suffix.lower() == '.json':  # 只处理 JSON 文件
-                    if convert_line_endings(file_path):
-                        print(f"已转换: {file_path}")
-                    else:
-                        success = False
-    return success
 
 def install_resource():
     configure_ocr_model()
@@ -104,31 +55,6 @@ def install_resource():
         print(f"📦 检测到自定义布局，正在注入: {layout_src}")
         shutil.copy2(layout_src, install_path / "resource" / "mfa_layout.json")
     # ================= [预配置写入结束] =================
-
-    # 分别处理 MD 和 JSON 文件换行符
-    all_success = True
-    
-    # 1. 处理公告文件夹的 Markdown 文件
-    announcement_dir = install_path / "resource" / "Announcement"
-    if not process_markdown_files(announcement_dir):
-        all_success = False
-    
-    # 2. 处理 pipeline 文件夹的 JSON 文件
-    pipeline_dir = install_path / "resource" / "pipeline"
-    if not process_json_files(pipeline_dir):
-        all_success = False
-    
-    # 3. 处理 Changelog.md 文件
-    changelog_path = install_path / "resource" / "Changelog.md"
-    if changelog_path.exists():
-        print(f"处理更新日志文件: {changelog_path}")
-        if not convert_line_endings(changelog_path):
-            all_success = False
-    else:
-        print(f"注意: 未找到更新日志文件 {changelog_path}，跳过处理")
-    
-    if not all_success:
-        print("警告: 部分文件换行符转换失败")
 
     # 复制并更新 interface.json
     shutil.copy2(
