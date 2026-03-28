@@ -66,6 +66,14 @@ def resolve_account_id(socket_id: str, project_root: Path) -> str:
 
     # ---- 从实例配置文件中提取用户自定义存档号 ----
     account_id = _extract_account_from_config(instance_id, project_root)
+
+    # ---- 防串档警告: 非默认实例却回退到了公共存档 ----
+    if account_id == "0":
+        logger.warning(
+            f"[Resolver] ⚠️ 实例 [{instance_id}] 未配置独立存档号，将使用默认存档。"
+            f"多实例同时运行时可能串档！请在「启动脚本」→「多存档」→「存档名称」中为此实例设置不同的编号。"
+        )
+
     logger.info(f"[Resolver] 📋 最终存档号 = {account_id} (instance={instance_id})")
     return account_id
 
@@ -179,7 +187,12 @@ def _extract_account_from_config(instance_id: str, project_root: Path) -> str:
             if "多存档" not in option.get("name", ""):
                 continue
 
-            # 找到「多存档」选项，向下搜索 sub_options
+            # index=0 表示用户在 UI 中关闭了多存档开关
+            if not option.get("index"):
+                logger.info("[Resolver] 「多存档」选项已关闭 (index=0)，使用默认存档")
+                return "0"
+
+            # 找到「多存档」选项且已开启，向下搜索 sub_options
             for sub in option.get("sub_options", []):
                 data = sub.get("data", {})
                 account = data.get("账号多开配置", "").strip()

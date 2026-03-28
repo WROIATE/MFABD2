@@ -465,7 +465,7 @@ debug
 发布帮助.md
 
 .nicegui
-assets/resource/pipeline/*.mpe.json
+assets/resource/*/pipeline/*.mpe.json
 
 # 允许追踪 scripts 下的 release 文件夹
 !scripts/release/
@@ -477,3 +477,4 @@ cartridge_history.json
 package-lock.json
 package.json
 prettier.config.mjs
+
