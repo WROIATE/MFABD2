@@ -187,7 +187,12 @@ def _extract_account_from_config(instance_id: str, project_root: Path) -> str:
             if "多存档" not in option.get("name", ""):
                 continue
 
-            # 找到「多存档」选项，向下搜索 sub_options
+            # index=0 表示用户在 UI 中关闭了多存档开关
+            if not option.get("index"):
+                logger.info("[Resolver] 「多存档」选项已关闭 (index=0)，使用默认存档")
+                return "0"
+
+            # 找到「多存档」选项且已开启，向下搜索 sub_options
             for sub in option.get("sub_options", []):
                 data = sub.get("data", {})
                 account = data.get("账号多开配置", "").strip()
