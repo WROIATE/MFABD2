@@ -1,0 +1,13 @@
+{
+  "Global_Null_Panic": {
+    "doc": "[PC覆盖] PC端不支持StopApp，改为DoNothing+提示。管路失控时仅记录日志，不尝试重启游戏。",
+    "focus": "[color:red][WRN][PC] 管路逻辑失控，无法恢复。\n\nPC端不支持自动重启游戏，请检查游戏状态后手动重新运行任务。[/color]",
+    "recognition": "DirectHit",
+    "action": "DoNothing",
+    "post_delay": 2000,
+    "next": [
+      "StartGame_Check_App_Alive"
+    ],
+    "max_hit": 3
+  }
+}

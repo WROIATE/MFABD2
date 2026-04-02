@@ -1,0 +1,8 @@
+{
+  "Close_HomePage": {
+    "doc": "[PC覆盖] PC端不支持StopApp，改为DoNothing。PC端请手动关闭游戏窗口。",
+    "recognition": "DirectHit",
+    "action": "DoNothing",
+    "focus": "[color:yellow][PC]结束游戏：PC端不支持自动关闭，请手动关闭游戏窗口。[/color]"
+  }
+}
